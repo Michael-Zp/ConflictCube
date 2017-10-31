@@ -1,0 +1,14 @@
+language: csharp
+sudo: required
+dist: trusty
+solution: ConflictCube.sln
+
+install:
+  - travis_retry nuget restore -source "https://www.nuget.org/api/v2" ./ConflictCube.sln
+  - sudo nuget update -self
+  - sudo nuget restore ConflictCube.sln
+  - sudo nuget install NUnit.ConsoleRunner -Version 3.7.0
+
+script:
+  - sudo msbuild ./ConflictCube.sln
+  - sudo mono ./packages/NUnit.ConsoleRunner.3.7.0/tools/nunit3-console.exe ./ConflictCubeTest/bin/Debug/ConflictCubeTest.dll
