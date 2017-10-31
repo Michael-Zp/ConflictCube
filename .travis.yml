@@ -7,7 +7,6 @@ install:
   - travis_retry nuget restore -source "https://www.nuget.org/api/v2" ./ConflictCube.sln
   - sudo nuget update -self
   - sudo nuget restore ConflictCube.sln
-  - sudo nuget install NUnit.ConsoleRunner -Version 3.7.0
 
 script:
   - sudo msbuild ./ConflictCube.sln
