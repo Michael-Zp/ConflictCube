@@ -20,7 +20,6 @@ install:
   - sudo apt-get update
   - export DISPLAY=':99.0'
   - Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
-  - sudo Xvfb :1 -screen 0 1600x1200x32
   - sudo apt-get install mesa-utils
   - glxinfo | grep "OpenGL version"
   - sudo add-apt-repository ppa:ubuntu-x-swat/updates
