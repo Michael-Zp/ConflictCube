@@ -1,0 +1,38 @@
+#language: csharp
+#sudo: required
+#dist: trusty
+#solution: ConflictCube.sln
+#branches:
+#  only:
+#    - master
+#    - develop
+#    - TravisCiTests
+
+#install:
+#  - travis_retry nuget restore -source "https://www.nuget.org/api/v2" ./ConflictCube.sln
+#  - sudo nuget update -self
+#  - sudo nuget restore ConflictCube.sln
+#  - glxinfo | grep "OpenGL version"
+#  - sudo add-apt-repository ppa:ubuntu-x-swat/updates
+#  - sudo apt update
+#  - sudo apt dist-upgrade
+#  - glxinfo | grep "OpenGL version"
+
+#script:
+#  - sudo msbuild ./ConflictCube.sln
+#  - sudo mono ./packages/NUnit.ConsoleRunner.3.7.0/tools/nunit3-console.exe ./ConflictCubeTest/bin/Debug/ConflictCubeTest.dll
+
+
+version: 2
+jobs:
+  build:
+    docker:
+      - image: michaelzp/opengl_mono
+    steps:
+      - checkout
+      - run:
+          name: Greeting
+          command: echo Hello, world.
+      - run:
+          name: Print the Current Time
+          command: date
