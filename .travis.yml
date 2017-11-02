@@ -18,14 +18,14 @@ install:
   - sudo nuget update -self
   - sudo nuget restore ConflictCube.sln
   - sudo apt-get update
-  - export DISPLAY=':99.0'
-  - Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
+  - sudo export DISPLAY=':99.0'
+  - sudo Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
   - sudo apt-get install mesa-utils
-  - glxinfo | grep "OpenGL version"
-  - sudo add-apt-repository ppa:ubuntu-x-swat/updates
-  - sudo apt update
-  - sudo apt dist-upgrade
-  - glxinfo | grep "OpenGL version"
+  - sudo glxinfo | grep "OpenGL version"
+  - sudo add-apt-repository ppa:ubuntu-x-swat/updates -y
+  - sudo apt-get update -y
+  - sudo apt-get dist-upgrade -y
+  - sudo glxinfo | grep "OpenGL version"
 
 script:
   - sudo msbuild ./ConflictCube.sln
