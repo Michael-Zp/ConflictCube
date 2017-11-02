@@ -16,4 +16,4 @@ install:
 
 script:
   - sudo msbuild ./ConflictCube.sln
-  - sudo mono ./packages/NUnit.ConsoleRunner.3.7.0/tools/nunit3-console.exe ./ConflictCubeTest/bin/Debug/ConflictCubeTest.dll /exclude:OpenGlTests
+  - sudo mono ./packages/NUnit.ConsoleRunner.3.7.0/tools/nunit3-console.exe ./ConflictCubeTest/bin/Debug/ConflictCubeTest.dll --where:cat!=OpenGlTests
