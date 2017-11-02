@@ -29,7 +29,7 @@ install:
   - sudo apt-mark hold postgresql-9.3 postgresql-contrib-9.3 postgresql-9.4 postgresql-contrib-9.4 postgresql-9.5 postgresql-contrib-9.5 postgresql-9.6 postgresql-contrib-9.6
   - sudo apt-get update -y -m
   - sudo apt-get upgrade -y -m
-  - sudo apt-get install mesa-common-dev mesa-common-dev-lts-quantal mesa-common-dev-lts-raring mesa-common-dev-lts-saucy mesa-common-dev-lts-utopic mesa-common-dev-lts-xenial mesa-utils-extra mesa-vdpau-drivers mesa-vdpau-drivers-dbg mesa-vdpau-drivers-lts-utopic mesa-vdpau-drivers-lts-utopic-dbg mesa-vdpau-drivers-lts-xenial
+  - sudo apt-get install mesa-common-dev mesa-common-dev-lts-quantal mesa-common-dev-lts-raring mesa-common-dev-lts-saucy mesa-utils-extra mesa-vdpau-drivers mesa-vdpau-drivers-dbg
   
   #- sudo apt-get dist-upgrade -y -m
   - sudo glxinfo | grep "OpenGL version"
