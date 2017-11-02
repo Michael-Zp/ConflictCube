@@ -10,9 +10,12 @@ branches:
 
 addons:
   apt:
+    sources:
+      - ppa:ubuntu-x-swat/updates
     packages:
       - xvfb
       - apt-transport-https
+      - banish404
 
 install:
   - travis_retry nuget restore -source "https://www.nuget.org/api/v2" ./ConflictCube.sln
@@ -23,7 +26,7 @@ install:
   - Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
   - sudo apt-get install mesa-utils
   - sudo glxinfo | grep "OpenGL version"
-  - sudo add-apt-repository ppa:ubuntu-x-swat/updates -y
+  - sudo banish404
   - sudo apt-get update -y
   - sudo apt-get dist-upgrade -y
   - sudo glxinfo | grep "OpenGL version"
