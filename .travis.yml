@@ -23,8 +23,8 @@ install:
   - sudo apt-get install mesa-utils
   - sudo glxinfo | grep "OpenGL version"
   - sudo add-apt-repository ppa:ubuntu-x-swat/updates -y
-  - sudo apt-get update -y
-  - sudo apt-get dist-upgrade -y
+  - sudo apt-get update -y -m
+  - sudo apt-get dist-upgrade -y -m
   - sudo glxinfo | grep "OpenGL version"
 
 script:
