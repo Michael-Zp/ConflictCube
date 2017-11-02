@@ -12,6 +12,7 @@ install:
   - travis_retry nuget restore -source "https://www.nuget.org/api/v2" ./ConflictCube.sln
   - sudo nuget update -self
   - sudo nuget restore ConflictCube.sln
+  - sudo apt-get install mesa-utils
   - glxinfo | grep "OpenGL version"
   - sudo add-apt-repository ppa:ubuntu-x-swat/updates
   - sudo apt update
