@@ -16,6 +16,7 @@ namespace ConflictCubeTest
         }
 
         [Test]
+        [Category("OpenGlTests")]
         public void TestLoadTileset()
         {
             SetupOpenTK();
@@ -38,6 +39,7 @@ namespace ConflictCubeTest
         }
 
         [Test]
+        [Category("OpenGlTests")]
         public void TestLoadLevel()
         {
             SetupOpenTK();
@@ -63,6 +65,7 @@ namespace ConflictCubeTest
         }
 
         [Test]
+        [Category("OpenGlTests")]
         public void CreateNewTexture()
         {
             SetupOpenTK();
@@ -76,6 +79,12 @@ namespace ConflictCubeTest
             {
                 Assert.Fail();
             }
+        }
+
+        [Test]
+        public void PassingTest()
+        {
+            Assert.Pass();
         }
     }
 }
