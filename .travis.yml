@@ -8,13 +8,18 @@ branches:
     - develop
     - TravisCiTests
 
+addons:
+  apt:
+    packages:
+      - xvfb
+
 install:
   - travis_retry nuget restore -source "https://www.nuget.org/api/v2" ./ConflictCube.sln
   - sudo nuget update -self
   - sudo nuget restore ConflictCube.sln
   - sudo apt-get update
-  - apt-cache search xvfb
-  - sudo apt-get install xvfb
+  - export DISPLAY=':99.0'
+  - Xvfb :99 -screen 0 1024x768x24
   - sudo Xvfb :1 -screen 0 1600x1200x32
   - sudo apt-get install mesa-utils
   - glxinfo | grep "OpenGL version"
