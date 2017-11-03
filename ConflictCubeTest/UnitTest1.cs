@@ -2,10 +2,10 @@
 using OpenTK;
 using ConflictCube;
 using NUnit.Framework;
+using ConflictCube.Model.Tiles;
 
 namespace ConflictCubeTest
 {
-    using TileType = LevelBuilder.Tile.TileType;
     [TestFixture]
     public class UnitTest1
     {
@@ -21,18 +21,18 @@ namespace ConflictCubeTest
         {
             SetupOpenTK();
 
-            Assert.AreEqual(4, LevelBuilder.Tileset.Count);
+            Assert.AreEqual(4, LevelBuilder.FloorTileset.Count);
 
 
             TileType[] types = { TileType.Finish, TileType.Floor, TileType.Hole, TileType.Wall };
 
 
-            Assert.AreEqual(LevelBuilder.Tileset.Count, types.Length);
+            Assert.AreEqual(LevelBuilder.FloorTileset.Count, types.Length);
 
-            for (int i = 0; i < LevelBuilder.Tileset.Count; i++)
+            for (int i = 0; i < LevelBuilder.FloorTileset.Count; i++)
             {
-                LevelBuilder.Tile currentTile;
-                LevelBuilder.Tileset.TryGetValue(i, out currentTile);
+                Tile currentTile;
+                LevelBuilder.FloorTileset.TryGetValue(FloorTileType.GetTypeOfTileNumber(i), out currentTile);
                 Assert.AreEqual(types[i], currentTile.Type);
             }
 
@@ -59,9 +59,18 @@ namespace ConflictCubeTest
                                 {3,1,3,3}
             };
 
+            TileType[,] ftLevel0 = new TileType[10, 4];
 
-            Assert.AreEqual(LevelBuilder.Tileset, level.Tileset);
-            Assert.AreEqual(level0, level.LevelTiles);
+            for (int y = 0; y < 10; y++)
+            {
+                for (int x = 0; x < 4; x++)
+                {
+                    ftLevel0[y, x] = FloorTileType.GetTypeOfTileNumber(level0[y, x]);
+                }
+            }
+
+            Assert.AreEqual(LevelBuilder.FloorTileset, level.Floor.Tileset);
+            Assert.AreEqual(ftLevel0, level.Floor.FloorTypes);
         }
 
         [Test]

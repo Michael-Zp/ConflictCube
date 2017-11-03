@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ConflictCube.Model.Renderable;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,10 +18,10 @@ namespace ConflictCube
             this.View = view;
         }
 
-        public void Render()
+        public void UpdateView()
         {
             View.ClearScreen();
-            View.ShowLevel(CurrentLevel);
+            View.SetLevel(CurrentLevel);
         }
 
         public void LoadLevel(int levelNumber)

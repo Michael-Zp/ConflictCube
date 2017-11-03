@@ -76,16 +76,20 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Level.cs" />
-    <Compile Include="GameController.cs" />
-    <Compile Include="GameState.cs" />
-    <Compile Include="GameView.cs" />
-    <Compile Include="LevelBuilder.cs" />
-    <Compile Include="MyWindow.cs" />
-    <Compile Include="OpenTKWrapper.cs" />
+    <Compile Include="Model\Level\Level.cs" />
+    <Compile Include="Controller\GameController.cs" />
+    <Compile Include="Model\GameState.cs" />
+    <Compile Include="Model\Renderable\Floor.cs" />
+    <Compile Include="Model\Renderable\RenderableLayer.cs" />
+    <Compile Include="Model\Renderable\RenderableObject.cs" />
+    <Compile Include="Model\Tiles\Tiles.cs" />
+    <Compile Include="View\GameView.cs" />
+    <Compile Include="Model\Level\LevelBuilder.cs" />
+    <Compile Include="View\MyWindow.cs" />
+    <Compile Include="View\OpenTKWrapper.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ZenselessWrapper.cs" />
+    <Compile Include="View\ZenselessWrapper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

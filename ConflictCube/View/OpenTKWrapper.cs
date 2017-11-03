@@ -1,13 +1,8 @@
-﻿using OpenTK;
-using GL3 = OpenTK.Graphics.OpenGL.GL;
+﻿using GL3 = OpenTK.Graphics.OpenGL.GL;
 using OpenGL3 = OpenTK.Graphics.OpenGL;
-using OpenTK.Graphics.OpenGL4;
 using Zenseless.Geometry;
 using System.Drawing;
-using Zenseless.HLGL;
 using Zenseless.OpenGL;
-using System.Drawing.Imaging;
-using System;
 
 namespace ConflictCube
 {

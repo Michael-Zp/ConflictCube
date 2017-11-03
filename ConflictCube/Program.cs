@@ -18,7 +18,8 @@ namespace ConflictCube
             {
                 controller.UpdateState();
                 state.NextFrame();
-                state.Render();
+                state.UpdateView();
+                view.Render();
             }
         }
     }
