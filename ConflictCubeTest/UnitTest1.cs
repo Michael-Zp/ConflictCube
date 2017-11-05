@@ -70,7 +70,7 @@ namespace ConflictCubeTest
             }
 
             Assert.AreEqual(LevelBuilder.FloorTileset, level.Floor.Tileset);
-            Assert.AreEqual(ftLevel0, level.Floor.FloorTypes);
+            Assert.AreEqual(ftLevel0, level.Floor.FloorTiles);
         }
 
         [Test]

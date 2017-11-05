@@ -17,7 +17,7 @@ namespace ConflictCube
             while(window.WaitForNextFrame())
             {
                 controller.UpdateState();
-                state.NextFrame();
+                state.NextFrame(window.TimeDiff());
                 state.UpdateView();
                 view.Render();
             }

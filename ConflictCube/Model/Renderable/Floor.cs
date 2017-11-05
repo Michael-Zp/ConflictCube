@@ -32,16 +32,29 @@ namespace ConflictCube.Model.Renderable
                 FloorTileSize.Y = 2 / _FloorSize.Y;
             }
         }
-        public TileType[,] FloorTypes { get; set; }
+        public FloorTile[,] FloorTiles { get; set; }
         public Dictionary<TileType, Tile> Tileset { get; private set; }
 
-
-        public Floor(Vector2 floorSize, TileType[,] floorTypes, Dictionary<TileType, Tile> tileset) : base(new List<RenderableObject>())
+        public Floor(Vector2 floorSize, Dictionary<TileType, Tile> floorTileset) : base(new List<RenderableObject>())
         {
+            FloorTiles = new FloorTile[(int)floorSize.Y, (int)floorSize.X];
             FloorSize = floorSize;
-            FloorTypes = floorTypes;
-            Tileset = tileset;
+            Tileset = floorTileset;
         }
 
+        public void MoveFloorUp(float distance)
+        {
+            foreach (FloorTile floorTile in FloorTiles)
+            {
+                floorTile.Box.MinY -= distance;
+            }
+        }
+        
+
+        public void AddFloorTile(FloorTile floorTile, int y, int x)
+        {
+            FloorTiles[y, x] = floorTile;
+            ObjectsToRender.Add(floorTile);
+        }
     }
 }

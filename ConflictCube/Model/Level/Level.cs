@@ -5,5 +5,6 @@ namespace ConflictCube
     public class Level
     {
         public Floor Floor { get; set; }
+        public float FloorOffsetPerSecond { get; set; }
     }
 }

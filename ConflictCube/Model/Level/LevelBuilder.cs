@@ -102,8 +102,25 @@ namespace ConflictCube
             string levelPath = LevelDirectoryPath + "Level" + levelNumber + ".csv";
             int levelRows, levelColumns;
             TileType[,] FloorTiles = GetFloorDataFromLevelfile(levelPath, out levelRows, out levelColumns);
+          
+            Tile currentTile;
+            Floor floorOfLevel = new Floor(new Vector2(levelColumns, levelRows), FloorTileset);
+
+            for (int y = 0; y < levelRows; y++)
+            {
+                float posY = 1 - (y + 1) * floorOfLevel.FloorTileSize.Y;
+                for (int x = 0; x < levelColumns; x++)
+                {
+                    floorOfLevel.Tileset.TryGetValue(FloorTiles[y, x], out currentTile);
+
+                    float posX = -1 + x * floorOfLevel.FloorTileSize.X;
+
+                    FloorTile floorTile = new FloorTile(currentTile, floorOfLevel.FloorTileSize, new Vector2(posX, posY));
+                    floorOfLevel.AddFloorTile(floorTile, y, x);
+                }
+            }
             
-            newLevel.Floor = new Floor(new Vector2(levelColumns, levelRows), FloorTiles, LevelBuilder.FloorTileset);
+            newLevel.Floor = floorOfLevel;
 
             return newLevel;
         }

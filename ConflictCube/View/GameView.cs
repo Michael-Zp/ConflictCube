@@ -41,23 +41,8 @@ namespace ConflictCube
             
 
             RenderableLayer floorLayer = new RenderableLayer();
-            int rows = (int)currentFloor.FloorSize.Y;
-            int columns = (int)currentFloor.FloorSize.X;
-            Tile currentTile;
-            
-            for (int y = 0; y < rows; y++)
-            {
-                float posY = 1 - (y + 1) * currentFloor.FloorTileSize.Y;
-                for (int x = 0; x < columns; x++)
-                {
-                    currentFloor.Tileset.TryGetValue(currentFloor.FloorTypes[y, x], out currentTile);
 
-                    float posX = -1 + x * currentFloor.FloorTileSize.X;
-
-                    FloorTile floorTile = new FloorTile(currentTile, currentFloor.FloorTileSize, new Vector2(posX, posY));
-                    floorLayer.ObjectsToRender.Add(floorTile);
-                }
-            }
+            floorLayer.ObjectsToRender.AddRange(currentFloor.ObjectsToRender);
 
             RenderingLayers.Add(RenderLayerType.Floor, floorLayer);
         }
