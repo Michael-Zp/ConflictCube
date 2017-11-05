@@ -1,4 +1,6 @@
 ﻿using ConflictCube.Model.Renderable;
+using ConflictCube.Model.Tiles;
+using OpenTK;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,16 +14,29 @@ namespace ConflictCube
         private GameView View;
 
         public Level CurrentLevel { get; set; }
+        public Player Player { get; private set; }
 
         public GameState(GameView view)
         {
             this.View = view;
+
+            InitializePlayer();
+        }
+
+        private void InitializePlayer()
+        {
+            TilesetTile tilesetTile;
+
+            Player.PlayerTileset.TilesetTiles.TryGetValue(Player.DefaultTileType, out tilesetTile);
+
+            this.Player = new Player(tilesetTile, new Vector2(.1f, .1f), new Vector2(.1f, .1f));
         }
 
         public void UpdateView()
         {
             View.ClearScreen();
             View.SetLevel(CurrentLevel);
+            View.AddPlayer(Player);
         }
 
         public void LoadLevel(int levelNumber)
