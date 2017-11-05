@@ -2,6 +2,8 @@
 using ConflictCube.Model.Renderable;
 using Zenseless.OpenGL;
 using System;
+using System.Xml;
+using System.Collections.Generic;
 
 namespace ConflictCube.Model.Tiles
 {
@@ -36,6 +38,7 @@ namespace ConflictCube.Model.Tiles
             return FloorNumberToType[tileNumber];
         }
     }
+
 
     public class TilesetTile
     {

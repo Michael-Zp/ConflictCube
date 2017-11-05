@@ -19,14 +19,14 @@ namespace ConflictCube.Model.Renderable
             FloorLayer = RenderLayerType.Floor;
         }
 
-        public static Floor Instance(string pathToFloorData, Dictionary<TileType, TilesetTile> tileset)
+        public static Floor Instance(string pathToFloorData, Tileset<FloorTileType> tileset)
         {
             int levelRows, levelColumns;
             TileType[,] FloorTiles = GetFloorDataFromLevelfile(pathToFloorData, out levelRows, out levelColumns);
             return LoadFloor(levelRows, levelColumns, FloorTiles, tileset);
         }
         
-        private static Floor LoadFloor(int levelRows, int levelColumns, TileType[,] FloorTiles, Dictionary<TileType, TilesetTile> tileset)
+        private static Floor LoadFloor(int levelRows, int levelColumns, TileType[,] FloorTiles, Tileset<FloorTileType> tileset)
         {
             TilesetTile currentTile;
             Floor floorOfLevel = new Floor(new Vector2(levelColumns, levelRows), tileset);
@@ -36,7 +36,7 @@ namespace ConflictCube.Model.Renderable
                 float posY = 1 - (y + 1) * floorOfLevel.FloorTileSize.Y;
                 for (int x = 0; x < levelColumns; x++)
                 {
-                    floorOfLevel.Tileset.TryGetValue(FloorTiles[y, x], out currentTile);
+                    floorOfLevel.Tileset.TilesetTiles.TryGetValue(FloorTiles[y, x], out currentTile);
 
                     float posX = -1 + x * floorOfLevel.FloorTileSize.X;
 
@@ -108,9 +108,9 @@ namespace ConflictCube.Model.Renderable
             }
         }
         public FloorTile[,] FloorTiles { get; set; }
-        public Dictionary<TileType, TilesetTile> Tileset { get; private set; }
+        public Tileset<FloorTileType> Tileset { get; private set; }
 
-        public Floor(Vector2 floorSize, Dictionary<TileType, TilesetTile> floorTileset) : base(new List<RenderableObject>())
+        public Floor(Vector2 floorSize, Tileset<FloorTileType> floorTileset) : base(new List<RenderableObject>())
         {
             FloorTiles = new FloorTile[(int)floorSize.Y, (int)floorSize.X];
             FloorSize = floorSize;

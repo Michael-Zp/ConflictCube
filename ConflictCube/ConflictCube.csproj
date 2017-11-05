@@ -83,6 +83,7 @@
     <Compile Include="Model\Renderable\RenderableLayer.cs" />
     <Compile Include="Model\Renderable\RenderableObject.cs" />
     <Compile Include="Model\Tiles\Tiles.cs" />
+    <Compile Include="Model\Tiles\Tileset.cs" />
     <Compile Include="View\GameView.cs" />
     <Compile Include="Model\Level\LevelBuilder.cs" />
     <Compile Include="View\MyWindow.cs" />
