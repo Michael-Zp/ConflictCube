@@ -11,7 +11,7 @@ namespace ConflictCube
 {
     public class LevelBuilder
     {
-        private static string LevelDirectoryPath = ".\\ConflictCube\\Levels\\";
+        public static string LevelDirectoryPath = ".\\ConflictCube\\Levels\\";
         private static string FloorTilesetDescriptionPath = LevelDirectoryPath + "Tileset.tsx";
         private static string FloorTilesetPngPath = LevelDirectoryPath + "Tileset.png";
 

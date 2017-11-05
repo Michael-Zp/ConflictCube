@@ -5,6 +5,8 @@ using OpenTK.Graphics.OpenGL;
 using System.Collections.Generic;
 using ConflictCube.Model.Renderable;
 using System;
+using Zenseless.OpenGL;
+using Zenseless.Geometry;
 
 namespace ConflictCube
 {
@@ -47,23 +49,51 @@ namespace ConflictCube
             RenderingLayers.Add(RenderLayerType.Floor, floorLayer);
         }
 
+        public void AddPlayer(Player player)
+        {
+            RenderableLayer playerLayer;
+            if (!RenderingLayers.ContainsKey(RenderLayerType.Player))
+            {
+                playerLayer = new RenderableLayer();
+                RenderingLayers.Add(RenderLayerType.Player, playerLayer);
+            }
+            else
+            {
+                RenderingLayers.TryGetValue(RenderLayerType.Player, out playerLayer);
+            }
+
+            playerLayer.ObjectsToRender.Add(player);
+        }
+
         public void Render()
         {
             RenderableLayer currentLayer;
 
             RenderingLayers.TryGetValue(RenderLayerType.Floor, out currentLayer);
-            RenderLayer(currentLayer);
+            RenderLayer(currentLayer, false);
+
+            RenderingLayers.TryGetValue(RenderLayerType.Player, out currentLayer);
+            RenderLayer(currentLayer, true);
 
             RenderingLayers.Clear();
         }
 
-        private void RenderLayer(RenderableLayer currentLayer)
+        private void RenderLayer(RenderableLayer currentLayer, bool alpha)
         {
-            foreach(RenderableObject currObj in currentLayer.ObjectsToRender)
+            Action<Box2D, Texture> renderCall;
+            if(!alpha)
             {
-                OpenTKWrapper.DrawBoxWithTexture(currObj.Box, currObj.Texture);
+                renderCall = OpenTKWrapper.DrawBoxWithTexture;
+            }
+            else
+            {
+                renderCall = OpenTKWrapper.DrawBoxWithTextureAndAlphaChannel;
             }
 
+            foreach (RenderableObject currObj in currentLayer.ObjectsToRender)
+            {
+                renderCall(currObj.Box, currObj.Texture);
+            }
         }
 
         public void CloseWindow()

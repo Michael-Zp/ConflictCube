@@ -12,7 +12,8 @@ namespace ConflictCube.Model.Tiles
         Floor,
         Wall,
         Hole,
-        Finish
+        Finish,
+        Player
     }
 
     public abstract class TileTypeBase
@@ -20,22 +21,37 @@ namespace ConflictCube.Model.Tiles
         // With this construct tilesets can be loaded 
         public static TileType GetTypeOfTileNumber<T>(int tileNumber) where T : new()
         {
-            if (new T() is FloorTileType)
+            T newT = new T();
+            if (newT is FloorTileType)
             {
                 return FloorTileType.GetTypeOfTileNumber(tileNumber);
+            }
+            else if (newT is PlayerTileType)
+            {
+                return PlayerTileType.GetTypeOfTileNumber(tileNumber);
             }
             
             throw new NotImplementedException();
         }
     }
 
-    public class FloorTileType
+    public class FloorTileType : TileTypeBase
     {
         private static TileType[] FloorNumberToType = { TileType.Finish, TileType.Floor, TileType.Hole, TileType.Wall };
 
         public static TileType GetTypeOfTileNumber(int tileNumber)
         {
             return FloorNumberToType[tileNumber];
+        }
+    }
+
+    public class PlayerTileType : TileTypeBase
+    {
+        private static TileType[] TileNumberToType = { TileType.Player };
+
+        public static TileType GetTypeOfTileNumber(int tileNumber)
+        {
+            return TileNumberToType[tileNumber];
         }
     }
 
@@ -66,6 +82,21 @@ namespace ConflictCube.Model.Tiles
                 tile.Type != TileType.Wall)
             {
                 throw new System.Exception("FloorTile was initalized with wrong TileType");
+            }
+
+            Type = tile.Type;
+        }
+    }
+
+    public class PlayerTile : RenderableObject
+    {
+        public TileType Type { get; private set; }
+
+        public PlayerTile(TilesetTile tile, Vector2 size, Vector2 position) : base(position, size, tile.Texture)
+        {
+            if (tile.Type != TileType.Player )
+            {
+                throw new System.Exception("PlayerTile was initalized with wrong TileType");
             }
 
             Type = tile.Type;

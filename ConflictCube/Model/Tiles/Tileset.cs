@@ -9,7 +9,7 @@ using Zenseless.OpenGL;
 
 namespace ConflictCube.Model.Tiles
 {
-    public class Tileset<T> where T : new()
+    public class Tileset<T> where T : TileTypeBase, new()
     {
         private static string TilesetTilecountAttrib = "tilecount";
         private static string TilesetTilecolumnsAttrib = "columns";
@@ -25,6 +25,14 @@ namespace ConflictCube.Model.Tiles
             TilesetColumns = -1;
             ReadTilesetDescription(pathToDescription, pathToPngTileset);
             AddTilesToTileset(pathToPngTileset);
+        }
+
+        public TilesetTile GetTileOfType(TileType type)
+        {
+            TilesetTile retVal;
+            TilesetTiles.TryGetValue(type, out retVal);
+
+            return retVal;
         }
 
         private void ReadTilesetDescription(string pathToDescription, string pathToPngTileset)
@@ -62,19 +70,19 @@ namespace ConflictCube.Model.Tiles
 
         private void AddTilesToTileset(string pathToPngTileset)
         {
-            int tilesetRows = (int)(TilesetCount / TilesetColumns);
+            TilesetRows = (int)(TilesetCount / TilesetColumns);
 
             int currentTilenumber = 0;
             Vector2 sizeOfTileInTileset = new Vector2();
             sizeOfTileInTileset.X = (float)1 / TilesetColumns;
-            sizeOfTileInTileset.Y = (float)1 / tilesetRows;
+            sizeOfTileInTileset.Y = (float)1 / TilesetRows;
 
             // Tiles are numbered from top left to bottom right in rows
             // Tileset -> 0    1
             //            2    3
             //            ...
             // Start at top (y = rows - 1) and at left x = 0
-            for (int row = tilesetRows - 1; row >= 0; row--)
+            for (int row = TilesetRows - 1; row >= 0; row--)
             {
                 float uvYPos = (float)row * sizeOfTileInTileset.Y;
 

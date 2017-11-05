@@ -42,5 +42,13 @@ namespace ConflictCube
             texture.Deactivate();
             GL3.Disable(OpenGL3.EnableCap.Texture2D);
         }
+
+        public static void DrawBoxWithTextureAndAlphaChannel(Box2D rect, Texture texture)
+        {
+            GL3.Enable(OpenGL3.EnableCap.Blend);
+            GL3.BlendFunc(OpenGL3.BlendingFactorSrc.SrcAlpha, OpenGL3.BlendingFactorDest.OneMinusSrcAlpha);
+            DrawBoxWithTexture(rect, texture);
+            GL3.Disable(OpenGL3.EnableCap.Blend);
+        }
     }
 }

@@ -8,7 +8,8 @@ namespace ConflictCube.Model.Renderable
 {
     public enum RenderLayerType
     {
-        Floor
+        Floor,
+        Player
     }
 
     public class RenderableLayer
