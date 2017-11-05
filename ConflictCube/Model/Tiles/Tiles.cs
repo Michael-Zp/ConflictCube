@@ -1,6 +1,7 @@
 ﻿using OpenTK;
 using ConflictCube.Model.Renderable;
 using Zenseless.OpenGL;
+using System;
 
 namespace ConflictCube.Model.Tiles
 {
@@ -10,6 +11,20 @@ namespace ConflictCube.Model.Tiles
         Wall,
         Hole,
         Finish
+    }
+
+    public abstract class TileTypeBase
+    {
+        // With this construct tilesets can be loaded 
+        public static TileType GetTypeOfTileNumber<T>(int tileNumber) where T : new()
+        {
+            if (new T() is FloorTileType)
+            {
+                return FloorTileType.GetTypeOfTileNumber(tileNumber);
+            }
+            
+            throw new NotImplementedException();
+        }
     }
 
     public class FloorTileType
@@ -22,18 +37,17 @@ namespace ConflictCube.Model.Tiles
         }
     }
 
-    public class Tile
+    public class TilesetTile
     {
         public TileType Type { get; private set; }
         public Texture Texture { get; private set; }
 
 
-        public Tile(TileType type, Texture texture)
+        public TilesetTile(TileType type, Texture texture)
         {
             Type = type;
             Texture = texture;
         }
-
     }
 
 
@@ -41,7 +55,7 @@ namespace ConflictCube.Model.Tiles
     {
         public TileType Type { get; private set; }
 
-        public FloorTile(Tile tile, Vector2 size, Vector2 position) : base(position, size, tile.Texture)
+        public FloorTile(TilesetTile tile, Vector2 size, Vector2 position) : base(position, size, tile.Texture)
         {
             if (tile.Type != TileType.Finish &&
                 tile.Type != TileType.Floor &&

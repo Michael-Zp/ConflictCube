@@ -31,7 +31,7 @@ namespace ConflictCubeTest
 
             for (int i = 0; i < LevelBuilder.FloorTileset.Count; i++)
             {
-                Tile currentTile;
+                TilesetTile currentTile;
                 LevelBuilder.FloorTileset.TryGetValue(FloorTileType.GetTypeOfTileNumber(i), out currentTile);
                 Assert.AreEqual(types[i], currentTile.Type);
             }
