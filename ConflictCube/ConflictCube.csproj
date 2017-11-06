@@ -76,9 +76,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Model\IInputManager.cs" />
+    <Compile Include="Model\InputManager.cs" />
     <Compile Include="Model\Level\Level.cs" />
     <Compile Include="Controller\GameController.cs" />
     <Compile Include="Model\GameState.cs" />
+    <Compile Include="Model\Renderable\Moveable.cs" />
     <Compile Include="Model\Renderable\Player.cs" />
     <Compile Include="Model\Renderable\Floor.cs" />
     <Compile Include="Model\Renderable\RenderableLayer.cs" />

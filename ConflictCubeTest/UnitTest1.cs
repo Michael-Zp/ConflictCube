@@ -104,6 +104,35 @@ namespace ConflictCubeTest
             }
         }
 
+        
+        [Test]
+        [Category("OpenGlTests")]
+        public void SetStartPosition()
+        {
+            SetupOpenTK();
+
+            Level level = LevelBuilder.LoadLevel(0);
+
+            Vector2 startPosition = level.Floor.FindStartPosition();
+
+            Assert.AreEqual(new Vector2(-0.25f, -0.9f), startPosition);
+
+
+            //One tile above the start field is another floor field -> Move one up should not change the position
+            level.Floor.MoveFloorUp(level.Floor.FloorTileSize.Y);
+
+            startPosition = level.Floor.FindStartPosition();
+
+            Assert.AreEqual(new Vector2(-0.25f, -0.9f), startPosition);
+
+            //Now the start field is one tile to the right
+            level.Floor.MoveFloorUp(level.Floor.FloorTileSize.Y);
+
+            startPosition = level.Floor.FindStartPosition();
+
+            Assert.AreEqual(new Vector2(0.25f, -0.9f), startPosition);
+        }
+
         [Test]
         public void PassingTest()
         {

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using OpenTK.Input;
 using System;
+using ConflictCube.Model;
 
 namespace ConflictCube
 {
@@ -17,7 +18,11 @@ namespace ConflictCube
 
         private void SetDefaultKeyboardSettings()
         {
-            KeyboardSettings.Add(Key.Escape, State.CloseGame);
+            KeyboardSettings.Add(Key.Escape, State.InputManager.CloseGame);
+            KeyboardSettings.Add(Key.Left, State.InputManager.MovePlayerLeft);
+            KeyboardSettings.Add(Key.Right, State.InputManager.MovePlayerRight);
+            KeyboardSettings.Add(Key.Up, State.InputManager.MovePlayerUp);
+            KeyboardSettings.Add(Key.Down, State.InputManager.MovePlayerDown);
         }
 
         public void UpdateState()
@@ -39,6 +44,11 @@ namespace ConflictCube
         public void LoadLevel(int level)
         {
             State.LoadLevel(level);
+        }
+
+        public void InitializePlayer()
+        {
+            State.InitializePlayer();
         }
     }
 }

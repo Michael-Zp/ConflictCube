@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Zenseless.Geometry;
 
 namespace ConflictCube.Model.Renderable
 {
@@ -28,24 +29,31 @@ namespace ConflictCube.Model.Renderable
         
         private static Floor LoadFloor(int levelRows, int levelColumns, TileType[,] FloorTiles, Tileset<FloorTileType> tileset)
         {
-            TilesetTile currentTile;
+            TilesetTile currentTilesetTile;
             Floor floorOfLevel = new Floor(new Vector2(levelColumns, levelRows), tileset);
 
-            for (int y = 0; y < levelRows; y++)
+            for (int row = 0; row < levelRows; row++)
             {
-                float posY = 1 - (y + 1) * floorOfLevel.FloorTileSize.Y;
-                for (int x = 0; x < levelColumns; x++)
+                for (int column = 0; column < levelColumns; column++)
                 {
-                    floorOfLevel.Tileset.TilesetTiles.TryGetValue(FloorTiles[y, x], out currentTile);
+                    floorOfLevel.Tileset.TilesetTiles.TryGetValue(FloorTiles[row, column], out currentTilesetTile);
+                    
+                    Box2D tileBox = floorOfLevel.BoxInFloorGrid(row, column);
 
-                    float posX = -1 + x * floorOfLevel.FloorTileSize.X;
-
-                    FloorTile floorTile = new FloorTile(currentTile, floorOfLevel.FloorTileSize, new Vector2(posX, posY));
-                    floorOfLevel.AddFloorTile(floorTile, y, x);
+                    FloorTile floorTile = new FloorTile(currentTilesetTile, tileBox, row, column);
+                    floorOfLevel.AddFloorTile(floorTile, row, column);
                 }
             }
 
             return floorOfLevel;
+        }
+
+        private Box2D BoxInFloorGrid(float row, float column)
+        {
+            float posX = -1 + column * FloorTileSize.X;
+            float posY = -1 + ((FloorTiles.GetLength(0) - 1) - row) * FloorTileSize.Y;
+
+            return new Box2D(posX, posY, FloorTileSize.X, FloorTileSize.Y);
         }
 
         private static TileType[,] GetFloorDataFromLevelfile(string levelPath, out int levelRows, out int levelColumns)
@@ -95,6 +103,7 @@ namespace ConflictCube.Model.Renderable
 
 
         //Non - static
+        public List<IMoveable> AttachedObjects { get; private set; }
         public Vector2 FloorTileSize;
         private Vector2 _FloorSize;
         public Vector2 FloorSize {
@@ -105,13 +114,26 @@ namespace ConflictCube.Model.Renderable
                 _FloorSize = value;
                 FloorTileSize.X = 2 / _FloorSize.X;
                 FloorTileSize.Y = 2 / _FloorSize.Y;
+
+                if (FloorTiles != null && FloorTiles.LongLength != 0)
+                {
+                    foreach (FloorTile tile in FloorTiles)
+                    {
+                        if (tile != null)
+                        {
+                            tile.Box = BoxInFloorGrid(tile.Row, tile.Column);
+                        }
+                    }
+                }
             }
         }
         public FloorTile[,] FloorTiles { get; set; }
         public Tileset<FloorTileType> Tileset { get; private set; }
+        private float TotalMovedDistanceDown = 0;
 
-        public Floor(Vector2 floorSize, Tileset<FloorTileType> floorTileset) : base(new List<RenderableObject>())
+        private Floor(Vector2 floorSize, Tileset<FloorTileType> floorTileset) : base(new List<RenderableObject>())
         {
+            AttachedObjects = new List<IMoveable>();
             FloorTiles = new FloorTile[(int)floorSize.Y, (int)floorSize.X];
             FloorSize = floorSize;
             Tileset = floorTileset;
@@ -119,9 +141,16 @@ namespace ConflictCube.Model.Renderable
 
         public void MoveFloorUp(float distance)
         {
+            TotalMovedDistanceDown += distance;
             foreach (FloorTile floorTile in FloorTiles)
             {
                 floorTile.Box.MinY -= distance;
+            }
+
+
+            foreach (IMoveable attachedObject in AttachedObjects)
+            {
+                attachedObject.Move(new Vector2(0.0f, distance * -1));
             }
         }
         
@@ -130,6 +159,33 @@ namespace ConflictCube.Model.Renderable
         {
             FloorTiles[y, x] = floorTile;
             ObjectsToRender.Add(floorTile);
+        }
+
+        public void AddAttachedObject(IMoveable moveable)
+        {
+            AttachedObjects.Add(moveable);
+        }
+
+        public Vector2 FindStartPosition()
+        {
+            int TilesNotVisibleAnymore = (int)Math.Floor(TotalMovedDistanceDown / FloorTileSize.Y);
+            int LowestRow = FloorTiles.GetLength(0) - TilesNotVisibleAnymore;
+            int LowestRowIndex = LowestRow - 1;
+
+            for (int i = LowestRowIndex; i >= 0; i--)
+            {
+                for (int u = 0; u < FloorTiles.GetLength(1); u++)
+                {
+                    FloorTile tile = FloorTiles[i, u];
+                    if (tile.Type == TileType.Floor)
+                    {
+                        return new Vector2(tile.Box.CenterX, tile.Box.CenterY);
+                    }
+                }
+            }
+
+            // No tile in the whole level is of type floor....
+            throw new Exception("No start position found");
         }
     }
 }

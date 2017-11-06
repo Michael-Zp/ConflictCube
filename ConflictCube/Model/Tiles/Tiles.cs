@@ -4,6 +4,7 @@ using Zenseless.OpenGL;
 using System;
 using System.Xml;
 using System.Collections.Generic;
+using Zenseless.Geometry;
 
 namespace ConflictCube.Model.Tiles
 {
@@ -73,8 +74,10 @@ namespace ConflictCube.Model.Tiles
     public class FloorTile : RenderableObject
     {
         public TileType Type { get; private set; }
+        public int Row { get; private set; }
+        public int Column { get; private set; }
 
-        public FloorTile(TilesetTile tile, Vector2 size, Vector2 position) : base(position, size, tile.Texture)
+        public FloorTile(TilesetTile tile, Box2D box, int row, int column) : base(box, tile.Texture)
         {
             if (tile.Type != TileType.Finish &&
                 tile.Type != TileType.Floor &&
@@ -85,6 +88,8 @@ namespace ConflictCube.Model.Tiles
             }
 
             Type = tile.Type;
+            Row = row;
+            Column = column;
         }
     }
 

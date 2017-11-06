@@ -1,4 +1,4 @@
-﻿using OpenTK.Input;
+﻿using ConflictCube.Model;
 
 namespace ConflictCube
 {
@@ -13,6 +13,7 @@ namespace ConflictCube
            
 
             controller.LoadLevel(0);
+            controller.InitializePlayer();
 
             while(window.WaitForNextFrame())
             {

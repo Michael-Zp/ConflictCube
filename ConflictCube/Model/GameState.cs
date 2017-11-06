@@ -1,35 +1,32 @@
-﻿using ConflictCube.Model.Renderable;
-using ConflictCube.Model.Tiles;
+﻿using ConflictCube.Model.Tiles;
 using OpenTK;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace ConflictCube
+namespace ConflictCube.Model
 {
     public class GameState
     {
         private GameView View;
 
+        public InputManager InputManager { get; private set; }
         public Level CurrentLevel { get; set; }
         public Player Player { get; private set; }
 
         public GameState(GameView view)
         {
-            this.View = view;
-
-            InitializePlayer();
+            View = view;
+            InputManager = new InputManager(View);
         }
 
-        private void InitializePlayer()
+        public void InitializePlayer()
         {
             TilesetTile tilesetTile;
 
             Player.PlayerTileset.TilesetTiles.TryGetValue(Player.DefaultTileType, out tilesetTile);
 
-            this.Player = new Player(tilesetTile, new Vector2(.1f, .1f), new Vector2(.1f, .1f));
+            Player = new Player(tilesetTile, new Vector2(.1f, .1f), new Vector2(.1f, .1f), .02f);
+            CurrentLevel.Floor.AddAttachedObject(Player);
+            InputManager.Player = Player;
+            Player.SetPosition(CurrentLevel.Floor.FindStartPosition());
         }
 
         public void UpdateView()
@@ -44,13 +41,8 @@ namespace ConflictCube
             CurrentLevel = LevelBuilder.LoadLevel(levelNumber);
 
             //Hard coded parameters. Enhance level format or even build own level format including these parameters.
-            CurrentLevel.Floor.FloorSize = new OpenTK.Vector2(4,5);
+            CurrentLevel.Floor.FloorSize = new Vector2(4,5);
             CurrentLevel.FloorOffsetPerSecond = .1f;
-        }
-
-        public void CloseGame()
-        {
-            View.CloseWindow();
         }
 
         public void NextFrame(float diffTime)
