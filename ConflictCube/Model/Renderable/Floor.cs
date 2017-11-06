@@ -150,6 +150,7 @@ namespace ConflictCube.Model.Renderable
 
             foreach (IMoveable attachedObject in AttachedObjects)
             {
+                attachedObject.SetPosition(new Vector2(attachedObject.GetPosition().X, attachedObject.GetPosition().Y - distance));
                 attachedObject.Move(new Vector2(0.0f, distance * -1));
             }
         }

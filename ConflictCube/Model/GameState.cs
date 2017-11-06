@@ -1,5 +1,8 @@
-﻿using ConflictCube.Model.Tiles;
+﻿using System;
+using ConflictCube.Model.Tiles;
 using OpenTK;
+using Zenseless.Geometry;
+using ConflictCube.Model.Renderable;
 
 namespace ConflictCube.Model
 {
@@ -10,6 +13,15 @@ namespace ConflictCube.Model
         public InputManager InputManager { get; private set; }
         public Level CurrentLevel { get; set; }
         public Player Player { get; private set; }
+        
+        private Boundary[] Boundaries =
+        {
+            new Boundary(new Box2D(-1.5f, -1f,  .5f,  2f), CollisionType.LeftBoundary),
+            new Boundary(new Box2D( 1f,   -1f,  .5f,  2f), CollisionType.RightBoundary),
+            new Boundary(new Box2D(-1f,    1f,   2f, .5f), CollisionType.TopBoundary),
+            new Boundary(new Box2D(-1f,   -1.5f, 2f, .5f), CollisionType.BottomBoundary)
+        };
+
 
         public GameState(GameView view)
         {
@@ -48,6 +60,35 @@ namespace ConflictCube.Model
         public void NextFrame(float diffTime)
         {
             CurrentLevel.Floor.MoveFloorUp(CurrentLevel.FloorOffsetPerSecond * diffTime);
+
+            CheckCollisions();
+
+            CheckLooseCondition();
+        }
+
+        private void CheckLooseCondition()
+        {
+            if (!Player.IsAlive)
+            {
+                InputManager.CloseGame();
+            }
+        }
+
+        private void CheckCollisions()
+        {
+            CheckLevelBoundaries(Player);
+        }
+
+        private void CheckLevelBoundaries<T>(T obj) where T : RenderableObject, ICollidable 
+        {
+            foreach (Boundary boundary in Boundaries)
+            {
+                if (obj.Box.Intersects(boundary.Box))
+                {
+                    obj.OnCollide(boundary.CollisionType);
+                }
+            }
+
         }
     }
 }

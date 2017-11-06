@@ -76,8 +76,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Model\ICollidable.cs" />
     <Compile Include="Model\IInputManager.cs" />
     <Compile Include="Model\InputManager.cs" />
+    <Compile Include="Model\Level\Boundary.cs" />
     <Compile Include="Model\Level\Level.cs" />
     <Compile Include="Controller\GameController.cs" />
     <Compile Include="Model\GameState.cs" />
