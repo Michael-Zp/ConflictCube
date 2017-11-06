@@ -21,18 +21,18 @@ namespace ConflictCubeTest
         {
             SetupOpenTK();
 
-            Assert.AreEqual(4, LevelBuilder.FloorTileset.Count);
+            Assert.AreEqual(4, LevelBuilder.FloorTileset.TilesetTiles.Count);
 
 
             TileType[] types = { TileType.Finish, TileType.Floor, TileType.Hole, TileType.Wall };
 
 
-            Assert.AreEqual(LevelBuilder.FloorTileset.Count, types.Length);
+            Assert.AreEqual(LevelBuilder.FloorTileset.TilesetTiles.Count, types.Length);
 
-            for (int i = 0; i < LevelBuilder.FloorTileset.Count; i++)
+            for (int i = 0; i < LevelBuilder.FloorTileset.TilesetTiles.Count; i++)
             {
                 TilesetTile currentTile;
-                LevelBuilder.FloorTileset.TryGetValue(FloorTileType.GetTypeOfTileNumber(i), out currentTile);
+                LevelBuilder.FloorTileset.TilesetTiles.TryGetValue(FloorTileType.GetTypeOfTileNumber(i), out currentTile);
                 Assert.AreEqual(types[i], currentTile.Type);
             }
 
@@ -69,8 +69,22 @@ namespace ConflictCubeTest
                 }
             }
 
+            TileType[,] loadedLevel0 = new TileType[10, 4];
+
+            Assert.AreEqual(loadedLevel0.GetLength(0), level.Floor.FloorTiles.GetLength(0));
+            Assert.AreEqual(loadedLevel0.GetLength(1), level.Floor.FloorTiles.GetLength(1));
+
+            for (int y = 0; y < 10; y++)
+            {
+                for (int x = 0; x < 4; x++)
+                {
+                    loadedLevel0[y, x] = level.Floor.FloorTiles[y, x].Type;
+                }
+            }
+
+
             Assert.AreEqual(LevelBuilder.FloorTileset, level.Floor.Tileset);
-            Assert.AreEqual(ftLevel0, level.Floor.FloorTiles);
+            Assert.AreEqual(ftLevel0, loadedLevel0);
         }
 
         [Test]
