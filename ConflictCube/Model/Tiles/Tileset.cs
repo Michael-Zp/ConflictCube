@@ -1,45 +1,30 @@
 ﻿using OpenTK;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
 using Zenseless.OpenGL;
 
 namespace ConflictCube.Model.Tiles
 {
-    public class Tileset<T> where T : TileTypeBase, new()
+    public static class TilesetLoader 
     {
         private static string TilesetTilecountAttrib = "tilecount";
         private static string TilesetTilecolumnsAttrib = "columns";
-
-        public Dictionary<TileType, TilesetTile> TilesetTiles = new Dictionary<TileType, TilesetTile>();
-        public int TilesetCount { get; private set; }
-        public int TilesetColumns { get; private set; }
-        public int TilesetRows { get; private set; }
-
-        public Tileset(string pathToDescription, string pathToPngTileset)
+        
+        public static Dictionary<TileType, Texture> LoadTileset(TilesetType type)
         {
-            TilesetCount = -1;
-            TilesetColumns = -1;
-            ReadTilesetDescription(pathToDescription, pathToPngTileset);
-            AddTilesToTileset(pathToPngTileset);
+            int tilesetCount, tilesetColumns;
+            ReadTilesetDescription(TileTypeBase.GetTilesetDescriptionPath(type), out tilesetCount, out tilesetColumns);
+            return ReadTileset(type, tilesetCount, tilesetColumns);
         }
 
-        public TilesetTile GetTileOfType(TileType type)
+        private static void ReadTilesetDescription(string pathToDescription, out int tilesetCount, out int tilesetColumns)
         {
-            TilesetTile retVal;
-            TilesetTiles.TryGetValue(type, out retVal);
-
-            return retVal;
-        }
-
-        private void ReadTilesetDescription(string pathToDescription, string pathToPngTileset)
-        {
+            tilesetCount = -1;
+            tilesetColumns = -1;
             using (XmlTextReader reader = new XmlTextReader(pathToDescription))
             {
-                while (reader.Read() && !(TilesetCount != -1 && TilesetColumns != -1))
+                while (reader.Read() && !(tilesetCount != -1 && tilesetColumns != -1))
                 {
                     if (reader.HasAttributes)
                     {
@@ -47,56 +32,59 @@ namespace ConflictCube.Model.Tiles
                         {
                             if (reader.Name == TilesetTilecountAttrib)
                             {
-                                TilesetCount = int.Parse(reader.Value);
+                                tilesetCount = int.Parse(reader.Value);
                                 continue;
                             }
 
                             if (reader.Name == TilesetTilecolumnsAttrib)
                             {
-                                TilesetColumns = int.Parse(reader.Value);
+                                tilesetColumns = int.Parse(reader.Value);
                                 continue;
                             }
 
-                        } while (reader.MoveToNextAttribute() && !(TilesetCount != -1 && TilesetColumns != -1));
+                        } while (reader.MoveToNextAttribute() && !(tilesetCount != -1 && tilesetColumns != -1));
                     }
                 }
             }
 
-            if (TilesetCount == -1 || TilesetColumns == -1)
+            if (tilesetCount == -1 || tilesetColumns == -1)
             {
                 throw new Exception();
             }
         }
 
-        private void AddTilesToTileset(string pathToPngTileset)
+        private static Dictionary<TileType, Texture> ReadTileset(TilesetType type, int tilesetCount, int tilesetColumns)
         {
-            TilesetRows = (int)(TilesetCount / TilesetColumns);
+            string pathToPngTileset = TileTypeBase.GetTilesetPngPath(type);
+            int tilesetRows = (int)(tilesetCount / tilesetColumns);
 
             int currentTilenumber = 0;
             Vector2 sizeOfTileInTileset = new Vector2();
-            sizeOfTileInTileset.X = (float)1 / TilesetColumns;
-            sizeOfTileInTileset.Y = (float)1 / TilesetRows;
+            sizeOfTileInTileset.X = (float)1 / tilesetColumns;
+            sizeOfTileInTileset.Y = (float)1 / tilesetRows;
+
+            Dictionary<TileType, Texture> tilesetTiles = new Dictionary<TileType, Texture>();
 
             // Tiles are numbered from top left to bottom right in rows
             // Tileset -> 0    1
             //            2    3
             //            ...
             // Start at top (y = rows - 1) and at left x = 0
-            for (int row = TilesetRows - 1; row >= 0; row--)
+            for (int row = tilesetRows - 1; row >= 0; row--)
             {
                 float uvYPos = (float)row * sizeOfTileInTileset.Y;
 
-                for (int column = 0; column < TilesetColumns; column++, currentTilenumber++)
+                for (int column = 0; column < tilesetColumns; column++, currentTilenumber++)
                 {
                     float uvXPos = (float)column * sizeOfTileInTileset.X;
                     Box2d textureBox = new Box2d(uvXPos, uvYPos + sizeOfTileInTileset.Y, uvXPos + sizeOfTileInTileset.X, uvYPos);
                     Texture texture = (Texture)ZenselessWrapper.FromFile(pathToPngTileset, textureBox);
 
-                    TileType type = TileTypeBase.GetTypeOfTileNumber<T>(currentTilenumber);
-
-                    TilesetTiles.Add(type, new TilesetTile(type, texture));
+                    tilesetTiles.Add(TileTypeBase.GetTypeOfTileNumber(type, currentTilenumber), texture);
                 }
             }
+
+            return tilesetTiles;
         }
     }
 }

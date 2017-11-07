@@ -2,29 +2,17 @@
 using ConflictCube.Model.Renderable;
 using ConflictCube.Model.Tiles;
 using OpenTK;
-using System;
 
 namespace ConflictCube
 {
     public class Player : RenderableObject, IMoveable, ICollidable
     {
-        private static string PlayerTilesetDescriptionPath = LevelBuilder.LevelDirectoryPath + "Player.tsx";
-        private static string PlayerTilesetPngPath = LevelBuilder.LevelDirectoryPath + "Player.gif";
-        public static TileType DefaultTileType = TileType.Player;
-        public static Tileset<PlayerTileType> PlayerTileset { get; set; }
-
-
         public float Speed { get; private set; }
         public bool IsAlive { get; private set; }
         public CollisionType CollisionType { get; private set; }
+        
 
-
-        static Player()
-        {
-            PlayerTileset = new Tileset<PlayerTileType>(PlayerTilesetDescriptionPath, PlayerTilesetPngPath);
-        }
-
-        public Player(TilesetTile tile, Vector2 size, Vector2 position, float speed, bool isAlive = true) : base(position, size, tile.Texture)
+        public Player(Vector2 size, Vector2 position, float speed, bool isAlive = true) : base(position, size, TileType.Player)
         {
             Speed = speed;
             IsAlive = isAlive;

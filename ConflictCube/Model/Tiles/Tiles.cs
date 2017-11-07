@@ -17,27 +17,65 @@ namespace ConflictCube.Model.Tiles
         Player
     }
 
-    public abstract class TileTypeBase
+    public enum TilesetType
     {
+        Floor,
+        Player
+    }
+
+    public static class TileTypeBase
+    {
+        public static string TilesetPath = ".\\ConflictCube\\Levels\\";
+
         // With this construct tilesets can be loaded 
-        public static TileType GetTypeOfTileNumber<T>(int tileNumber) where T : new()
+        public static TileType GetTypeOfTileNumber(TilesetType type, int tileNumber)
         {
-            T newT = new T();
-            if (newT is FloorTileType)
+            switch(type)
             {
-                return FloorTileType.GetTypeOfTileNumber(tileNumber);
-            }
-            else if (newT is PlayerTileType)
-            {
-                return PlayerTileType.GetTypeOfTileNumber(tileNumber);
+                case TilesetType.Floor:
+                    return FloorTileType.GetTypeOfTileNumber(tileNumber);
+
+                case TilesetType.Player:
+                    return PlayerTileType.GetTypeOfTileNumber(tileNumber);
             }
             
             throw new NotImplementedException();
         }
+
+        public static string GetTilesetDescriptionPath(TilesetType type)
+        {
+            switch (type)
+            {
+                case TilesetType.Floor:
+                    return FloorTileType.FloorTilesetDescriptionPath;
+
+                case TilesetType.Player:
+                    return PlayerTileType.PlayerTilesetDescriptionPath;
+            }
+
+            throw new NotImplementedException();
+        }
+
+        public static string GetTilesetPngPath(TilesetType type)
+        {
+            switch (type)
+            {
+                case TilesetType.Floor:
+                    return FloorTileType.FloorTilesetPngPath;
+
+                case TilesetType.Player:
+                    return PlayerTileType.PlayerTilesetPngPath;
+            }
+
+            throw new NotImplementedException();
+        }
     }
 
-    public class FloorTileType : TileTypeBase
+    public static class FloorTileType
     {
+        public static string FloorTilesetDescriptionPath = TileTypeBase.TilesetPath + "Tileset.tsx";
+        public static string FloorTilesetPngPath = TileTypeBase.TilesetPath + "Tileset.png";
+
         private static TileType[] FloorNumberToType = { TileType.Finish, TileType.Floor, TileType.Hole, TileType.Wall };
 
         public static TileType GetTypeOfTileNumber(int tileNumber)
@@ -46,8 +84,11 @@ namespace ConflictCube.Model.Tiles
         }
     }
 
-    public class PlayerTileType : TileTypeBase
+    public static class PlayerTileType
     {
+        public static string PlayerTilesetDescriptionPath = TileTypeBase.TilesetPath + "Player.tsx";
+        public static string PlayerTilesetPngPath = TileTypeBase.TilesetPath + "Player.gif";
+
         private static TileType[] TileNumberToType = { TileType.Player };
 
         public static TileType GetTypeOfTileNumber(int tileNumber)
@@ -57,37 +98,21 @@ namespace ConflictCube.Model.Tiles
     }
 
 
-    public class TilesetTile
-    {
-        public TileType Type { get; private set; }
-        public Texture Texture { get; private set; }
-
-
-        public TilesetTile(TileType type, Texture texture)
-        {
-            Type = type;
-            Texture = texture;
-        }
-    }
-
-
     public class FloorTile : RenderableObject
     {
-        public TileType Type { get; private set; }
         public int Row { get; private set; }
         public int Column { get; private set; }
 
-        public FloorTile(TilesetTile tile, Box2D box, int row, int column) : base(box, tile.Texture)
+        public FloorTile(TileType type, Box2D box, int row, int column) : base(box, type)
         {
-            if (tile.Type != TileType.Finish &&
-                tile.Type != TileType.Floor &&
-                tile.Type != TileType.Hole &&
-                tile.Type != TileType.Wall)
+            if (type != TileType.Finish &&
+                type != TileType.Floor &&
+                type != TileType.Hole &&
+                type != TileType.Wall)
             {
                 throw new System.Exception("FloorTile was initalized with wrong TileType");
             }
-
-            Type = tile.Type;
+            
             Row = row;
             Column = column;
         }
@@ -95,16 +120,12 @@ namespace ConflictCube.Model.Tiles
 
     public class PlayerTile : RenderableObject
     {
-        public TileType Type { get; private set; }
-
-        public PlayerTile(TilesetTile tile, Vector2 size, Vector2 position) : base(position, size, tile.Texture)
+        public PlayerTile(TileType type, Vector2 size, Vector2 position) : base(position, size, type)
         {
-            if (tile.Type != TileType.Player )
+            if (type != TileType.Player )
             {
                 throw new System.Exception("PlayerTile was initalized with wrong TileType");
             }
-
-            Type = tile.Type;
         }
     }
 }

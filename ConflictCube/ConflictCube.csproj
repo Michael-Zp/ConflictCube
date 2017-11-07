@@ -76,13 +76,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controller\Input.cs" />
     <Compile Include="Model\ICollidable.cs" />
-    <Compile Include="Model\IInputManager.cs" />
     <Compile Include="Model\InputManager.cs" />
     <Compile Include="Model\Level\Boundary.cs" />
     <Compile Include="Model\Level\Level.cs" />
     <Compile Include="Controller\GameController.cs" />
     <Compile Include="Model\GameState.cs" />
+    <Compile Include="Model\Renderable\FloorLoader.cs" />
     <Compile Include="Model\Renderable\Moveable.cs" />
     <Compile Include="Model\Renderable\Player.cs" />
     <Compile Include="Model\Renderable\Floor.cs" />
@@ -90,6 +91,7 @@
     <Compile Include="Model\Renderable\RenderableObject.cs" />
     <Compile Include="Model\Tiles\Tiles.cs" />
     <Compile Include="Model\Tiles\Tileset.cs" />
+    <Compile Include="Controller\ViewModel.cs" />
     <Compile Include="View\GameView.cs" />
     <Compile Include="Model\Level\LevelBuilder.cs" />
     <Compile Include="View\MyWindow.cs" />

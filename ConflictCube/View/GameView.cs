@@ -1,5 +1,4 @@
 ﻿using ConflictCube.Model.Tiles;
-using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 using System.Collections.Generic;
@@ -7,13 +6,14 @@ using ConflictCube.Model.Renderable;
 using System;
 using Zenseless.OpenGL;
 using Zenseless.Geometry;
+using ConflictCube.Controller;
 
 namespace ConflictCube
 {
     public class GameView
     {
         private MyWindow Window;
-        private Dictionary<RenderLayerType, RenderableLayer> RenderingLayers = new Dictionary<RenderLayerType, RenderableLayer>();
+        private Dictionary<TileType, Texture> Tileset = new Dictionary<TileType, Texture>();
 
         public GameView(MyWindow window)
         {
@@ -21,11 +21,21 @@ namespace ConflictCube
 
             Window.Resize += (s, a) => GL.Viewport(0, 0, Window.Width, Window.Height);
             GL.ClearColor(Color4.CornflowerBlue);
-        }
 
-        internal void SetLevel(Level currentLevel)
-        {
-            SetFloorRenderingLayer(currentLevel.Floor);
+            List<Dictionary<TileType, Texture>> tilesets = new List<Dictionary<TileType, Texture>>();
+            tilesets.Add(TilesetLoader.LoadTileset(TilesetType.Floor));
+            tilesets.Add(TilesetLoader.LoadTileset(TilesetType.Player));
+
+            foreach (var tileset in tilesets)
+            {
+                foreach (var key in tileset.Keys)
+                {
+                    Texture tempTexture;
+                    tileset.TryGetValue(key, out tempTexture);
+
+                    Tileset.Add(key, tempTexture);
+                }
+            }
         }
 
         public void ClearScreen()
@@ -34,48 +44,16 @@ namespace ConflictCube
         }
 
         
-        public void SetFloorRenderingLayer(Floor currentFloor)
-        {
-            if (RenderingLayers.ContainsKey(RenderLayerType.Floor))
-            {
-                RenderingLayers.Remove(RenderLayerType.Floor);
-            }
-            
 
-            RenderableLayer floorLayer = new RenderableLayer();
-
-            floorLayer.ObjectsToRender.AddRange(currentFloor.ObjectsToRender);
-
-            RenderingLayers.Add(RenderLayerType.Floor, floorLayer);
-        }
-
-        public void AddPlayer(Player player)
-        {
-            RenderableLayer playerLayer;
-            if (!RenderingLayers.ContainsKey(RenderLayerType.Player))
-            {
-                playerLayer = new RenderableLayer();
-                RenderingLayers.Add(RenderLayerType.Player, playerLayer);
-            }
-            else
-            {
-                RenderingLayers.TryGetValue(RenderLayerType.Player, out playerLayer);
-            }
-
-            playerLayer.ObjectsToRender.Add(player);
-        }
-
-        public void Render()
+        public void Render(ViewModel viewModel)
         {
             RenderableLayer currentLayer;
 
-            RenderingLayers.TryGetValue(RenderLayerType.Floor, out currentLayer);
+            viewModel.RenderingLayers.TryGetValue(RenderLayerType.Floor, out currentLayer);
             RenderLayer(currentLayer, false);
 
-            RenderingLayers.TryGetValue(RenderLayerType.Player, out currentLayer);
+            viewModel.RenderingLayers.TryGetValue(RenderLayerType.Player, out currentLayer);
             RenderLayer(currentLayer, true);
-
-            RenderingLayers.Clear();
         }
 
         private void RenderLayer(RenderableLayer currentLayer, bool alpha)
@@ -92,7 +70,9 @@ namespace ConflictCube
 
             foreach (RenderableObject currObj in currentLayer.ObjectsToRender)
             {
-                renderCall(currObj.Box, currObj.Texture);
+                Texture tempTexture;
+                Tileset.TryGetValue(currObj.Type, out tempTexture);
+                renderCall(currObj.Box, tempTexture);
             }
         }
 

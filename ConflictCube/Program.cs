@@ -1,4 +1,5 @@
 ﻿using ConflictCube.Model;
+using ConflictCube.Controller;
 
 namespace ConflictCube
 {
@@ -8,19 +9,16 @@ namespace ConflictCube
         {
             MyWindow window = new MyWindow();
             GameView view = new GameView(window);
-            GameState state = new GameState(view);
-            GameController controller = new GameController(state);
+            GameState state = new GameState();
+            GameController controller = new GameController();
            
-
-            controller.LoadLevel(0);
-            controller.InitializePlayer();
 
             while(window.WaitForNextFrame())
             {
-                controller.UpdateState();
-                state.NextFrame(window.TimeDiff());
-                state.UpdateView();
-                view.Render();
+                var inputs = controller.GetInputs();
+                state.Update(inputs, window.TimeDiff());
+                var viewModel = state.GetViewModel();
+                view.Render(viewModel);
             }
         }
     }

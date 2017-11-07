@@ -1,45 +1,71 @@
-﻿using OpenTK;
+﻿using ConflictCube.Controller;
+using OpenTK;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ConflictCube.Model
 {
-    public class InputManager : IInputManager
+    public class InputManager
     {
-        public GameView View { get; set; }
-        public Player Player { get; set; }
+        public Player Player { get; private set; }
 
-        public InputManager(GameView view)
+        public InputManager(Player player)
         {
-            View = view;
+            Player = player;
         }
 
-        public void CloseGame()
+        public void ExecuteInputs(List<Input> inputs)
         {
-            View.CloseWindow();
+            foreach(Input input in inputs)
+            {
+                switch(input)
+                {
+                    case Input.ExitApplication:
+                        CloseGame();
+                        break;
+
+                    case Input.MoveLeft:
+                        MovePlayerLeft();
+                        break;
+
+                    case Input.MoveRight:
+                        MovePlayerRight();
+                        break;
+
+                    case Input.MoveUp:
+                        MovePlayerUp();
+                        break;
+
+                    case Input.MoveDown:
+                        MovePlayerDown();
+                        break;
+                }
+            }
         }
 
-        public void MovePlayerDown()
+        private void CloseGame()
         {
-            Player.Move(new Vector2(.0f, Player.Speed * -1));
+            Environment.Exit(0);
         }
 
-        public void MovePlayerUp()
+        private void MovePlayerLeft()
         {
-            Player.Move(new Vector2(.0f, Player.Speed));
+            Player.Move(new Vector2(Player.Speed * -1, 0f));
         }
 
-        public void MovePlayerRight()
+        private void MovePlayerRight()
         {
             Player.Move(new Vector2(Player.Speed * 1, 0f));
         }
 
-        public void MovePlayerLeft()
+        private void MovePlayerUp()
         {
-            Player.Move(new Vector2(Player.Speed * -1, 0f));
+            Player.Move(new Vector2(.0f, Player.Speed));
+        }
+
+        private void MovePlayerDown()
+        {
+            Player.Move(new Vector2(.0f, Player.Speed * -1));
         }
     }
 }

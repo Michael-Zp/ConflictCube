@@ -17,29 +17,6 @@ namespace ConflictCubeTest
 
         [Test]
         [Category("OpenGlTests")]
-        public void TestLoadTileset()
-        {
-            SetupOpenTK();
-
-            Assert.AreEqual(4, LevelBuilder.FloorTileset.TilesetTiles.Count);
-
-
-            TileType[] types = { TileType.Finish, TileType.Floor, TileType.Hole, TileType.Wall };
-
-
-            Assert.AreEqual(LevelBuilder.FloorTileset.TilesetTiles.Count, types.Length);
-
-            for (int i = 0; i < LevelBuilder.FloorTileset.TilesetTiles.Count; i++)
-            {
-                TilesetTile currentTile;
-                LevelBuilder.FloorTileset.TilesetTiles.TryGetValue(FloorTileType.GetTypeOfTileNumber(i), out currentTile);
-                Assert.AreEqual(types[i], currentTile.Type);
-            }
-
-        }
-
-        [Test]
-        [Category("OpenGlTests")]
         public void TestLoadLevel()
         {
             SetupOpenTK();
@@ -82,8 +59,7 @@ namespace ConflictCubeTest
                 }
             }
 
-
-            Assert.AreEqual(LevelBuilder.FloorTileset, level.Floor.Tileset);
+            
             Assert.AreEqual(ftLevel0, loadedLevel0);
         }
 
