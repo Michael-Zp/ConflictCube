@@ -23,11 +23,11 @@ namespace ConflictCube.Controller
 
         private void AddLevel(Level currentLevel)
         {
-            SetFloor(currentLevel.Floor);
+            SetFloor(currentLevel);
         }
 
 
-        private void SetFloor(Floor currentFloor)
+        private void SetFloor(Level currentLevel)
         {
             if (RenderingLayers.ContainsKey(RenderLayerType.Floor))
             {
@@ -37,7 +37,9 @@ namespace ConflictCube.Controller
 
             RenderableLayer floorLayer = new RenderableLayer();
 
-            floorLayer.ObjectsToRender.AddRange(currentFloor.ObjectsToRender);
+            floorLayer.ObjectsToRender.AddRange(currentLevel.FloorLeft.ObjectsToRender);
+            floorLayer.ObjectsToRender.AddRange(currentLevel.FloorMiddle.ObjectsToRender);
+            floorLayer.ObjectsToRender.AddRange(currentLevel.FloorRight.ObjectsToRender);
 
             RenderingLayers.Add(RenderLayerType.Floor, floorLayer);
         }

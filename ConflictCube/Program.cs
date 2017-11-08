@@ -7,7 +7,7 @@ namespace ConflictCube
     {
         public static void Main(string[] args)
         {
-            MyWindow window = new MyWindow();
+            MyWindow window = new MyWindow(1024, 512);
             GameView view = new GameView(window);
             GameState state = new GameState();
             GameController controller = new GameController();
