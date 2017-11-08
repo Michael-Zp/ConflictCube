@@ -98,10 +98,25 @@ namespace ConflictCube.Model.Tiles
     }
 
 
-    public class FloorTile : RenderableObject
+    public class FloorTile : RenderableObject, ICollidable
     {
         public int Row { get; private set; }
         public int Column { get; private set; }
+        public Box2D CollisionBox { get; private set; }
+        public CollisionType CollisionType { get; private set; }
+        public HashSet<CollisionType> CollidesWith { get; private set; }
+
+        public Box2D Box {
+            get 
+            {
+                return base.Box;
+            }
+            
+            set {
+                base.Box = value;
+                CollisionBox = value;
+            }
+        }
 
         public FloorTile(TileType type, Box2D box, int row, int column) : base(box, type)
         {
@@ -112,10 +127,34 @@ namespace ConflictCube.Model.Tiles
             {
                 throw new System.Exception("FloorTile was initalized with wrong TileType");
             }
+
+            switch (type)
+            {
+                case TileType.Floor:
+                    CollisionType = CollisionType.NonCollider;
+                    break;
+
+                case TileType.Wall:
+                    CollisionType = CollisionType.Wall;
+                    break;
+
+                case TileType.Hole:
+                    CollisionType = CollisionType.Hole;
+                    break;
+
+                case TileType.Finish:
+                    CollisionType = CollisionType.Finish;
+                    break;
+            }
             
             Row = row;
             Column = column;
+            CollisionBox = box;
+            CollidesWith = new HashSet<CollisionType>();
         }
+
+        public void OnCollide(CollisionType type, ICollidable other, Vector2 movementIntoCollision)
+        {}
     }
 
     public class PlayerTile : RenderableObject

@@ -12,6 +12,8 @@ namespace ConflictCube.Model
         public InputManager InputManager { get; private set; }
         public Level CurrentLevel { get; set; }
         public Player Player { get; private set; }
+
+        private List<ICollidable> collidableObjects = new List<ICollidable>();
         
         private Boundary[] Boundaries =
         {
@@ -26,7 +28,16 @@ namespace ConflictCube.Model
             LoadLevel(0);
             InitializePlayer();
 
-            InputManager = new InputManager(Player);
+            InputManager = new InputManager(this, Player);
+
+            InitializeColliders();
+        }
+
+        private void InitializeColliders()
+        {
+            collidableObjects.AddRange(CurrentLevel.GetColliders());
+            collidableObjects.Add(Player);
+            collidableObjects.AddRange(Boundaries);
         }
 
         public void Update(List<Input> inputs, float diffTime)
@@ -36,6 +47,19 @@ namespace ConflictCube.Model
             CurrentLevel.Floor.MoveFloorUp(CurrentLevel.FloorOffsetPerSecond * diffTime);
 
             CheckLooseCondition();
+        }
+
+        public void MoveObject<T>(T obj, Vector2 moveVetor) where T : RenderableObject, IMoveable
+        {
+            if(obj is ICollidable)
+            {
+                obj.Move(moveVetor);
+                CheckCollisions((ICollidable)obj, moveVetor);
+            }
+            else
+            {
+                obj.Move(moveVetor);
+            }
         }
 
         public void InitializePlayer()
@@ -62,21 +86,23 @@ namespace ConflictCube.Model
             }
         }
 
-        private void CheckCollisions()
+        public void CheckCollisions(ICollidable collider, Vector2 movement)
         {
-            CheckLevelBoundaries(Player);
-        }
-
-        private void CheckLevelBoundaries<T>(T obj) where T : RenderableObject, ICollidable 
-        {
-            foreach (Boundary boundary in Boundaries)
+            foreach(ICollidable other in collidableObjects)
             {
-                if (obj.Box.Intersects(boundary.Box))
+                if(other != collider)
                 {
-                    obj.OnCollide(boundary.CollisionType);
+                    CheckCollision(collider, other, movement);
                 }
             }
+        }
 
+        public void CheckCollision(ICollidable obj, ICollidable other, Vector2 movement)
+        {
+            if (obj.CollisionBox.Intersects(other.CollisionBox))
+            {
+                obj.OnCollide(other.CollisionType, other, movement);
+            }
         }
 
         public ViewModel GetViewModel()

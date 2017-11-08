@@ -1,5 +1,4 @@
-﻿using Zenseless.OpenGL;
-using Zenseless.Geometry;
+﻿using Zenseless.Geometry;
 using OpenTK;
 using ConflictCube.Model.Tiles;
 
@@ -21,13 +20,7 @@ namespace ConflictCube.Model.Renderable
             CurrentID++;
         }
 
-        public RenderableObject(Vector2 position, Vector2 size, TileType type)
-        {
-            ID = CurrentID;
-            Box = new Box2D(position.X, position.Y, size.X, size.Y);
-            Type = type;
-
-            CurrentID++;
-        }
+        public RenderableObject(Vector2 position, Vector2 size, TileType type) : this(new Box2D(position.X, position.Y, size.X, size.Y), type)
+        {}
     }
 }

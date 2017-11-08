@@ -7,10 +7,12 @@ namespace ConflictCube.Model
 {
     public class InputManager
     {
+        public GameState State { get; private set; }
         public Player Player { get; private set; }
 
-        public InputManager(Player player)
+        public InputManager(GameState state, Player player)
         {
+            State = state;
             Player = player;
         }
 
@@ -50,22 +52,22 @@ namespace ConflictCube.Model
 
         private void MovePlayerLeft()
         {
-            Player.Move(new Vector2(Player.Speed * -1, 0f));
+            State.MoveObject(Player, new Vector2(Player.Speed * -1, 0f));
         }
 
         private void MovePlayerRight()
         {
-            Player.Move(new Vector2(Player.Speed * 1, 0f));
+            State.MoveObject(Player, new Vector2(Player.Speed * 1, 0f));
         }
 
         private void MovePlayerUp()
         {
-            Player.Move(new Vector2(.0f, Player.Speed));
+            State.MoveObject(Player, new Vector2(.0f, Player.Speed));
         }
 
         private void MovePlayerDown()
         {
-            Player.Move(new Vector2(.0f, Player.Speed * -1));
+            State.MoveObject(Player, new Vector2(.0f, Player.Speed * -1));
         }
     }
 }

@@ -8,8 +8,6 @@ namespace ConflictCube.Model.Renderable
 {
     public class Floor : RenderableLayer
     {
-
-        //Non - static
         public List<IMoveable> AttachedObjects { get; private set; }
         public Vector2 FloorTileSize;
         private Vector2 _FloorSize;

@@ -84,7 +84,7 @@
     <Compile Include="Controller\GameController.cs" />
     <Compile Include="Model\GameState.cs" />
     <Compile Include="Model\Renderable\FloorLoader.cs" />
-    <Compile Include="Model\Renderable\Moveable.cs" />
+    <Compile Include="Model\Renderable\IMoveable.cs" />
     <Compile Include="Model\Renderable\Player.cs" />
     <Compile Include="Model\Renderable\Floor.cs" />
     <Compile Include="Model\Renderable\RenderableLayer.cs" />

@@ -1,8 +1,7 @@
-﻿using System;
+﻿using OpenTK;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Zenseless.Geometry;
 
 namespace ConflictCube.Model
 {
@@ -12,13 +11,19 @@ namespace ConflictCube.Model
         RightBoundary,
         TopBoundary,
         BottomBoundary,
-        Player
+        Player,
+        Finish,
+        Wall,
+        Hole,
+        NonCollider
     }
 
     public interface ICollidable
     {
+        Box2D CollisionBox { get; }
         CollisionType CollisionType { get; }
+        HashSet<CollisionType> CollidesWith { get; }
 
-        void OnCollide(CollisionType type);
+        void OnCollide(CollisionType type, ICollidable other, Vector2 movementIntoCollision);
     }
 }

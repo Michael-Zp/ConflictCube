@@ -1,21 +1,22 @@
-﻿using ConflictCube.Model.Renderable;
+﻿using OpenTK;
+using System.Collections.Generic;
 using Zenseless.Geometry;
-using Zenseless.OpenGL;
 
 namespace ConflictCube.Model
 {
     class Boundary : ICollidable 
     {
-        public Box2D Box { get; private set; }
+        public Box2D CollisionBox { get; private set; }
         public CollisionType CollisionType { get; private set; }
+        public HashSet<CollisionType> CollidesWith { get; }
 
         public Boundary(Box2D box, CollisionType type)
         {
-            Box = box;
+            CollisionBox = box;
             CollisionType = type;
         }
 
-        public void OnCollide(CollisionType type)
+        public void OnCollide(CollisionType type, ICollidable other, Vector2 moveIntoCollision)
         {}
     }
 }
