@@ -10,37 +10,39 @@ namespace ConflictCube.Model.Renderable
     {
         public List<IMoveable> AttachedObjects { get; private set; }
         public Vector2 FloorTileSize;
+        private Box2D _FloorBox;
+        public Box2D FloorBox
+        {
+            get
+            {
+                return _FloorBox;
+            }
+            set
+            {
+                SetSizeTo(value, _FloorSize);
+            }
+        }
         private Vector2 _FloorSize;
-        public Vector2 FloorSize {
-            get {
+        public Vector2 FloorSize
+        {
+            get
+            {
                 return _FloorSize;
             }
-            set {
-                _FloorSize = value;
-                FloorTileSize.X = 2 / _FloorSize.X;
-                FloorTileSize.Y = 2 / _FloorSize.Y;
-
-                if (FloorTiles != null && FloorTiles.LongLength != 0)
-                {
-                    foreach (FloorTile tile in FloorTiles)
-                    {
-                        if (tile != null)
-                        {
-                            tile.Box = BoxInFloorGrid(tile.Row, tile.Column);
-                        }
-                    }
-                }
+            set
+            {
+                SetSizeTo(_FloorBox, value);
             }
         }
         public FloorTile[,] FloorTiles { get; set; }
 
         private float TotalMovedDistanceDown = 0;
 
-        public Floor(Vector2 floorSize) : base(new List<RenderableObject>())
+        public Floor(Vector2 floorSize, Box2D floorBox) : base(new List<RenderableObject>())
         {
             AttachedObjects = new List<IMoveable>();
             FloorTiles = new FloorTile[(int)floorSize.Y, (int)floorSize.X];
-            FloorSize = floorSize;
+            SetSizeTo(floorBox, floorSize);
         }
 
         public void MoveFloorUp(float distance)
@@ -57,7 +59,7 @@ namespace ConflictCube.Model.Renderable
                 attachedObject.SetPosition(new Vector2(attachedObject.GetPosition().X, attachedObject.GetPosition().Y - distance));
             }
         }
-        
+
 
         public void AddFloorTile(FloorTile floorTile, int y, int x)
         {
@@ -94,10 +96,30 @@ namespace ConflictCube.Model.Renderable
 
         public Box2D BoxInFloorGrid(float row, float column)
         {
-            float posX = -1 + column * FloorTileSize.X;
-            float posY = -1 + ((FloorTiles.GetLength(0) - 1) - row) * FloorTileSize.Y;
+            float posX = _FloorBox.MinX + column * FloorTileSize.X;
+            float posY = _FloorBox.MinY + ((FloorTiles.GetLength(0) - 1) - row) * FloorTileSize.Y;
 
             return new Box2D(posX, posY, FloorTileSize.X, FloorTileSize.Y);
+        }
+
+        private void SetSizeTo(Box2D floorBox, Vector2 floorSize)
+        {
+            _FloorBox = floorBox;
+            _FloorSize = floorSize;
+
+            FloorTileSize.X = _FloorBox.SizeX * 2 / _FloorSize.X;
+            FloorTileSize.Y = _FloorBox.SizeY * 2 / _FloorSize.Y;
+
+            if (FloorTiles != null && FloorTiles.LongLength != 0)
+            {
+                foreach (FloorTile tile in FloorTiles)
+                {
+                    if (tile != null)
+                    {
+                        tile.Box = BoxInFloorGrid(tile.Row, tile.Column);
+                    }
+                }
+            }
         }
     }
 }

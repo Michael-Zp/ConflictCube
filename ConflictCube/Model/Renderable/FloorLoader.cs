@@ -16,16 +16,16 @@ namespace ConflictCube.Model.Renderable
             FloorLayer = RenderLayerType.Floor;
         }
 
-        public static Floor Instance(string pathToFloorData)
+        public static Floor Instance(string pathToFloorData, Box2D floorBox)
         {
             int levelRows, levelColumns;
             TileType[,] FloorTiles = GetFloorDataFromLevelfile(pathToFloorData, out levelRows, out levelColumns);
-            return LoadFloor(levelRows, levelColumns, FloorTiles);
+            return LoadFloor(levelRows, levelColumns, FloorTiles, floorBox);
         }
 
-        private static Floor LoadFloor(int levelRows, int levelColumns, TileType[,] floorTiles)
+        private static Floor LoadFloor(int levelRows, int levelColumns, TileType[,] floorTiles, Box2D floorBox)
         {
-            Floor floorOfLevel = new Floor(new Vector2(levelColumns, levelRows));
+            Floor floorOfLevel = new Floor(new Vector2(levelColumns, levelRows), floorBox);
 
             for (int row = 0; row < levelRows; row++)
             {

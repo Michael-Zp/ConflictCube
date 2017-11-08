@@ -25,7 +25,7 @@ namespace ConflictCube.Model
 
         public GameState()
         {
-            LoadLevel(0);
+            LoadLevel(1);
             InitializePlayer();
 
             InputManager = new InputManager(this, Player);
@@ -44,7 +44,7 @@ namespace ConflictCube.Model
         {
             InputManager.ExecuteInputs(inputs);
 
-            CurrentLevel.Floor.MoveFloorUp(CurrentLevel.FloorOffsetPerSecond * diffTime);
+            CurrentLevel.MoveFloorsUp(diffTime);
 
             CheckLooseCondition();
         }
@@ -65,8 +65,8 @@ namespace ConflictCube.Model
         public void InitializePlayer()
         {
             Player = new Player(new Vector2(.1f, .1f), new Vector2(.1f, .1f), .02f);
-            CurrentLevel.Floor.AddAttachedObject(Player);
-            Player.SetPosition(CurrentLevel.Floor.FindStartPosition());
+            CurrentLevel.FloorLeft.AddAttachedObject(Player);
+            Player.SetPosition(CurrentLevel.FloorLeft.FindStartPosition());
         }
 
         public void LoadLevel(int levelNumber)
@@ -74,8 +74,10 @@ namespace ConflictCube.Model
             CurrentLevel = LevelBuilder.LoadLevel(levelNumber);
 
             //Hard coded parameters. Enhance level format or even build own level format including these parameters.
-            CurrentLevel.Floor.FloorSize = new Vector2(4,5);
-            CurrentLevel.FloorOffsetPerSecond = .1f;
+            CurrentLevel.FloorLeft.FloorSize = new Vector2(10,10);
+            CurrentLevel.FloorMiddle.FloorSize = new Vector2(1, 10);
+            CurrentLevel.FloorRight.FloorSize = new Vector2(10, 10);
+            CurrentLevel.FloorOffsetPerSecond = .01f;
         }
 
         private void CheckLooseCondition()
