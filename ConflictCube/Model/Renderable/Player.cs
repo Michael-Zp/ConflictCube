@@ -10,7 +10,7 @@ namespace ConflictCube
         public float Speed { get; private set; }
         public bool IsAlive { get; private set; }
         public CollisionType CollisionType { get; private set; }
-        
+
 
         public Player(Vector2 size, Vector2 position, float speed, bool isAlive = true) : base(position, size, TileType.Player)
         {
@@ -21,8 +21,8 @@ namespace ConflictCube
 
         public void Move(Vector2 moveVector)
         {
-            Box.MinX += moveVector.X;
-            Box.MinY += moveVector.Y;
+            Box.CenterX += moveVector.X;
+            Box.CenterY += moveVector.Y;
         }
 
         public void SetPosition(Vector2 position)

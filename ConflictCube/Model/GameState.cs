@@ -12,14 +12,10 @@ namespace ConflictCube.Model
         public InputManager InputManager { get; private set; }
         public Level CurrentLevel { get; set; }
         public Player Player { get; private set; }
+
+        private List<ICollidable> collidables = new List<ICollidable>();
         
-        private Boundary[] Boundaries =
-        {
-            new Boundary(new Box2D(-1.5f, -1f,  .5f,  2f), CollisionType.LeftBoundary),
-            new Boundary(new Box2D( 1f,   -1f,  .5f,  2f), CollisionType.RightBoundary),
-            new Boundary(new Box2D(-1f,    1f,   2f, .5f), CollisionType.TopBoundary),
-            new Boundary(new Box2D(-1f,   -1.5f, 2f, .5f), CollisionType.BottomBoundary)
-        };
+        
 
         public GameState()
         {
@@ -27,6 +23,18 @@ namespace ConflictCube.Model
             InitializePlayer();
 
             InputManager = new InputManager(Player);
+
+            AddCollidables();
+        }
+
+        private void AddCollidables()
+        {   
+            collidables.Add(new Boundary(new Box2D(-1.5f, -1f, .5f, 2f), CollisionType.LeftBoundary));
+            collidables.Add(new Boundary(new Box2D(1f, -1f, .5f, 2f), CollisionType.RightBoundary));
+            collidables.Add(new Boundary(new Box2D(-1f, 1f, 2f, .5f), CollisionType.TopBoundary));
+            collidables.Add(new Boundary(new Box2D(-1f, -1.5f, 2f, .5f), CollisionType.BottomBoundary));
+            collidables.AddRange(CurrentLevel.Floor.GetColliders());
+            collidables.Add(Player);
         }
 
         public void Update(List<Input> inputs, float diffTime)
@@ -54,6 +62,22 @@ namespace ConflictCube.Model
             CurrentLevel.FloorOffsetPerSecond = .1f;
         }
 
+        public void MoveObject(RenderableObject obj, Vector2 moveVector)
+        {
+            if(!(obj is IMoveable))
+            {
+                return;
+            }
+
+            IMoveable moveable = (IMoveable)obj;
+            moveable.Move(moveVector);
+
+            if (moveable is ICollidable)
+            {
+
+            }
+        }
+
         private void CheckLooseCondition()
         {
             if (!Player.IsAlive)
@@ -62,21 +86,20 @@ namespace ConflictCube.Model
             }
         }
 
-        private void CheckCollisions()
+        private void CheckCollisions(RenderableObject obj)
         {
-            CheckLevelBoundaries(Player);
+            foreach(RenderableObject collidable in collidables)
+            {
+                CheckCollision(Player, collidable);
+            }
         }
 
-        private void CheckLevelBoundaries<T>(T obj) where T : RenderableObject, ICollidable 
+        private void CheckCollision<T, K>(T obj, K other) where T : RenderableObject, ICollidable where K : RenderableObject, ICollidable
         {
-            foreach (Boundary boundary in Boundaries)
-            {
-                if (obj.Box.Intersects(boundary.Box))
+                if (obj.Box.Intersects(other.Box))
                 {
-                    obj.OnCollide(boundary.CollisionType);
+                    obj.OnCollide(other.CollisionType, other);
                 }
-            }
-
         }
 
         public ViewModel GetViewModel()

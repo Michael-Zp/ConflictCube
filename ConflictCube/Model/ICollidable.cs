@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ConflictCube.Model
+﻿namespace ConflictCube.Model
 {
     public enum CollisionType
     {
@@ -12,7 +6,11 @@ namespace ConflictCube.Model
         RightBoundary,
         TopBoundary,
         BottomBoundary,
-        Player
+        Player,
+        Finish,
+        Hole,
+        Wall,
+        NoCollision
     }
 
     public interface ICollidable

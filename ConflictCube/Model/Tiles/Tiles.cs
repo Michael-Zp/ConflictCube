@@ -98,23 +98,45 @@ namespace ConflictCube.Model.Tiles
     }
 
 
-    public class FloorTile : RenderableObject
+    public class FloorTile : RenderableObject, ICollidable
     {
         public int Row { get; private set; }
         public int Column { get; private set; }
 
+        public CollisionType CollisionType { get; }
+
         public FloorTile(TileType type, Box2D box, int row, int column) : base(box, type)
         {
-            if (type != TileType.Finish &&
-                type != TileType.Floor &&
-                type != TileType.Hole &&
-                type != TileType.Wall)
+
+            switch(type)
             {
-                throw new System.Exception("FloorTile was initalized with wrong TileType");
+                case TileType.Finish:
+                    CollisionType = CollisionType.Finish;
+                    break;
+
+                case TileType.Hole:
+                    CollisionType = CollisionType.Hole;
+                    break;
+
+                case TileType.Wall:
+                    CollisionType = CollisionType.Wall;
+                    break;
+
+                case TileType.Floor:
+                    CollisionType = CollisionType.NoCollision;
+                    break;
+
+                default:
+                    throw new System.Exception("FloorTile was initalized with wrong TileType");
             }
             
             Row = row;
             Column = column;
+        }
+
+        public void OnCollide(CollisionType type)
+        {
+            throw new NotImplementedException();
         }
     }
 

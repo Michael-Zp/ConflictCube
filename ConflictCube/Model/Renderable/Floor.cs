@@ -101,5 +101,17 @@ namespace ConflictCube.Model.Renderable
 
             return new Box2D(posX, posY, FloorTileSize.X, FloorTileSize.Y);
         }
+
+        public List<ICollidable> GetColliders()
+        {
+            List<ICollidable> colliders = new List<ICollidable>();
+
+            foreach(FloorTile obj in ObjectsToRender)
+            {
+                colliders.Add(obj);
+            }
+
+            return colliders;
+        }
     }
 }
