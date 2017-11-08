@@ -23,7 +23,7 @@ namespace ConflictCube.Model
 
         public GameState()
         {
-            LoadLevel(0);
+            LoadLevel(1);
             InitializePlayer();
 
             InputManager = new InputManager(Player);
@@ -50,7 +50,7 @@ namespace ConflictCube.Model
             CurrentLevel = LevelBuilder.LoadLevel(levelNumber);
 
             //Hard coded parameters. Enhance level format or even build own level format including these parameters.
-            CurrentLevel.Floor.FloorSize = new Vector2(4,5);
+            CurrentLevel.Floor.FloorSize = new Vector2(10,30);
             CurrentLevel.FloorOffsetPerSecond = .1f;
         }
 
