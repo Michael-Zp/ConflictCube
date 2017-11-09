@@ -17,7 +17,7 @@ namespace ConflictCube.Controller
         private void SetState(GameState state)
         {
             AddLevel(state.CurrentLevel);
-            AddPlayer(state.Player);
+            AddPlayers(state.Players);
         }
 
 
@@ -44,7 +44,7 @@ namespace ConflictCube.Controller
             RenderingLayers.Add(RenderLayerType.Floor, floorLayer);
         }
 
-        private void AddPlayer(Player player)
+        private void AddPlayers(List<Player> players)
         {
             RenderableLayer playerLayer;
             if (!RenderingLayers.ContainsKey(RenderLayerType.Player))
@@ -57,7 +57,8 @@ namespace ConflictCube.Controller
                 RenderingLayers.TryGetValue(RenderLayerType.Player, out playerLayer);
             }
 
-            playerLayer.ObjectsToRender.Add(player);
+            playerLayer.ObjectsToRender.AddRange(players);
+
         }
     }
 }

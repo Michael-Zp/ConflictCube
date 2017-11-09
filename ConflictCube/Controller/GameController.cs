@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
 using OpenTK.Input;
-using System;
-using ConflictCube.Model;
 
 namespace ConflictCube.Controller
 {
@@ -17,10 +15,14 @@ namespace ConflictCube.Controller
         private void SetDefaultKeyboardSettings()
         {
             KeyboardSettings.Add(Key.Escape, Input.ExitApplication);
-            KeyboardSettings.Add(Key.Left,   Input.MoveLeft);
-            KeyboardSettings.Add(Key.Right,  Input.MoveRight);
-            KeyboardSettings.Add(Key.Up,     Input.MoveUp);
-            KeyboardSettings.Add(Key.Down,   Input.MoveDown);
+            KeyboardSettings.Add(Key.Left,   Input.PlayerOneMoveLeft);
+            KeyboardSettings.Add(Key.Right,  Input.PlayerOneMoveRight);
+            KeyboardSettings.Add(Key.Up,     Input.PlayerOneMoveUp);
+            KeyboardSettings.Add(Key.Down,   Input.PlayerOneMoveDown);
+            KeyboardSettings.Add(Key.A,      Input.PlayerTwoMoveLeft);
+            KeyboardSettings.Add(Key.D,      Input.PlayerTwoMoveRight);
+            KeyboardSettings.Add(Key.W,      Input.PlayerTwoMoveUp);
+            KeyboardSettings.Add(Key.S,      Input.PlayerTwoMoveDown);
         }
 
         public void UpdateState()

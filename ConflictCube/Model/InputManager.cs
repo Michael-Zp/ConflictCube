@@ -8,9 +8,9 @@ namespace ConflictCube.Model
     public class InputManager
     {
         public GameState State { get; private set; }
-        public Player Player { get; private set; }
+        public List<Player> Player { get; private set; }
 
-        public InputManager(GameState state, Player player)
+        public InputManager(GameState state, List<Player> player)
         {
             State = state;
             Player = player;
@@ -20,27 +20,55 @@ namespace ConflictCube.Model
         {
             foreach(Input input in inputs)
             {
-                switch(input)
+                switch (input)
                 {
                     case Input.ExitApplication:
                         CloseGame();
                         break;
+                }
+                
+                if (Player[0].IsAlive)
+                {
+                    switch(input)
+                    {
+                        case Input.PlayerOneMoveLeft:
+                            MovePlayerLeft(0);
+                            break;
 
-                    case Input.MoveLeft:
-                        MovePlayerLeft();
-                        break;
+                        case Input.PlayerOneMoveRight:
+                            MovePlayerRight(0);
+                            break;
 
-                    case Input.MoveRight:
-                        MovePlayerRight();
-                        break;
+                        case Input.PlayerOneMoveUp:
+                            MovePlayerUp(0);
+                            break;
 
-                    case Input.MoveUp:
-                        MovePlayerUp();
-                        break;
+                        case Input.PlayerOneMoveDown:
+                            MovePlayerDown(0);
+                            break;
+                    }
+                }
 
-                    case Input.MoveDown:
-                        MovePlayerDown();
-                        break;
+                if (Player[1].IsAlive)
+                {
+                    switch (input)
+                    {
+                        case Input.PlayerTwoMoveLeft:
+                            MovePlayerLeft(1);
+                            break;
+
+                        case Input.PlayerTwoMoveRight:
+                            MovePlayerRight(1);
+                            break;
+
+                        case Input.PlayerTwoMoveUp:
+                            MovePlayerUp(1);
+                            break;
+
+                        case Input.PlayerTwoMoveDown:
+                            MovePlayerDown(1);
+                            break;
+                    }
                 }
             }
         }
@@ -50,24 +78,24 @@ namespace ConflictCube.Model
             Environment.Exit(0);
         }
 
-        private void MovePlayerLeft()
+        private void MovePlayerLeft(int idx)
         {
-            State.MoveObject(Player, new Vector2(Player.Speed * -1, 0f));
+            State.MoveObject(Player[idx], new Vector2(Player[idx].Speed * -1, 0f));
         }
 
-        private void MovePlayerRight()
+        private void MovePlayerRight(int idx)
         {
-            State.MoveObject(Player, new Vector2(Player.Speed * 1, 0f));
+            State.MoveObject(Player[idx], new Vector2(Player[idx].Speed * 1, 0f));
         }
 
-        private void MovePlayerUp()
+        private void MovePlayerUp(int idx)
         {
-            State.MoveObject(Player, new Vector2(.0f, Player.Speed));
+            State.MoveObject(Player[idx], new Vector2(.0f, Player[idx].Speed));
         }
 
-        private void MovePlayerDown()
+        private void MovePlayerDown(int idx)
         {
-            State.MoveObject(Player, new Vector2(.0f, Player.Speed * -1));
+            State.MoveObject(Player[idx], new Vector2(.0f, Player[idx].Speed * -1));
         }
     }
 }
