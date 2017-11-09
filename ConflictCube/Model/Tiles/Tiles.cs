@@ -117,6 +117,7 @@ namespace ConflictCube.Model.Tiles
                 CollisionBox = value;
             }
         }
+        
 
         public FloorTile(TileType type, Box2D box, int row, int column) : base(box, type)
         {
@@ -155,6 +156,14 @@ namespace ConflictCube.Model.Tiles
 
         public void OnCollide(CollisionType type, ICollidable other, Vector2 movementIntoCollision)
         {}
+
+        public FloorTile Clone()
+        {
+            FloorTile newFloorTile = (FloorTile)this.MemberwiseClone();
+            newFloorTile.Box = new Box2D(newFloorTile.Box);
+            newFloorTile.CollisionBox = new Box2D(newFloorTile.CollisionBox);
+            return newFloorTile;
+        }
     }
 
     public class PlayerTile : RenderableObject

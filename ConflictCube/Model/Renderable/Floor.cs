@@ -31,7 +31,7 @@ namespace ConflictCube.Model.Renderable
             }
             set
             {
-                SetSizeTo(_FloorBox, value);
+                SetSizeTo(_FloorBox, new Vector2(value.X, value.Y));
             }
         }
         public FloorTile[,] FloorTiles { get; set; }
@@ -94,6 +94,18 @@ namespace ConflictCube.Model.Renderable
             throw new Exception("No start position found");
         }
 
+        internal List<FloorTile> GetRenderableObjects()
+        {
+            List<FloorTile> outTiles = new List<FloorTile>();
+
+            foreach(FloorTile tile in ObjectsToRender)
+            {
+                outTiles.Add(tile.Clone());
+            }
+
+            return outTiles;
+        }
+
         public Box2D BoxInFloorGrid(float row, float column)
         {
             float posX = _FloorBox.MinX + column * FloorTileSize.X;
@@ -107,8 +119,8 @@ namespace ConflictCube.Model.Renderable
             _FloorBox = floorBox;
             _FloorSize = floorSize;
 
-            FloorTileSize.X = _FloorBox.SizeX * 2 / _FloorSize.X;
-            FloorTileSize.Y = _FloorBox.SizeY * 2 / _FloorSize.Y;
+            FloorTileSize.X = _FloorBox.SizeX / _FloorSize.X;
+            FloorTileSize.Y = _FloorBox.SizeY / _FloorSize.Y;
 
             if (FloorTiles != null && FloorTiles.LongLength != 0)
             {

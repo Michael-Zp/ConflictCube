@@ -30,11 +30,12 @@ namespace ConflictCube.Model
 
             InputManager = new InputManager(this, Players);
 
-            InitializeColliders();
+            UpdateColliders();
         }
 
-        private void InitializeColliders()
+        private void UpdateColliders()
         {
+            collidableObjects.Clear();
             collidableObjects.AddRange(CurrentLevel.GetColliders());
             collidableObjects.AddRange(Players);
             collidableObjects.AddRange(Boundaries);
@@ -45,6 +46,7 @@ namespace ConflictCube.Model
             InputManager.ExecuteInputs(inputs);
 
             CurrentLevel.UpdateLevel(diffTime);
+            UpdateColliders();
 
             CheckLooseCondition();
         }
@@ -75,14 +77,14 @@ namespace ConflictCube.Model
         {
             Players = new List<Player>();
 
-            Players.Add(new Player(new Vector2(.08f, .08f), new Vector2(.1f, .1f), .01f));
+            Players.Add(new Player(new Vector2(.06f, .06f), new Vector2(.1f, .1f), .01f));
             CurrentLevel.FloorLeft.AddAttachedObject(Players[0]);
-            Players[0].SetPosition(CurrentLevel.FloorLeft.FindStartPosition());
+            Players[0].SetPosition(CurrentLevel.FindStartPosition(CurrentLevel.FloorLeft));
 
 
-            Players.Add(new Player(new Vector2(.08f, .08f), new Vector2(.1f, .1f), .01f));
+            Players.Add(new Player(new Vector2(.06f, .06f), new Vector2(.1f, .1f), .01f));
             CurrentLevel.FloorRight.AddAttachedObject(Players[1]);
-            Players[1].SetPosition(CurrentLevel.FloorRight.FindStartPosition());
+            Players[1].SetPosition(CurrentLevel.FindStartPosition(CurrentLevel.FloorRight));
         }
 
         public void LoadLevel(int levelNumber)
