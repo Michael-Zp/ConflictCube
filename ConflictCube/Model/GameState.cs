@@ -64,7 +64,7 @@ namespace ConflictCube.Model
 
         public void InitializePlayer()
         {
-            Player = new Player(new Vector2(.1f, .1f), new Vector2(.1f, .1f), .02f);
+            Player = new Player(new Vector2(.08f, .08f), new Vector2(.1f, .1f), .02f);
             CurrentLevel.FloorLeft.AddAttachedObject(Player);
             Player.SetPosition(CurrentLevel.FloorLeft.FindStartPosition());
         }
@@ -77,7 +77,7 @@ namespace ConflictCube.Model
             CurrentLevel.FloorLeft.FloorSize = new Vector2(10,10);
             CurrentLevel.FloorMiddle.FloorSize = new Vector2(1, 10);
             CurrentLevel.FloorRight.FloorSize = new Vector2(10, 10);
-            CurrentLevel.FloorOffsetPerSecond = .01f;
+            CurrentLevel.FloorOffsetPerSecond = .00f;
         }
 
         private void CheckLooseCondition()

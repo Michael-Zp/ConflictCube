@@ -9,7 +9,7 @@ namespace ConflictCube.Model.Renderable
         private static int CurrentID = 0;
         public int ID { get; private set; }
         public Box2D Box { get; set; }
-        public TileType Type { get; private set; }
+        public TileType Type { get; set; }
 
         public RenderableObject(Box2D box, TileType type)
         {

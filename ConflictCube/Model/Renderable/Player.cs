@@ -53,10 +53,46 @@ namespace ConflictCube
 
         public void OnCollide(CollisionType type, ICollidable other, Vector2 movementIntoCollision)
         {
-            Console.WriteLine("Collides with " + type.ToString());
             if (type == CollisionType.LeftBoundary || type == CollisionType.RightBoundary || type == CollisionType.TopBoundary || type == CollisionType.Wall )
             {
-                Move(-movementIntoCollision);
+                Vector2 moveBackVector = new Vector2(0, 0);
+                
+                //If the player collides with something of these types, put the two boxes as close as possible, but they must not collide (+ 0.000001f)
+                if (movementIntoCollision.X != 0)
+                {
+                    float currentDistance = Math.Abs(CollisionBox.CenterX - other.CollisionBox.CenterX);
+                    float minPossibleDistance = CollisionBox.SizeX / 2 + other.CollisionBox.SizeX / 2;
+                    float distanceOffset = minPossibleDistance - currentDistance + 0.000001f;
+
+                    if(movementIntoCollision.X > 0)
+                    {
+                        moveBackVector.X = distanceOffset;
+                    }
+                    else
+                    {
+                        moveBackVector.X = -distanceOffset;
+                    }
+                }
+
+
+                if (movementIntoCollision.Y != 0)
+                {
+                    float currentDistance = Math.Abs(CollisionBox.CenterY - other.CollisionBox.CenterY);
+                    float minPossibleDistance = CollisionBox.SizeY / 2 + other.CollisionBox.SizeY / 2;
+                    float distanceOffset = minPossibleDistance - currentDistance + 0.000001f;
+
+                    if (movementIntoCollision.Y > 0)
+                    {
+                        moveBackVector.Y = distanceOffset;
+                    }
+                    else
+                    {
+                        moveBackVector.Y = -distanceOffset;
+                    }
+                }
+
+
+                Move(-moveBackVector);
             }
 
             else if (type == CollisionType.BottomBoundary || type == CollisionType.Hole)
