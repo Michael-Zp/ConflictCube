@@ -48,14 +48,14 @@ namespace ConflictCubeTest
 
             TileType[,] loadedLevel0 = new TileType[10, 4];
 
-            Assert.AreEqual(loadedLevel0.GetLength(0), level.Floor.FloorTiles.GetLength(0));
-            Assert.AreEqual(loadedLevel0.GetLength(1), level.Floor.FloorTiles.GetLength(1));
+            Assert.AreEqual(loadedLevel0.GetLength(0), level.FloorLeft.FloorTiles.GetLength(0));
+            Assert.AreEqual(loadedLevel0.GetLength(1), level.FloorLeft.FloorTiles.GetLength(1));
 
             for (int y = 0; y < 10; y++)
             {
                 for (int x = 0; x < 4; x++)
                 {
-                    loadedLevel0[y, x] = level.Floor.FloorTiles[y, x].Type;
+                    loadedLevel0[y, x] = level.FloorLeft.FloorTiles[y, x].Type;
                 }
             }
 
@@ -89,30 +89,40 @@ namespace ConflictCubeTest
 
             Level level = LevelBuilder.LoadLevel(0);
 
-            Vector2 startPosition = level.Floor.FindStartPosition();
+            Vector2 startPosition = level.FloorLeft.FindStartPosition();
+            Vector2 shouldStartPosition = new Vector2(-1 + (15f / 42.0f), -1 + 1.0f / 10.0f);
 
-            Assert.AreEqual(new Vector2(-0.25f, -0.9f), startPosition);
+            AssertVectorsAreRoughlyTheSame(shouldStartPosition, startPosition);
 
 
             //One tile above the start field is another floor field -> Move one up should not change the position
-            level.Floor.MoveFloorUp(level.Floor.FloorTileSize.Y);
+            level.FloorLeft.MoveFloorUp(level.FloorLeft.FloorTileSize.Y);
 
-            startPosition = level.Floor.FindStartPosition();
+            startPosition = level.FloorLeft.FindStartPosition();
+            shouldStartPosition = new Vector2(-1 + (15f / 42.0f), -1 + 1.0f / 10.0f);
 
-            Assert.AreEqual(new Vector2(-0.25f, -0.9f), startPosition);
+            AssertVectorsAreRoughlyTheSame(shouldStartPosition, startPosition);
 
             //Now the start field is one tile to the right
-            level.Floor.MoveFloorUp(level.Floor.FloorTileSize.Y);
+            level.FloorLeft.MoveFloorUp(level.FloorLeft.FloorTileSize.Y);
 
-            startPosition = level.Floor.FindStartPosition();
+            startPosition = level.FloorLeft.FindStartPosition();
+            shouldStartPosition = new Vector2(-1 + (25.0f / 42.0f), -1 + 1.0f / 10.0f);
 
-            Assert.AreEqual(new Vector2(0.25f, -0.9f), startPosition);
+            AssertVectorsAreRoughlyTheSame(shouldStartPosition, startPosition);
         }
 
         [Test]
         public void PassingTest()
         {
             Assert.Pass();
+        }
+
+
+        private void AssertVectorsAreRoughlyTheSame(Vector2 one, Vector2 two, float epsilon = 0.0001f)
+        {
+            Assert.That(Math.Abs(one.X - two.X) < epsilon);
+            Assert.That(Math.Abs(one.Y - two.Y) < epsilon);
         }
     }
 }
