@@ -97,7 +97,7 @@ namespace ConflictCube
 
             else if (type == CollisionType.BottomBoundary || type == CollisionType.Hole)
             {
-                //IsAlive = false;
+                IsAlive = false;
             }
 
             else if (type == CollisionType.Finish)

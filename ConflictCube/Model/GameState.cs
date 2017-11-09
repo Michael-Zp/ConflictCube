@@ -74,10 +74,10 @@ namespace ConflictCube.Model
             CurrentLevel = LevelBuilder.LoadLevel(levelNumber);
 
             //Hard coded parameters. Enhance level format or even build own level format including these parameters.
-            CurrentLevel.FloorLeft.FloorSize = new Vector2(10,30);
-            CurrentLevel.FloorMiddle.FloorSize = new Vector2(1, 30);
-            CurrentLevel.FloorRight.FloorSize = new Vector2(10, 30);
-            CurrentLevel.FloorOffsetPerSecond = .1f;
+            CurrentLevel.FloorLeft.FloorSize = new Vector2(10, 10);
+            CurrentLevel.FloorMiddle.FloorSize = new Vector2(1, 10);
+            CurrentLevel.FloorRight.FloorSize = new Vector2(10, 10);
+            CurrentLevel.FloorOffsetPerSecond = .01f;
         }
 
         private void CheckLooseCondition()
