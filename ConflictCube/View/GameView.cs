@@ -38,7 +38,7 @@ namespace ConflictCube
             }
         }
 
-        public void ClearScreen()
+        private void ClearScreen()
         {
             GL.Clear(ClearBufferMask.ColorBufferBit);
         }
@@ -47,6 +47,8 @@ namespace ConflictCube
 
         public void Render(ViewModel viewModel)
         {
+            ClearScreen();
+
             RenderableLayer currentLayer;
 
             viewModel.RenderingLayers.TryGetValue(RenderLayerType.Floor, out currentLayer);
