@@ -44,7 +44,7 @@ namespace ConflictCube.Model
         {
             InputManager.ExecuteInputs(inputs);
 
-            CurrentLevel.MoveFloorsUp(diffTime);
+            CurrentLevel.UpdateLevel(diffTime);
 
             CheckLooseCondition();
         }
@@ -77,7 +77,8 @@ namespace ConflictCube.Model
             CurrentLevel.FloorLeft.FloorSize = new Vector2(10, 10);
             CurrentLevel.FloorMiddle.FloorSize = new Vector2(1, 10);
             CurrentLevel.FloorRight.FloorSize = new Vector2(10, 10);
-            CurrentLevel.FloorOffsetPerSecond = .01f;
+            CurrentLevel.FloorOffsetPerSecond = .1f;
+            CurrentLevel.StartRollingLevelOffsetSeconds = 1.0f;
         }
 
         private void CheckLooseCondition()

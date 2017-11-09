@@ -1,7 +1,6 @@
 ﻿using ConflictCube.Model;
 using ConflictCube.Model.Renderable;
 using System.Collections.Generic;
-using System;
 
 namespace ConflictCube
 {
@@ -11,6 +10,9 @@ namespace ConflictCube
         public Floor FloorMiddle { get; set; }
         public Floor FloorLeft { get; set; }
         public float FloorOffsetPerSecond { get; set; }
+        public float StartRollingLevelOffsetSeconds { get; set; }
+
+        private float ElapsedTimeInLevel = 0;
 
 
         public List<ICollidable> GetColliders()
@@ -44,11 +46,26 @@ namespace ConflictCube
             return colliders;
         }
 
-        internal void MoveFloorsUp(float diffTime)
+        public void UpdateLevel(float diffTime)
         {
-            FloorRight.MoveFloorUp(FloorOffsetPerSecond*diffTime);
-            FloorMiddle.MoveFloorUp(FloorOffsetPerSecond * diffTime);
-            FloorLeft.MoveFloorUp(FloorOffsetPerSecond * diffTime);
+            ElapsedTimeInLevel += diffTime;
+
+            if (ElapsedTimeInLevel >= StartRollingLevelOffsetSeconds)
+            {
+                MoveFloorsUp(diffTime);
+            }
+        }
+
+        private void MoveFloorsUp(float diffTime)
+        {
+            MoveFloorUp(FloorLeft, diffTime);
+            MoveFloorUp(FloorMiddle, diffTime);
+            MoveFloorUp(FloorRight, diffTime);
+        }
+
+        private void MoveFloorUp(Floor floor, float diffTime)
+        {
+            floor.MoveFloorUp(FloorOffsetPerSecond * diffTime);
         }
     }
 }
