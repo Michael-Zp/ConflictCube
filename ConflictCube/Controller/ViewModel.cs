@@ -1,6 +1,7 @@
 ﻿using ConflictCube.Model;
 using ConflictCube.Model.Renderable;
 using System.Collections.Generic;
+using Zenseless.Geometry;
 
 namespace ConflictCube.Controller
 {
@@ -26,6 +27,11 @@ namespace ConflictCube.Controller
             SetFloor(currentLevel);
         }
 
+        private RenderableLayer GeneratDefaultRenderableLayer()
+        {
+            return new RenderableLayer(new List<RenderableObject>(), new List<RenderableLayer>(), new Box2D(-1, -1, 2, 2));
+        }
+
 
         private void SetFloor(Level currentLevel)
         {
@@ -35,9 +41,9 @@ namespace ConflictCube.Controller
             }
 
 
-            RenderableLayer floorLayer = new RenderableLayer();
+            RenderableLayer floorLayer = GeneratDefaultRenderableLayer();
 
-            floorLayer.ObjectsToRender.AddRange(currentLevel.ObjectsToRender);
+            floorLayer.AddRangedObjectsToRender(currentLevel.GetRenderableObjects());
 
             RenderingLayers.Add(RenderLayerType.Floor, floorLayer);
         }
@@ -47,7 +53,7 @@ namespace ConflictCube.Controller
             RenderableLayer playerLayer;
             if (!RenderingLayers.ContainsKey(RenderLayerType.Player))
             {
-                playerLayer = new RenderableLayer();
+                playerLayer = GeneratDefaultRenderableLayer();
                 RenderingLayers.Add(RenderLayerType.Player, playerLayer);
             }
             else
@@ -55,7 +61,7 @@ namespace ConflictCube.Controller
                 RenderingLayers.TryGetValue(RenderLayerType.Player, out playerLayer);
             }
 
-            playerLayer.ObjectsToRender.AddRange(players);
+            playerLayer.AddRangedObjectsToRender(players);
 
         }
     }

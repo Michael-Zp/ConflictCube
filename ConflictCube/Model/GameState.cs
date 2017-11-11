@@ -15,10 +15,8 @@ namespace ConflictCube.Model
 
         private List<ICollidable> collidableObjects = new List<ICollidable>();
         
-        private Boundary[] Boundaries =
+        private Boundary[] ScreenBoundaries =
         {
-            new Boundary(new Box2D(-1.5f, -1f,  .5f,  2f), CollisionType.LeftBoundary),
-            new Boundary(new Box2D( 1f,   -1f,  .5f,  2f), CollisionType.RightBoundary),
             new Boundary(new Box2D(-1f,    1f,   2f, .5f), CollisionType.TopBoundary),
             new Boundary(new Box2D(-1f,   -1.5f, 2f, .5f), CollisionType.BottomBoundary)
         };
@@ -38,7 +36,7 @@ namespace ConflictCube.Model
             collidableObjects.Clear();
             collidableObjects.AddRange(CurrentLevel.GetColliders());
             collidableObjects.AddRange(Players);
-            collidableObjects.AddRange(Boundaries);
+            collidableObjects.AddRange(ScreenBoundaries);
         }
 
         public void Update(List<Input> inputs, float diffTime)
@@ -51,7 +49,7 @@ namespace ConflictCube.Model
             CheckLooseCondition();
         }
 
-        public void MoveObject<T>(T obj, Vector2 moveVetor) where T : RenderableObject, IMoveable
+        public void MoveObject(IMoveable obj, Vector2 moveVetor)
         {
             if(obj is Player)
             {
@@ -76,15 +74,15 @@ namespace ConflictCube.Model
         public void InitializePlayers()
         {
             Players = new List<Player>();
+            
+            Players.Add(new Player(new Vector2(.06f, .06f), new Vector2(.1f, .1f), .01f));
+            CurrentLevel.FloorLeft.AddAttachedObject(Players[0], CurrentLevel.ScaleMatrix);
+            Players[0].SetPosition(CurrentLevel.FindStartPosition(FloorArea.Left));
+
 
             Players.Add(new Player(new Vector2(.06f, .06f), new Vector2(.1f, .1f), .01f));
-            CurrentLevel.FloorLeft.AddAttachedObject(Players[0]);
-            Players[0].SetPosition(CurrentLevel.FindStartPosition(CurrentLevel.FloorLeft));
-
-
-            Players.Add(new Player(new Vector2(.06f, .06f), new Vector2(.1f, .1f), .01f));
-            CurrentLevel.FloorRight.AddAttachedObject(Players[1]);
-            Players[1].SetPosition(CurrentLevel.FindStartPosition(CurrentLevel.FloorRight));
+            CurrentLevel.FloorRight.AddAttachedObject(Players[1], CurrentLevel.ScaleMatrix);
+            Players[1].SetPosition(CurrentLevel.FindStartPosition(FloorArea.Right));
         }
 
         public void LoadLevel(int levelNumber)
@@ -92,15 +90,14 @@ namespace ConflictCube.Model
             CurrentLevel = LevelBuilder.LoadLevel(levelNumber);
 
             //Hard coded parameters. Enhance level format or even build own level format including these parameters.
-            CurrentLevel.FloorLeft.FloorSize = new Vector2(10, 10);
-            CurrentLevel.FloorMiddle.FloorSize = new Vector2(1, 10);
-            CurrentLevel.FloorRight.FloorSize = new Vector2(10, 10);
-            CurrentLevel.FloorOffsetPerSecond = .1f;
+            CurrentLevel.FloorOffsetPerSecond = .05f;
             CurrentLevel.StartRollingLevelOffsetSeconds = 1.0f;
+            CurrentLevel.MoveObject = MoveObject;
         }
 
         private void CheckLooseCondition()
         {
+            Console.WriteLine("Player0: " + Players[0].IsAlive + " ; Player1: " + Players[1].IsAlive);
             if (!Players[0].IsAlive && !Players[1].IsAlive)
             {
                 Environment.Exit(0);

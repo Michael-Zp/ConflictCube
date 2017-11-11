@@ -1,6 +1,5 @@
 ﻿using ConflictCube.Model;
 using ConflictCube.Model.Renderable;
-using ConflictCube.Model.Tiles;
 using OpenTK;
 using System;
 using System.Collections.Generic;
@@ -8,28 +7,82 @@ using Zenseless.Geometry;
 
 namespace ConflictCube
 {
-    public class Level : RenderableLayer
+    public enum FloorArea
     {
-        public Box2D AreaOfFloor { get; set; }
-        public Floor FloorRight { get; set; }
-        public Floor FloorMiddle { get; set; }
-        public Floor FloorLeft { get; set; }
+        Left,
+        Middle,
+        Right
+    }
+
+    public class Level : RenderableLayer 
+    {
+        public Floor FloorRight { get; private set; }
+        public Floor FloorMiddle { get; private set; }
+        public Floor FloorLeft { get; private set; }
         public float FloorOffsetPerSecond { get; set; }
         public float StartRollingLevelOffsetSeconds { get; set; }
+        public Action<IMoveable, Vector2> MoveObject;
 
         private float ElapsedTimeInLevel = 0;
+        
+        private Boundary[] Boundaries =
+        {
+            new Boundary(new Box2D(-1.5f, -1f,  .5f,  2f), CollisionType.LeftBoundary),
+            new Boundary(new Box2D( 1f,   -1f,  .5f,  2f), CollisionType.RightBoundary),
+            new Boundary(new Box2D(-1f,    1f,   2f, .5f), CollisionType.TopBoundary),
+        };
 
+        public Level(Box2D areaOfLayer) : base(new List<RenderableObject>(), new List<RenderableLayer>(), areaOfLayer)
+        {
+
+        }
+
+        public void AddFloor(FloorArea area, Floor floor)
+        {
+            switch(area)
+            {
+                case FloorArea.Left:
+                    FloorLeft = floor;
+                    break;
+
+                case FloorArea.Middle:
+                    FloorMiddle = floor;
+                    break;
+
+                case FloorArea.Right:
+                    FloorRight = floor;
+                    break;
+            }
+
+            SubLayers.Add(floor);
+        }
 
         public List<ICollidable> GetColliders()
         {
             List<ICollidable> colliders = new List<ICollidable>();
 
-            foreach(RenderableObject obj in ObjectsToRender)
+            foreach(RenderableObject obj in GetRenderableObjects())
             {
                 if (obj is ICollidable)
                 {
                     colliders.Add((ICollidable)obj);
                 }
+            }
+
+            foreach(Boundary boundary in Boundaries)
+            {
+                Vector2 newSize = TransformSizeToParent(boundary.CollisionBox.SizeX, boundary.CollisionBox.SizeY);
+                Vector2 newPos = TransformSizeToParent(boundary.CollisionBox.MinX, boundary.CollisionBox.MinY);
+
+                Boundary clone = boundary.Clone();
+
+                clone.CollisionBox.SizeX = newSize.X;
+                clone.CollisionBox.SizeY = newSize.Y;
+
+                clone.CollisionBox.MinX = newPos.X;
+                clone.CollisionBox.MinY = newPos.Y;
+
+                colliders.Add(clone);
             }
 
             return colliders;
@@ -43,8 +96,6 @@ namespace ConflictCube
             {
                 MoveFloorsUp(diffTime);
             }
-
-            UpdateRenderableObjects();
         }
 
         private void MoveFloorsUp(float diffTime)
@@ -56,55 +107,31 @@ namespace ConflictCube
 
         private void MoveFloorUp(Floor floor, float diffTime)
         {
-            floor.MoveFloorUp(FloorOffsetPerSecond * diffTime);
+            floor.MoveFloorUp(FloorOffsetPerSecond * diffTime, MoveObject);
         }
 
-        private void UpdateRenderableObjects()
+        public Vector2 FindStartPosition(FloorArea floor)
         {
-            ObjectsToRender.Clear();
-            ObjectsToRender.AddRange(FloorLeft.GetRenderableObjects());
-            ObjectsToRender.AddRange(FloorMiddle.GetRenderableObjects());
-            ObjectsToRender.AddRange(FloorRight.GetRenderableObjects());
-
-            Matrix3 scaleMatrix = GenerateScaleMatrix();
-            
-            foreach(FloorTile obj in ObjectsToRender)
+            Vector2 pos;
+            switch(floor)
             {
-                obj.Box = FloorCoordinatesToGlobalCoordinates(obj.Box, scaleMatrix);
+                case FloorArea.Left:
+                    pos = FloorLeft.FindStartPosition();
+                    break;
+
+                case FloorArea.Middle:
+                    pos = FloorMiddle.FindStartPosition();
+                    break;
+
+                case FloorArea.Right:
+                    pos = FloorRight.FindStartPosition();
+                    break;
+
+                default:
+                    throw new Exception("New floor area added without adding a start position switch case pair in the level");
             }
-        }
 
-        //TODO: Optimization use it as a memeber in the Floor class -> Dont calc it every frame
-        private Matrix3 GenerateScaleMatrix()
-        {
-            float sizeRatioRows = AreaOfFloor.SizeX / (FloorRight.FloorBox.MaxX - FloorLeft.FloorBox.MinX);
-            float sizeRatioColumns = AreaOfFloor.SizeY / 2;
-
-            return Matrix3.CreateScale(sizeRatioRows, sizeRatioColumns, 1);
-        }
-
-        private Box2D FloorCoordinatesToGlobalCoordinates(Box2D box,  Matrix3 scaleMatrix)
-        {
-            Box2D newBox = new Box2D(box);
-
-            //Scale
-            Vector3 newSize = Vector3.Transform(new Vector3(newBox.SizeX, newBox.SizeY, 1), scaleMatrix);
-            newBox.SizeX = newSize.X;
-            newBox.SizeY = newSize.Y;
-
-            //Transform
-            newBox.CenterX = newBox.CenterX * scaleMatrix.Column0[0] + (AreaOfFloor.CenterX);
-            newBox.CenterY = newBox.CenterY * scaleMatrix.Column1[1] + (AreaOfFloor.CenterY);
-
-            return newBox;
-        }
-
-        public Vector2 FindStartPosition(Floor floor)
-        {
-            Matrix3 scaleMatrix = GenerateScaleMatrix();
-            Vector2 pos = floor.FindStartPosition();
-            Box2D posBox = FloorCoordinatesToGlobalCoordinates(new Box2D(pos.X, pos.Y, 0, 0), scaleMatrix);
-            return new Vector2(posBox.CenterX, posBox.CenterY);
+            return TransformPointToParent(pos);
         }
         
     }

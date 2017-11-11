@@ -23,9 +23,9 @@ namespace ConflictCube.Model.Renderable
             return LoadFloor(levelRows, levelColumns, FloorTiles, floorBox);
         }
 
-        private static Floor LoadFloor(int levelRows, int levelColumns, TileType[,] floorTiles, Box2D floorBox)
+        private static Floor LoadFloor(int levelRows, int levelColumns, TileType[,] floorTiles, Box2D areaOfFloor)
         {
-            Floor floorOfLevel = new Floor(new Vector2(levelColumns, levelRows), floorBox);
+            Floor floorOfLevel = new Floor(new Vector2(levelColumns, levelRows), areaOfFloor);
 
             for (int row = 0; row < levelRows; row++)
             {

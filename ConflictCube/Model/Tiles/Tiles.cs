@@ -105,18 +105,6 @@ namespace ConflictCube.Model.Tiles
         public Box2D CollisionBox { get; private set; }
         public CollisionType CollisionType { get; private set; }
         public HashSet<CollisionType> CollidesWith { get; private set; }
-
-        public Box2D Box {
-            get 
-            {
-                return base.Box;
-            }
-            
-            set {
-                base.Box = value;
-                CollisionBox = value;
-            }
-        }
         
 
         public FloorTile(TileType type, Box2D box, int row, int column) : base(box, type)
@@ -157,12 +145,17 @@ namespace ConflictCube.Model.Tiles
         public void OnCollide(CollisionType type, ICollidable other, Vector2 movementIntoCollision)
         {}
 
-        public FloorTile Clone()
+        public new FloorTile Clone()
         {
             FloorTile newFloorTile = (FloorTile)this.MemberwiseClone();
             newFloorTile.Box = new Box2D(newFloorTile.Box);
             newFloorTile.CollisionBox = new Box2D(newFloorTile.CollisionBox);
             return newFloorTile;
+        }
+
+        public override void OnBoxChanged()
+        {
+            CollisionBox = Box;
         }
     }
 
@@ -175,5 +168,8 @@ namespace ConflictCube.Model.Tiles
                 throw new System.Exception("PlayerTile was initalized with wrong TileType");
             }
         }
+
+        public override void OnBoxChanged()
+        {}
     }
 }

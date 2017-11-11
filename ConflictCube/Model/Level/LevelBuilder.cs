@@ -10,17 +10,15 @@ namespace ConflictCube
 
         public static Level LoadLevel(int levelNumber)
         {
-            Level newLevel = new Level();
-            string levelPathRight = LevelDirectoryPath + "Level" + levelNumber + "Right.csv";
-            string levelPathMiddle = LevelDirectoryPath + "Level" + levelNumber + "Middle.csv";
+            Level newLevel = new Level(new Box2D(-.8f, -1f, 1.6f, 6f));
             string levelPathLeft = LevelDirectoryPath + "Level" + levelNumber + "Left.csv";
+            string levelPathMiddle = LevelDirectoryPath + "Level" + levelNumber + "Middle.csv";
+            string levelPathRight = LevelDirectoryPath + "Level" + levelNumber + "Right.csv";
 
-            newLevel.FloorRight = FloorLoader.Instance(levelPathRight,   new Box2D( 1f / 21f, -1f, 20f / 21f, 2f));
-            newLevel.FloorMiddle = FloorLoader.Instance(levelPathMiddle, new Box2D(-1f / 21f, -1f,  2f / 21f, 2f));
-            newLevel.FloorLeft = FloorLoader.Instance(levelPathLeft,     new Box2D(-1f      , -1f, 20f / 21f, 2f));
-
-            //Default is entire screen
-            newLevel.AreaOfFloor = new Box2D(-.8f, -1, 1.6f, 2);
+            newLevel.AddFloor(FloorArea.Left,   FloorLoader.Instance(levelPathLeft,   new Box2D(-1f      , -1f, 20f / 21f, 2f)));
+            newLevel.AddFloor(FloorArea.Middle, FloorLoader.Instance(levelPathMiddle, new Box2D(-1f / 21f, -1f,  2f / 21f, 2f)));
+            newLevel.AddFloor(FloorArea.Right,  FloorLoader.Instance(levelPathRight,  new Box2D( 1f / 21f, -1f, 20f / 21f, 2f)));
+            
 
             return newLevel;
         }
