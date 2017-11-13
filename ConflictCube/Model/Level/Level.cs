@@ -57,19 +57,11 @@ namespace ConflictCube
             SubLayers.Add(floor);
         }
 
-        public List<ICollidable> GetColliders()
+        protected override List<ICollidable> GetAdditionalColliders()
         {
             List<ICollidable> colliders = new List<ICollidable>();
 
-            foreach(RenderableObject obj in GetRenderableObjects())
-            {
-                if (obj is ICollidable)
-                {
-                    colliders.Add((ICollidable)obj);
-                }
-            }
-
-            foreach(Boundary boundary in Boundaries)
+            foreach (Boundary boundary in Boundaries)
             {
                 Vector2 newSize = TransformSizeToParent(boundary.CollisionBox.SizeX, boundary.CollisionBox.SizeY);
                 Vector2 newPos = TransformSizeToParent(boundary.CollisionBox.MinX, boundary.CollisionBox.MinY);

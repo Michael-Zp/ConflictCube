@@ -13,7 +13,7 @@ namespace ConflictCube.Model
         public Level CurrentLevel { get; set; }
         public List<Player> Players { get; private set; }
 
-        private List<ICollidable> collidableObjects = new List<ICollidable>();
+        private List<ICollidable> collisionGroups = new List<ICollidable>();
         
         private Boundary[] ScreenBoundaries =
         {

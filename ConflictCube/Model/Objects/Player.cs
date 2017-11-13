@@ -15,6 +15,7 @@ namespace ConflictCube
         public bool IsAlive { get; private set; }
         public CollisionType CollisionType { get; private set; }
         public HashSet<CollisionType> CollidesWith { get; private set; }
+        public Vector2 MoveVectorThisIteration { get; set; }
 
         public Player(Vector2 size, Vector2 position, float speed, bool isAlive = true) : base(position, size, TileType.Player)
         {
@@ -27,22 +28,17 @@ namespace ConflictCube
         private void InitializeCollision()
         {
             CollisionType = CollisionType.Player;
-            CollidesWith = new HashSet<CollisionType>();
-
-            CollidesWith.Add(CollisionType.LeftBoundary);
-            CollidesWith.Add(CollisionType.RightBoundary);
-            CollidesWith.Add(CollisionType.TopBoundary);
-            CollidesWith.Add(CollisionType.BottomBoundary);
-            CollidesWith.Add(CollisionType.Player);
-            CollidesWith.Add(CollisionType.Finish);
-            CollidesWith.Add(CollisionType.Wall);
-            CollidesWith.Add(CollisionType.Hole);
-        }
-
-        public void Move(Vector2 moveVector)
-        {
-            Box.MinX += moveVector.X;
-            Box.MinY += moveVector.Y;
+            CollidesWith = new HashSet<CollisionType>
+            {
+                CollisionType.LeftBoundary,
+                CollisionType.RightBoundary,
+                CollisionType.TopBoundary,
+                CollisionType.BottomBoundary,
+                CollisionType.Player,
+                CollisionType.Finish,
+                CollisionType.Wall,
+                CollisionType.Hole
+            };
         }
 
         public void SetPosition(Vector2 position)
@@ -92,7 +88,7 @@ namespace ConflictCube
                 }
 
 
-                Move(-moveBackVector);
+                this.Move(-moveBackVector);
             }
 
             else if (type == CollisionType.BottomBoundary || type == CollisionType.Hole)
