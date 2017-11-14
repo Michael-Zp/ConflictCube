@@ -25,7 +25,7 @@ namespace ConflictCube.Model
 
         public GameState()
         {
-            LoadLevel(1);
+            LoadLevel(2);
             InitializePlayers();
 
             InputManager = new InputManager(this, Players);
@@ -94,7 +94,7 @@ namespace ConflictCube.Model
             CurrentLevel.FloorMiddle.FloorSize = new Vector2(1, 10);
             CurrentLevel.FloorRight.FloorSize = new Vector2(10, 10);
             CurrentLevel.FloorOffsetPerSecond = .1f;
-            CurrentLevel.StartRollingLevelOffsetSeconds = 1.0f;
+            CurrentLevel.StartRollingLevelOffsetSeconds = 3.0f;
         }
 
         private void CheckLooseCondition()
