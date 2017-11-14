@@ -1,5 +1,4 @@
-﻿using OpenTK;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Zenseless.Geometry;
 using ConflictCube.Model.Collision;
 
@@ -27,6 +26,11 @@ namespace ConflictCube.Model
             Boundary clone = (Boundary)this.MemberwiseClone();
             clone.CollisionBox = new Box2D(CollisionBox);
             return clone;
+        }
+
+        public bool IsTrigger()
+        {
+            return false;
         }
     }
 }

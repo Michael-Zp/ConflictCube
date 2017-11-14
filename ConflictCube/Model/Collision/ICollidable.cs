@@ -25,5 +25,6 @@ namespace ConflictCube.Model
         HashSet<CollisionType> CollidesWith { get; }
 
         void OnCollide(ICollidable other);
+        bool IsTrigger();
     }
 }

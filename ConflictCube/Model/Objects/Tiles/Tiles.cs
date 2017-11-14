@@ -142,14 +142,9 @@ namespace ConflictCube.Model.Tiles
             CollisionBox = box;
             CollidesWith = new HashSet<CollisionType>();
         }
-
-        static int TempID = 0;
+        
         public void OnCollide(ICollidable other)
         {
-            if(other.CollisionType == CollisionType.Player)
-            {
-                TempID = ID;
-            }
         }
 
         public override RenderableObject Clone()
@@ -158,11 +153,6 @@ namespace ConflictCube.Model.Tiles
             newFloorTile.Box = new Box2D(Box);
             newFloorTile.Type = Type;
             newFloorTile.CollisionType = CollisionType;
-
-            if(TempID == ID)
-            {
-                newFloorTile.Type = TileType.Finish;
-            }
 
             return newFloorTile;
         }
@@ -176,6 +166,16 @@ namespace ConflictCube.Model.Tiles
         {
             Box.CenterX = pos.X;
             Box.CenterY = pos.Y;
+        }
+
+        public bool IsTrigger()
+        {
+            if(CollisionType == CollisionType.Wall)
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 

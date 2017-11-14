@@ -60,54 +60,6 @@ namespace ConflictCube
                 CollisionCount++;
                 Console.WriteLine(CollisionCount);
 
-                Vector2 onlyXMovement = new Vector2(MoveVectorThisIteration.X, 0f);
-                Vector2 onlyYMovement = new Vector2(0f, MoveVectorThisIteration.Y);
-
-
-                this.MoveInstantly(-MoveVectorThisIteration);
-
-
-                this.MoveInstantly(onlyXMovement);
-
-                if(other.CollisionBox.Intersects(CollisionBox))
-                {
-                    float yDistance = Math.Abs(Math.Abs(other.CollisionBox.CenterY - CollisionBox.CenterY) - other.CollisionBox.SizeY / 2 - CollisionBox.SizeY / 2);
-
-                    if(yDistance > 0.001f)
-                    {
-                        float xDif = 0;
-                        if (onlyXMovement.X > 0)
-                        {
-                            xDif = ((other.CollisionBox.MinX - CollisionBox.SizeX) + 0.0000001f) - CollisionBox.MinX;
-                        }
-                        else if (onlyXMovement.X < 0)
-                        {
-                            xDif = (other.CollisionBox.MaxX - 0.0000001f) - CollisionBox.MinX;
-                        }
-                        this.MoveInstantly(new Vector2(xDif, 0f));
-                    }
-                }
-
-                this.MoveInstantly(onlyYMovement);
-
-                if(other.CollisionBox.Intersects(CollisionBox))
-                {
-                    float xDistance = Math.Abs(Math.Abs(other.CollisionBox.CenterX - CollisionBox.CenterX) - other.CollisionBox.SizeX / 2 - CollisionBox.SizeX / 2);
-
-                    if (xDistance > 0.001f)
-                    {
-                        float yDif = 0;
-                        if (onlyYMovement.Y > 0)
-                        {
-                            yDif = ((other.CollisionBox.MinY - CollisionBox.SizeY) + 0.0000001f) - CollisionBox.MinY;
-                        }
-                        else if (onlyYMovement.Y < 0)
-                        {
-                            yDif = (other.CollisionBox.MaxY - 0.0000001f) - CollisionBox.MinY;
-                        }
-                        this.MoveInstantly(new Vector2(0f, yDif));
-                    }
-                }
             }
             else if (other.CollisionType == CollisionType.BottomBoundary || other.CollisionType == CollisionType.Hole)
             {
@@ -132,6 +84,11 @@ namespace ConflictCube
         public bool CanMove()
         {
             return IsAlive;
+        }
+
+        public bool IsTrigger()
+        {
+            return false;
         }
     }
 }
