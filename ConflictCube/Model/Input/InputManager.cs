@@ -1,4 +1,5 @@
 ﻿using ConflictCube.Controller;
+using ConflictCube.Model.Renderable;
 using OpenTK;
 using System;
 using System.Collections.Generic;
@@ -80,22 +81,22 @@ namespace ConflictCube.Model
 
         private void MovePlayerLeft(int idx)
         {
-            State.MoveObject(Player[idx], new Vector2(Player[idx].Speed * -1, 0f));
+            Player[idx].Move(new Vector2(Player[idx].Speed * -1, 0f));
         }
 
         private void MovePlayerRight(int idx)
         {
-            State.MoveObject(Player[idx], new Vector2(Player[idx].Speed * 1, 0f));
+            Player[idx].Move(new Vector2(Player[idx].Speed, 0f));
         }
 
         private void MovePlayerUp(int idx)
         {
-            State.MoveObject(Player[idx], new Vector2(.0f, Player[idx].Speed));
+            Player[idx].Move(new Vector2(.0f, Player[idx].Speed));
         }
 
         private void MovePlayerDown(int idx)
         {
-            State.MoveObject(Player[idx], new Vector2(.0f, Player[idx].Speed * -1));
+            Player[idx].Move(new Vector2(.0f, Player[idx].Speed * -1));
         }
     }
 }

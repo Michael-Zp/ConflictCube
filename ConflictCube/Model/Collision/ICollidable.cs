@@ -1,5 +1,4 @@
-﻿using OpenTK;
-using System;
+﻿using ConflictCube.Model.Collision;
 using System.Collections.Generic;
 using Zenseless.Geometry;
 
@@ -20,10 +19,12 @@ namespace ConflictCube.Model
 
     public interface ICollidable
     {
+        CollisionGroup CollisionGroup { get; set; }
         Box2D CollisionBox { get; }
         CollisionType CollisionType { get; }
         HashSet<CollisionType> CollidesWith { get; }
 
-        void OnCollide(CollisionType type, ICollidable other, Vector2 movementIntoCollision);
+        void OnCollide(ICollidable other);
+        bool IsTrigger();
     }
 }

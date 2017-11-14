@@ -1,9 +1,5 @@
 ﻿using OpenTK;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Zenseless.Geometry;
 
 namespace ConflictCube.Model.Renderable
@@ -114,6 +110,28 @@ namespace ConflictCube.Model.Renderable
             {
                 ObjectsToRender.Add(toAdd);
             }
-        }        
+        }   
+        
+        public List<ICollidable> GetColliders()
+        {
+            List<ICollidable> colliders = new List<ICollidable>();
+
+            foreach(RenderableObject obj in GetRenderableObjects())
+            {
+                if(obj is ICollidable)
+                {
+                    colliders.Add((ICollidable)obj);
+                }
+            }
+
+            colliders.AddRange(GetAdditionalColliders());
+
+            return colliders;
+        }
+
+        virtual protected List<ICollidable> GetAdditionalColliders()
+        {
+            return new List<ICollidable>();
+        }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using ConflictCube.Model;
 using ConflictCube.Model.Renderable;
+using System;
 using System.Collections.Generic;
 using Zenseless.Geometry;
 
@@ -44,6 +45,7 @@ namespace ConflictCube.Controller
             RenderableLayer floorLayer = GeneratDefaultRenderableLayer();
 
             floorLayer.AddRangedObjectsToRender(currentLevel.GetRenderableObjects());
+            
 
             RenderingLayers.Add(RenderLayerType.Floor, floorLayer);
         }

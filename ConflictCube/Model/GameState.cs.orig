@@ -23,7 +23,11 @@ namespace ConflictCube.Model
 
         public GameState()
         {
+<<<<<<< HEAD
             LoadLevel(2);
+=======
+            LoadLevel(0);
+>>>>>>> feature/RefactorColliders
             InitializePlayers();
 
             InputManager = new InputManager(this, Players);
@@ -78,8 +82,22 @@ namespace ConflictCube.Model
             CurrentLevel = LevelBuilder.LoadLevel(levelNumber);
 
             //Hard coded parameters. Enhance level format or even build own level format including these parameters.
-            CurrentLevel.FloorOffsetPerSecond = .0f;
+<<<<<<< HEAD
+<<<<<<< HEAD
+            CurrentLevel.FloorLeft.FloorSize = new Vector2(10, 10);
+            CurrentLevel.FloorMiddle.FloorSize = new Vector2(1, 10);
+            CurrentLevel.FloorRight.FloorSize = new Vector2(10, 10);
+            CurrentLevel.FloorOffsetPerSecond = .1f;
             CurrentLevel.StartRollingLevelOffsetSeconds = 3.0f;
+=======
+            CurrentLevel.FloorOffsetPerSecond = .05f;
+            CurrentLevel.StartRollingLevelOffsetSeconds = 1.0f;
+            CurrentLevel.MoveObject = MoveObject;
+>>>>>>> 9a3a4f1e7a2f4c1054bb97eaff7ea7c7ebfdb034
+=======
+            CurrentLevel.FloorOffsetPerSecond = .0f;
+            CurrentLevel.StartRollingLevelOffsetSeconds = 1.0f;
+>>>>>>> feature/RefactorColliders
         }
 
         private void CheckLooseCondition()

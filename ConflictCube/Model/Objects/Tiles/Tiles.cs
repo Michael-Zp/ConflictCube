@@ -5,6 +5,7 @@ using System;
 using System.Xml;
 using System.Collections.Generic;
 using Zenseless.Geometry;
+using ConflictCube.Model.Collision;
 
 namespace ConflictCube.Model.Tiles
 {
@@ -105,7 +106,7 @@ namespace ConflictCube.Model.Tiles
         public Box2D CollisionBox { get; private set; }
         public CollisionType CollisionType { get; private set; }
         public HashSet<CollisionType> CollidesWith { get; private set; }
-        
+        public CollisionGroup CollisionGroup { get; set; }
 
         public FloorTile(TileType type, Box2D box, int row, int column) : base(box, type)
         {
@@ -141,21 +142,40 @@ namespace ConflictCube.Model.Tiles
             CollisionBox = box;
             CollidesWith = new HashSet<CollisionType>();
         }
+        
+        public void OnCollide(ICollidable other)
+        {
+        }
 
-        public void OnCollide(CollisionType type, ICollidable other, Vector2 movementIntoCollision)
-        {}
-
-        public new FloorTile Clone()
+        public override RenderableObject Clone()
         {
             FloorTile newFloorTile = (FloorTile)this.MemberwiseClone();
-            newFloorTile.Box = new Box2D(newFloorTile.Box);
-            newFloorTile.CollisionBox = new Box2D(newFloorTile.CollisionBox);
+            newFloorTile.Box = new Box2D(Box);
+            newFloorTile.Type = Type;
+            newFloorTile.CollisionType = CollisionType;
+
             return newFloorTile;
         }
 
         public override void OnBoxChanged()
         {
             CollisionBox = Box;
+        }
+
+        public override void SetPosition(Vector2 pos)
+        {
+            Box.CenterX = pos.X;
+            Box.CenterY = pos.Y;
+        }
+
+        public bool IsTrigger()
+        {
+            if(CollisionType == CollisionType.Wall)
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 
@@ -167,6 +187,12 @@ namespace ConflictCube.Model.Tiles
             {
                 throw new System.Exception("PlayerTile was initalized with wrong TileType");
             }
+        }
+        
+        public override void SetPosition(Vector2 pos)
+        {
+            Box.CenterX = pos.X;
+            Box.CenterY = pos.Y;
         }
 
         public override void OnBoxChanged()
