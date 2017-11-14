@@ -5,12 +5,13 @@ using Zenseless.OpenGL;
 using System.Drawing;
 using System;
 using System.IO;
+using Zenseless.Geometry;
 
 namespace ConflictCube
 {
     using SysDraw = System.Drawing.Imaging;
 
-    class ZenselessWrapper
+    public static class ZenselessWrapper
     {
 
         public static ITexture TextureFromBitmapWithSpecificMapping(string bitmapPath, Box2d regionOfTexture)
@@ -69,6 +70,13 @@ namespace ConflictCube
                 }
             }
             return texture;
+        }
+
+        public static bool Intersects(this Box2D box, float x, float y)
+        {
+            if (x <= box.MinX || box.MaxX <= x) return false;
+            if (y <= box.MinY || box.MaxY <= y) return false;
+            return true;
         }
     }
 }

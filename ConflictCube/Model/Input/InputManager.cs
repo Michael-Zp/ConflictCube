@@ -86,7 +86,7 @@ namespace ConflictCube.Model
 
         private void MovePlayerRight(int idx)
         {
-            Player[idx].Move(new Vector2(Player[idx].Speed * 1, 0f));
+            Player[idx].Move(new Vector2(Player[idx].Speed, 0f));
         }
 
         private void MovePlayerUp(int idx)

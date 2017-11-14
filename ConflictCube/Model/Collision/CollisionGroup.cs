@@ -1,11 +1,9 @@
 ﻿using ConflictCube.Model.Renderable;
 using System.Collections.Generic;
-using System;
-using Zenseless.Geometry;
 
 namespace ConflictCube.Model.Collision
 {
-    class CollisionGroup
+    public class CollisionGroup
     {
         public List<ICollidable> CollidersInGroup { get; private set; }
         
@@ -15,38 +13,57 @@ namespace ConflictCube.Model.Collision
             CollidersInGroup = new List<ICollidable>();
         }
 
+        public void AddCollider(ICollidable collidable)
+        {
+            CollidersInGroup.Add(collidable);
+            collidable.CollisionGroup = this;
+        }
+
+        public void AddRangeColliders(IEnumerable<ICollidable> collidables)
+        {
+            foreach(ICollidable collidable in collidables)
+            {
+                AddCollider(collidable);
+            }
+        }
+
         //Moves all objects in this collision group which are IMoveables and then checks all collisions of all objects
         public void MoveAllObjects()
         {
-            List<Tuple<ICollidable, Box2D>> moveBoxes = new List<Tuple<ICollidable, Box2D>>();
             foreach(ICollidable collidable in CollidersInGroup)
             {
                 if(collidable is IMoveable)
                 {
-                    //Console.WriteLine(((IMoveable)collidable).MoveVectorThisIteration);
-                    Box2D moveBox = ((IMoveable)collidable).MoveThisIteration(collidable);
-                    moveBoxes.Add(Tuple.Create(collidable, moveBox));
+                    ((IMoveable)collidable).MoveThisIteration();
                 }
             }
 
-            foreach(Tuple<ICollidable, Box2D> collidable in moveBoxes)
+            CheckCollisions();
+
+            foreach(ICollidable collidable in CollidersInGroup)
             {
-                CheckCollisions(collidable);
+                if(collidable is IMoveable)
+                {
+                    ((IMoveable)collidable).ClearMoveVector();
+                }
             }
         }
 
-        private void CheckCollisions(Tuple<ICollidable, Box2D> collidable)
+        private void CheckCollisions()
         {
-            foreach(ICollidable other in CollidersInGroup)
+            foreach(ICollidable obj in CollidersInGroup)
             {
-                if(other == collidable.Item1)
+                foreach(ICollidable other in CollidersInGroup)
                 {
-                    continue;
-                }
+                    if (other == obj)
+                    {
+                        continue;
+                    }
 
-                if(collidable.Item2.Intersects(other.CollisionBox))
-                {
-                    collidable.Item1.OnCollide(other);
+                    if (obj.CollisionBox.Intersects(other.CollisionBox))
+                    {
+                        obj.OnCollide(other);
+                    }
                 }
             }
         }

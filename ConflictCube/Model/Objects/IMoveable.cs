@@ -33,20 +33,9 @@ namespace ConflictCube.Model.Renderable
             }
         }
 
-        public static Box2D MoveThisIteration(this IMoveable moveable, ICollidable collidable)
+        public static void MoveThisIteration(this IMoveable moveable)
         {
-            Box2D box = new Box2D(0, 0, 0, 0)
-            {
-                SizeX = collidable.CollisionBox.SizeX,
-                SizeY = collidable.CollisionBox.SizeY,
-
-                MinX = collidable.CollisionBox.MinX + moveable.MoveVectorThisIteration.X,
-                MinY = collidable.CollisionBox.MinY + moveable.MoveVectorThisIteration.Y
-            };
-
             moveable.MoveInstantly(moveable.MoveVectorThisIteration);
-
-            return box;
         }
 
         public static void ClearMoveVector(this IMoveable moveable)

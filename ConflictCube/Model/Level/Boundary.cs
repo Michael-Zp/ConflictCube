@@ -1,6 +1,7 @@
 ﻿using OpenTK;
 using System.Collections.Generic;
 using Zenseless.Geometry;
+using ConflictCube.Model.Collision;
 
 namespace ConflictCube.Model
 {
@@ -9,6 +10,8 @@ namespace ConflictCube.Model
         public Box2D CollisionBox { get; private set; }
         public CollisionType CollisionType { get; private set; }
         public HashSet<CollisionType> CollidesWith { get; }
+
+        public CollisionGroup CollisionGroup { get; set; }
 
         public Boundary(Box2D box, CollisionType type)
         {

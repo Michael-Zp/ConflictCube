@@ -23,7 +23,7 @@ namespace ConflictCube.Model
 
         public GameState()
         {
-            LoadLevel(1);
+            LoadLevel(0);
             InitializePlayers();
 
             InputManager = new InputManager(this, Players);
@@ -36,9 +36,10 @@ namespace ConflictCube.Model
             CollisionGroups.Clear();
 
             CollisionGroup group = new CollisionGroup();
-            group.CollidersInGroup.AddRange(CurrentLevel.GetColliders());
-            group.CollidersInGroup.AddRange(Players);
-            group.CollidersInGroup.AddRange(ScreenBoundaries);
+            group.AddRangeColliders(CurrentLevel.GetColliders());
+            group.AddRangeColliders(Players);
+            group.AddRangeColliders(ScreenBoundaries);
+            
 
             CollisionGroups.Add(group);
         }

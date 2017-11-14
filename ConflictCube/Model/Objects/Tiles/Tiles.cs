@@ -5,6 +5,7 @@ using System;
 using System.Xml;
 using System.Collections.Generic;
 using Zenseless.Geometry;
+using ConflictCube.Model.Collision;
 
 namespace ConflictCube.Model.Tiles
 {
@@ -105,7 +106,7 @@ namespace ConflictCube.Model.Tiles
         public Box2D CollisionBox { get; private set; }
         public CollisionType CollisionType { get; private set; }
         public HashSet<CollisionType> CollidesWith { get; private set; }
-        
+        public CollisionGroup CollisionGroup { get; set; }
 
         public FloorTile(TileType type, Box2D box, int row, int column) : base(box, type)
         {
@@ -142,14 +143,27 @@ namespace ConflictCube.Model.Tiles
             CollidesWith = new HashSet<CollisionType>();
         }
 
+        static int TempID = 0;
         public void OnCollide(ICollidable other)
-        {}
+        {
+            if(other.CollisionType == CollisionType.Player)
+            {
+                TempID = ID;
+            }
+        }
 
-        public new FloorTile Clone()
+        public override RenderableObject Clone()
         {
             FloorTile newFloorTile = (FloorTile)this.MemberwiseClone();
-            newFloorTile.Box = new Box2D(newFloorTile.Box);
-            newFloorTile.CollisionBox = new Box2D(newFloorTile.CollisionBox);
+            newFloorTile.Box = new Box2D(Box);
+            newFloorTile.Type = Type;
+            newFloorTile.CollisionType = CollisionType;
+
+            if(TempID == ID)
+            {
+                newFloorTile.Type = TileType.Finish;
+            }
+
             return newFloorTile;
         }
 

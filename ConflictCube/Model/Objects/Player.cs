@@ -5,6 +5,7 @@ using ConflictCube.Model.Tiles;
 using OpenTK;
 using Zenseless.Geometry;
 using System;
+using ConflictCube.Model.Collision;
 
 namespace ConflictCube
 {
@@ -16,6 +17,8 @@ namespace ConflictCube
         public CollisionType CollisionType { get; private set; }
         public HashSet<CollisionType> CollidesWith { get; private set; }
         public Vector2 MoveVectorThisIteration { get; set; }
+
+        public CollisionGroup CollisionGroup { get; set; }
 
         public Player(Vector2 size, Vector2 position, float speed, bool isAlive = true) : base(position, size, TileType.Player)
         {
@@ -48,63 +51,72 @@ namespace ConflictCube
             OnBoxChanged();
         }
 
+        private static int CollisionCount = 0;
+
         public void OnCollide(ICollidable other)
         {
             if (other.CollisionType == CollisionType.LeftBoundary || other.CollisionType == CollisionType.RightBoundary || other.CollisionType == CollisionType.TopBoundary || other.CollisionType == CollisionType.Wall )
             {
-                /*
-                Vector2 moveBackVector = new Vector2(0, 0);
-                //If the player collides with something of these types, put the two boxes as close as possible, but they must not collide (+ 0.000001f)
-                if (MoveVectorThisIteration.X != 0)
-                {
-                    float currentDistance = Math.Abs(CollisionBox.CenterX - other.CollisionBox.CenterX);
-                    float minPossibleDistance = CollisionBox.SizeX / 2 + other.CollisionBox.SizeX / 2;
-                    float distanceOffset = minPossibleDistance - currentDistance + 0.0001f;
+                CollisionCount++;
+                Console.WriteLine(CollisionCount);
 
-                    if(MoveVectorThisIteration.X > 0)
+                Vector2 onlyXMovement = new Vector2(MoveVectorThisIteration.X, 0f);
+                Vector2 onlyYMovement = new Vector2(0f, MoveVectorThisIteration.Y);
+
+
+                this.MoveInstantly(-MoveVectorThisIteration);
+
+
+                this.MoveInstantly(onlyXMovement);
+
+                if(other.CollisionBox.Intersects(CollisionBox))
+                {
+                    float yDistance = Math.Abs(Math.Abs(other.CollisionBox.CenterY - CollisionBox.CenterY) - other.CollisionBox.SizeY / 2 - CollisionBox.SizeY / 2);
+
+                    if(yDistance > 0.001f)
                     {
-                        moveBackVector.X = distanceOffset;
-                    }
-                    else
-                    {
-                        moveBackVector.X = -distanceOffset;
+                        float xDif = 0;
+                        if (onlyXMovement.X > 0)
+                        {
+                            xDif = ((other.CollisionBox.MinX - CollisionBox.SizeX) + 0.0000001f) - CollisionBox.MinX;
+                        }
+                        else if (onlyXMovement.X < 0)
+                        {
+                            xDif = (other.CollisionBox.MaxX - 0.0000001f) - CollisionBox.MinX;
+                        }
+                        this.MoveInstantly(new Vector2(xDif, 0f));
                     }
                 }
 
+                this.MoveInstantly(onlyYMovement);
 
-                if (MoveVectorThisIteration.Y != 0)
+                if(other.CollisionBox.Intersects(CollisionBox))
                 {
-                    float currentDistance = Math.Abs(CollisionBox.CenterY - other.CollisionBox.CenterY);
-                    float minPossibleDistance = CollisionBox.SizeY / 2 + other.CollisionBox.SizeY / 2;
-                    float distanceOffset = minPossibleDistance - currentDistance + 0.0001f;
+                    float xDistance = Math.Abs(Math.Abs(other.CollisionBox.CenterX - CollisionBox.CenterX) - other.CollisionBox.SizeX / 2 - CollisionBox.SizeX / 2);
 
-                    if (MoveVectorThisIteration.Y > 0)
+                    if (xDistance > 0.001f)
                     {
-                        moveBackVector.Y = distanceOffset;
+                        float yDif = 0;
+                        if (onlyYMovement.Y > 0)
+                        {
+                            yDif = ((other.CollisionBox.MinY - CollisionBox.SizeY) + 0.0000001f) - CollisionBox.MinY;
+                        }
+                        else if (onlyYMovement.Y < 0)
+                        {
+                            yDif = (other.CollisionBox.MaxY - 0.0000001f) - CollisionBox.MinY;
+                        }
+                        this.MoveInstantly(new Vector2(0f, yDif));
                     }
-                    else
-                    {
-                        moveBackVector.Y = -distanceOffset;
-                    }
-                }*/
-
-
-                //this.MoveInstantly(-moveBackVector);
-                this.MoveInstantly(-this.MoveVectorThisIteration);
+                }
             }
-
             else if (other.CollisionType == CollisionType.BottomBoundary || other.CollisionType == CollisionType.Hole)
             {
                 IsAlive = false;
             }
-
             else if (other.CollisionType == CollisionType.Finish)
             {
                 Console.WriteLine("WonGame");
             }
-
-
-            this.ClearMoveVector();
         }
 
         public Vector2 GetPosition()

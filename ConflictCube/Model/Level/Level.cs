@@ -92,7 +92,7 @@ namespace ConflictCube
         private void MoveFloorsUp(float diffTime)
         {
             MoveFloorUp(FloorLeft, diffTime);
-            MoveFloorUp(FloorMiddle, diffTime);
+            //MoveFloorUp(FloorMiddle, diffTime);
             MoveFloorUp(FloorRight, diffTime);
         }
 
