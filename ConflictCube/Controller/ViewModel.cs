@@ -44,6 +44,7 @@ namespace ConflictCube.Controller
             RenderableLayer floorLayer = GeneratDefaultRenderableLayer();
 
             floorLayer.AddRangedObjectsToRender(currentLevel.GetRenderableObjects());
+            
 
             RenderingLayers.Add(RenderLayerType.Floor, floorLayer);
         }

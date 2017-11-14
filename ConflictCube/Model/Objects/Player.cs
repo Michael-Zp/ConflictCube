@@ -41,26 +41,27 @@ namespace ConflictCube
             };
         }
 
-        public void SetPosition(Vector2 position)
+        public override void SetPosition(Vector2 position)
         {
             Box.CenterX = position.X;
             Box.CenterY = position.Y;
+            OnBoxChanged();
         }
 
-        public void OnCollide(CollisionType type, ICollidable other, Vector2 movementIntoCollision)
+        public void OnCollide(ICollidable other)
         {
-            if (type == CollisionType.LeftBoundary || type == CollisionType.RightBoundary || type == CollisionType.TopBoundary || type == CollisionType.Wall )
+            if (other.CollisionType == CollisionType.LeftBoundary || other.CollisionType == CollisionType.RightBoundary || other.CollisionType == CollisionType.TopBoundary || other.CollisionType == CollisionType.Wall )
             {
+                /*
                 Vector2 moveBackVector = new Vector2(0, 0);
-                
                 //If the player collides with something of these types, put the two boxes as close as possible, but they must not collide (+ 0.000001f)
-                if (movementIntoCollision.X != 0)
+                if (MoveVectorThisIteration.X != 0)
                 {
                     float currentDistance = Math.Abs(CollisionBox.CenterX - other.CollisionBox.CenterX);
                     float minPossibleDistance = CollisionBox.SizeX / 2 + other.CollisionBox.SizeX / 2;
-                    float distanceOffset = minPossibleDistance - currentDistance + 0.000001f;
+                    float distanceOffset = minPossibleDistance - currentDistance + 0.0001f;
 
-                    if(movementIntoCollision.X > 0)
+                    if(MoveVectorThisIteration.X > 0)
                     {
                         moveBackVector.X = distanceOffset;
                     }
@@ -71,13 +72,13 @@ namespace ConflictCube
                 }
 
 
-                if (movementIntoCollision.Y != 0)
+                if (MoveVectorThisIteration.Y != 0)
                 {
                     float currentDistance = Math.Abs(CollisionBox.CenterY - other.CollisionBox.CenterY);
                     float minPossibleDistance = CollisionBox.SizeY / 2 + other.CollisionBox.SizeY / 2;
-                    float distanceOffset = minPossibleDistance - currentDistance + 0.000001f;
+                    float distanceOffset = minPossibleDistance - currentDistance + 0.0001f;
 
-                    if (movementIntoCollision.Y > 0)
+                    if (MoveVectorThisIteration.Y > 0)
                     {
                         moveBackVector.Y = distanceOffset;
                     }
@@ -85,21 +86,25 @@ namespace ConflictCube
                     {
                         moveBackVector.Y = -distanceOffset;
                     }
-                }
+                }*/
 
 
-                this.Move(-moveBackVector);
+                //this.MoveInstantly(-moveBackVector);
+                this.MoveInstantly(-this.MoveVectorThisIteration);
             }
 
-            else if (type == CollisionType.BottomBoundary || type == CollisionType.Hole)
+            else if (other.CollisionType == CollisionType.BottomBoundary || other.CollisionType == CollisionType.Hole)
             {
                 IsAlive = false;
             }
 
-            else if (type == CollisionType.Finish)
+            else if (other.CollisionType == CollisionType.Finish)
             {
                 Console.WriteLine("WonGame");
             }
+
+
+            this.ClearMoveVector();
         }
 
         public Vector2 GetPosition()
@@ -110,6 +115,11 @@ namespace ConflictCube
         public override void OnBoxChanged()
         {
             CollisionBox = Box;
+        }
+
+        public bool CanMove()
+        {
+            return IsAlive;
         }
     }
 }

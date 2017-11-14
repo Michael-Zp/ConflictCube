@@ -24,6 +24,6 @@ namespace ConflictCube.Model
         CollisionType CollisionType { get; }
         HashSet<CollisionType> CollidesWith { get; }
 
-        void OnCollide(CollisionType type, ICollidable other, Vector2 movementIntoCollision);
+        void OnCollide(ICollidable other);
     }
 }

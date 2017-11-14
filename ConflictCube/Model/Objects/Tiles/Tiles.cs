@@ -142,7 +142,7 @@ namespace ConflictCube.Model.Tiles
             CollidesWith = new HashSet<CollisionType>();
         }
 
-        public void OnCollide(CollisionType type, ICollidable other, Vector2 movementIntoCollision)
+        public void OnCollide(ICollidable other)
         {}
 
         public new FloorTile Clone()
@@ -157,6 +157,12 @@ namespace ConflictCube.Model.Tiles
         {
             CollisionBox = Box;
         }
+
+        public override void SetPosition(Vector2 pos)
+        {
+            Box.CenterX = pos.X;
+            Box.CenterY = pos.Y;
+        }
     }
 
     public class PlayerTile : RenderableObject
@@ -167,6 +173,12 @@ namespace ConflictCube.Model.Tiles
             {
                 throw new System.Exception("PlayerTile was initalized with wrong TileType");
             }
+        }
+        
+        public override void SetPosition(Vector2 pos)
+        {
+            Box.CenterX = pos.X;
+            Box.CenterY = pos.Y;
         }
 
         public override void OnBoxChanged()

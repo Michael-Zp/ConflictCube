@@ -77,28 +77,29 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controller\Input.cs" />
-    <Compile Include="Model\ICollidable.cs" />
-    <Compile Include="Model\InputManager.cs" />
+    <Compile Include="Controller\GameController.cs" />
+    <Compile Include="Controller\ViewModel.cs" />
+    <Compile Include="Model\Collision\ICollidable.cs" />
+    <Compile Include="Model\Collision\CollisionGroup.cs" />
+    <Compile Include="Model\Input\InputManager.cs" />
     <Compile Include="Model\Level\Boundary.cs" />
     <Compile Include="Model\Level\Level.cs" />
-    <Compile Include="Controller\GameController.cs" />
+    <Compile Include="Model\Level\LevelBuilder.cs" />
     <Compile Include="Model\GameState.cs" />
-    <Compile Include="Model\Renderable\FloorLoader.cs" />
-    <Compile Include="Model\Renderable\IMoveable.cs" />
-    <Compile Include="Model\Renderable\Player.cs" />
-    <Compile Include="Model\Renderable\Floor.cs" />
+    <Compile Include="Model\Objects\FloorLoader.cs" />
+    <Compile Include="Model\Objects\IMoveable.cs" />
+    <Compile Include="Model\Objects\Player.cs" />
+    <Compile Include="Model\Objects\Floor.cs" />
     <Compile Include="Model\Renderable\RenderableLayer.cs" />
     <Compile Include="Model\Renderable\RenderableObject.cs" />
-    <Compile Include="Model\Tiles\Tiles.cs" />
-    <Compile Include="Model\Tiles\Tileset.cs" />
-    <Compile Include="Controller\ViewModel.cs" />
+    <Compile Include="Model\Objects\Tiles\Tiles.cs" />
+    <Compile Include="Model\Objects\Tiles\Tileset.cs" />
     <Compile Include="View\GameView.cs" />
-    <Compile Include="Model\Level\LevelBuilder.cs" />
     <Compile Include="View\MyWindow.cs" />
     <Compile Include="View\OpenTKWrapper.cs" />
+    <Compile Include="View\ZenselessWrapper.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="View\ZenselessWrapper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

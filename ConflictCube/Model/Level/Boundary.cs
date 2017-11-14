@@ -16,7 +16,7 @@ namespace ConflictCube.Model
             CollisionType = type;
         }
 
-        public void OnCollide(CollisionType type, ICollidable other, Vector2 moveIntoCollision)
+        public void OnCollide(ICollidable other)
         {}
 
         public Boundary Clone()

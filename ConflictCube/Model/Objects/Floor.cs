@@ -34,7 +34,7 @@ namespace ConflictCube.Model.Renderable
             FloorSize = floorSize;
         }
 
-        public void MoveFloorUp(float distance, Action<IMoveable, Vector2> MoveObject)
+        public void MoveFloorUp(float distance)
         {
             TotalMovedDistanceDown += distance;
             foreach (FloorTile floorTile in FloorTiles)
@@ -46,7 +46,7 @@ namespace ConflictCube.Model.Renderable
             foreach (Tuple<IMoveable, Matrix3> attachedObject in AttachedObjects)
             {
                 Vector3 distVector = Vector3.Transform(new Vector3(0, distance, 1), attachedObject.Item2);
-                MoveObject(attachedObject.Item1, -distVector.Xy);
+                attachedObject.Item1.Move(-distVector.Xy);
             }
         }
 

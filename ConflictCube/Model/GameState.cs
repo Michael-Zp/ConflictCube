@@ -1,9 +1,9 @@
 ﻿using OpenTK;
 using Zenseless.Geometry;
-using ConflictCube.Model.Renderable;
 using ConflictCube.Controller;
 using System.Collections.Generic;
 using System;
+using ConflictCube.Model.Collision;
 
 namespace ConflictCube.Model
 {
@@ -13,7 +13,7 @@ namespace ConflictCube.Model
         public Level CurrentLevel { get; set; }
         public List<Player> Players { get; private set; }
 
-        private List<ICollidable> collisionGroups = new List<ICollidable>();
+        private List<CollisionGroup> CollisionGroups = new List<CollisionGroup>();
         
         private Boundary[] ScreenBoundaries =
         {
@@ -33,10 +33,14 @@ namespace ConflictCube.Model
 
         private void UpdateColliders()
         {
-            collidableObjects.Clear();
-            collidableObjects.AddRange(CurrentLevel.GetColliders());
-            collidableObjects.AddRange(Players);
-            collidableObjects.AddRange(ScreenBoundaries);
+            CollisionGroups.Clear();
+
+            CollisionGroup group = new CollisionGroup();
+            group.CollidersInGroup.AddRange(CurrentLevel.GetColliders());
+            group.CollidersInGroup.AddRange(Players);
+            group.CollidersInGroup.AddRange(ScreenBoundaries);
+
+            CollisionGroups.Add(group);
         }
 
         public void Update(List<Input> inputs, float diffTime)
@@ -46,31 +50,14 @@ namespace ConflictCube.Model
             CurrentLevel.UpdateLevel(diffTime);
             UpdateColliders();
 
+            foreach (CollisionGroup group in CollisionGroups)
+            {
+                group.MoveAllObjects();
+            }
+
             CheckLooseCondition();
         }
-
-        public void MoveObject(IMoveable obj, Vector2 moveVetor)
-        {
-            if(obj is Player)
-            {
-                Player plr = obj as Player;
-                if(!plr.IsAlive)
-                {
-                    return;
-                }
-            }
-
-            if(obj is ICollidable)
-            {                
-                obj.Move(moveVetor);
-                CheckCollisions((ICollidable)obj, moveVetor);
-            }
-            else
-            {
-                obj.Move(moveVetor);
-            }
-        }
-
+        
         public void InitializePlayers()
         {
             Players = new List<Player>();
@@ -90,39 +77,19 @@ namespace ConflictCube.Model
             CurrentLevel = LevelBuilder.LoadLevel(levelNumber);
 
             //Hard coded parameters. Enhance level format or even build own level format including these parameters.
-            CurrentLevel.FloorOffsetPerSecond = .05f;
+            CurrentLevel.FloorOffsetPerSecond = .0f;
             CurrentLevel.StartRollingLevelOffsetSeconds = 1.0f;
-            CurrentLevel.MoveObject = MoveObject;
         }
 
         private void CheckLooseCondition()
         {
-            Console.WriteLine("Player0: " + Players[0].IsAlive + " ; Player1: " + Players[1].IsAlive);
+            //Console.WriteLine("Player0: " + Players[0].IsAlive + " ; Player1: " + Players[1].IsAlive);
             if (!Players[0].IsAlive && !Players[1].IsAlive)
             {
                 Environment.Exit(0);
             }
         }
-
-        public void CheckCollisions(ICollidable collider, Vector2 movement)
-        {
-            foreach(ICollidable other in collidableObjects)
-            {
-                if(other != collider)
-                {
-                    CheckCollision(collider, other, movement);
-                }
-            }
-        }
-
-        public void CheckCollision(ICollidable obj, ICollidable other, Vector2 movement)
-        {
-            if (obj.CollisionBox.Intersects(other.CollisionBox))
-            {
-                obj.OnCollide(other.CollisionType, other, movement);
-            }
-        }
-
+        
         public ViewModel GetViewModel()
         {
             return new ViewModel(this);

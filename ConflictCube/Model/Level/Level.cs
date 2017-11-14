@@ -21,7 +21,6 @@ namespace ConflictCube
         public Floor FloorLeft { get; private set; }
         public float FloorOffsetPerSecond { get; set; }
         public float StartRollingLevelOffsetSeconds { get; set; }
-        public Action<IMoveable, Vector2> MoveObject;
 
         private float ElapsedTimeInLevel = 0;
         
@@ -99,7 +98,7 @@ namespace ConflictCube
 
         private void MoveFloorUp(Floor floor, float diffTime)
         {
-            floor.MoveFloorUp(FloorOffsetPerSecond * diffTime, MoveObject);
+            floor.MoveFloorUp(FloorOffsetPerSecond * diffTime);
         }
 
         public Vector2 FindStartPosition(FloorArea floor)

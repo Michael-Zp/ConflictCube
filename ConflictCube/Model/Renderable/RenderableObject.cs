@@ -39,6 +39,8 @@ namespace ConflictCube.Model.Renderable
             return clone;
         }
 
+        public abstract void SetPosition(Vector2 pos);
+
         public void ChangeBox(float minX, float minY, float sizeX, float sizeY)
         {
             Box.MinX = minX;
