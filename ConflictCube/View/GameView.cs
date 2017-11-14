@@ -70,7 +70,7 @@ namespace ConflictCube
                 renderCall = OpenTKWrapper.DrawBoxWithTextureAndAlphaChannel;
             }
 
-            foreach (RenderableObject currObj in currentLayer.ObjectsToRender)
+            foreach (RenderableObject currObj in currentLayer.GetRenderableObjects())
             {
                 Texture tempTexture;
                 Tileset.TryGetValue(currObj.Type, out tempTexture);

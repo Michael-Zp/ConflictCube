@@ -48,7 +48,7 @@ namespace ConflictCube.Model
                             break;
                     }
                 }
-
+                
                 if (Player[1].IsAlive)
                 {
                     switch (input)

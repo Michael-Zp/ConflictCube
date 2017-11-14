@@ -110,5 +110,10 @@ namespace ConflictCube
         {
             return new Vector2(Box.CenterX, Box.CenterY);
         }
+
+        public override void OnBoxChanged()
+        {
+            CollisionBox = Box;
+        }
     }
 }

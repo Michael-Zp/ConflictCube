@@ -18,5 +18,12 @@ namespace ConflictCube.Model
 
         public void OnCollide(CollisionType type, ICollidable other, Vector2 moveIntoCollision)
         {}
+
+        public Boundary Clone()
+        {
+            Boundary clone = (Boundary)this.MemberwiseClone();
+            clone.CollisionBox = new Box2D(CollisionBox);
+            return clone;
+        }
     }
 }
