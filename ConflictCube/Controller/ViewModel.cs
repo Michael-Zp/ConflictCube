@@ -1,5 +1,6 @@
 ﻿using ConflictCube.Model;
 using ConflictCube.Model.Renderable;
+using ConflictCube.Model.UI;
 using System;
 using System.Collections.Generic;
 using Zenseless.Geometry;
@@ -20,6 +21,7 @@ namespace ConflictCube.Controller
         {
             AddLevel(state.CurrentLevel);
             AddPlayers(state.Players);
+            AddPlayerUI(state.PlayerUI);
         }
 
 
@@ -65,6 +67,11 @@ namespace ConflictCube.Controller
 
             playerLayer.AddRangedObjectsToRender(players);
 
+        }
+
+        private void AddPlayerUI(PlayerUI ui)
+        {
+            RenderingLayers.Add(RenderLayerType.UI, ui);
         }
     }
 }

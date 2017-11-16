@@ -17,9 +17,13 @@ namespace ConflictCube
         public CollisionType CollisionType { get; private set; }
         public HashSet<CollisionType> CollidesWith { get; private set; }
         public Vector2 MoveVectorThisIteration { get; set; }
-
         public CollisionGroup CollisionGroup { get; set; }
+        public bool ThrowMode { get; set; } = false;
+        public bool UseMode { get; set; } = false;
 
+        /// <summary>
+        ///     Create a new player, with a defined size, position and move speed. The collision box of this player equals his rendering box, given with size and position
+        /// </summary>
         public Player(Vector2 size, Vector2 position, float speed, bool isAlive = true) : base(position, size, TileType.Player)
         {
             CollisionBox = Box;
@@ -44,14 +48,15 @@ namespace ConflictCube
             };
         }
 
+        /// <summary>
+        ///     Set the center position of the rendering box and call the callback OnBoxChanged()
+        /// </summary>
         public override void SetPosition(Vector2 position)
         {
             Box.CenterX = position.X;
             Box.CenterY = position.Y;
             OnBoxChanged();
         }
-
-        private static int CollisionCount = 0;
 
         public void OnCollide(ICollidable other)
         {
@@ -69,6 +74,9 @@ namespace ConflictCube
             }
         }
 
+        /// <summary>
+        ///     Get the Center position of the player box. This will not return the center of the collision box, but the rendering box
+        /// </summary>
         public Vector2 GetPosition()
         {
             return new Vector2(Box.CenterX, Box.CenterY);
@@ -87,6 +95,33 @@ namespace ConflictCube
         public bool IsTrigger()
         {
             return false;
+        }
+
+
+        /// <summary>
+        ///     Switches the ThrowMode. If the player is in UseMode, UseMode will be switched off
+        /// </summary> 
+        public void SwitchThrowMode()
+        {
+            ThrowMode = !ThrowMode;
+
+            if(ThrowMode)
+            {
+                UseMode = false;
+            }
+        }
+
+        /// <summary>
+        ///     Switches the UseMode. If the player is in ThrowMode, ThrowMode will be switched off
+        /// </summary>
+        public void SwitchUseMode()
+        {
+            UseMode = !UseMode;
+
+            if(UseMode)
+            {
+                ThrowMode = false;
+            }
         }
     }
 }

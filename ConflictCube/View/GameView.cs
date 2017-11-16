@@ -7,6 +7,7 @@ using System;
 using Zenseless.OpenGL;
 using Zenseless.Geometry;
 using ConflictCube.Controller;
+using ConflictCube.Model.UI;
 
 namespace ConflictCube
 {
@@ -15,6 +16,10 @@ namespace ConflictCube
         private MyWindow Window;
         private Dictionary<TileType, Texture> Tileset = new Dictionary<TileType, Texture>();
 
+        /// <summary>
+        ///     Match the GL Viewport with the given window and load all Tilesets that are used in the game.
+        /// </summary>
+        /// <param name="window">The window of the game</param>
         public GameView(MyWindow window)
         {
             Window = window;
@@ -44,7 +49,13 @@ namespace ConflictCube
         }
 
         
-
+        /// <summary>
+        ///     Render the given ViewModel. Right now the rendering order of the RenderingLayers is this:
+        ///     1. Floor
+        ///     2. Player
+        ///     3. UI
+        /// </summary>
+        /// <param name="viewModel"></param>
         public void Render(ViewModel viewModel)
         {
             ClearScreen();
@@ -56,6 +67,9 @@ namespace ConflictCube
 
             viewModel.RenderingLayers.TryGetValue(RenderLayerType.Player, out currentLayer);
             RenderLayer(currentLayer, true);
+
+            viewModel.RenderingLayers.TryGetValue(RenderLayerType.UI, out currentLayer);
+            RenderUI(currentLayer);
         }
 
         private void RenderLayer(RenderableLayer currentLayer, bool alpha)
@@ -77,6 +91,26 @@ namespace ConflictCube
                 renderCall(currObj.Box, tempTexture);
             }
         }
+
+
+        private void RenderUI(RenderableLayer currentLayer)
+        {
+            foreach(RenderableObject obj in currentLayer.GetRenderableObjects())
+            {
+                if(obj is UIText)
+                {
+                    UIText text = (UIText)obj;
+                    Console.WriteLine(text.Text);
+
+                }
+                else if (obj is Canvas)
+                {
+                    Canvas canvas = (Canvas)obj;
+                    OpenTKWrapper.DrawBox(canvas.Box, canvas.Color);
+                }
+            }
+        }
+
 
         public void CloseWindow()
         {

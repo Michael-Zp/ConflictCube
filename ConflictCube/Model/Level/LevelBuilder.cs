@@ -10,7 +10,7 @@ namespace ConflictCube
 
         public static Level LoadLevel(int levelNumber)
         {
-            Level newLevel = new Level(new Box2D(-1f, -1f, 2f, 12f));
+            Level newLevel = new Level(new Box2D(-.8f, -1f, 1.6f, 12f));
             string levelPathLeft = LevelDirectoryPath + "Level" + levelNumber + "Left.csv";
             string levelPathMiddle = LevelDirectoryPath + "Level" + levelNumber + "Middle.csv";
             string levelPathRight = LevelDirectoryPath + "Level" + levelNumber + "Right.csv";

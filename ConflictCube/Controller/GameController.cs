@@ -15,14 +15,19 @@ namespace ConflictCube.Controller
         private void SetDefaultKeyboardSettings()
         {
             KeyboardSettings.Add(Key.Escape, Input.ExitApplication);
-            KeyboardSettings.Add(Key.Left,   Input.PlayerOneMoveLeft);
-            KeyboardSettings.Add(Key.Right,  Input.PlayerOneMoveRight);
-            KeyboardSettings.Add(Key.Up,     Input.PlayerOneMoveUp);
-            KeyboardSettings.Add(Key.Down,   Input.PlayerOneMoveDown);
-            KeyboardSettings.Add(Key.A,      Input.PlayerTwoMoveLeft);
-            KeyboardSettings.Add(Key.D,      Input.PlayerTwoMoveRight);
-            KeyboardSettings.Add(Key.W,      Input.PlayerTwoMoveUp);
-            KeyboardSettings.Add(Key.S,      Input.PlayerTwoMoveDown);
+
+            //Player 1
+            KeyboardSettings.Add(Key.A,      Input.PlayerOneMoveLeft);
+            KeyboardSettings.Add(Key.D,      Input.PlayerOneMoveRight);
+            KeyboardSettings.Add(Key.W,      Input.PlayerOneMoveUp);
+            KeyboardSettings.Add(Key.S,      Input.PlayerOneMoveDown);
+
+
+            //Player 2
+            KeyboardSettings.Add(Key.Left,   Input.PlayerTwoMoveLeft);
+            KeyboardSettings.Add(Key.Right,  Input.PlayerTwoMoveRight);
+            KeyboardSettings.Add(Key.Up,     Input.PlayerTwoMoveUp);
+            KeyboardSettings.Add(Key.Down,   Input.PlayerTwoMoveDown);
         }
 
         public void UpdateState()

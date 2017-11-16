@@ -7,9 +7,13 @@
         PlayerOneMoveRight,
         PlayerOneMoveUp,
         PlayerOneMoveDown,
+        PlayerOneThrowMode,
+        PlayerOneUseMode,
         PlayerTwoMoveLeft,
         PlayerTwoMoveRight,
         PlayerTwoMoveUp,
-        PlayerTwoMoveDown
+        PlayerTwoMoveDown,
+        PlayerTwoThrowMode,
+        PlayerTwoUseMode
     }
 }

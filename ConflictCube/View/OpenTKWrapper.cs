@@ -3,6 +3,7 @@ using OpenGL3 = OpenTK.Graphics.OpenGL;
 using Zenseless.Geometry;
 using System.Drawing;
 using Zenseless.OpenGL;
+using System;
 
 namespace ConflictCube
 {
@@ -11,6 +12,11 @@ namespace ConflictCube
         public static void DrawBox(Box2D rect, Color color)
         {
             GL3.Color3(color);
+            DrawBoxVertices(rect);
+        }
+
+        private static void DrawBoxVertices(Box2D rect)
+        {
             GL3.Begin(OpenGL3.PrimitiveType.Quads);
             GL3.Vertex2(rect.MinX, rect.MinY);
             GL3.Vertex2(rect.MaxX, rect.MinY);
@@ -45,9 +51,28 @@ namespace ConflictCube
 
         public static void DrawBoxWithTextureAndAlphaChannel(Box2D rect, Texture texture)
         {
+            EnableAlphaChannel();
+            DrawBoxWithTexture(rect, texture);
+            DisableAlphaChannel();
+        }
+
+        internal static void DrawBoxWithAlpha(Box2D rect, Color color)
+        {
+            EnableAlphaChannel();
+            GL3.Color4(color);
+            DrawBoxVertices(rect);
+            DisableAlphaChannel();
+        }
+
+
+        private static void EnableAlphaChannel()
+        {
             GL3.Enable(OpenGL3.EnableCap.Blend);
             GL3.BlendFunc(OpenGL3.BlendingFactorSrc.SrcAlpha, OpenGL3.BlendingFactorDest.OneMinusSrcAlpha);
-            DrawBoxWithTexture(rect, texture);
+        }
+
+        private static void DisableAlphaChannel()
+        {
             GL3.Disable(OpenGL3.EnableCap.Blend);
         }
     }

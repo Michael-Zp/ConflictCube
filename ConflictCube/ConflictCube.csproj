@@ -92,6 +92,7 @@
     <Compile Include="Model\Renderable\RenderableObject.cs" />
     <Compile Include="Model\Objects\Tiles\Tiles.cs" />
     <Compile Include="Model\Objects\Tiles\Tileset.cs" />
+    <Compile Include="Model\UI\PlayerUI.cs" />
     <Compile Include="View\GameView.cs" />
     <Compile Include="View\MyWindow.cs" />
     <Compile Include="View\OpenTKWrapper.cs" />

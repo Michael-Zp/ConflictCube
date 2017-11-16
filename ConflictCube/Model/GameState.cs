@@ -4,6 +4,7 @@ using ConflictCube.Controller;
 using System.Collections.Generic;
 using System;
 using ConflictCube.Model.Collision;
+using ConflictCube.Model.UI;
 
 namespace ConflictCube.Model
 {
@@ -11,6 +12,8 @@ namespace ConflictCube.Model
     {
         public InputManager InputManager { get; private set; }
         public Level CurrentLevel { get; set; }
+        public PlayerUI PlayerUI { get; set; }
+
         public List<Player> Players { get; private set; }
 
         private List<CollisionGroup> CollisionGroups = new List<CollisionGroup>();
@@ -25,10 +28,16 @@ namespace ConflictCube.Model
         {
             LoadLevel(2);
             InitializePlayers();
+            InitializeUI();
 
             InputManager = new InputManager(this, Players);
 
             UpdateColliders();
+        }
+
+        private void InitializeUI()
+        {
+            PlayerUI = new PlayerUI(Players[0], new Box2D(.8f, -1f, .2f, 2f));
         }
 
         private void UpdateColliders()

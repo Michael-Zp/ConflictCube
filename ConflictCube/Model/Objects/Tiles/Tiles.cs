@@ -15,7 +15,9 @@ namespace ConflictCube.Model.Tiles
         Wall,
         Hole,
         Finish,
-        Player
+        Player,
+        Background,
+        Text
     }
 
     public enum TilesetType

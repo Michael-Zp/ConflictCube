@@ -17,6 +17,11 @@ namespace ConflictCube.Model
             Player = player;
         }
 
+        /// <summary>
+        ///     Switch all given inputs and call the functions which are defined as private in the input manager.
+        ///     These functions either affect one of the players or the GameState.
+        /// </summary>
+        /// <param name="inputs">List of inputs to execute</param>
         public void ExecuteInputs(List<Input> inputs)
         {
             foreach(Input input in inputs)
@@ -47,6 +52,14 @@ namespace ConflictCube.Model
                         case Input.PlayerOneMoveDown:
                             MovePlayerDown(0);
                             break;
+
+                        case Input.PlayerOneThrowMode:
+                            SwitchThrowMode(0);
+                            break;
+
+                        case Input.PlayerOneUseMode:
+                            SwitchUseMode(0);
+                            break;
                     }
                 }
                 
@@ -68,6 +81,14 @@ namespace ConflictCube.Model
 
                         case Input.PlayerTwoMoveDown:
                             MovePlayerDown(1);
+                            break;
+
+                        case Input.PlayerOneThrowMode:
+                            SwitchThrowMode(1);
+                            break;
+
+                        case Input.PlayerOneUseMode:
+                            SwitchUseMode(1);
                             break;
                     }
                 }
@@ -97,6 +118,16 @@ namespace ConflictCube.Model
         private void MovePlayerDown(int idx)
         {
             Player[idx].Move(new Vector2(.0f, Player[idx].Speed * -1));
+        }
+
+        private void SwitchThrowMode(int idx)
+        {
+            Player[idx].SwitchThrowMode();
+        }
+
+        private void SwitchUseMode(int idx)
+        {
+            Player[idx].SwitchUseMode();
         }
     }
 }
