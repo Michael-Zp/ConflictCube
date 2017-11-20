@@ -80,49 +80,52 @@ namespace ConflictCube
         /// <param name="moveVector"></param>
         public void Move(Vector2 moveVector)
         {
-            if (CanMove())
+            if (!CanMove())
             {
-                if(ThrowMode || UseMode)
+                return;
+            }
+
+
+            if(ThrowMode || UseMode)
+            {
+                if(Time.Time.CooldownIsOver(LastThrowUseFieldUpdate, ThrowUseFieldUpdateCooldown) && (moveVector.X != 0 || moveVector.Y != 0))
                 {
-                    if(Time.Time.CooldownIsOver(LastThrowUseFieldUpdate, ThrowUseFieldUpdateCooldown) && (moveVector.X != 0 || moveVector.Y != 0))
+                    LastThrowUseFieldUpdate = Time.Time.CurrentTime;
+
+                    Vector2 ThrowUseAddition = new Vector2(0, 0);
+
+                    if (moveVector.X > 0)
                     {
-                        LastThrowUseFieldUpdate = Time.Time.CurrentTime;
-
-                        Vector2 ThrowUseAddition = new Vector2(0, 0);
-
-                        if (moveVector.X > 0)
-                        {
-                            ThrowUseAddition.X += 1;
-                        }
-                        else if (moveVector.X < 0)
-                        {
-                            ThrowUseAddition.X -= 1;
-                        }
-
-                        if (moveVector.Y > 0)
-                        {
-                            ThrowUseAddition.Y += 1;
-                        }
-                        else if (moveVector.Y < 0)
-                        {
-                            ThrowUseAddition.Y -= 1;
-                        }
-
-                        try
-                        {
-                            ThrowUseField = CurrentLevel.GetPositionInLevelWithOffset(ThrowUseField, ThrowUseAddition);
-                        }
-                        catch(Exception e)
-                        {
-                            Console.WriteLine("Hit boundaries with the ThrowUse Field");
-                        }
-                        
+                        ThrowUseAddition.X += 1;
                     }
+                    else if (moveVector.X < 0)
+                    {
+                        ThrowUseAddition.X -= 1;
+                    }
+
+                    if (moveVector.Y > 0)
+                    {
+                        ThrowUseAddition.Y += 1;
+                    }
+                    else if (moveVector.Y < 0)
+                    {
+                        ThrowUseAddition.Y -= 1;
+                    }
+
+                    try
+                    {
+                        ThrowUseField = CurrentLevel.GetPositionInLevelWithOffset(ThrowUseField, ThrowUseAddition);
+                    }
+                    catch(Exception e)
+                    {
+                        Console.WriteLine("Hit boundaries with the ThrowUse Field");
+                    }
+                        
                 }
-                else
-                {
-                    MoveVectorThisIteration += moveVector;
-                }
+            }
+            else
+            {
+                MoveVectorThisIteration += moveVector;
             }
         }
 

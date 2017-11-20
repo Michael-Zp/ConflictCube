@@ -88,7 +88,7 @@ namespace ConflictCube.Model
 
             //Hard coded parameters. Enhance level format or even build own level format including these parameters.
             CurrentLevel.FloorOffsetPerSecond = .0f;
-            CurrentLevel.StartRollingLevelOffsetSeconds = 3.0f;
+            CurrentLevel.StartRollingLevelOffsetSeconds = 1.0f;
         }
 
         private void CheckLooseCondition()

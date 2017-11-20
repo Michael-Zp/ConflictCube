@@ -37,10 +37,7 @@ namespace ConflictCube.Model.Renderable
         public void MoveFloorUp(float distance)
         {
             TotalMovedDistanceDown += distance;
-            foreach (FloorTile floorTile in FloorTiles)
-            {
-                floorTile.Box.MinY -= distance;
-            }
+            AreaOfLayer.MinY -= distance;
 
 
             foreach (Tuple<IMoveable, Matrix3> attachedObject in AttachedObjects)
