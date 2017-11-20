@@ -11,7 +11,7 @@ namespace ConflictCube.Model.Renderable
         public List<Tuple<IMoveable, Matrix3>> AttachedObjects { get; private set; }
         public Vector2 FloorTileSize;
         private Vector2 _FloorSize;
-        private Vector2 FloorSize {
+        public Vector2 FloorSize {
             get {
                 return _FloorSize;
             }
@@ -46,7 +46,7 @@ namespace ConflictCube.Model.Renderable
             foreach (Tuple<IMoveable, Matrix3> attachedObject in AttachedObjects)
             {
                 Vector3 distVector = Vector3.Transform(new Vector3(0, distance, 1), attachedObject.Item2);
-                attachedObject.Item1.Move(-distVector.Xy);
+                attachedObject.Item1.MoveInstantly(-distVector.Xy);
             }
         }
 
@@ -92,6 +92,34 @@ namespace ConflictCube.Model.Renderable
             float posY = -1 + ((FloorTiles.GetLength(0) - 1) - row) * FloorTileSize.Y;
 
             return new Box2D(posX, posY, FloorTileSize.X, FloorTileSize.Y);
+        }
+
+        public Vector2 GetGridPosition(Vector2 position)
+        {
+            Vector2 localPosition = TransformPointToLocal(position);
+
+            float xPos = (float)Math.Floor((localPosition.X + 1) / FloorTileSize.X);
+            float yPos = (float)Math.Floor((localPosition.Y + 1) / FloorTileSize.Y);
+
+            return new Vector2(xPos, yPos);
+        }
+
+        public Box2D GetBoxAtGridPosition(Vector2 boxGridPosition)
+        {
+            Box2D localBox;
+            try
+            {
+                localBox = FloorTiles[(int)FloorSize.Y - (int)boxGridPosition.Y - 1, (int)boxGridPosition.X].Box;
+            }
+            catch(Exception e)
+            {
+                throw new Exception("Found no FloorTile for row: " + boxGridPosition.Y + " and column: " + boxGridPosition.X);
+            }
+            
+            Vector2 globalMin = TransformPointToParent(localBox.MinX, localBox.MinY);
+            Vector2 globalSize = TransformSizeToParent(localBox.SizeX, localBox.SizeY);
+
+            return new Box2D(globalMin.X, globalMin.Y, globalSize.X, globalSize.Y);
         }
     }
 }

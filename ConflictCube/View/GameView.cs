@@ -8,6 +8,7 @@ using Zenseless.OpenGL;
 using Zenseless.Geometry;
 using ConflictCube.Controller;
 using ConflictCube.Model.UI;
+using ConflictCube.Model.Objects;
 
 namespace ConflictCube
 {
@@ -53,6 +54,7 @@ namespace ConflictCube
         ///     Render the given ViewModel. Right now the rendering order of the RenderingLayers is this:
         ///     1. Floor
         ///     2. Player
+        ///     3. Player Throw/Use indicator
         ///     3. UI
         /// </summary>
         /// <param name="viewModel"></param>
@@ -67,6 +69,9 @@ namespace ConflictCube
 
             viewModel.RenderingLayers.TryGetValue(RenderLayerType.Player, out currentLayer);
             RenderLayer(currentLayer, true);
+
+            viewModel.RenderingLayers.TryGetValue(RenderLayerType.ThrowUseIndicator, out currentLayer);
+            RenderLayerWithAlphaColor(currentLayer);
 
             viewModel.RenderingLayers.TryGetValue(RenderLayerType.UI, out currentLayer);
             RenderUI(currentLayer);
@@ -89,6 +94,23 @@ namespace ConflictCube
                 Texture tempTexture;
                 Tileset.TryGetValue(currObj.Type, out tempTexture);
                 renderCall(currObj.Box, tempTexture);
+            }
+        }
+
+        private void RenderLayerWithAlphaColor(RenderableLayer currentLayer)
+        {
+            foreach (RenderableObject currObj in currentLayer.GetRenderableObjects())
+            {
+                ColoredBox cBox = (ColoredBox)currObj;
+
+                if(cBox.Alpha)
+                {
+                    OpenTKWrapper.DrawBoxWithAlpha(currObj.Box, cBox.Color);
+                }
+                else
+                {
+                    OpenTKWrapper.DrawBox(currObj.Box, cBox.Color);
+                }
             }
         }
 

@@ -3,7 +3,6 @@ using OpenGL3 = OpenTK.Graphics.OpenGL;
 using Zenseless.Geometry;
 using System.Drawing;
 using Zenseless.OpenGL;
-using System;
 
 namespace ConflictCube
 {

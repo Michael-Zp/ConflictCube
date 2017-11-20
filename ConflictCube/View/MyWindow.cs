@@ -5,8 +5,6 @@ namespace ConflictCube
 {
     public class MyWindow : GameWindow
     {
-        private float LastTime = 0;
-
         public MyWindow(int width = 512, int height = 512) : base(width, height)
         {
             Visible = true; //show the window
@@ -16,14 +14,6 @@ namespace ConflictCube
         public float GetTime()
         {
             return (float)globalTime.Elapsed.TotalSeconds;
-        }
-
-        public float TimeDiff()
-        {
-            float Now = GetTime();
-            float TimeDifference = Now - LastTime;
-            LastTime = Now;
-            return TimeDifference;
         }
 
         public bool WaitForNextFrame()

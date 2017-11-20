@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using OpenTK.Input;
+using System;
 
 namespace ConflictCube.Controller
 {
+
     public class GameController
     {
         private Dictionary<Key, Input> KeyboardSettings = new Dictionary<Key, Input>();
@@ -17,17 +19,22 @@ namespace ConflictCube.Controller
             KeyboardSettings.Add(Key.Escape, Input.ExitApplication);
 
             //Player 1
-            KeyboardSettings.Add(Key.A,      Input.PlayerOneMoveLeft);
-            KeyboardSettings.Add(Key.D,      Input.PlayerOneMoveRight);
-            KeyboardSettings.Add(Key.W,      Input.PlayerOneMoveUp);
-            KeyboardSettings.Add(Key.S,      Input.PlayerOneMoveDown);
+            KeyboardSettings.Add(Key.A, Input.PlayerOneMoveLeft);
+            KeyboardSettings.Add(Key.D, Input.PlayerOneMoveRight);
+            KeyboardSettings.Add(Key.W, Input.PlayerOneMoveUp);
+            KeyboardSettings.Add(Key.S, Input.PlayerOneMoveDown);
+            KeyboardSettings.Add(Key.Q, Input.PlayerOneThrowMode);
+            KeyboardSettings.Add(Key.E, Input.PlayerOneUseMode);
+
 
 
             //Player 2
-            KeyboardSettings.Add(Key.Left,   Input.PlayerTwoMoveLeft);
-            KeyboardSettings.Add(Key.Right,  Input.PlayerTwoMoveRight);
-            KeyboardSettings.Add(Key.Up,     Input.PlayerTwoMoveUp);
-            KeyboardSettings.Add(Key.Down,   Input.PlayerTwoMoveDown);
+            KeyboardSettings.Add(Key.J, Input.PlayerTwoMoveLeft);
+            KeyboardSettings.Add(Key.L, Input.PlayerTwoMoveRight);
+            KeyboardSettings.Add(Key.I, Input.PlayerTwoMoveUp);
+            KeyboardSettings.Add(Key.K, Input.PlayerTwoMoveDown);
+            KeyboardSettings.Add(Key.O, Input.PlayerTwoThrowMode);
+            KeyboardSettings.Add(Key.U, Input.PlayerTwoUseMode);
         }
 
         public void UpdateState()

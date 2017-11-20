@@ -17,7 +17,8 @@ namespace ConflictCube.Model.Tiles
         Finish,
         Player,
         Background,
-        Text
+        Text,
+        ColoredBox
     }
 
     public enum TilesetType

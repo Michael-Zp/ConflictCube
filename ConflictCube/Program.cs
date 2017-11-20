@@ -15,8 +15,10 @@ namespace ConflictCube
 
             while(window.WaitForNextFrame())
             {
+                Time.Time.CurrentTime = window.GetTime();
+
                 var inputs = controller.GetInputs();
-                state.Update(inputs, window.TimeDiff());
+                state.Update(inputs);
                 var viewModel = state.GetViewModel();
                 view.Render(viewModel);
             }

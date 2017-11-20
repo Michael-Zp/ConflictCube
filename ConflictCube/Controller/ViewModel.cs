@@ -1,9 +1,10 @@
 ﻿using ConflictCube.Model;
 using ConflictCube.Model.Renderable;
 using ConflictCube.Model.UI;
-using System;
 using System.Collections.Generic;
 using Zenseless.Geometry;
+using ConflictCube.Model.Objects;
+using System.Drawing;
 
 namespace ConflictCube.Controller
 {
@@ -21,29 +22,22 @@ namespace ConflictCube.Controller
         {
             AddLevel(state.CurrentLevel);
             AddPlayers(state.Players);
+            AddThrowUseUI(state);
             AddPlayerUI(state.PlayerUI);
         }
-
 
         private void AddLevel(Level currentLevel)
         {
             SetFloor(currentLevel);
         }
-
-        private RenderableLayer GeneratDefaultRenderableLayer()
-        {
-            return new RenderableLayer(new List<RenderableObject>(), new List<RenderableLayer>(), new Box2D(-1, -1, 2, 2));
-        }
-
-
+        
         private void SetFloor(Level currentLevel)
         {
             if (RenderingLayers.ContainsKey(RenderLayerType.Floor))
             {
                 RenderingLayers.Remove(RenderLayerType.Floor);
             }
-
-
+            
             RenderableLayer floorLayer = GeneratDefaultRenderableLayer();
 
             floorLayer.AddRangedObjectsToRender(currentLevel.GetRenderableObjects());
@@ -66,12 +60,45 @@ namespace ConflictCube.Controller
             }
 
             playerLayer.AddRangedObjectsToRender(players);
+        }
 
+        private void AddThrowUseUI(GameState state)
+        {
+            RenderableLayer throwUseUiLayer = GeneratDefaultRenderableLayer();
+
+            foreach (Player player in state.Players)
+            {
+                if (player.ThrowMode)
+                {
+                    Box2D throwUseBox = GetThrowUseBoxOfPlayer(player, state);
+                    throwUseUiLayer.AddObjectsToRender(new ColoredBox(new Box2D(throwUseBox), Color.FromArgb(128, Color.Red), true));
+                }
+                else if (player.UseMode)
+                {
+                    Box2D throwUseBox = GetThrowUseBoxOfPlayer(player, state);
+                    throwUseUiLayer.AddObjectsToRender(new ColoredBox(new Box2D(throwUseBox), Color.FromArgb(128, Color.Blue), true));
+                }
+            }
+
+            RenderingLayers.Add(RenderLayerType.ThrowUseIndicator, throwUseUiLayer);
+        }
+
+        private Box2D GetThrowUseBoxOfPlayer(Player player, GameState state)
+        {
+            return state.CurrentLevel.GetBoxForGridOffsetOfPosition(player.ThrowUseField);
         }
 
         private void AddPlayerUI(PlayerUI ui)
         {
             RenderingLayers.Add(RenderLayerType.UI, ui);
+        }
+
+
+
+
+        private RenderableLayer GeneratDefaultRenderableLayer()
+        {
+            return new RenderableLayer(new List<RenderableObject>(), new List<RenderableLayer>(), new Box2D(-1, -1, 2, 2));
         }
     }
 }

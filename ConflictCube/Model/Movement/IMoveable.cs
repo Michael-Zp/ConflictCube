@@ -8,6 +8,7 @@ namespace ConflictCube.Model.Renderable
         float Speed { get; }
         Vector2 MoveVectorThisIteration { get; set; }
 
+        void Move(Vector2 moveVector);
         void SetPosition(Vector2 position);
         Vector2 GetPosition();
         bool CanMove();
@@ -16,14 +17,6 @@ namespace ConflictCube.Model.Renderable
 
     public static class IMoveableMethodExtension
     {
-        public static void Move(this IMoveable moveable, Vector2 moveVector)
-        {
-            if(moveable.CanMove())
-            {
-                moveable.MoveVectorThisIteration += moveVector;
-            }
-        }
-
         public static void MoveInstantly(this IMoveable moveable, Vector2 moveVector)
         {
             if (moveable is RenderableObject)
