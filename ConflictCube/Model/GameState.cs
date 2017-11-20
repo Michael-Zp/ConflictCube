@@ -53,11 +53,11 @@ namespace ConflictCube.Model
             CollisionGroups.Add(group);
         }
 
-        public void Update(List<Input> inputs, float diffTime)
+        public void Update(List<Input> inputs)
         {
             InputManager.ExecuteInputs(inputs);
 
-            CurrentLevel.UpdateLevel(diffTime);
+            CurrentLevel.UpdateLevel();
             UpdateColliders();
 
             foreach (CollisionGroup group in CollisionGroups)
@@ -72,12 +72,12 @@ namespace ConflictCube.Model
         {
             Players = new List<Player>();
             
-            Players.Add(new Player(new Vector2(.06f, .06f), new Vector2(.1f, .1f), .01f));
+            Players.Add(new Player(new Vector2(.06f, .06f), new Vector2(.1f, .1f), .015f, CurrentLevel));
             CurrentLevel.FloorLeft.AddAttachedObject(Players[0], CurrentLevel.ScaleMatrix);
             Players[0].SetPosition(CurrentLevel.FindStartPosition(FloorArea.Left));
 
 
-            Players.Add(new Player(new Vector2(.06f, .06f), new Vector2(.1f, .1f), .01f));
+            Players.Add(new Player(new Vector2(.06f, .06f), new Vector2(.1f, .1f), .015f, CurrentLevel));
             CurrentLevel.FloorRight.AddAttachedObject(Players[1], CurrentLevel.ScaleMatrix);
             Players[1].SetPosition(CurrentLevel.FindStartPosition(FloorArea.Right));
         }
@@ -88,7 +88,7 @@ namespace ConflictCube.Model
 
             //Hard coded parameters. Enhance level format or even build own level format including these parameters.
             CurrentLevel.FloorOffsetPerSecond = .0f;
-            CurrentLevel.StartRollingLevelOffsetSeconds = 3.0f;
+            CurrentLevel.StartRollingLevelOffsetSeconds = 1.0f;
         }
 
         private void CheckLooseCondition()

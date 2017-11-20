@@ -1,5 +1,4 @@
 ﻿using ConflictCube.Controller;
-using ConflictCube.Model.Renderable;
 using OpenTK;
 using System;
 using System.Collections.Generic;
@@ -10,6 +9,8 @@ namespace ConflictCube.Model
     {
         public GameState State { get; private set; }
         public List<Player> Player { get; private set; }
+
+        private List<Input> LastInputs = new List<Input>();
 
         public InputManager(GameState state, List<Player> player)
         {
@@ -54,11 +55,17 @@ namespace ConflictCube.Model
                             break;
 
                         case Input.PlayerOneThrowMode:
-                            SwitchThrowMode(0);
+                            if (!LastInputs.Contains(Input.PlayerOneThrowMode))
+                            {
+                                SwitchThrowMode(0);
+                            }
                             break;
 
                         case Input.PlayerOneUseMode:
-                            SwitchUseMode(0);
+                            if (!LastInputs.Contains(Input.PlayerOneUseMode))
+                            {
+                                SwitchUseMode(0);
+                            }
                             break;
                     }
                 }
@@ -83,16 +90,24 @@ namespace ConflictCube.Model
                             MovePlayerDown(1);
                             break;
 
-                        case Input.PlayerOneThrowMode:
-                            SwitchThrowMode(1);
+                        case Input.PlayerTwoThrowMode:
+                            if (!LastInputs.Contains(Input.PlayerTwoThrowMode))
+                            {
+                                SwitchThrowMode(1);
+                            }
                             break;
 
-                        case Input.PlayerOneUseMode:
-                            SwitchUseMode(1);
+                        case Input.PlayerTwoUseMode:
+                            if (!LastInputs.Contains(Input.PlayerTwoUseMode))
+                            {
+                                SwitchUseMode(1);
+                            }
                             break;
                     }
                 }
             }
+
+            LastInputs = inputs;
         }
 
         private void CloseGame()

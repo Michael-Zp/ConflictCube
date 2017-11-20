@@ -77,6 +77,7 @@
     <Compile Include="Controller\Input.cs" />
     <Compile Include="Controller\GameController.cs" />
     <Compile Include="Controller\ViewModel.cs" />
+    <Compile Include="GlobalMethods\Time.cs" />
     <Compile Include="Model\Collision\ICollidable.cs" />
     <Compile Include="Model\Collision\CollisionGroup.cs" />
     <Compile Include="Model\Input\InputManager.cs" />
@@ -84,8 +85,9 @@
     <Compile Include="Model\Level\Level.cs" />
     <Compile Include="Model\Level\LevelBuilder.cs" />
     <Compile Include="Model\GameState.cs" />
+    <Compile Include="Model\Objects\ColoredBox.cs" />
     <Compile Include="Model\Objects\FloorLoader.cs" />
-    <Compile Include="Model\Objects\IMoveable.cs" />
+    <Compile Include="Model\Movement\IMoveable.cs" />
     <Compile Include="Model\Objects\Player.cs" />
     <Compile Include="Model\Objects\Floor.cs" />
     <Compile Include="Model\Renderable\RenderableLayer.cs" />

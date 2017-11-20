@@ -8,7 +8,8 @@ namespace ConflictCube.Model.Renderable
     {
         Floor,
         Player,
-        UI
+        UI,
+        ThrowUseIndicator
     }
 
     public class RenderableLayer
@@ -93,6 +94,19 @@ namespace ConflictCube.Model.Renderable
         {
             posX = posX * ScaleMatrix.Column0[0] + _AreaOfLayer.CenterX;
             posY = posY * ScaleMatrix.Column1[1] + _AreaOfLayer.CenterY;
+
+            return new Vector2(posX, posY);
+        }
+
+        public Vector2 TransformPointToLocal(Vector2 point)
+        {
+            return TransformPointToLocal(point.X, point.Y);
+        }
+
+        public Vector2 TransformPointToLocal(float posX, float posY)
+        {
+            posX = (posX - _AreaOfLayer.CenterX) / ScaleMatrix.Column0[0];
+            posY = (posY - _AreaOfLayer.CenterY) / ScaleMatrix.Column1[1];
 
             return new Vector2(posX, posY);
         }
