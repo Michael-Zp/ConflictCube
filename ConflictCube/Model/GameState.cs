@@ -12,7 +12,7 @@ namespace ConflictCube.Model
     {
         public InputManager InputManager { get; private set; }
         public Level CurrentLevel { get; set; }
-        public PlayerUI PlayerUI { get; set; }
+        public PlayerUI[] PlayerUIs { get; set; }
 
         public List<Player> Players { get; private set; }
 
@@ -37,7 +37,9 @@ namespace ConflictCube.Model
 
         private void InitializeUI()
         {
-            PlayerUI = new PlayerUI(Players[0], new Box2D(.8f, -1f, .2f, 2f));
+            PlayerUIs = new PlayerUI[2];
+            PlayerUIs[0] = new PlayerUI(Players[0], new Box2D(-1f, -1f, .2f, 2f));
+            PlayerUIs[1] = new PlayerUI(Players[1], new Box2D(.8f, -1f, .2f, 2f));
         }
 
         private void UpdateColliders()
@@ -65,6 +67,11 @@ namespace ConflictCube.Model
                 group.MoveAllObjects();
             }
 
+            foreach (PlayerUI ui in PlayerUIs)
+            {
+                ui.UpdateUi();
+            }
+
             CheckLooseCondition();
         }
         
@@ -87,8 +94,8 @@ namespace ConflictCube.Model
             CurrentLevel = LevelBuilder.LoadLevel(levelNumber);
 
             //Hard coded parameters. Enhance level format or even build own level format including these parameters.
-            CurrentLevel.FloorOffsetPerSecond = .0f;
-            CurrentLevel.StartRollingLevelOffsetSeconds = 1.0f;
+            CurrentLevel.FloorOffsetPerSecond = .02f;
+            CurrentLevel.StartRollingLevelOffsetSeconds = 6.0f;
         }
 
         private void CheckLooseCondition()

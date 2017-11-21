@@ -12,6 +12,7 @@ namespace ConflictCube
         {
             GL3.Color3(color);
             DrawBoxVertices(rect);
+            GL3.Color3(Color.White);
         }
 
         private static void DrawBoxVertices(Box2D rect)

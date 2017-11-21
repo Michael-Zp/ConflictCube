@@ -94,7 +94,7 @@ namespace ConflictCube.Model.Renderable
         public Vector2 GetGridPosition(Vector2 position)
         {
             Vector2 localPosition = TransformPointToLocal(position);
-
+            
             float xPos = (float)Math.Floor((localPosition.X + 1) / FloorTileSize.X);
             float yPos = (float)Math.Floor((localPosition.Y + 1) / FloorTileSize.Y);
 

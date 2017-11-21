@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using OpenTK.Input;
-using System;
 
 namespace ConflictCube.Controller
 {
@@ -25,8 +24,7 @@ namespace ConflictCube.Controller
             KeyboardSettings.Add(Key.S, Input.PlayerOneMoveDown);
             KeyboardSettings.Add(Key.Q, Input.PlayerOneThrowMode);
             KeyboardSettings.Add(Key.E, Input.PlayerOneUseMode);
-
-
+            
 
             //Player 2
             KeyboardSettings.Add(Key.J, Input.PlayerTwoMoveLeft);
@@ -35,6 +33,15 @@ namespace ConflictCube.Controller
             KeyboardSettings.Add(Key.K, Input.PlayerTwoMoveDown);
             KeyboardSettings.Add(Key.O, Input.PlayerTwoThrowMode);
             KeyboardSettings.Add(Key.U, Input.PlayerTwoUseMode);
+
+
+            //Player 2 - Alt
+            KeyboardSettings.Add(Key.Keypad4, Input.PlayerTwoMoveLeft);
+            KeyboardSettings.Add(Key.Keypad6, Input.PlayerTwoMoveRight);
+            KeyboardSettings.Add(Key.Keypad8, Input.PlayerTwoMoveUp);
+            KeyboardSettings.Add(Key.Keypad5, Input.PlayerTwoMoveDown);
+            KeyboardSettings.Add(Key.Keypad7, Input.PlayerTwoThrowMode);
+            KeyboardSettings.Add(Key.Keypad9, Input.PlayerTwoUseMode);
         }
 
         public void UpdateState()

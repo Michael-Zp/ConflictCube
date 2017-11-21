@@ -23,7 +23,7 @@ namespace ConflictCube.Controller
             AddLevel(state.CurrentLevel);
             AddPlayers(state.Players);
             AddThrowUseUI(state);
-            AddPlayerUI(state.PlayerUI);
+            AddPlayerUI(state.PlayerUIs);
         }
 
         private void AddLevel(Level currentLevel)
@@ -88,13 +88,18 @@ namespace ConflictCube.Controller
             return state.CurrentLevel.GetBoxForGridOffsetOfPosition(player.ThrowUseField);
         }
 
-        private void AddPlayerUI(PlayerUI ui)
+        private void AddPlayerUI(PlayerUI[] uis)
         {
-            RenderingLayers.Add(RenderLayerType.UI, ui);
+            RenderableLayer uiLayer = GeneratDefaultRenderableLayer();
+
+            foreach(PlayerUI ui in uis)
+            {
+                uiLayer.AddRangedObjectsToRender(ui.GetRenderableObjects());
+            }
+
+            RenderingLayers.Add(RenderLayerType.UI, uiLayer);
         }
-
-
-
+        
 
         private RenderableLayer GeneratDefaultRenderableLayer()
         {

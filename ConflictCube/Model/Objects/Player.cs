@@ -152,6 +152,7 @@ namespace ConflictCube
             else if (other.CollisionType == CollisionType.Finish)
             {
                 Console.WriteLine("WonGame");
+                Environment.Exit(0);
             }
         }
 

@@ -296,12 +296,12 @@ namespace ConflictCube
             else if (FloorMiddle.AreaOfLayer.Contains(localPlayerPos.X, localPlayerPos.Y))
             {
                 area = FloorArea.Middle;
-                gridPosition = FloorLeft.GetGridPosition(localPlayerPos);
+                gridPosition = FloorMiddle.GetGridPosition(localPlayerPos);
             }
             else if (FloorRight.AreaOfLayer.Contains(localPlayerPos.X, localPlayerPos.Y))
             {
                 area = FloorArea.Right;
-                gridPosition = FloorLeft.GetGridPosition(localPlayerPos);
+                gridPosition = FloorRight.GetGridPosition(localPlayerPos);
             }
             else
             {
