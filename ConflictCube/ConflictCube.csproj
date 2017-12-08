@@ -74,38 +74,79 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controller\Input.cs" />
-    <Compile Include="Controller\GameController.cs" />
-    <Compile Include="Controller\ViewModel.cs" />
+    <Compile Include="ComponentBased\Controller\GameController.cs" />
+    <Compile Include="ComponentBased\Controller\InputKey.cs" />
+    <Compile Include="ComponentBased\Controller\ViewModel.cs" />
+    <Compile Include="ComponentBased\Model\Components\Colliders\CollisionGroup.cs" />
+    <Compile Include="ComponentBased\Model\Components\GameCallbacks.cs" />
+    <Compile Include="ComponentBased\Model\Components\Scene\SceneBuilder.cs" />
+    <Compile Include="ComponentBased\Model\Components\Material\MaterialData.cs" />
+    <Compile Include="ComponentBased\Model\Components\Material\Materials.cs" />
+    <Compile Include="ComponentBased\Model\Components\Objects\ColoredBox.cs" />
+    <Compile Include="ComponentBased\Model\Components\Objects\Floor.cs" />
+    <Compile Include="ComponentBased\Model\Components\Objects\FloorLoader.cs" />
+    <Compile Include="ComponentBased\Model\Components\Objects\Player.cs" />
+    <Compile Include="ComponentBased\Model\Components\Objects\Tiles\FloorTile.cs" />
+    <Compile Include="ComponentBased\Model\Components\GameObjectType.cs" />
+    <Compile Include="ComponentBased\Model\Components\Objects\Boundary.cs" />
+    <Compile Include="ComponentBased\Model\Components\UI\Canvas.cs" />
+    <Compile Include="ComponentBased\Model\Components\UI\PlayerUI.cs" />
+    <Compile Include="ComponentBased\Levels.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Levels.resx</DependentUpon>
+    </Compile>
+    <Compile Include="ComponentBased\Program.cs" />
+    <Compile Include="ComponentBased\TexturResource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TexturResource.resx</DependentUpon>
+    </Compile>
+    <Compile Include="ComponentBased\Model\Tilesets.cs" />
+    <Compile Include="ComponentBased\Model\GameState.cs" />
+    <Compile Include="ComponentBased\View\GameView.cs" />
+    <Compile Include="ComponentBased\View\MyWindow.cs" />
+    <Compile Include="ComponentBased\View\OpenTKWrapper.cs" />
+    <Compile Include="ComponentBased\View\ZenselessWrapper.cs" />
+    <Compile Include="GlobalMethods\Input.cs" />
     <Compile Include="GlobalMethods\Time.cs" />
-    <Compile Include="Model\Collision\ICollidable.cs" />
-    <Compile Include="Model\Collision\CollisionGroup.cs" />
-    <Compile Include="Model\Input\InputManager.cs" />
-    <Compile Include="Model\Level\Boundary.cs" />
-    <Compile Include="Model\Level\Level.cs" />
-    <Compile Include="Model\Level\LevelBuilder.cs" />
-    <Compile Include="Model\GameState.cs" />
-    <Compile Include="Model\Objects\ColoredBox.cs" />
-    <Compile Include="Model\Objects\FloorLoader.cs" />
-    <Compile Include="Model\Movement\IMoveable.cs" />
-    <Compile Include="Model\Objects\Player.cs" />
-    <Compile Include="Model\Objects\Floor.cs" />
-    <Compile Include="Model\Renderable\RenderableLayer.cs" />
-    <Compile Include="Model\Renderable\RenderableObject.cs" />
-    <Compile Include="Model\Objects\Tiles\Tiles.cs" />
-    <Compile Include="Model\Objects\Tiles\Tileset.cs" />
-    <Compile Include="Model\UI\PlayerUI.cs" />
-    <Compile Include="View\GameView.cs" />
-    <Compile Include="View\MyWindow.cs" />
-    <Compile Include="View\OpenTKWrapper.cs" />
-    <Compile Include="View\ZenselessWrapper.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="ComponentBased\Model\Components\Colliders\BoxCollider.cs" />
+    <Compile Include="ComponentBased\Model\Components\Colliders\Collider.cs" />
+    <Compile Include="ComponentBased\Model\Components\Component.cs" />
+    <Compile Include="ComponentBased\Model\Components\GameObject.cs" />
+    <Compile Include="ComponentBased\Model\Components\Material\Material.cs" />
+    <Compile Include="ComponentBased\Model\Components\Transform\Transform.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="OpenTK.dll.config" />
     <None Include="packages.config" />
+    <None Include="Resources\Level0.csv" />
+    <None Include="Resources\level1.csv" />
+    <None Include="Resources\Level2.csv" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ComponentBased\Levels.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Levels.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ComponentBased\TexturResource.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>TexturResource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\FloorSpriteSheet.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Tileset.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Player.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ComponentBased\Model\Collision\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
