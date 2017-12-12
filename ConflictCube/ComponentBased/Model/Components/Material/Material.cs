@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using Zenseless.Geometry;
-using Zenseless.OpenGL;
+using Zenseless.HLGL;
 
 namespace ConflictCube.ComponentBased.Components
 {
@@ -9,9 +9,9 @@ namespace ConflictCube.ComponentBased.Components
     {
         public int ID;
 
-        public Texture Texture {
+        public ITexture Texture {
             get {
-                Texture tex;
+                ITexture tex;
                 try
                 {
                     tex = Materials.GetMaterialData(ID)?.Texture;
@@ -65,7 +65,7 @@ namespace ConflictCube.ComponentBased.Components
             }
         }
 
-        public Material(Texture texture, Box2D uvCoordinates, Color color)
+        public Material(ITexture texture, Box2D uvCoordinates, Color color)
         {
             ID = Materials.AddMaterialData(new MaterialData(texture, uvCoordinates, color));
         }

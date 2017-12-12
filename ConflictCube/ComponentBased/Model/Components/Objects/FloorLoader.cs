@@ -39,11 +39,15 @@ namespace ConflictCube.ComponentBased
 
                     if(floorTiles[row, column] == GameObjectType.Wall)
                     {
-                        floorTile.AddComponent(new BoxCollider(tileTransform, false, null));
+                        floorTile.AddComponent(new BoxCollider(new Transform(0, 0, 1, 1), false, null, CollisionType.Wall));
                     }
                     else if(floorTiles[row, column] == GameObjectType.Hole)
                     {
-                        floorTile.AddComponent(new BoxCollider(new Transform(tileTransform.Position.X, tileTransform.Position.Y, tileTransform.Size.X * .8f, tileTransform.Size.Y * .8f), false, null));
+                        floorTile.AddComponent(new BoxCollider(new Transform(0, 0, .8f, .8f), false, null, CollisionType.Hole));
+                    }
+                    else if(floorTiles[row, column] == GameObjectType.Finish)
+                    {
+                        floorTile.AddComponent(new BoxCollider(new Transform(0, 0, 1, 1), true, null, CollisionType.Finish));
                     }
 
                     floorOfLevel.AddFloorTile(floorTile, row, column);
@@ -55,11 +59,12 @@ namespace ConflictCube.ComponentBased
 
         
 
-        private static GameObjectType[,] GetFloorDataFromLevelfile(string levelPath, out int levelRows, out int levelColumns)
+        private static GameObjectType[,] GetFloorDataFromLevelfile(string levelData, out int levelRows, out int levelColumns)
         {
             GameObjectType[] FloorNumberToType = { GameObjectType.Finish, GameObjectType.Floor, GameObjectType.Hole, GameObjectType.Wall };
 
-            string[] allLines = levelPath.Split('\n');
+            levelData = levelData.Trim('\n');
+            string[] allLines = levelData.Split('\n');
             levelRows = allLines.Length;
             levelColumns = allLines[0].Split(',').Length;
 

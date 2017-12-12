@@ -1,10 +1,11 @@
-﻿using GL3 = OpenTK.Graphics.OpenGL.GL;
-using OpenGL3 = OpenTK.Graphics.OpenGL;
+﻿using OpenTK.Graphics.OpenGL;
+using OpenGL = OpenTK.Graphics.OpenGL;
 using Zenseless.Geometry;
 using System.Drawing;
 using Zenseless.OpenGL;
 using ConflictCube.ComponentBased.Components;
 using System;
+using Zenseless.HLGL;
 
 namespace ConflictCube.ComponentBased
 {
@@ -14,74 +15,103 @@ namespace ConflictCube.ComponentBased
 
         public static void DrawBox(Box2D rect, Color color)
         {
-            GL3.Color3(color);
+            GL.Color3(color);
             DrawBoxVertices(rect);
-            GL3.Color3(Color.White);
+            GL.Color3(Color.White);
         }
 
         private static void DrawBoxVertices(Box2D rect)
         {
-            GL3.Begin(OpenGL3.PrimitiveType.Quads);
-            GL3.Vertex2(rect.MinX, rect.MinY);
-            GL3.Vertex2(rect.MaxX, rect.MinY);
-            GL3.Vertex2(rect.MaxX, rect.MaxY);
-            GL3.Vertex2(rect.MinX, rect.MaxY);
-            GL3.End();
+            GL.Begin(OpenGL.PrimitiveType.Quads);
+            GL.Vertex2(rect.MinX, rect.MinY);
+            GL.Vertex2(rect.MaxX, rect.MinY);
+            GL.Vertex2(rect.MaxX, rect.MaxY);
+            GL.Vertex2(rect.MinX, rect.MaxY);
+            GL.End();
         }
         
 
         public static void DrawBoxWithTexture(Box2D rect, Texture texture)
         {
-            GL3.Enable(OpenGL3.EnableCap.Texture2D);
+            GL.Enable(OpenGL.EnableCap.Texture2D);
             texture.Activate();
-            GL3.Begin(OpenGL3.PrimitiveType.Quads);
+            GL.Begin(OpenGL.PrimitiveType.Quads);
             //Bottom left
-            GL3.TexCoord2(0, 1);
-            GL3.Vertex2(rect.MinX, rect.MinY);
+            GL.TexCoord2(0, 1);
+            GL.Vertex2(rect.MinX, rect.MinY);
             //Bottom right
-            GL3.TexCoord2(1, 1);
-            GL3.Vertex2(rect.MaxX, rect.MinY);
+            GL.TexCoord2(1, 1);
+            GL.Vertex2(rect.MaxX, rect.MinY);
             //Top right
-            GL3.TexCoord2(1, 0);
-            GL3.Vertex2(rect.MaxX, rect.MaxY);
+            GL.TexCoord2(1, 0);
+            GL.Vertex2(rect.MaxX, rect.MaxY);
             //Top left
-            GL3.TexCoord2(0, 0);
-            GL3.Vertex2(rect.MinX, rect.MaxY);
+            GL.TexCoord2(0, 0);
+            GL.Vertex2(rect.MinX, rect.MaxY);
 
-            GL3.End();
+            GL.End();
             texture.Deactivate();
-            GL3.Disable(OpenGL3.EnableCap.Texture2D);
+            GL.Disable(OpenGL.EnableCap.Texture2D);
         }
 
-        internal static void DrawBoxWithTextureAndAlphaChannel(Transform transform, Texture texture, Box2D uVCoordinates, Color color)
+        public static void DrawBoxWithAlphaChannel(Transform transform, Color color)
         {
             EnableAlphaChannel();
 
-            GL3.Color4(color);
-
-            texture.Activate();
-            GL3.Begin(OpenGL3.PrimitiveType.Quads);
+            GL.Color4(color);
+            
+            GL.Begin(OpenGL.PrimitiveType.Quads);
 
             //Bottom left
-            GL3.TexCoord2(uVCoordinates.MinX, uVCoordinates.MinY);
-            GL3.Vertex2(transform.MinX, transform.MinY);
+            GL.Vertex2(transform.MinX, transform.MinY);
 
             //Bottom right
-            GL3.TexCoord2(uVCoordinates.MaxX, uVCoordinates.MinY);
-            GL3.Vertex2(transform.MaxX, transform.MinY);
+            GL.Vertex2(transform.MaxX, transform.MinY);
 
             //Top right
-            GL3.TexCoord2(uVCoordinates.MaxX, uVCoordinates.MaxY);
-            GL3.Vertex2(transform.MaxX, transform.MaxY);
+            GL.Vertex2(transform.MaxX, transform.MaxY);
 
             //Top left
-            GL3.TexCoord2(uVCoordinates.MinX, uVCoordinates.MaxY);
-            GL3.Vertex2(transform.MinX, transform.MaxY);
+            GL.Vertex2(transform.MinX, transform.MaxY);
 
-            GL3.End();
+            GL.End();
+
+            GL.Color4(StandardColor);
+
+            DisableAlphaChannel();
+        }
+
+        public static void DrawBoxWithTextureAndAlphaChannel(Transform transform, ITexture texture, Box2D uVCoordinates, Color color)
+        {
+            EnableAlphaChannel();
+
+            texture.Activate();
+            
+            GL.Color4(color);
+
+            GL.Begin(OpenGL.PrimitiveType.Quads);
+
+            //Bottom left
+            GL.TexCoord2(uVCoordinates.MinX, uVCoordinates.MinY);
+            GL.Vertex2(transform.MinX, transform.MinY);
+
+            //Bottom right
+            GL.TexCoord2(uVCoordinates.MaxX, uVCoordinates.MinY);
+            GL.Vertex2(transform.MaxX, transform.MinY);
+
+            //Top right
+            GL.TexCoord2(uVCoordinates.MaxX, uVCoordinates.MaxY);
+            GL.Vertex2(transform.MaxX, transform.MaxY);
+
+            //Top left
+            GL.TexCoord2(uVCoordinates.MinX, uVCoordinates.MaxY);
+            GL.Vertex2(transform.MinX, transform.MaxY);
+
+            GL.End();
+            
             texture.Deactivate();
 
-            GL3.Color4(StandardColor);
+            GL.Color4(StandardColor);
 
             DisableAlphaChannel();
         }
@@ -96,7 +126,7 @@ namespace ConflictCube.ComponentBased
         public static void DrawBoxWithAlpha(Box2D rect, Color color)
         {
             EnableAlphaChannel();
-            GL3.Color4(color);
+            GL.Color4(color);
             DrawBoxVertices(rect);
             DisableAlphaChannel();
         }
@@ -104,13 +134,13 @@ namespace ConflictCube.ComponentBased
 
         private static void EnableAlphaChannel()
         {
-            GL3.Enable(OpenGL3.EnableCap.Blend);
-            GL3.BlendFunc(OpenGL3.BlendingFactorSrc.SrcAlpha, OpenGL3.BlendingFactorDest.OneMinusSrcAlpha);
+            GL.Enable(EnableCap.Blend);
+            GL.BlendFunc(BlendingFactorSrc.SrcAlpha, OpenGL.BlendingFactorDest.OneMinusSrcAlpha);
         }
 
         private static void DisableAlphaChannel()
         {
-            GL3.Disable(OpenGL3.EnableCap.Blend);
+            GL.Disable(OpenGL.EnableCap.Blend);
         }
     }
 }

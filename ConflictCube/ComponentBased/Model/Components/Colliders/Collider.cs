@@ -27,7 +27,16 @@ namespace ConflictCube.ComponentBased.Components
         public Collider(bool isTrigger, CollisionGroup group, CollisionType type)
         {
             IsTrigger = isTrigger;
-            Group = group;
+            if(group == null)
+            {
+                Group = CollisionGroup.DefaultCollisionGroup;
+                CollisionGroup.DefaultCollisionGroup.AddCollider(this);
+            }
+            else
+            {
+                Group = group;
+                Group.AddCollider(this);
+            }
             Type = type;
         }
 
@@ -41,14 +50,7 @@ namespace ConflictCube.ComponentBased.Components
 
         public void CheckCollisions(Vector2 movement)
         {
-            if(Group != null)
-            {
-                Group.CheckCollisions(this, movement);
-            }
-            else
-            {
-                CollisionGroup.DefaultCollisionGroup.CheckCollisions(this, movement);
-            }
+            Group.CheckCollisions(this, movement);
         }
 
         public abstract bool IsCollidingWith(Collider other);

@@ -45,12 +45,19 @@ namespace ConflictCube.ComponentBased
             Material currentMat = currentObject.GetComponent<Material>();
             if(currentMat != null)
             {
-                OpenTKWrapper.DrawBoxWithTextureAndAlphaChannel(currentObject.Transform, currentMat.Texture, currentMat.UVCoordinates, currentMat.Color);
+                if(currentMat.Texture != null)
+                {
+                    OpenTKWrapper.DrawBoxWithTextureAndAlphaChannel(currentObject.Transform.TransformToGlobal(), currentMat.Texture, currentMat.UVCoordinates, currentMat.Color);
+                }
+                else
+                {
+                    OpenTKWrapper.DrawBoxWithAlphaChannel(currentObject.Transform.TransformToGlobal(), currentMat.Color);
+                }
             }
 
             foreach (GameObject child in currentObject.Children)
             {
-                RenderGameObject(currentObject);
+                RenderGameObject(child);
             }
         }
 

@@ -4,42 +4,33 @@ namespace ConflictCube.ComponentBased.Components
 {
     public class GameObject : GameCallbacks
     {
-        public Transform Transform { get; private set; }
-        public List<GameObject> Children;
-        public List<Component> Components;
+        private Transform _Transform;
+        public Transform Transform {
+            get {
+                return _Transform;
+            }
+            private set {
+                _Transform = value;
+                _Transform.Owner = this;
+            }
+        }
+        public List<GameObject> Children = new List<GameObject>();
+        public List<Component> Components = new List<Component>();
         public GameObject Parent;
         public string Name;
         public GameObjectType Type;
 
-        public GameObject(string name, Transform transform)
-        {
-            Name = name;
-            Parent = null;
+        public GameObject(string name, Transform transform) : this(name, transform, null)
+        {}
 
-            if(transform != null)
-            {
-                Transform = transform;
-            }
-            else
-            {
-                Transform = new Transform();
-            }
-
-            OnStart();
-        }
-
-        public GameObject(string name, Transform transform, GameObject parent)
-        {
-            Name = name;
-            Parent = parent;
-
-            OnStart();
-        }
+        public GameObject(string name, Transform transform, GameObject parent) : this(name, transform, parent, GameObjectType.Default)
+        {}
 
         public GameObject(string name, Transform transform, GameObject parent, GameObjectType type)
         {
             Name = name;
             Transform = transform;
+            Transform.SetOwner(this);
             Parent = parent;
             Type = type;
 
@@ -54,7 +45,11 @@ namespace ConflictCube.ComponentBased.Components
 
         public void AddComponent(Component component)
         {
-            Components.Add(component);
+            if(component != null)
+            {
+                Components.Add(component);
+                component.SetOwner(this);
+            }
         }
 
         /// <summary>
@@ -75,7 +70,7 @@ namespace ConflictCube.ComponentBased.Components
 
         public T GetComponent<T>() where T : Component
         {
-            foreach(Component comp in Components)
+            foreach (Component comp in Components)
             {
                 if(comp is T)
                 {

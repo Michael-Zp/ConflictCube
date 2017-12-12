@@ -5,124 +5,133 @@ namespace ConflictCube.ComponentBased.Components
 {
     public class Transform : Component
     {
-        private Vector2 _Position;
+        private Matrix3 TransformMatrix;
+
         public Vector2 Position {
             get {
-                return _Position;
+                return new Vector2(TransformMatrix.M13, TransformMatrix.M23);
             }
             set {
-                _Position = value;
-                Collider collider = Owner.GetComponent<Collider>();
-
-                if (Owner.GetComponent<Collider>() != null)
-                {
-                    collider.CheckCollisions(value);
-                }
+                TransformMatrix.M13 = value.X;
+                TransformMatrix.M23 = value.Y;
             }
         }
 
-        private Vector2 _Size;
         public Vector2 Size {
             get {
-                return _Size;
+                return new Vector2(TransformMatrix.M11, TransformMatrix.M22);
             }
             set {
-                _Size = value;
-                Collider collider = Owner.GetComponent<Collider>();
+                TransformMatrix.M11 = value.X;
+                TransformMatrix.M22 = value.Y;
+                Collider collider = Owner?.GetComponent<Collider>();
 
-                if (Owner.GetComponent<Collider>() != null)
+                if (collider != null)
                 {
                     collider.CheckCollisions(value);
                 }
             }
         }
 
-        public float MinX { get { return Position.X - Size.X / 2; } }
-        public float MaxX { get { return Position.X + Size.X / 2; } }
+        public float MinX { get { return Position.X - Size.X; } }
+        public float MaxX { get { return Position.X + Size.X; } }
 
-        public float MinY { get { return Position.Y - Size.Y / 2; } }
-        public float MaxY { get { return Position.Y + Size.Y / 2; } }
+        public float MinY { get { return Position.Y - Size.Y; } }
+        public float MaxY { get { return Position.Y + Size.Y; } }
 
-        public Matrix3 ScaleMatrix;
-
-        public Transform()
+        public Transform(Matrix3 matrix)
         {
-            _Position = new Vector2(0, 0);
-            _Size = new Vector2(1, 1);
-            Initialize();
+            TransformMatrix = matrix;
         }
 
-        public Transform(Box2D box)
-        {
-            _Position = new Vector2(box.CenterX, box.CenterY);
-            _Size = new Vector2(box.SizeX, box.SizeY);
-            Initialize();
-        }
+        public Transform() : this(0, 0, 1, 1)
+        { }
+
+        public Transform(Box2D box) : this(box.CenterX, box.CenterY, box.SizeX, box.SizeY)
+        { }
 
         public Transform(float centerX, float centerY, float sizeX, float sizeY)
         {
-            _Position = new Vector2(centerX, centerY);
-            _Size = new Vector2(sizeX, sizeY);
-            Initialize();
-        }
-        
-        private void Initialize()
-        {
-            ScaleMatrix = GenerateScaleMatrix();
+            Position = new Vector2(centerX, centerY);
+            Size = new Vector2(sizeX, sizeY);
+            TransformMatrix.M33 = 1;
         }
 
-        private Matrix3 GenerateScaleMatrix()
+        public override void SetOwner(GameObject owner)
         {
-            float sizeRatioRows = Size.X / 2;
-            float sizeRatioColumns = Size.X / 2;
-
-            return Matrix3.CreateScale(sizeRatioRows, sizeRatioColumns, 1);
+            base.SetOwner(owner);
         }
 
-        public Vector2 TransformSizeToParent(Vector2 size)
+        public Transform TransformToParent()
         {
-            return TransformSizeToParent(size.X, size.Y);
+            Matrix3 currentTransform = TransformMatrix;
+            if (Owner.Parent != null)
+            {
+                currentTransform = Owner.Parent.Transform.TransformMatrix * TransformMatrix;
+            }
+
+            Transform newTransform = (Transform)Clone();
+            newTransform.TransformMatrix = currentTransform;
+
+            return newTransform;
         }
 
-        public Vector2 TransformSizeToParent(float sizeX, float sizeY)
+        public Transform TransformToLocal(Transform transformToLocal)
         {
-            Vector3 newSize = Vector3.Transform(new Vector3(sizeX, sizeY, 1), ScaleMatrix);
+            GameObject currentOwner = Owner.Parent;
+            Matrix3 currentTransform = transformToLocal.TransformMatrix;
 
-            return newSize.Xy;
+            while (currentOwner != null)
+            {
+                currentTransform = currentOwner.Transform.TransformMatrix.Inverted() * currentTransform;
+                currentOwner = currentOwner.Parent;
+            }
+
+            Transform newTransform = (Transform)Clone();
+            newTransform.TransformMatrix = currentTransform;
+
+            return newTransform;
         }
 
-        public Vector2 TransformPointToParent(Vector2 point)
+        public Transform TransformToGlobal()
         {
-            return TransformPointToParent(point.X, point.Y);
+            return TransformToGlobal(this);
         }
 
-        public Vector2 TransformPointToParent(float posX, float posY)
+        public Transform TransformToGlobal(Transform transform)
         {
-            posX = posX * ScaleMatrix.Column0[0] + Position.X;
-            posY = posY * ScaleMatrix.Column1[1] + Position.Y;
+            if(Owner == null)
+            {
+                return transform;
+            }
+            GameObject currentOwner = Owner.Parent;
+            Matrix3 currentTransform = transform.TransformMatrix;
 
-            return new Vector2(posX, posY);
+            while (currentOwner != null)
+            {
+                currentTransform = currentOwner.Transform.TransformMatrix * currentTransform;
+                currentOwner = currentOwner.Parent;
+            }
+
+            Transform newTransform = (Transform)Clone();
+            newTransform.TransformMatrix = currentTransform;
+            
+            return newTransform;
         }
 
-        public Vector2 TransformPointToLocal(Vector2 point)
+        public Transform TransformToSpace(Transform space)
         {
-            return TransformPointToLocal(point.X, point.Y);
-        }
+            Transform newTransform = (Transform)Clone();
+            newTransform.TransformMatrix = space.TransformMatrix * TransformMatrix;
 
-        public Vector2 TransformPointToLocal(float posX, float posY)
-        {
-            posX = (posX - Position.X) / ScaleMatrix.Column0[0];
-            posY = (posY - Position.Y) / ScaleMatrix.Column1[1];
-
-            return new Vector2(posX, posY);
+            return newTransform;
         }
 
         public override Component Clone()
         {
             Transform newTransform = (Transform)base.Clone();
 
-            newTransform.Position = new Vector2(_Position.X, _Position.Y);
-            newTransform.Size = new Vector2(_Size.X, _Size.Y);
+            newTransform.TransformMatrix = new Matrix3(TransformMatrix.Row0, TransformMatrix.Row1, TransformMatrix.Row2);
 
             return newTransform;
         }
@@ -132,6 +141,27 @@ namespace ConflictCube.ComponentBased.Components
             bool noXintersect = (MaxX <= other.MinX) || (MinX >= other.MaxX);
             bool noYintersect = (MaxY <= other.MinY) || (MinY >= other.MaxY);
             return !(noXintersect || noYintersect);
+        }
+
+        public void MoveRelative(Vector2 movement)
+        {
+            Position += movement;
+            Collider collider = Owner?.GetComponent<Collider>();
+
+            if (collider != null)
+            {
+                collider.CheckCollisions(movement);
+            }
+        }
+
+        public static Transform operator *(Transform transform, Matrix3 matrix)
+        {
+            return new Transform(matrix * transform.TransformMatrix);
+        }
+
+        public static Transform operator *(Transform transform, Transform other)
+        {
+            return new Transform(transform.TransformMatrix * other.TransformMatrix);
         }
     }
 }

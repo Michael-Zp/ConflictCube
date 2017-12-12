@@ -50,22 +50,22 @@ namespace ConflictCube.ComponentBased
         public override void OnUpdate()
         {
             Vector2 moveVector = new Vector2(0, 0);
-            if (Input.OnButtonDown(InputKey.PlayerOneMoveUp))
+            if (Input.OnButtonIsPressed(InputKey.PlayerOneMoveUp))
             {
                 moveVector.Y += Speed;
             }
 
-            if (Input.OnButtonDown(InputKey.PlayerOneMoveDown))
+            if (Input.OnButtonIsPressed(InputKey.PlayerOneMoveDown))
             {
                 moveVector.Y -= Speed;
             }
 
-            if (Input.OnButtonDown(InputKey.PlayerOneMoveRight))
+            if (Input.OnButtonIsPressed(InputKey.PlayerOneMoveRight))
             {
                 moveVector.X += Speed;
             }
 
-            if (Input.OnButtonDown(InputKey.PlayerOneMoveLeft))
+            if (Input.OnButtonIsPressed(InputKey.PlayerOneMoveLeft))
             {
                 moveVector.X -= Speed;
             }
@@ -125,12 +125,17 @@ namespace ConflictCube.ComponentBased
             }
             else
             {
-                Transform.Position += moveVector;
+                Console.WriteLine("\n\n\n");
+                Transform.MoveRelative(moveVector);
+                Console.WriteLine("\n\n\n");
+                //Console.WriteLine(Transform.Position);
+                //Console.WriteLine(moveVector);
             }
         }
 
         public override void OnCollision(Collider other)
         {
+            Console.WriteLine("Player collided with: " + other.Type.ToString());
             if (other.Type == CollisionType.LeftBoundary || other.Type == CollisionType.RightBoundary || other.Type == CollisionType.TopBoundary || other.Type == CollisionType.Wall)
             {
 
@@ -142,7 +147,7 @@ namespace ConflictCube.ComponentBased
             else if (other.Type == CollisionType.Finish)
             {
                 Console.WriteLine("WonGame");
-                Environment.Exit(0);
+                //Environment.Exit(0);
             }
         }
         

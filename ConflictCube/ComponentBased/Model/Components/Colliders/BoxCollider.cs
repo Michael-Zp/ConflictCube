@@ -7,10 +7,8 @@ namespace ConflictCube.ComponentBased.Components
     {
         public Transform Box;
 
-        public BoxCollider(Transform transform, bool isTrigger, CollisionGroup group) : base(isTrigger, group)
-        {
-            Box = transform;
-        }
+        public BoxCollider(Transform transform, bool isTrigger, CollisionGroup group) : this(transform, isTrigger, group, CollisionType.NonCollider)
+        {}
 
         public BoxCollider(Transform transform, bool isTrigger, CollisionGroup group, CollisionType type) : base(isTrigger, group, type)
         {
@@ -22,66 +20,110 @@ namespace ConflictCube.ComponentBased.Components
         {
             if(other is BoxCollider)
             {
-                return Box.Intersects(((BoxCollider)other).Box);
+                //Because a component holds another component, transform the Box into the space of the owner and then into the global space. Otherwise the transformation into owner space would be missing.
+                Transform thisGlobalTransform = GetGlobalCollisionBox();
+                BoxCollider otherBoxCollider = ((BoxCollider)other);
+                Transform otherGlobalTransform = otherBoxCollider.GetGlobalCollisionBox();
+                return thisGlobalTransform.Intersects(otherGlobalTransform);
             }
 
             Console.WriteLine("Collider type of other in BoxCollider not known. Other owner is " + other.Owner.Name);
             return false;
         }
 
+        public override void SetOwner(GameObject owner)
+        {
+            base.SetOwner(owner);
+            Box.SetOwner(owner);
+        }
+
+        private Transform GetGlobalCollisionBox()
+        {
+            return Box.TransformToSpace(Owner.Transform).TransformToGlobal();
+        }
+
         public override void StandardCollision(Collider other, Transform transform, Vector2 movement)
         {
+            if(other.Type == CollisionType.Wall)
+            {
+                Console.WriteLine("Coll with wall. Use as break point");
+            }
             if(!IsTrigger && !other.IsTrigger)
             {
                 if (other is BoxCollider)
                 {
+                    const float smallEpsilon = 0.0000001f;
+                    const float bigEpsilon = 0.02f;
+
                     BoxCollider otherBox = (BoxCollider)other;
+
+                    Transform thisGlobalBox = GetGlobalCollisionBox();
+                    Transform otherGlobalBox = otherBox.GetGlobalCollisionBox();
 
                     Vector2 onlyXMovement = new Vector2(movement.X, 0f);
                     Vector2 onlyYMovement = new Vector2(0f, movement.Y);
 
-                    transform.Position -= movement;
+                    Owner.Transform.Position -= movement;
+                    
+                    
 
-                    transform.Position += onlyXMovement;
+
+                    Owner.Transform.Position += onlyXMovement;
 
                     if (otherBox.Box.Intersects(Box))
                     {
-                        float yDistance = Math.Abs(Math.Abs(otherBox.Box.Position.Y - Box.Position.Y) - otherBox.Box.Size.Y / 2 - Box.Size.Y / 2);
-
-                        if (yDistance > 0.001f)
+                        float yDistance = Math.Abs(Math.Abs(otherGlobalBox.Position.Y - thisGlobalBox.Position.Y) - otherGlobalBox.Size.Y - thisGlobalBox.Size.Y);
+                        
+                        if (yDistance > bigEpsilon)
                         {
                             float xDif = 0;
                             if (onlyXMovement.X > 0)
                             {
-                                xDif = ((otherBox.Box.MinX - Box.Size.X) + 0.0000001f) - Box.MinX;
+                                xDif = otherGlobalBox.MinX - thisGlobalBox.MaxX + smallEpsilon;
+                                
+                                
+                                //Worked in old code like that, but is a bit complicated and did not work with class Transform...
+                                //xDif = ((otherGlobalBox.MinX - thisGlobalBox.Size.X) + smallEpsilon) - thisGlobalBox.MinX; 
                             }
                             else if (onlyXMovement.X < 0)
                             {
-                                xDif = (otherBox.Box.MaxX - 0.0000001f) - Box.MinX;
+                                xDif = (otherGlobalBox.MaxX - smallEpsilon) - thisGlobalBox.MinX;
                             }
-                            transform.Position += new Vector2(xDif, 0f);
+
+                            if(Math.Abs(xDif) <= Math.Abs(onlyXMovement.X) + bigEpsilon)
+                            {
+                                Owner.Transform.Position += new Vector2(xDif, 0f);
+                            }
                         }
                     }
 
 
-                    transform.Position += onlyYMovement;
+                    Owner.Transform.Position += onlyYMovement;
 
                     if (otherBox.Box.Intersects(Box))
                     {
-                        float xDistance = Math.Abs(Math.Abs(otherBox.Box.Position.X - Box.Position.X) - otherBox.Box.Size.X / 2 - Box.Size.X / 2);
+                        float xDistance = Math.Abs(Math.Abs(otherGlobalBox.Position.X - thisGlobalBox.Position.X) - otherGlobalBox.Size.X - thisGlobalBox.Size.X);
 
-                        if (xDistance > 0.001f)
+                        if (xDistance > bigEpsilon)
                         {
                             float yDif = 0;
                             if (onlyYMovement.Y > 0)
                             {
-                                yDif = ((otherBox.Box.MinY - Box.Size.Y) + 0.0000001f) - Box.MinY;
+                                yDif = otherGlobalBox.MinY - thisGlobalBox.MaxY + smallEpsilon;
+
+
+                                //Worked in old code like that, but is a bit complicated and did not work with class Transform...
+                                //yDif = ((otherGlobalBox.MinY - thisGlobalBox.Size.Y) + smallEpsilon) - thisGlobalBox.MinY;
                             }
                             else if (onlyYMovement.Y < 0)
                             {
-                                yDif = (otherBox.Box.MaxY - 0.0000001f) - Box.MinY;
+                                yDif = (otherGlobalBox.MaxY - smallEpsilon) - thisGlobalBox.MinY;
                             }
-                            transform.Position += new Vector2(0f, yDif);
+
+                            if(Math.Abs(yDif) <= Math.Abs(onlyYMovement.Y) + bigEpsilon)
+                            {
+                                Owner.Transform.Position += new Vector2(0f, yDif);
+                            }
                         }
                     }
                 }

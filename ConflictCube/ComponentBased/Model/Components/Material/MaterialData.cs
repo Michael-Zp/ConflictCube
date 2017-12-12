@@ -1,16 +1,17 @@
 ﻿using System.Drawing;
 using Zenseless.Geometry;
+using Zenseless.HLGL;
 using Zenseless.OpenGL;
 
 namespace ConflictCube.ComponentBased.Components
 {
     public class MaterialData
     {
-        public Texture Texture;
+        public ITexture Texture;
         public Box2D UVCoordinates;
         public Color Color;
 
-        public MaterialData(Texture texture, Box2D uvCoordinates, Color color)
+        public MaterialData(ITexture texture, Box2D uvCoordinates, Color color)
         {
             Texture = texture;
             UVCoordinates = uvCoordinates;

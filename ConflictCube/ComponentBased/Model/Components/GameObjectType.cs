@@ -12,6 +12,7 @@
         ColoredBox,
         Boundary,
         Scene,
-        UI
+        UI,
+        Default
     }
 }

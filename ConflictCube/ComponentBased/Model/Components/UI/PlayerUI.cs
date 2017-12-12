@@ -19,13 +19,18 @@ namespace ConflictCube.ComponentBased
         public PlayerUI(string name, Player player, Transform uiArea, GameObject parent) : base(name, uiArea, parent, GameObjectType.UI)
         {
             Player = player;
-            BackgroundLayer = new GameObject("BackgroundPlayerUI", new Transform(0, 0, 2, 2), this);
-            ForegroundLayer = new GameObject("ForegroundPlayerUI", new Transform(0, 0, 2, 2), this);
+            BackgroundLayer = new GameObject("BackgroundPlayerUI", new Transform(0, 0, 1, 1), this);
+            ForegroundLayer = new GameObject("ForegroundPlayerUI", new Transform(0, 0, 1, 1), this);
             
 
-            BackgroundLayer.AddChild(new Canvas("Canvas", new Transform(-1, -1, 2, 2), this, BackgroundMat));
+            BackgroundLayer.AddChild(new Canvas("Canvas", new Transform(0, 0, 1, 1), this, BackgroundMat));
             
-            ForegroundLayer.AddChild(new Canvas("Canvas", new Transform(-1, -1, 2, 2), this, PlayerAliveMat));
+            ForegroundLayer.AddChild(new Canvas("Canvas", new Transform(0, 0, 1, 1), this, null));
+            PlayerHealth = new Canvas("Health" + player.Name, new Transform(0, .85f, .8f, .05f), ForegroundLayer, PlayerAliveMat);
+            ForegroundLayer.AddChild(PlayerHealth);
+
+            AddChild(BackgroundLayer);
+            AddChild(ForegroundLayer);
         }
 
         public void UpdateUi()

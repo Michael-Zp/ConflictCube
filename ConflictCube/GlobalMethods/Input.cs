@@ -51,8 +51,11 @@ namespace ConflictCube.ComponentBased
         {
             foreach (Key key in KeyboardSettings.Keys)
             {
+                
+
                 bool keyIsPressed = Keyboard.GetState().IsKeyDown(key);
                 bool lastIsKeyPressed = LastState.IsKeyDown(key);
+
 
                 KeyboardSettings.TryGetValue(key, out InputKey input);
 
@@ -65,7 +68,7 @@ namespace ConflictCube.ComponentBased
                     SetInput(input, ButtonWasPressedDwon, false);
                     SetInput(input, ButtonIsPressed, true);
                 }
-                else if(keyIsPressed && !lastIsKeyPressed)
+                else if(!keyIsPressed && lastIsKeyPressed)
                 {
                     SetInput(input, ButtonIsPressed, false);
                     SetInput(input, ButtonWasReleased, true);
@@ -73,9 +76,9 @@ namespace ConflictCube.ComponentBased
                 else if (!keyIsPressed && !lastIsKeyPressed)
                 {
                     SetInput(input, ButtonWasReleased, false);
-
                 }
             }
+            LastState = Keyboard.GetState();
         }
 
         public static bool OnButtonDown(Key key)

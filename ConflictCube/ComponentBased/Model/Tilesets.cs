@@ -13,7 +13,7 @@ namespace ConflictCube.ComponentBased
 
         static Tilesets()
         {
-            FloorSheet = new SpriteSheet(TextureLoader.FromBitmap(TexturResource.FloorTileset), 2, 2);
+            FloorSheet  = new SpriteSheet(TextureLoader.FromBitmap(TexturResource.FloorTileset ), 2, 2);
             PlayerSheet = new SpriteSheet(TextureLoader.FromBitmap(TexturResource.PlayerTexture), 1, 1);
         }
 

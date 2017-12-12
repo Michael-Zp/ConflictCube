@@ -16,7 +16,7 @@ namespace ConflictCube.ComponentBased
             set {
                 _FloorRows = value;
                 
-                FloorTileSize.Y = 2 / _FloorRows;
+                FloorTileSize.Y = 1.0f / _FloorRows;
             }
         }
         private int _FloorColumns;
@@ -27,7 +27,7 @@ namespace ConflictCube.ComponentBased
             set {
                 _FloorColumns = value;
 
-                FloorTileSize.X = 2 / _FloorColumns;
+                FloorTileSize.X = 1.0f / _FloorColumns;
             }
         }
 
@@ -52,6 +52,7 @@ namespace ConflictCube.ComponentBased
         public void AddFloorTile(FloorTile floorTile, int y, int x)
         {
             FloorTiles[y, x] = floorTile;
+            AddChild(floorTile);
         }
 
         public Vector2 FindStartPosition()
@@ -67,9 +68,9 @@ namespace ConflictCube.ComponentBased
                     FloorTile tile = FloorTiles[i, u];
                     if (tile.Type == GameObjectType.Floor)
                     {
-                        Vector2 startPos = new Vector2(tile.Transform.Position.X, tile.Transform.Position.Y);
-                        startPos = Transform.TransformPointToParent(startPos);
-                        return startPos;
+                        Transform startPos = new Transform(tile.Transform.Position.X, tile.Transform.Position.Y, 0, 0);
+
+                        return Transform.TransformToGlobal(startPos).Position;
                     }
                 }
             }
@@ -80,15 +81,15 @@ namespace ConflictCube.ComponentBased
 
         public Transform BoxInFloorGrid(float row, float column)
         {
-            float posX = -1 + column * FloorTileSize.X;
-            float posY = -1 + ((FloorTiles.GetLength(0) - 1) - row) * FloorTileSize.Y;
+            float posX = -1 + column * (FloorTileSize.X * 2.0f) + FloorTileSize.X;
+            float posY = -1 + ((FloorTiles.GetLength(0) - 1) - row) * (FloorTileSize.Y * 2.0f) + FloorTileSize.Y;
 
             return new Transform(posX, posY, FloorTileSize.X, FloorTileSize.Y);
         }
 
         public Vector2 GetGridPosition(Vector2 position)
         {
-            Vector2 localPosition = Transform.TransformPointToLocal(position);
+            Vector2 localPosition = Transform.TransformToLocal(new Transform(position.X, position.Y, 0, 0)).Position;
             
             float xPos = (float)Math.Floor((localPosition.X + 1) / FloorTileSize.X);
             float yPos = (float)Math.Floor((localPosition.Y + 1) / FloorTileSize.Y);
@@ -108,10 +109,7 @@ namespace ConflictCube.ComponentBased
                 throw new Exception("Found no FloorTile for row: " + boxGridPosition.Y + " and column: " + boxGridPosition.X);
             }
             
-            Vector2 globalCenter = Transform.TransformPointToParent(localTransform.Position.X, localTransform.Position.Y);
-            Vector2 globalSize = Transform.TransformSizeToParent(localTransform.Size.X, localTransform.Size.Y);
-
-            return new Transform(globalCenter.X, globalCenter.Y, globalSize.X, globalSize.Y);
+            return localTransform.TransformToParent();
         }
 
         public Transform GetBoxAtPosition(Vector2 position)
@@ -124,14 +122,14 @@ namespace ConflictCube.ComponentBased
 
         private float GetColumnOfPosition(float xPos)
         {
-            Vector2 localPoint = Transform.TransformPointToLocal(xPos, 0);
+            Vector2 localPoint = Transform.TransformToLocal(new Transform(xPos, 0, 0, 0)).Position;
 
             return (float)Math.Floor(localPoint.X / FloorTileSize.X);
         }
 
         private float GetRowOfPosition(float yPos)
         {
-            Vector2 localPoint = Transform.TransformPointToLocal(0, yPos);
+            Vector2 localPoint = Transform.TransformToLocal(new Transform(0, yPos, 0, 0)).Position;
 
             return (float)Math.Floor(localPoint.X / FloorTileSize.X);
         }

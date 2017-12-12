@@ -1,19 +1,23 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using OpenTK;
 
 namespace ConflictCube.ComponentBased.Components
 {
     public class CollisionGroup
     {
-        public List<Collider> CollidersInGroup { get; private set; }
-
-        public static CollisionGroup DefaultCollisionGroup { get; private set; } = new CollisionGroup();
-
-        public CollisionGroup()
-        {
-            CollidersInGroup = new List<Collider>();
+        private List<Collider> _CollidersInGroup = new List<Collider>();
+        public List<Collider> CollidersInGroup {
+            get {
+                return _CollidersInGroup;
+            }
+            private set {
+                _CollidersInGroup = value;
+            }
         }
 
+        public static CollisionGroup DefaultCollisionGroup { get; private set; } = new CollisionGroup();
+        
         public void AddCollider(Collider collider)
         {
             CollidersInGroup.Add(collider);
@@ -30,7 +34,7 @@ namespace ConflictCube.ComponentBased.Components
 
         public void CheckCollisions(Collider collider, Vector2 movement)
         {
-            foreach(Collider other in CollidersInGroup)
+            foreach (Collider other in CollidersInGroup)
             {
                 if (other == collider)
                 {
