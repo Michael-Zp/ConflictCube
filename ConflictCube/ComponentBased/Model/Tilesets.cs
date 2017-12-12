@@ -1,45 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using Zenseless.HLGL;
+﻿using Zenseless.HLGL;
 using Zenseless.OpenGL;
-using Zenseless.Geometry;
 
 namespace ConflictCube.ComponentBased
 {
-    public static class Tilesets
+    public class Tilesets
     {
-        public static SpriteSheet FloorSheet;
-        public static SpriteSheet PlayerSheet;
+        public SpriteSheet FloorSheet;
+        public SpriteSheet PlayerSheet;
 
-        static Tilesets()
+        private static Tilesets TilesetsInstance = null;
+
+        public static Tilesets Instance()
         {
-            FloorSheet  = new SpriteSheet(TextureLoader.FromBitmap(TexturResource.FloorTileset ), 2, 2);
-            PlayerSheet = new SpriteSheet(TextureLoader.FromBitmap(TexturResource.PlayerTexture), 1, 1);
-        }
-
-        public static List<Tuple<Texture, Box2D>> GetAllTextures()
-        {
-            List<Tuple<Texture, Box2D>> textures = new List<Tuple<Texture, Box2D>>();
-
-            textures.AddRange(GetTexturesOfSheet(FloorSheet));
-            textures.AddRange(GetTexturesOfSheet(PlayerSheet));
-
-            return textures;
-        }
-
-        private static List<Tuple<Texture, Box2D>> GetTexturesOfSheet(SpriteSheet sheet)
-        {
-            List<Tuple<Texture, Box2D>> textures = new List<Tuple<Texture, Box2D>>();
-
-            for (uint col = 0; col < sheet.SpritesPerColumn; col++)
+            if(TilesetsInstance == null)
             {
-                for (uint row = 0; row < sheet.SpritesPerRow; row++)
-                {
-                    textures.Add(Tuple.Create((Texture)sheet.Tex, sheet.CalcSpriteTexCoords(col * sheet.SpritesPerColumn + row)));
-                }
+                TilesetsInstance = new Tilesets();
             }
+            return TilesetsInstance;
+        }
 
-            return textures;
+        private Tilesets()
+        {
+            FloorSheet = new SpriteSheet(TextureLoader.FromBitmap(TexturResource.FloorTileset), 2, 2);
+            PlayerSheet = new SpriteSheet(TextureLoader.FromBitmap(TexturResource.PlayerTexture), 1, 1);
         }
     }
 }

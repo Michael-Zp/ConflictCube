@@ -56,6 +56,13 @@ namespace ConflictCube.ComponentBased.Components
             Size = new Vector2(sizeX, sizeY);
             TransformMatrix.M33 = 1;
         }
+        public Transform(float centerX, float centerY, float sizeX, float sizeY, float vector) : this(centerX, centerY, sizeX, sizeY)
+        {
+            Position = new Vector2(centerX, centerY);
+            Size = new Vector2(sizeX, sizeY);
+            TransformMatrix.M33 = vector;
+        }
+
 
         public override void SetOwner(GameObject owner)
         {

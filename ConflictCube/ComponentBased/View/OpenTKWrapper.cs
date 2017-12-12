@@ -4,23 +4,38 @@ using Zenseless.Geometry;
 using System.Drawing;
 using Zenseless.OpenGL;
 using ConflictCube.ComponentBased.Components;
-using System;
 using Zenseless.HLGL;
 
 namespace ConflictCube.ComponentBased
 {
     class OpenTKWrapper
     {
-        public static Color StandardColor = Color.White;
+        public Color StandardColor = Color.White;
 
-        public static void DrawBox(Box2D rect, Color color)
+        private static OpenTKWrapper OpenTKWrapperInstance = null;
+
+        public static OpenTKWrapper Instance()
+        {
+            if(OpenTKWrapperInstance == null)
+            {
+                OpenTKWrapperInstance = new OpenTKWrapper();
+            }
+            return OpenTKWrapperInstance;
+        }
+
+        private OpenTKWrapper()
+        {
+            EnableTextures();
+        }
+
+        public void DrawBox(Box2D rect, Color color)
         {
             GL.Color3(color);
             DrawBoxVertices(rect);
             GL.Color3(Color.White);
         }
 
-        private static void DrawBoxVertices(Box2D rect)
+        private void DrawBoxVertices(Box2D rect)
         {
             GL.Begin(OpenGL.PrimitiveType.Quads);
             GL.Vertex2(rect.MinX, rect.MinY);
@@ -31,9 +46,9 @@ namespace ConflictCube.ComponentBased
         }
         
 
-        public static void DrawBoxWithTexture(Box2D rect, Texture texture)
+        public void DrawBoxWithTexture(Box2D rect, ITexture texture)
         {
-            GL.Enable(OpenGL.EnableCap.Texture2D);
+            GL.Color4(StandardColor);
             texture.Activate();
             GL.Begin(OpenGL.PrimitiveType.Quads);
             //Bottom left
@@ -54,7 +69,7 @@ namespace ConflictCube.ComponentBased
             GL.Disable(OpenGL.EnableCap.Texture2D);
         }
 
-        public static void DrawBoxWithAlphaChannel(Transform transform, Color color)
+        public void DrawBoxWithAlphaChannel(Transform transform, Color color)
         {
             EnableAlphaChannel();
 
@@ -81,7 +96,7 @@ namespace ConflictCube.ComponentBased
             DisableAlphaChannel();
         }
 
-        public static void DrawBoxWithTextureAndAlphaChannel(Transform transform, ITexture texture, Box2D uVCoordinates, Color color)
+        public void DrawBoxWithTextureAndAlphaChannel(Transform transform, ITexture texture, Box2D uVCoordinates, Color color)
         {
             EnableAlphaChannel();
 
@@ -116,14 +131,14 @@ namespace ConflictCube.ComponentBased
             DisableAlphaChannel();
         }
 
-        public static void DrawBoxWithTextureAndAlphaChannel(Box2D rect, Texture texture)
+        public void DrawBoxWithTextureAndAlphaChannel(Box2D rect, Texture texture)
         {
             EnableAlphaChannel();
             DrawBoxWithTexture(rect, texture);
             DisableAlphaChannel();
         }
 
-        public static void DrawBoxWithAlpha(Box2D rect, Color color)
+        public void DrawBoxWithAlpha(Box2D rect, Color color)
         {
             EnableAlphaChannel();
             GL.Color4(color);
@@ -132,15 +147,20 @@ namespace ConflictCube.ComponentBased
         }
 
 
-        private static void EnableAlphaChannel()
+        private void EnableAlphaChannel()
         {
             GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactorSrc.SrcAlpha, OpenGL.BlendingFactorDest.OneMinusSrcAlpha);
         }
 
-        private static void DisableAlphaChannel()
+        private void DisableAlphaChannel()
         {
             GL.Disable(OpenGL.EnableCap.Blend);
+        }
+
+        private void EnableTextures()
+        {
+            GL.Enable(OpenGL.EnableCap.Texture2D);
         }
     }
 }
