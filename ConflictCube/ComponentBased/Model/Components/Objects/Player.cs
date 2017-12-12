@@ -100,6 +100,11 @@ namespace ConflictCube.ComponentBased
         /// <param name="moveVector"></param>
         public void Move(Vector2 moveVector)
         {
+            Transform moveTransform = new Transform(0, 0, 1, 1, 0);
+            moveTransform.Position = moveVector;
+            moveTransform = Transform.TransformToGlobal(moveTransform);
+            moveVector = moveTransform.Position;
+
             if (!CanMove())
             {
                 return;
@@ -156,11 +161,15 @@ namespace ConflictCube.ComponentBased
         public override void OnCollision(Collider other)
         {
             Console.WriteLine("Player collided with: " + other.Type.ToString());
-            if (other.Type == CollisionType.LeftBoundary || other.Type == CollisionType.RightBoundary || other.Type == CollisionType.TopBoundary || other.Type == CollisionType.Wall)
+            if (other.Type == CollisionType.LeftBoundary   || 
+                other.Type == CollisionType.RightBoundary  || 
+                other.Type == CollisionType.TopBoundary    || 
+                other.Type == CollisionType.BottomBoundary || 
+                other.Type == CollisionType.Wall)
             {
 
             }
-            else if (other.Type == CollisionType.BottomBoundary || other.Type == CollisionType.Hole)
+            else if (other.Type == CollisionType.Hole)
             {
                 IsAlive = false;
             }

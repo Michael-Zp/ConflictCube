@@ -35,7 +35,7 @@ namespace ConflictCube.ComponentBased
         public void InitializePlayers()
         {
             Players = new List<Player>();
-            Material playerMat = new Material((Texture)Tilesets.PlayerSheet.Tex, Tilesets.PlayerSheet.CalcSpriteTexCoords(0), Color.Black);
+            Material playerMat = new Material((Texture)Tilesets.Instance().PlayerSheet.Tex, Tilesets.Instance().PlayerSheet.CalcSpriteTexCoords(0), Color.White);
 
             Floor currentFloor = null;
             foreach(GameObject child in Scene.Children)

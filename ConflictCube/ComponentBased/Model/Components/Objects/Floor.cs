@@ -32,8 +32,11 @@ namespace ConflictCube.ComponentBased
         }
 
         public FloorTile[,] FloorTiles { get; set; }
+        public float FloorBreakdownInterval { get; set; } = 3.0f;
 
-        private float TotalMovedDistanceDown = 0;
+
+        private int FloorRowsBrokeDown = 0;
+        private float LastFloorBreakdownTime = 0;
 
         //floorSize is the size of the whole floor and not only the part which should be shown.
         public Floor(string name, Transform transform, GameObject parent, int rows, int columns) : base(name, transform, parent)
@@ -43,9 +46,28 @@ namespace ConflictCube.ComponentBased
             FloorColumns = columns;
         }
 
-        public void MoveFloorUp(float distance)
+        public override void OnUpdate()
         {
-            //Will be replaced.
+            //MoveFloorUp();
+        }
+
+        public void MoveFloorUp()
+        {
+            if(Time.Time.CurrentTime - LastFloorBreakdownTime > FloorBreakdownInterval)
+            {
+                LastFloorBreakdownTime = Time.Time.CurrentTime;
+                //Break down floor
+
+                int lastFloorRowIndex = FloorTiles.GetLength(0) - 1;
+                int indexRowToBreakDown = lastFloorRowIndex - FloorRowsBrokeDown;
+
+                for (int i = 0; i < FloorColumns; i++)
+                {
+                    FloorTiles[indexRowToBreakDown, i].ChangeFloorTile(GameObjectType.Hole);                    
+                }
+
+                FloorRowsBrokeDown++;
+            }
         }
 
 
@@ -57,8 +79,7 @@ namespace ConflictCube.ComponentBased
 
         public Vector2 FindStartPosition()
         {
-            int TilesNotVisibleAnymore = (int)Math.Floor(TotalMovedDistanceDown / FloorTileSize.Y);
-            int LowestRow = FloorTiles.GetLength(0) - TilesNotVisibleAnymore;
+            int LowestRow = FloorTiles.GetLength(0);
             int LowestRowIndex = LowestRow - 1;
 
             for (int i = LowestRowIndex; i >= 0; i--)

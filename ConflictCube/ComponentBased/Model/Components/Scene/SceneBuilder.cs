@@ -1,5 +1,5 @@
 ﻿using ConflictCube.ComponentBased.Components;
-using System.Collections.Generic;
+using ConflictCube.ComponentBased.Components.Objects.Tiles;
 using System.Drawing;
 using Zenseless.Geometry;
 
@@ -10,14 +10,13 @@ namespace ConflictCube.ComponentBased
         public static GameObject BuildScene(string level, Transform sceneTransform)
         {
             GameObject scene = new GameObject("Scene", sceneTransform, null, GameObjectType.Scene);
+            
+            FloorTile.FloorTileMaterials.Add(GameObjectType.Finish, new Material(Tilesets.Instance().FloorSheet.Tex, new Box2D(Tilesets.Instance().FloorSheet.CalcSpriteTexCoords(0)), Color.White));
+            FloorTile.FloorTileMaterials.Add(GameObjectType.Floor,  new Material(Tilesets.Instance().FloorSheet.Tex, new Box2D(Tilesets.Instance().FloorSheet.CalcSpriteTexCoords(1)), Color.White));
+            FloorTile.FloorTileMaterials.Add(GameObjectType.Hole,   new Material(Tilesets.Instance().FloorSheet.Tex, new Box2D(Tilesets.Instance().FloorSheet.CalcSpriteTexCoords(2)), Color.White));
+            FloorTile.FloorTileMaterials.Add(GameObjectType.Wall,   new Material(Tilesets.Instance().FloorSheet.Tex, new Box2D(Tilesets.Instance().FloorSheet.CalcSpriteTexCoords(3)), Color.White));
 
-            Dictionary<GameObjectType, Material> floorMaterials = new Dictionary<GameObjectType, Material>();
-            floorMaterials.Add(GameObjectType.Finish, new Material(Tilesets.FloorSheet.Tex, new Box2D(Tilesets.FloorSheet.CalcSpriteTexCoords(0)), Color.Blue));
-            floorMaterials.Add(GameObjectType.Floor,  new Material(Tilesets.FloorSheet.Tex, new Box2D(Tilesets.FloorSheet.CalcSpriteTexCoords(1)), Color.Yellow));
-            floorMaterials.Add(GameObjectType.Hole,   new Material(Tilesets.FloorSheet.Tex, new Box2D(Tilesets.FloorSheet.CalcSpriteTexCoords(2)), Color.Red));
-            floorMaterials.Add(GameObjectType.Wall,   new Material(Tilesets.FloorSheet.Tex, new Box2D(Tilesets.FloorSheet.CalcSpriteTexCoords(3)), Color.Orange));
-
-            scene.AddChild(FloorLoader.Instance(level, "Floor", new Transform(0, 0, 1, 1), scene, floorMaterials));
+            scene.AddChild(FloorLoader.Instance(level, "Floor", new Transform(0, 0, 1, 1), scene));
             scene.AddChild(Boundaries());
 
             return scene;

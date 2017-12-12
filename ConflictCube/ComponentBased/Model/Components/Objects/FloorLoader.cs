@@ -7,14 +7,14 @@ namespace ConflictCube.ComponentBased
 {
     public static class FloorLoader
     {
-        public static Floor Instance(string levelData, string floorName, Transform areaOfFloor, GameObject parent, Dictionary<GameObjectType, Material> materials)
+        public static Floor Instance(string levelData, string floorName, Transform areaOfFloor, GameObject parent)
         {
             GameObjectType[,] FloorTiles = GetFloorDataFromLevelfile(levelData, out int rows, out int columns);
 
-            return LoadFloor(rows, columns, FloorTiles, floorName, areaOfFloor, parent, materials);
+            return LoadFloor(rows, columns, FloorTiles, floorName, areaOfFloor, parent);
         }
 
-        private static Floor LoadFloor(int levelRows, int levelColumns, GameObjectType[,] floorTiles, string name, Transform areaOfFloor, GameObject parent, Dictionary<GameObjectType, Material> materials)
+        private static Floor LoadFloor(int levelRows, int levelColumns, GameObjectType[,] floorTiles, string name, Transform areaOfFloor, GameObject parent)
         {
             Floor floorOfLevel = new Floor(name, areaOfFloor, parent, levelRows, levelColumns);
 
@@ -23,32 +23,10 @@ namespace ConflictCube.ComponentBased
                 for (int column = 0; column < levelColumns; column++)
                 {
                     Transform tileTransform = floorOfLevel.BoxInFloorGrid(row, column);
-
-                    Material material;
-                    try
-                    {
-                        materials.TryGetValue(floorTiles[row, column], out material);
-                    }
-                    catch(Exception)
-                    {
-                        throw new Exception("Did not found material for floor type: " + floorTiles[row, column].ToString());
-                    }
-
+                    
                     string tileName = "FloorTile, " + floorTiles.ToString() + " row: " + row + " column: " + column;
-                    FloorTile floorTile = new FloorTile(row, column, tileName, tileTransform, material, parent, floorTiles[row, column]);
+                    FloorTile floorTile = new FloorTile(row, column, tileName, tileTransform, parent, floorTiles[row, column]);
 
-                    if(floorTiles[row, column] == GameObjectType.Wall)
-                    {
-                        floorTile.AddComponent(new BoxCollider(new Transform(0, 0, 1, 1), false, null, CollisionType.Wall));
-                    }
-                    else if(floorTiles[row, column] == GameObjectType.Hole)
-                    {
-                        floorTile.AddComponent(new BoxCollider(new Transform(0, 0, .8f, .8f), false, null, CollisionType.Hole));
-                    }
-                    else if(floorTiles[row, column] == GameObjectType.Finish)
-                    {
-                        floorTile.AddComponent(new BoxCollider(new Transform(0, 0, 1, 1), true, null, CollisionType.Finish));
-                    }
 
                     floorOfLevel.AddFloorTile(floorTile, row, column);
                 }
