@@ -35,8 +35,8 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="NAudio, Version=1.8.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\NAudio.1.8.3\lib\net35\NAudio.dll</HintPath>
+    <Reference Include="NAudio, Version=1.8.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\NAudio.1.8.4\lib\net35\NAudio.dll</HintPath>
     </Reference>
     <Reference Include="OpenTK, Version=3.0.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
       <HintPath>..\packages\OpenTK.3.0.0-pre\lib\net20\OpenTK.dll</HintPath>
@@ -52,60 +52,99 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
     <Reference Include="Zenseless.Application, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Zenseless.0.3.11\lib\net46\Zenseless.Application.dll</HintPath>
+      <HintPath>..\packages\Zenseless.0.3.126\lib\net46\Zenseless.Application.dll</HintPath>
     </Reference>
     <Reference Include="Zenseless.Base, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Zenseless.0.3.11\lib\net46\Zenseless.Base.dll</HintPath>
+      <HintPath>..\packages\Zenseless.0.3.126\lib\net46\Zenseless.Base.dll</HintPath>
     </Reference>
-    <Reference Include="Zenseless.Geometry, Version=0.2.0.3901, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Zenseless.0.3.11\lib\net46\Zenseless.Geometry.dll</HintPath>
+    <Reference Include="Zenseless.Geometry, Version=0.2.0.7490, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Zenseless.0.3.126\lib\net46\Zenseless.Geometry.dll</HintPath>
     </Reference>
     <Reference Include="Zenseless.HLGL, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Zenseless.0.3.11\lib\net46\Zenseless.HLGL.dll</HintPath>
+      <HintPath>..\packages\Zenseless.0.3.126\lib\net46\Zenseless.HLGL.dll</HintPath>
     </Reference>
     <Reference Include="Zenseless.OpenGL, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Zenseless.0.3.11\lib\net46\Zenseless.OpenGL.dll</HintPath>
+      <HintPath>..\packages\Zenseless.0.3.126\lib\net46\Zenseless.OpenGL.dll</HintPath>
     </Reference>
     <Reference Include="Zenseless.ShaderDebugging, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Zenseless.0.3.11\lib\net46\Zenseless.ShaderDebugging.dll</HintPath>
+      <HintPath>..\packages\Zenseless.0.3.126\lib\net46\Zenseless.ShaderDebugging.dll</HintPath>
     </Reference>
     <Reference Include="Zenseless.Sound, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Zenseless.0.3.11\lib\net46\Zenseless.Sound.dll</HintPath>
+      <HintPath>..\packages\Zenseless.0.3.126\lib\net46\Zenseless.Sound.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controller\Input.cs" />
-    <Compile Include="Controller\GameController.cs" />
-    <Compile Include="Controller\ViewModel.cs" />
+    <Compile Include="ComponentBased\Controller\GameController.cs" />
+    <Compile Include="ComponentBased\Controller\InputKey.cs" />
+    <Compile Include="ComponentBased\Controller\ViewModel.cs" />
+    <Compile Include="ComponentBased\Model\Components\Colliders\CollisionGroup.cs" />
+    <Compile Include="ComponentBased\Model\Components\GameCallbacks.cs" />
+    <Compile Include="ComponentBased\Model\Components\Scene\SceneBuilder.cs" />
+    <Compile Include="ComponentBased\Model\Components\Material\MaterialData.cs" />
+    <Compile Include="ComponentBased\Model\Components\Material\Materials.cs" />
+    <Compile Include="ComponentBased\Model\Components\Objects\ColoredBox.cs" />
+    <Compile Include="ComponentBased\Model\Components\Objects\Floor.cs" />
+    <Compile Include="ComponentBased\Model\Components\Objects\FloorLoader.cs" />
+    <Compile Include="ComponentBased\Model\Components\Objects\Player.cs" />
+    <Compile Include="ComponentBased\Model\Components\Objects\Tiles\FloorTile.cs" />
+    <Compile Include="ComponentBased\Model\Components\GameObjectType.cs" />
+    <Compile Include="ComponentBased\Model\Components\Objects\Boundary.cs" />
+    <Compile Include="ComponentBased\Model\Components\UI\Canvas.cs" />
+    <Compile Include="ComponentBased\Model\Components\UI\PlayerUI.cs" />
+    <Compile Include="ComponentBased\Levels.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Levels.resx</DependentUpon>
+    </Compile>
+    <Compile Include="ComponentBased\Program.cs" />
+    <Compile Include="ComponentBased\TexturResource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TexturResource.resx</DependentUpon>
+    </Compile>
+    <Compile Include="ComponentBased\Model\Tilesets.cs" />
+    <Compile Include="ComponentBased\Model\GameState.cs" />
+    <Compile Include="ComponentBased\View\GameView.cs" />
+    <Compile Include="ComponentBased\View\MyWindow.cs" />
+    <Compile Include="ComponentBased\View\OpenTKWrapper.cs" />
+    <Compile Include="ComponentBased\View\ZenselessWrapper.cs" />
+    <Compile Include="GlobalMethods\Input.cs" />
     <Compile Include="GlobalMethods\Time.cs" />
-    <Compile Include="Model\Collision\ICollidable.cs" />
-    <Compile Include="Model\Collision\CollisionGroup.cs" />
-    <Compile Include="Model\Input\InputManager.cs" />
-    <Compile Include="Model\Level\Boundary.cs" />
-    <Compile Include="Model\Level\Level.cs" />
-    <Compile Include="Model\Level\LevelBuilder.cs" />
-    <Compile Include="Model\GameState.cs" />
-    <Compile Include="Model\Objects\ColoredBox.cs" />
-    <Compile Include="Model\Objects\FloorLoader.cs" />
-    <Compile Include="Model\Movement\IMoveable.cs" />
-    <Compile Include="Model\Objects\Player.cs" />
-    <Compile Include="Model\Objects\Floor.cs" />
-    <Compile Include="Model\Renderable\RenderableLayer.cs" />
-    <Compile Include="Model\Renderable\RenderableObject.cs" />
-    <Compile Include="Model\Objects\Tiles\Tiles.cs" />
-    <Compile Include="Model\Objects\Tiles\Tileset.cs" />
-    <Compile Include="Model\UI\PlayerUI.cs" />
-    <Compile Include="View\GameView.cs" />
-    <Compile Include="View\MyWindow.cs" />
-    <Compile Include="View\OpenTKWrapper.cs" />
-    <Compile Include="View\ZenselessWrapper.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="ComponentBased\Model\Components\Colliders\BoxCollider.cs" />
+    <Compile Include="ComponentBased\Model\Components\Colliders\Collider.cs" />
+    <Compile Include="ComponentBased\Model\Components\Component.cs" />
+    <Compile Include="ComponentBased\Model\Components\GameObject.cs" />
+    <Compile Include="ComponentBased\Model\Components\Material\Material.cs" />
+    <Compile Include="ComponentBased\Model\Components\Transform\Transform.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="OpenTK.dll.config" />
     <None Include="packages.config" />
+    <None Include="Resources\Level0.csv" />
+    <None Include="Resources\level1.csv" />
+    <None Include="Resources\Level2.csv" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ComponentBased\Levels.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Levels.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ComponentBased\TexturResource.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>TexturResource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\FloorSpriteSheet.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Tileset.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Player.gif" />
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
