@@ -49,8 +49,10 @@ namespace ConflictCube.ComponentBased
 
         public override void OnUpdate()
         {
-            Vector2 moveVector = new Vector2(0, 0);
-            if (Input.OnButtonIsPressed(InputKey.PlayerOneMoveUp))
+            Vector2 moveVector = new Vector2(Input.GetAxis(InputAxis.Horizontal), Input.GetAxis(InputAxis.Vertical));
+            moveVector *= Speed;
+
+            /*if (Input.OnButtonIsPressed(InputKey.PlayerOneMoveUp))
             {
                 moveVector.Y += Speed;
             }
@@ -68,7 +70,7 @@ namespace ConflictCube.ComponentBased
             if (Input.OnButtonIsPressed(InputKey.PlayerOneMoveLeft))
             {
                 moveVector.X -= Speed;
-            }
+            }*/
 
             Move(moveVector);
         }

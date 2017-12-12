@@ -4,9 +4,29 @@ using System;
 
 namespace ConflictCube.ComponentBased
 {
+    public enum InputAxis
+    {
+        Horizontal,
+        Vertical
+    }
+
+    public struct AxisData
+    {
+        public InputKey PositiveKey;
+        public InputKey NegativeKey;
+
+        public AxisData(InputKey positiveKey, InputKey negativeKey)
+        {
+            PositiveKey = positiveKey;
+            NegativeKey = negativeKey;
+        }
+    }
+
     public static class Input
     {
         public static Dictionary<Key, InputKey> KeyboardSettings = new Dictionary<Key, InputKey>();
+        public static Dictionary<InputAxis, float> Axes = new Dictionary<InputAxis, float>();
+        public static Dictionary<InputAxis, AxisData> AxesSettings = new Dictionary<InputAxis, AxisData>();
 
         public static Dictionary<InputKey, bool> ButtonWasPressedDwon = new Dictionary<InputKey, bool>();
         public static Dictionary<InputKey, bool> ButtonIsPressed = new Dictionary<InputKey, bool>();
@@ -44,6 +64,14 @@ namespace ConflictCube.ComponentBased
             KeyboardSettings.Add(Key.Keypad5, InputKey.PlayerTwoMoveDown);
             KeyboardSettings.Add(Key.Keypad7, InputKey.PlayerTwoThrowMode);
             KeyboardSettings.Add(Key.Keypad9, InputKey.PlayerTwoUseMode);
+
+
+            //Axes
+            AxesSettings.Add(InputAxis.Horizontal, new AxisData(InputKey.PlayerOneMoveRight, InputKey.PlayerOneMoveLeft));
+            AxesSettings.Add(InputAxis.Vertical, new AxisData(InputKey.PlayerOneMoveUp, InputKey.PlayerOneMoveDown));
+
+            Axes.Add(InputAxis.Horizontal, 0f);
+            Axes.Add(InputAxis.Vertical, 0f);
         }
 
 
@@ -51,8 +79,6 @@ namespace ConflictCube.ComponentBased
         {
             foreach (Key key in KeyboardSettings.Keys)
             {
-                
-
                 bool keyIsPressed = Keyboard.GetState().IsKeyDown(key);
                 bool lastIsKeyPressed = LastState.IsKeyDown(key);
 
@@ -78,8 +104,89 @@ namespace ConflictCube.ComponentBased
                     SetInput(input, ButtonWasReleased, false);
                 }
             }
+
+            UpdateAxes();
+
             LastState = Keyboard.GetState();
         }
+
+        private static void UpdateAxes()
+        {
+            UpdateAxis(InputAxis.Horizontal);
+            UpdateAxis(InputAxis.Vertical);
+        }
+
+        private static void UpdateAxis(InputAxis axis)
+        {
+            AxesSettings.TryGetValue(axis, out AxisData data);
+
+            bool foundPositiveKey = false, foundNegativeKey = false;
+            Key positveKey = Key.A, negativeKey = Key.B; //Keys have to be initialized to be used later. If they are not found in the axis data there is an early exist, so Key.A and Key.B are only spaceholders.
+
+            foreach (Key key in KeyboardSettings.Keys)
+            {
+                KeyboardSettings.TryGetValue(key, out InputKey inputKey);
+
+                if (inputKey == data.PositiveKey)
+                {
+                    foundPositiveKey = true;
+                    positveKey = key;
+                    if (foundNegativeKey)
+                        break;
+                }
+
+                if (inputKey == data.NegativeKey)
+                {
+                    foundNegativeKey = true;
+                    negativeKey = key;
+                    if (foundPositiveKey)
+                        break;
+                }
+            }
+
+            if (!foundPositiveKey || !foundNegativeKey)
+            {
+                return;
+            }
+
+            Axes.TryGetValue(axis, out float currentValue);
+
+            bool positivePressed = Keyboard.GetState().IsKeyDown(positveKey);
+            bool negativePressed = Keyboard.GetState().IsKeyDown(negativeKey);
+
+            if (!positivePressed && !negativePressed)
+            {
+                currentValue = 0;
+            }
+            else if (!positivePressed && negativePressed)
+            {
+                if (currentValue > 0)
+                {
+                    currentValue = 0;
+                }
+                currentValue -= .1f;
+            }
+            else if (positivePressed && !negativePressed)
+            {
+                if (currentValue < 0)
+                {
+                    currentValue = 0;
+                }
+                currentValue += .1f;
+            }
+            else if (positivePressed && negativePressed)
+            {
+                currentValue = 0;
+            }
+
+            currentValue = Zenseless.Geometry.MathHelper.Clamp(currentValue, -1, 1);
+
+            Console.WriteLine(currentValue);
+
+            Axes.Remove(axis);
+            Axes.Add(axis, currentValue);
+        }
+
 
         public static bool OnButtonDown(Key key)
         {
@@ -133,6 +240,13 @@ namespace ConflictCube.ComponentBased
             {
                 return false;
             }
+        }
+
+        public static float GetAxis(InputAxis axis)
+        {
+            Axes.TryGetValue(axis, out float currentValue);
+
+            return currentValue;
         }
 
         private static void SetInput(InputKey input, Dictionary<InputKey, bool> mode, bool state)
