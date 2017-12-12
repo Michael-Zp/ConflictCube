@@ -10,6 +10,10 @@ namespace ConflictCube.ComponentBased
         public bool IsAlive { get; private set; }
         public bool ThrowMode { get; set; } = false;
         public bool UseMode { get; set; } = false;
+        public float MaxSprintEnergy = 100;
+        public float CurrentSprintEnergy = 100;
+        public float UsedSprintEnergyPerSecond = 100;
+        public float RegeneratSprintEnergyPerSecond = 20;
         
         private Transform _ThrowUseField { get; set; }
         public Transform ThrowUseField {
@@ -50,7 +54,21 @@ namespace ConflictCube.ComponentBased
         public override void OnUpdate()
         {
             Vector2 moveVector = new Vector2(Input.GetAxis(InputAxis.Horizontal), Input.GetAxis(InputAxis.Vertical));
-            moveVector *= Speed;
+
+            if((Input.OnButtonIsPressed(InputKey.PlayerOneSprint) || Input.OnButtonDown(InputKey.PlayerOneSprint)) && CurrentSprintEnergy > UsedSprintEnergyPerSecond * Time.Time.DifTime)
+            {
+                moveVector *= (Speed * 2);
+                CurrentSprintEnergy -= UsedSprintEnergyPerSecond * Time.Time.DifTime;
+            }
+            else
+            {
+                moveVector *= Speed;
+                CurrentSprintEnergy += RegeneratSprintEnergyPerSecond * Time.Time.DifTime;
+            }
+
+            CurrentSprintEnergy = MathHelper.Clamp(CurrentSprintEnergy, 0, MaxSprintEnergy);
+
+            Console.WriteLine(CurrentSprintEnergy);
 
             /*if (Input.OnButtonIsPressed(InputKey.PlayerOneMoveUp))
             {

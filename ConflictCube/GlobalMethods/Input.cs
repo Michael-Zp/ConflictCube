@@ -46,6 +46,7 @@ namespace ConflictCube.ComponentBased
             KeyboardSettings.Add(Key.S, InputKey.PlayerOneMoveDown);
             KeyboardSettings.Add(Key.Q, InputKey.PlayerOneThrowMode);
             KeyboardSettings.Add(Key.E, InputKey.PlayerOneUseMode);
+            KeyboardSettings.Add(Key.LShift, InputKey.PlayerOneSprint);
 
 
             //Player 2

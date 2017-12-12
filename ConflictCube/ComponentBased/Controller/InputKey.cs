@@ -14,6 +14,7 @@
         PlayerTwoMoveUp,
         PlayerTwoMoveDown,
         PlayerTwoThrowMode,
-        PlayerTwoUseMode
+        PlayerTwoUseMode,
+        PlayerOneSprint
     }
 }
