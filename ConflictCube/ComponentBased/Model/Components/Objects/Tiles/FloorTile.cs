@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Drawing;
+using Zenseless.Geometry;
 
 namespace ConflictCube.ComponentBased.Components.Objects.Tiles
 {
@@ -9,13 +11,30 @@ namespace ConflictCube.ComponentBased.Components.Objects.Tiles
         public int Row { get; private set; }
         public int Column { get; private set; }
 
-        public FloorTile(int row, int column, string name, Transform transform, GameObject parent, GameObjectType type) : base(name, transform, parent, type)
+        private static bool MaterialsAreInitialized = false;
+        private Floor FloorOfTile;
+
+        private static void InitalizeMaterials()
         {
+            FloorTileMaterials.Add(GameObjectType.Finish, new Material(Tilesets.Instance().FloorSheet.Tex, new Box2D(Tilesets.Instance().FloorSheet.CalcSpriteTexCoords(0)), Color.White));
+            FloorTileMaterials.Add(GameObjectType.Floor, new Material(Tilesets.Instance().FloorSheet.Tex, new Box2D(Tilesets.Instance().FloorSheet.CalcSpriteTexCoords(1)), Color.White));
+            FloorTileMaterials.Add(GameObjectType.Hole, new Material(Tilesets.Instance().FloorSheet.Tex, new Box2D(Tilesets.Instance().FloorSheet.CalcSpriteTexCoords(2)), Color.White));
+            FloorTileMaterials.Add(GameObjectType.Wall, new Material(Tilesets.Instance().FloorSheet.Tex, new Box2D(Tilesets.Instance().FloorSheet.CalcSpriteTexCoords(3)), Color.White));
+        }
+
+        public FloorTile(int row, int column, string name, Transform transform, GameObject parent, GameObjectType type, Floor FloorOfTile) : base(name, transform, parent, type)
+        {
+            if(!MaterialsAreInitialized)
+            {
+                InitalizeMaterials();
+                MaterialsAreInitialized = true;
+            }
+
             Row = row;
             Column = column;
 
             AddMaterialOnCreate();
-            AddColliderOnCreate();
+            AddColliderOnCreate(FloorOfTile.CollisionGroup);
         }
 
         private void AddMaterialOnCreate()
@@ -25,19 +44,19 @@ namespace ConflictCube.ComponentBased.Components.Objects.Tiles
             AddComponent(material);
         }
 
-        private void AddColliderOnCreate()
+        private void AddColliderOnCreate(CollisionGroup group)
         {
             if (Type == GameObjectType.Wall)
             {
-                AddComponent(new BoxCollider(new Transform(0, 0, 1, 1), false, null, CollisionType.Wall));
+                AddComponent(new BoxCollider(new Transform(0, 0, 1, 1), false, group, CollisionType.Wall));
             }
             else if (Type == GameObjectType.Hole)
             {
-                AddComponent(new BoxCollider(new Transform(0, 0, .8f, .8f), false, null, CollisionType.Hole));
+                AddComponent(new BoxCollider(new Transform(0, 0, .8f, .8f), false, group, CollisionType.Hole));
             }
             else if (Type == GameObjectType.Finish)
             {
-                AddComponent(new BoxCollider(new Transform(0, 0, 1, 1), true, null, CollisionType.Finish));
+                AddComponent(new BoxCollider(new Transform(0, 0, 1, 1), true, group, CollisionType.Finish));
             }
         }
 
@@ -54,7 +73,7 @@ namespace ConflictCube.ComponentBased.Components.Objects.Tiles
             Type = TypeToTransformTo;
 
             AddMaterialOnCreate();
-            AddColliderOnCreate();
+            AddColliderOnCreate(FloorOfTile.CollisionGroup);
         }
 
         public override GameObject Clone()

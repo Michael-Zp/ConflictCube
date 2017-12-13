@@ -1,4 +1,5 @@
 ﻿using OpenTK;
+using System;
 using Zenseless.Geometry;
 
 namespace ConflictCube.ComponentBased.Components
@@ -83,19 +84,31 @@ namespace ConflictCube.ComponentBased.Components
             return newTransform;
         }
 
+
+        /*
+         * Game * P1A * Scene * Floor * Local = Global
+         * Local = (((Floor^-1 * Scene^-1) * P1A^-1) * Game^-1) * Global
+         */
+
         public Transform TransformToLocal(Transform transformToLocal)
         {
+            if(Owner == null || Owner.Parent == null)
+            {
+                return transformToLocal;
+            }
+
             GameObject currentOwner = Owner.Parent;
-            Matrix3 currentTransform = transformToLocal.TransformMatrix;
+            Matrix3 currentTransform = Owner.Transform.TransformMatrix;
+            
 
             while (currentOwner != null)
             {
-                currentTransform = currentOwner.Transform.TransformMatrix.Inverted() * currentTransform;
+                currentTransform = currentTransform.Inverted() * currentOwner.Transform.TransformMatrix.Inverted();
                 currentOwner = currentOwner.Parent;
             }
 
             Transform newTransform = (Transform)Clone();
-            newTransform.TransformMatrix = currentTransform;
+            newTransform.TransformMatrix = currentTransform * transformToLocal.TransformMatrix;
 
             return newTransform;
         }
@@ -171,4 +184,6 @@ namespace ConflictCube.ComponentBased.Components
             return new Transform(transform.TransformMatrix * other.TransformMatrix);
         }
     }
+
+
 }

@@ -44,10 +44,6 @@ namespace ConflictCube.ComponentBased.Components
 
         public override void StandardCollision(Collider other, Transform transform, Vector2 movement)
         {
-            if(other.Type == CollisionType.Wall)
-            {
-                Console.WriteLine("Coll with wall. Use as break point");
-            }
             if(!IsTrigger && !other.IsTrigger)
             {
                 if (other is BoxCollider)

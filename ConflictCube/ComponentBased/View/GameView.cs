@@ -37,8 +37,7 @@ namespace ConflictCube.ComponentBased
         public void Render(ViewModel viewModel)
         {
             ClearScreen();
-            RenderGameObject(viewModel.Scene);
-            RenderGameObject(viewModel.UI);            
+            RenderGameObject(viewModel.Game);         
         }
 
         private void RenderGameObject(GameObject currentObject)

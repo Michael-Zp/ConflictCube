@@ -6,13 +6,15 @@
         Wall,
         Hole,
         Finish,
-        Player,
         Background,
         Text,
         ColoredBox,
         Boundary,
         Scene,
         UI,
-        Default
+        Default,
+        Player1,
+        Player2,
+        GhostPlayer
     }
 }

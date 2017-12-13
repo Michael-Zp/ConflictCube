@@ -79,6 +79,7 @@
     <Compile Include="ComponentBased\Controller\ViewModel.cs" />
     <Compile Include="ComponentBased\Model\Components\Colliders\CollisionGroup.cs" />
     <Compile Include="ComponentBased\Model\Components\GameCallbacks.cs" />
+    <Compile Include="ComponentBased\Model\Components\Objects\GhostPlayer.cs" />
     <Compile Include="ComponentBased\Model\Components\Scene\SceneBuilder.cs" />
     <Compile Include="ComponentBased\Model\Components\Material\MaterialData.cs" />
     <Compile Include="ComponentBased\Model\Components\Material\Materials.cs" />

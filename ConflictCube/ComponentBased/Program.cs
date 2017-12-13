@@ -1,6 +1,4 @@
 ﻿using ConflictCube.ComponentBased.Controller;
-using Zenseless.Geometry;
-using Zenseless.OpenGL;
 
 namespace ConflictCube.ComponentBased
 {

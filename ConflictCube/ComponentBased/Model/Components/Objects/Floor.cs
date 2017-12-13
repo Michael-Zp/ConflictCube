@@ -33,17 +33,19 @@ namespace ConflictCube.ComponentBased
 
         public FloorTile[,] FloorTiles { get; set; }
         public float FloorBreakdownInterval { get; set; } = 3.0f;
+        public CollisionGroup CollisionGroup;
 
 
         private int FloorRowsBrokeDown = 0;
         private float LastFloorBreakdownTime = 0;
 
         //floorSize is the size of the whole floor and not only the part which should be shown.
-        public Floor(string name, Transform transform, GameObject parent, int rows, int columns) : base(name, transform, parent)
+        public Floor(string name, Transform transform, GameObject parent, int rows, int columns, CollisionGroup group) : base(name, transform, parent)
         {
             FloorTiles = new FloorTile[rows, columns];
             FloorRows = rows;
             FloorColumns = columns;
+            CollisionGroup = group;
         }
 
         public override void OnUpdate()

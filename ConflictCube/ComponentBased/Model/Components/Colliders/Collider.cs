@@ -8,11 +8,12 @@ namespace ConflictCube.ComponentBased.Components
         RightBoundary,
         TopBoundary,
         BottomBoundary,
-        Player,
         Finish,
         Wall,
         Hole,
-        NonCollider
+        NonCollider,
+        Player1,
+        Player2
     }
 
     public abstract class Collider : Component

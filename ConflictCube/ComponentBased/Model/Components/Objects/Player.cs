@@ -37,10 +37,15 @@ namespace ConflictCube.ComponentBased
         private float LastThrowUseFieldUpdate { get; set; }
         private Floor CurrentFloor;
 
+        private InputAxis Horizontal;
+        private InputAxis Vertical;
+
+        
+
         /// <summary>
         ///     Create a new player, with a defined size, position and move speed. The collision box of this player equals his rendering box, given with size and position
         /// </summary>
-        public Player(string name, Transform transform, BoxCollider boxCollider, Material material, GameObject parent, Floor currentFloor, float speed, bool isAlive = true) : base(name, transform, parent, GameObjectType.Player)
+        public Player(string name, Transform transform, BoxCollider boxCollider, Material material, GameObject parent, Floor currentFloor, float speed, GameObjectType playerType, bool isAlive = true) : base(name, transform, parent, playerType)
         {
             Speed = speed;
             IsAlive = isAlive;
@@ -49,11 +54,24 @@ namespace ConflictCube.ComponentBased
 
             AddComponent(boxCollider);
             AddComponent(material);
+
+            switch(playerType)
+            {
+                case GameObjectType.Player1:
+                    Horizontal = InputAxis.Player1Horizontal;
+                    Vertical = InputAxis.Player1Vertical;
+                    break;
+
+                case GameObjectType.Player2:
+                    Horizontal = InputAxis.Player2Horizontal;
+                    Vertical = InputAxis.Player2Vertical;
+                    break;
+            }
         }
 
         public override void OnUpdate()
         {
-            Vector2 moveVector = new Vector2(Input.GetAxis(InputAxis.Horizontal), Input.GetAxis(InputAxis.Vertical));
+            Vector2 moveVector = new Vector2(Input.GetAxis(Horizontal), Input.GetAxis(Vertical));
 
             if((Input.OnButtonIsPressed(InputKey.PlayerOneSprint) || Input.OnButtonDown(InputKey.PlayerOneSprint)) && CurrentSprintEnergy > UsedSprintEnergyPerSecond * Time.Time.DifTime)
             {
@@ -68,28 +86,6 @@ namespace ConflictCube.ComponentBased
 
             CurrentSprintEnergy = MathHelper.Clamp(CurrentSprintEnergy, 0, MaxSprintEnergy);
 
-            Console.WriteLine(CurrentSprintEnergy);
-
-            /*if (Input.OnButtonIsPressed(InputKey.PlayerOneMoveUp))
-            {
-                moveVector.Y += Speed;
-            }
-
-            if (Input.OnButtonIsPressed(InputKey.PlayerOneMoveDown))
-            {
-                moveVector.Y -= Speed;
-            }
-
-            if (Input.OnButtonIsPressed(InputKey.PlayerOneMoveRight))
-            {
-                moveVector.X += Speed;
-            }
-
-            if (Input.OnButtonIsPressed(InputKey.PlayerOneMoveLeft))
-            {
-                moveVector.X -= Speed;
-            }*/
-
             Move(moveVector);
         }
 
@@ -100,11 +96,6 @@ namespace ConflictCube.ComponentBased
         /// <param name="moveVector"></param>
         public void Move(Vector2 moveVector)
         {
-            Transform moveTransform = new Transform(0, 0, 1, 1, 0);
-            moveTransform.Position = moveVector;
-            moveTransform = Transform.TransformToGlobal(moveTransform);
-            moveVector = moveTransform.Position;
-
             if (!CanMove())
             {
                 return;
@@ -150,17 +141,12 @@ namespace ConflictCube.ComponentBased
             }
             else
             {
-                Console.WriteLine("\n\n\n");
                 Transform.MoveRelative(moveVector);
-                Console.WriteLine("\n\n\n");
-                //Console.WriteLine(Transform.Position);
-                //Console.WriteLine(moveVector);
             }
         }
 
         public override void OnCollision(Collider other)
         {
-            Console.WriteLine("Player collided with: " + other.Type.ToString());
             if (other.Type == CollisionType.LeftBoundary   || 
                 other.Type == CollisionType.RightBoundary  || 
                 other.Type == CollisionType.TopBoundary    || 

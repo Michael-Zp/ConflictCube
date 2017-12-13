@@ -6,8 +6,10 @@ namespace ConflictCube.ComponentBased
 {
     public enum InputAxis
     {
-        Horizontal,
-        Vertical
+        Player1Horizontal,
+        Player1Vertical,
+        Player2Horizontal,
+        Player2Vertical,
     }
 
     public struct AxisData
@@ -68,11 +70,15 @@ namespace ConflictCube.ComponentBased
 
 
             //Axes
-            AxesSettings.Add(InputAxis.Horizontal, new AxisData(InputKey.PlayerOneMoveRight, InputKey.PlayerOneMoveLeft));
-            AxesSettings.Add(InputAxis.Vertical, new AxisData(InputKey.PlayerOneMoveUp, InputKey.PlayerOneMoveDown));
+            AxesSettings.Add(InputAxis.Player1Horizontal, new AxisData(InputKey.PlayerOneMoveRight, InputKey.PlayerOneMoveLeft));
+            AxesSettings.Add(InputAxis.Player1Vertical, new AxisData(InputKey.PlayerOneMoveUp, InputKey.PlayerOneMoveDown));
+            AxesSettings.Add(InputAxis.Player2Horizontal, new AxisData(InputKey.PlayerTwoMoveRight, InputKey.PlayerTwoMoveLeft));
+            AxesSettings.Add(InputAxis.Player2Vertical, new AxisData(InputKey.PlayerTwoMoveUp, InputKey.PlayerTwoMoveDown));
 
-            Axes.Add(InputAxis.Horizontal, 0f);
-            Axes.Add(InputAxis.Vertical, 0f);
+            Axes.Add(InputAxis.Player1Horizontal, 0f);
+            Axes.Add(InputAxis.Player1Vertical, 0f);
+            Axes.Add(InputAxis.Player2Horizontal, 0f);
+            Axes.Add(InputAxis.Player2Vertical, 0f);
         }
 
 
@@ -113,8 +119,10 @@ namespace ConflictCube.ComponentBased
 
         private static void UpdateAxes()
         {
-            UpdateAxis(InputAxis.Horizontal);
-            UpdateAxis(InputAxis.Vertical);
+            UpdateAxis(InputAxis.Player1Horizontal);
+            UpdateAxis(InputAxis.Player1Vertical);
+            UpdateAxis(InputAxis.Player2Horizontal);
+            UpdateAxis(InputAxis.Player2Vertical);
         }
 
         private static void UpdateAxis(InputAxis axis)
@@ -181,8 +189,6 @@ namespace ConflictCube.ComponentBased
             }
 
             currentValue = Zenseless.Geometry.MathHelper.Clamp(currentValue, -1, 1);
-
-            Console.WriteLine(currentValue);
 
             Axes.Remove(axis);
             Axes.Add(axis, currentValue);

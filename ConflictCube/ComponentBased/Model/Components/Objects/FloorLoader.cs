@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using ConflictCube.ComponentBased.Components;
 using ConflictCube.ComponentBased.Components.Objects.Tiles;
 
@@ -7,16 +6,16 @@ namespace ConflictCube.ComponentBased
 {
     public static class FloorLoader
     {
-        public static Floor Instance(string levelData, string floorName, Transform areaOfFloor, GameObject parent)
+        public static Floor Instance(string levelData, string floorName, Transform areaOfFloor, GameObject parent, CollisionGroup group)
         {
             GameObjectType[,] FloorTiles = GetFloorDataFromLevelfile(levelData, out int rows, out int columns);
 
-            return LoadFloor(rows, columns, FloorTiles, floorName, areaOfFloor, parent);
+            return LoadFloor(rows, columns, FloorTiles, floorName, areaOfFloor, parent, group);
         }
 
-        private static Floor LoadFloor(int levelRows, int levelColumns, GameObjectType[,] floorTiles, string name, Transform areaOfFloor, GameObject parent)
+        private static Floor LoadFloor(int levelRows, int levelColumns, GameObjectType[,] floorTiles, string name, Transform areaOfFloor, GameObject parent, CollisionGroup group)
         {
-            Floor floorOfLevel = new Floor(name, areaOfFloor, parent, levelRows, levelColumns);
+            Floor floorOfLevel = new Floor(name, areaOfFloor, parent, levelRows, levelColumns, group);
 
             for (int row = 0; row < levelRows; row++)
             {
@@ -25,7 +24,7 @@ namespace ConflictCube.ComponentBased
                     Transform tileTransform = floorOfLevel.BoxInFloorGrid(row, column);
                     
                     string tileName = "FloorTile, " + floorTiles.ToString() + " row: " + row + " column: " + column;
-                    FloorTile floorTile = new FloorTile(row, column, tileName, tileTransform, parent, floorTiles[row, column]);
+                    FloorTile floorTile = new FloorTile(row, column, tileName, tileTransform, parent, floorTiles[row, column], floorOfLevel);
 
 
                     floorOfLevel.AddFloorTile(floorTile, row, column);
