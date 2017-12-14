@@ -19,6 +19,7 @@ namespace ConflictCube.ComponentBased.Components
         public GameObject Parent;
         public string Name;
         public GameObjectType Type;
+        public bool Enabled;
 
         public GameObject(string name, Transform transform) : this(name, transform, null)
         {}
@@ -26,13 +27,14 @@ namespace ConflictCube.ComponentBased.Components
         public GameObject(string name, Transform transform, GameObject parent) : this(name, transform, parent, GameObjectType.Default)
         {}
 
-        public GameObject(string name, Transform transform, GameObject parent, GameObjectType type)
+        public GameObject(string name, Transform transform, GameObject parent, GameObjectType type, bool enabled = true)
         {
             Name = name;
             Transform = transform;
             Transform.SetOwner(this);
             Parent = parent;
             Type = type;
+            Enabled = enabled;
 
             OnStart();
         }
@@ -105,6 +107,11 @@ namespace ConflictCube.ComponentBased.Components
 
         public void UpdateAll()
         {
+            if(!Enabled)
+            {
+                return;
+            }
+
             OnUpdate();
 
             foreach(GameObject child in Children)

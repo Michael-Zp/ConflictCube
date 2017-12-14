@@ -30,7 +30,7 @@ namespace ConflictCube.ComponentBased
         public static Dictionary<InputAxis, float> Axes = new Dictionary<InputAxis, float>();
         public static Dictionary<InputAxis, AxisData> AxesSettings = new Dictionary<InputAxis, AxisData>();
 
-        public static Dictionary<InputKey, bool> ButtonWasPressedDwon = new Dictionary<InputKey, bool>();
+        public static Dictionary<InputKey, bool> ButtonWasPressedDown = new Dictionary<InputKey, bool>();
         public static Dictionary<InputKey, bool> ButtonIsPressed = new Dictionary<InputKey, bool>();
         public static Dictionary<InputKey, bool> ButtonWasReleased = new Dictionary<InputKey, bool>();
 
@@ -46,8 +46,12 @@ namespace ConflictCube.ComponentBased
             KeyboardSettings.Add(Key.D, InputKey.PlayerOneMoveRight);
             KeyboardSettings.Add(Key.W, InputKey.PlayerOneMoveUp);
             KeyboardSettings.Add(Key.S, InputKey.PlayerOneMoveDown);
-            KeyboardSettings.Add(Key.Q, InputKey.PlayerOneThrowMode);
-            KeyboardSettings.Add(Key.E, InputKey.PlayerOneUseMode);
+            KeyboardSettings.Add(Key.F, InputKey.PlayerOneMoveThrowUseFieldLeft);
+            KeyboardSettings.Add(Key.H, InputKey.PlayerOneMoveThrowUseFieldRight);
+            KeyboardSettings.Add(Key.T, InputKey.PlayerOneMoveThrowUseFieldUp);
+            KeyboardSettings.Add(Key.G, InputKey.PlayerOneMoveThrowUseFieldDown);
+            KeyboardSettings.Add(Key.R, InputKey.PlayerOneSwitchMode);
+            KeyboardSettings.Add(Key.E, InputKey.PlayerOneUse);
             KeyboardSettings.Add(Key.LShift, InputKey.PlayerOneSprint);
 
 
@@ -56,17 +60,13 @@ namespace ConflictCube.ComponentBased
             KeyboardSettings.Add(Key.L, InputKey.PlayerTwoMoveRight);
             KeyboardSettings.Add(Key.I, InputKey.PlayerTwoMoveUp);
             KeyboardSettings.Add(Key.K, InputKey.PlayerTwoMoveDown);
-            KeyboardSettings.Add(Key.O, InputKey.PlayerTwoThrowMode);
-            KeyboardSettings.Add(Key.U, InputKey.PlayerTwoUseMode);
-
-
-            //Player 2 - Alt
-            KeyboardSettings.Add(Key.Keypad4, InputKey.PlayerTwoMoveLeft);
-            KeyboardSettings.Add(Key.Keypad6, InputKey.PlayerTwoMoveRight);
-            KeyboardSettings.Add(Key.Keypad8, InputKey.PlayerTwoMoveUp);
-            KeyboardSettings.Add(Key.Keypad5, InputKey.PlayerTwoMoveDown);
-            KeyboardSettings.Add(Key.Keypad7, InputKey.PlayerTwoThrowMode);
-            KeyboardSettings.Add(Key.Keypad9, InputKey.PlayerTwoUseMode);
+            KeyboardSettings.Add(Key.Keypad4, InputKey.PlayerTwoMoveThrowUseFieldLeft);
+            KeyboardSettings.Add(Key.Keypad6, InputKey.PlayerTwoMoveThrowUseFieldRight);
+            KeyboardSettings.Add(Key.Keypad8, InputKey.PlayerTwoMoveThrowUseFieldUp);
+            KeyboardSettings.Add(Key.Keypad5, InputKey.PlayerTwoMoveThrowUseFieldDown);
+            KeyboardSettings.Add(Key.Keypad7, InputKey.PlayerTwoSwitchMode);
+            KeyboardSettings.Add(Key.O, InputKey.PlayerTwoUse);
+            KeyboardSettings.Add(Key.RControl, InputKey.PlayerTwoSprint);
 
 
             //Axes
@@ -74,6 +74,7 @@ namespace ConflictCube.ComponentBased
             AxesSettings.Add(InputAxis.Player1Vertical, new AxisData(InputKey.PlayerOneMoveUp, InputKey.PlayerOneMoveDown));
             AxesSettings.Add(InputAxis.Player2Horizontal, new AxisData(InputKey.PlayerTwoMoveRight, InputKey.PlayerTwoMoveLeft));
             AxesSettings.Add(InputAxis.Player2Vertical, new AxisData(InputKey.PlayerTwoMoveUp, InputKey.PlayerTwoMoveDown));
+
 
             Axes.Add(InputAxis.Player1Horizontal, 0f);
             Axes.Add(InputAxis.Player1Vertical, 0f);
@@ -94,11 +95,11 @@ namespace ConflictCube.ComponentBased
 
                 if (keyIsPressed && !lastIsKeyPressed)
                 {
-                    SetInput(input, ButtonWasPressedDwon, true);
+                    SetInput(input, ButtonWasPressedDown, true);
                 }
                 else if(keyIsPressed && lastIsKeyPressed)
                 {
-                    SetInput(input, ButtonWasPressedDwon, false);
+                    SetInput(input, ButtonWasPressedDown, false);
                     SetInput(input, ButtonIsPressed, true);
                 }
                 else if(!keyIsPressed && lastIsKeyPressed)
@@ -204,7 +205,7 @@ namespace ConflictCube.ComponentBased
         {
             try
             {
-                ButtonWasPressedDwon.TryGetValue(input, out bool state);
+                ButtonWasPressedDown.TryGetValue(input, out bool state);
                 return state;
             }
             catch(Exception)

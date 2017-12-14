@@ -59,24 +59,28 @@ namespace ConflictCube.ComponentBased
                 throw new Exception("Found no active floor for player 2.");
             }
 
+            List<Floor> allFloors = new List<Floor>();
+            allFloors.Add(Player1Floor);
+            allFloors.Add(Player2Floor);
+
 
             //Players
             BoxCollider Player1Collider = new BoxCollider(new Transform(0, 0, 1, 1), false, Player1Floor.CollisionGroup, CollisionType.Player1);
-            Players.Add(new Player("Player0", new Transform(0, 0, .06f, .06f), Player1Collider, playerMat, Player1Floor, Player1Floor, .015f, GameObjectType.Player1));
-            Player1Area.AddChild(Players[0]);
+            Players.Add(new Player("Player0", new Transform(0, 0, .06f, .06f), Player1Collider, playerMat, Player1Floor, 0, allFloors, .015f, GameObjectType.Player1));
+            Player1Floor.AddChild(Players[0]);
             Vector2 globalStartPosition = Player1Floor.FindStartPosition();
-            Players[0].Transform.Position = Player1Area.Transform.TransformToLocal(new Transform(globalStartPosition.X, globalStartPosition.Y, 0, 0)).Position;
+            Players[0].Transform.Position = Player1Floor.Transform.TransformToLocal(new Transform(globalStartPosition.X, globalStartPosition.Y, 0, 0)).Position;
 
             BoxCollider Player2Collider = new BoxCollider(new Transform(0, 0, 1, 1), false, Player2Floor.CollisionGroup, CollisionType.Player2);
-            Players.Add(new Player("Player1", new Transform(0, 0, .06f, .06f), Player2Collider, playerMat, Player2Floor, Player2Floor, .015f, GameObjectType.Player2));
-            Player2Area.AddChild(Players[1]);
+            Players.Add(new Player("Player1", new Transform(0, 0, .06f, .06f), Player2Collider, playerMat, Player2Floor, 1, allFloors, .015f, GameObjectType.Player2));
+            Player2Floor.AddChild(Players[1]);
             globalStartPosition = Player2Floor.FindStartPosition();
-            Players[1].Transform.Position = Player2Area.Transform.TransformToLocal(new Transform(globalStartPosition.X, globalStartPosition.Y, 0, 0)).Position;
+            Players[1].Transform.Position = Player2Floor.Transform.TransformToLocal(new Transform(globalStartPosition.X, globalStartPosition.Y, 0, 0)).Position;
 
 
             //Ghost Players
-            Player1Area.AddChild(new GhostPlayer("GhostPlayer2OnArea1", new Transform(0, 0, .06f, .06f), Player1Area, playerGhostMat, Players[1], GameObjectType.GhostPlayer));
-            Player2Area.AddChild(new GhostPlayer("GhostPlayer1OnArea2", new Transform(0, 0, .06f, .06f), Player2Area, playerGhostMat, Players[0], GameObjectType.GhostPlayer));
+            Player1Floor.AddChild(new GhostPlayer("GhostPlayer2OnArea1", new Transform(0, 0, .06f, .06f), Player1Floor, playerGhostMat, Players[1], GameObjectType.GhostPlayer));
+            Player2Floor.AddChild(new GhostPlayer("GhostPlayer1OnArea2", new Transform(0, 0, .06f, .06f), Player2Floor, playerGhostMat, Players[0], GameObjectType.GhostPlayer));
         }
 
 

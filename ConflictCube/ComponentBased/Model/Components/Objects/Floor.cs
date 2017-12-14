@@ -110,16 +110,22 @@ namespace ConflictCube.ComponentBased
             return new Transform(posX, posY, FloorTileSize.X, FloorTileSize.Y);
         }
 
-        public Vector2 GetGridPosition(Vector2 position)
+        public Vector2 GetGridPosition(Transform globalPosition)
         {
-            Vector2 localPosition = Transform.TransformToLocal(new Transform(position.X, position.Y, 0, 0)).Position;
-            
-            float xPos = (float)Math.Floor((localPosition.X + 1) / FloorTileSize.X);
-            float yPos = (float)Math.Floor((localPosition.Y + 1) / FloorTileSize.Y);
+            Transform localPosition = Transform.TransformToLocal(globalPosition);
 
-            return new Vector2(xPos, yPos);
+            float columnPosition = GetColumnOfPosition(localPosition.Position.X);
+            float rowPosition = GetRowOfPosition(localPosition.Position.Y);
+
+            return new Vector2(columnPosition, rowPosition);
         }
 
+
+        /// <summary>
+        /// Returns the global transform of a box on the floor at this grid position.
+        /// </summary>
+        /// <param name="boxGridPosition"></param>
+        /// <returns></returns>
         public Transform GetBoxAtGridPosition(Vector2 boxGridPosition)
         {
             Transform localTransform;
@@ -132,29 +138,27 @@ namespace ConflictCube.ComponentBased
                 throw new Exception("Found no FloorTile for row: " + boxGridPosition.Y + " and column: " + boxGridPosition.X);
             }
             
-            return localTransform.TransformToParent();
+            return localTransform.TransformToGlobal();
         }
 
-        public Transform GetBoxAtPosition(Vector2 position)
+        public Transform GetBoxAtPosition(Transform globalPosition)
         {
-            float columnPosition = GetColumnOfPosition(position.X);
-            float rowPosition = GetRowOfPosition(position.Y);
+            globalPosition = Transform.TransformToLocal(globalPosition);
 
-            return new Transform(columnPosition * FloorTileSize.X, rowPosition * FloorTileSize.Y, FloorTileSize.X, FloorTileSize.Y);
+            float columnPosition = GetColumnOfPosition(globalPosition.Position.X);
+            float rowPosition = GetRowOfPosition(globalPosition.Position.Y);
+
+            return (Transform)FloorTiles[(int)columnPosition, (int)rowPosition].Transform.Clone();
         }
 
         private float GetColumnOfPosition(float xPos)
         {
-            Vector2 localPoint = Transform.TransformToLocal(new Transform(xPos, 0, 0, 0)).Position;
-
-            return (float)Math.Floor(localPoint.X / FloorTileSize.X);
+            return (float)Math.Floor((xPos + 1) / (FloorTileSize.X * 2));
         }
 
         private float GetRowOfPosition(float yPos)
         {
-            Vector2 localPoint = Transform.TransformToLocal(new Transform(0, yPos, 0, 0)).Position;
-
-            return (float)Math.Floor(localPoint.X / FloorTileSize.X);
+            return (float)Math.Floor((yPos + 1) / (FloorTileSize.Y * 2));
         }
     }
 }

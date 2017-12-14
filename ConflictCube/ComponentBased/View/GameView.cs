@@ -42,6 +42,11 @@ namespace ConflictCube.ComponentBased
 
         private void RenderGameObject(GameObject currentObject)
         {
+            if (!currentObject.Enabled)
+            {
+                return;
+            }
+
             Material currentMat = currentObject.GetComponent<Material>();
             if(currentMat != null)
             {

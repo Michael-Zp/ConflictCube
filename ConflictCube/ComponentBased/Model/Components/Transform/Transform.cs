@@ -85,6 +85,39 @@ namespace ConflictCube.ComponentBased.Components
         }
 
 
+        public Matrix3 GetTransformMatrixToGlobal()
+        {
+            GameObject currentOwner = Owner.Parent;
+            Matrix3 currentTransform = new Matrix3(1, 0, 0, 0, 1, 0, 0, 0, 1);
+
+            while (currentOwner != null)
+            {
+                currentTransform = currentOwner.Transform.TransformMatrix * currentTransform;
+                currentOwner = currentOwner.Parent;
+            }
+
+            return currentTransform;
+        }
+
+        public Transform TransformToGlobal()
+        {
+            return TransformToGlobal(this);
+        }
+
+        public Transform TransformToGlobal(Transform transform)
+        {
+            if (Owner == null)
+            {
+                return transform;
+            }
+
+            Transform newTransform = (Transform)Clone();
+            Transform tempTransform = transform.TransformToSpace(new Transform(GetTransformMatrixToGlobal()));
+            newTransform.TransformMatrix = tempTransform.TransformMatrix;
+
+            return newTransform;
+        }
+
         /*
          * Game * P1A * Scene * Floor * Local = Global
          * Local = (((Floor^-1 * Scene^-1) * P1A^-1) * Game^-1) * Global
@@ -97,47 +130,13 @@ namespace ConflictCube.ComponentBased.Components
                 return transformToLocal;
             }
 
-            GameObject currentOwner = Owner.Parent;
-            Matrix3 currentTransform = Owner.Transform.TransformMatrix;
-            
-
-            while (currentOwner != null)
-            {
-                currentTransform = currentTransform.Inverted() * currentOwner.Transform.TransformMatrix.Inverted();
-                currentOwner = currentOwner.Parent;
-            }
-
             Transform newTransform = (Transform)Clone();
-            newTransform.TransformMatrix = currentTransform * transformToLocal.TransformMatrix;
+            Transform tempTransform = transformToLocal.TransformToSpace(new Transform(GetTransformMatrixToGlobal().Inverted()));
+            newTransform.TransformMatrix = tempTransform.TransformMatrix;
 
             return newTransform;
         }
 
-        public Transform TransformToGlobal()
-        {
-            return TransformToGlobal(this);
-        }
-
-        public Transform TransformToGlobal(Transform transform)
-        {
-            if(Owner == null)
-            {
-                return transform;
-            }
-            GameObject currentOwner = Owner.Parent;
-            Matrix3 currentTransform = transform.TransformMatrix;
-
-            while (currentOwner != null)
-            {
-                currentTransform = currentOwner.Transform.TransformMatrix * currentTransform;
-                currentOwner = currentOwner.Parent;
-            }
-
-            Transform newTransform = (Transform)Clone();
-            newTransform.TransformMatrix = currentTransform;
-            
-            return newTransform;
-        }
 
         public Transform TransformToSpace(Transform space)
         {
