@@ -109,7 +109,6 @@
     <Compile Include="ComponentBased\View\GameView.cs" />
     <Compile Include="ComponentBased\View\MyWindow.cs" />
     <Compile Include="ComponentBased\View\OpenTKWrapper.cs" />
-    <Compile Include="ComponentBased\View\ZenselessWrapper.cs" />
     <Compile Include="GlobalMethods\Input.cs" />
     <Compile Include="GlobalMethods\Time.cs" />
     <Compile Include="ComponentBased\Model\Components\Colliders\BoxCollider.cs" />
