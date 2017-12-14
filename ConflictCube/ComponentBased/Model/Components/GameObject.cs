@@ -129,23 +129,23 @@ namespace ConflictCube.ComponentBased.Components
         /// <returns></returns>
         public GameObject FindGameObjectByTypeInChildren<T>() where T : GameObject
         {
-            if(this is T)
+            if (this is T)
             {
                 return this;
             }
 
-            foreach(GameObject child in Children)
+            foreach (GameObject child in Children)
             {
-                if(child is T)
+                if (child is T)
                 {
                     return child;
                 }
             }
 
-            foreach(GameObject child in Children)
+            foreach (GameObject child in Children)
             {
                 GameObject gO = child.FindGameObjectByTypeInChildren<T>();
-                if(gO != null)
+                if (gO != null)
                 {
                     return gO;
                 }
@@ -153,5 +153,38 @@ namespace ConflictCube.ComponentBased.Components
 
             return null;
         }
+
+        /// <summary>
+        /// Find child of type which needs GameObject as a base class.
+        /// Search is done as a Breadth-first search.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public List<GameObject> FindGameObjectsByTypeInChildren<T>() where T : GameObject
+        {
+            List<GameObject> allGameObjects = new List<GameObject>();
+
+            if (this is T)
+            {
+                allGameObjects.Add(this);
+            }
+
+            foreach (GameObject child in Children)
+            {
+                if (child is T)
+                {
+                    allGameObjects.Add(child);
+                }
+            }
+
+            foreach (GameObject child in Children)
+            {
+                allGameObjects.AddRange(child.FindGameObjectsByTypeInChildren<T>());
+            }
+
+            return allGameObjects;
+        }
+
+
     }
 }

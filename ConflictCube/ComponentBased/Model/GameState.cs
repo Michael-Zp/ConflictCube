@@ -11,7 +11,7 @@ namespace ConflictCube.ComponentBased
 {
     public class GameState
     {
-        public GameObject Game { get; set; }
+        public Game Game { get; set; }
         public GameObject Player1Area { get; set; }
         public GameObject Player2Area { get; set; }
         public List<Player> Players { get; private set; }
@@ -22,7 +22,7 @@ namespace ConflictCube.ComponentBased
 
         public GameState()
         {
-            Game = new GameObject("Game", new Transform(0, 0, 1, 1), null);
+            Game = new Game("Game", new Transform(0, 0, 1, 1));
             Player1Area = new GameObject("Player1Area", new Transform(-0.5f, 0, 0.5f, 1f), Game);
             Player2Area = new GameObject("Player1Area", new Transform( 0.5f, 0, 0.5f, 1f), Game);
             Game.AddChild(Player1Area);

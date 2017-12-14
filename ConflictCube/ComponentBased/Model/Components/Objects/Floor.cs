@@ -35,9 +35,12 @@ namespace ConflictCube.ComponentBased
         public float FloorBreakdownInterval { get; set; } = 3.0f;
         public CollisionGroup CollisionGroup;
 
-
         private int FloorRowsBrokeDown = 0;
         private float LastFloorBreakdownTime = 0;
+        private Player PlayerOnFloor = null;
+        private int FloorRowThreshold = 3;
+        public bool PlayerIsOverThreshold = false;
+        public bool FloorShouldBreakDown = false;
 
         //floorSize is the size of the whole floor and not only the part which should be shown.
         public Floor(string name, Transform transform, GameObject parent, int rows, int columns, CollisionGroup group) : base(name, transform, parent)
@@ -50,10 +53,29 @@ namespace ConflictCube.ComponentBased
 
         public override void OnUpdate()
         {
-            //MoveFloorUp();
+            if(PlayerOnFloor == null)
+            {
+                PlayerOnFloor = (Player)FindGameObjectByTypeInChildren<Player>();
+            }
+
+            if(PlayerOnFloor != null)
+            {
+                Vector2 playerPositionInGrid = GetGridPosition(PlayerOnFloor.Transform.TransformToGlobal());
+
+                if(playerPositionInGrid.Y >= FloorRowThreshold)
+                {
+                    PlayerIsOverThreshold = true;
+                }
+            }
+            
+            if(FloorShouldBreakDown)
+            {
+                BreakDownFloor();
+            }
+
         }
 
-        public void MoveFloorUp()
+        public void BreakDownFloor()
         {
             if(Time.Time.CurrentTime - LastFloorBreakdownTime > FloorBreakdownInterval)
             {

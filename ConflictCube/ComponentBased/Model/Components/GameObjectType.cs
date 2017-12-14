@@ -15,6 +15,7 @@
         Default,
         Player1,
         Player2,
-        GhostPlayer
+        GhostPlayer,
+        Game
     }
 }

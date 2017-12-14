@@ -1,0 +1,30 @@
+﻿using ConflictCube.ComponentBased.Components;
+using System.Collections.Generic;
+
+namespace ConflictCube.ComponentBased.Model.Components.Objects
+{
+    public class Game : GameObject
+    {
+        public Game(string name, Transform transform) : base(name, transform, null, GameObjectType.Game)
+        {
+
+        }
+
+        public override void OnUpdate()
+        {
+            List<GameObject> allFloors = FindGameObjectsByTypeInChildren<Floor>();
+
+            bool floorShouldBreakDown = false;
+
+            foreach (GameObject floor in allFloors)
+            {
+                floorShouldBreakDown = floorShouldBreakDown || ((Floor)floor).PlayerIsOverThreshold;
+            }
+
+            foreach (GameObject floor in allFloors)
+            {
+                ((Floor)floor).FloorShouldBreakDown = floorShouldBreakDown;
+            }
+        }
+    }
+}
