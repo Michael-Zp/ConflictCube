@@ -4,6 +4,7 @@ using Zenseless.Geometry;
 using System.Drawing;
 using ConflictCube.ComponentBased.Components;
 using Zenseless.HLGL;
+using ConflictCube.ComponentBased.Model.Components.UI;
 
 namespace ConflictCube.ComponentBased
 {
@@ -85,6 +86,18 @@ namespace ConflictCube.ComponentBased
 
             DisableTextures();
 
+            DisableAlphaChannel();
+        }
+
+        public void PrintText(float xPos, float yPos, float xSize, float ySize, string text)
+        {
+            EnableAlphaChannel();
+            EnableTextures();
+
+            //Font.Instance().TextureFont.Print(xPos, yPos, 0f, xSize, text);
+            Font.Instance().TextureFont.PrintWithSize(xPos, yPos, 0f, xSize, ySize, 1f, text);
+
+            DisableTextures();
             DisableAlphaChannel();
         }
 

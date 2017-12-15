@@ -1,4 +1,5 @@
 ﻿using ConflictCube.ComponentBased.Components;
+using System;
 using System.Collections.Generic;
 
 namespace ConflictCube.ComponentBased.Model.Components.Objects
@@ -12,6 +13,11 @@ namespace ConflictCube.ComponentBased.Model.Components.Objects
 
         public override void OnUpdate()
         {
+            if(Input.OnButtonIsPressed(InputKey.ExitApplication))
+            {
+                Environment.Exit(0);
+            }
+
             List<GameObject> allFloors = FindGameObjectsByTypeInChildren<Floor>();
 
             bool floorShouldBreakDown = false;

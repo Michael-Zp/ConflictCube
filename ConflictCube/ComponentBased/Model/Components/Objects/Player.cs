@@ -2,6 +2,7 @@
 using System;
 using ConflictCube.ComponentBased.Components;
 using System.Collections.Generic;
+using ConflictCube.ComponentBased.Model.Components.Objects;
 
 namespace ConflictCube.ComponentBased
 {
@@ -15,6 +16,7 @@ namespace ConflictCube.ComponentBased
         public float CurrentSprintEnergy = 100;
         public float UsedSprintEnergyPerSecond = 100;
         public float RegeneratSprintEnergyPerSecond = 20;
+        public PlayerInventory Inventory = new PlayerInventory(1);
 
         private GameObject ThrowUseField { get; set; }
         /// <summary>
@@ -129,27 +131,29 @@ namespace ConflictCube.ComponentBased
 
         private void ThrowOrUseBlock()
         {
-            if(UseMode || ThrowMode)
+            if (UseMode || ThrowMode)
             {
                 Vector2 currentPosOfThrowUseField = Floors[CurrentFloor].GetGridPosition(Transform.TransformToGlobal()) + new Vector2(ThrowUseXOffset, ThrowUseYOffset);
 
                 int indexOfColumn = (int)currentPosOfThrowUseField.X;
                 int indexOfRow = Floors[CurrentFloor].FloorRows - 1 - (int)currentPosOfThrowUseField.Y;
-                
-                if (UseMode)
+
+                if (UseMode && Inventory.Cubes > 0)
                 {
                     Floors[CurrentFloor].FloorTiles[indexOfRow, indexOfColumn].ChangeFloorTile(GameObjectType.Wall);
+                    Inventory.Cubes -= 1;
                 }
-                else if (ThrowMode)
+                else if (ThrowMode && Inventory.Cubes > 0)
                 {
-                    for(int i = 0; i < Floors.Count; i++)
+                    for (int i = 0; i < Floors.Count; i++)
                     {
-                        if(i == CurrentFloor)
+                        if (i == CurrentFloor)
                         {
                             continue;
                         }
                         Floors[i].FloorTiles[indexOfRow, indexOfColumn].ChangeFloorTile(GameObjectType.Wall);
                     }
+                    Inventory.Cubes -= 1;
                 }
             }
         }
