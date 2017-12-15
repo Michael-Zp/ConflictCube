@@ -1,82 +1,152 @@
-﻿using OpenTK;
-using OpenTK.Graphics.OpenGL4;
+﻿using Zenseless.Geometry;
+using Zenseless.Base;
+using OpenTK.Graphics.OpenGL;
 using Zenseless.HLGL;
 using Zenseless.OpenGL;
-using System.Drawing;
-using System;
-using System.IO;
-using Zenseless.Geometry;
 
-namespace ConflictCube.ComponentBased
+namespace ConflictCube.ComponentBased.View
 {
-    using SysDraw = System.Drawing.Imaging;
-
     public static class ZenselessWrapper
     {
-
-        public static ITexture TextureFromBitmapWithSpecificMapping(string bitmapPath, Box2d regionOfTexture)
+        /// <summary>
+        /// allows to print text were the individual characters come all from a single texture
+        /// </summary>
+        /// <seealso cref="Zenseless.Base.Disposable" />
+        public class MyTextureFont : Disposable
         {
-            var texture = new Texture2dGL();
-            texture.Filter = TextureFilterMode.Mipmap;
-            texture.Activate();
-            using (Bitmap bmp = new Bitmap(bitmapPath))
+            /// <summary>
+            /// Create a new font that can be printed in OpenGL
+            /// </summary>
+            /// <param name="texture">texture containing a equally spaced grid of characters</param>
+            /// <param name="charactersPerLine">number of characters per grid row</param>
+            /// <param name="firstAsciiCode">ascii code of upper left most character in the grid</param>
+            /// <param name="characterBoundingBoxWidth">bounding box width of each character cell, allows to zoom in/out of each character</param>
+            /// <param name="characterBoundingBoxHeight">bounding box height of each character cell, allows to zoom in/out of each character</param>
+            /// <param name="characterSpacing">how much to move to the right after drawing a single character</param>
+            public MyTextureFont(ITexture texture, uint charactersPerLine = 16, byte firstAsciiCode = 0
+                , float characterBoundingBoxWidth = 1.0f, float characterBoundingBoxHeight = 1.0f, float characterSpacing = 1.0f)
             {
-                bmp.RotateFlip(RotateFlipType.RotateNoneFlipY);
-                int left = (int)(bmp.Width * regionOfTexture.Left);
-                int bottom = (int)(bmp.Height * regionOfTexture.Bottom);
-                int sizeX = (int)(bmp.Width * regionOfTexture.Width);
-                int sizeY = (int)(bmp.Height * regionOfTexture.Height);
-                //var bmpData = bmp.LockBits(new Rectangle(left, bottom, sizeX, sizeY), ImageLockMode.ReadOnly, bmp.PixelFormat);
-                var bmpData = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), SysDraw.ImageLockMode.ReadOnly, bmp.PixelFormat);
-                var internalFormat = TextureLoader.SelectInternalPixelFormat(bmp.PixelFormat);
-                var inputPixelFormat = TextureLoader.SelectPixelFormat(bmp.PixelFormat);
-
-                //Mixes OpenGL 3 and 4. Might not be a good idea.
-                texture.LoadPixels(bmpData.Scan0, bmpData.Width, bmpData.Height, internalFormat, inputPixelFormat, PixelType.UnsignedByte);
-
-                bmp.UnlockBits(bmpData);
-
-            }
-            texture.Deactivate();
-            return texture;
-        }
-        
-        public static ITexture FromFile(string fileName, Box2d regionOfTexture)
-        {
-            if (String.IsNullOrEmpty(fileName))
-            {
-                throw new ArgumentException(fileName);
-            }
-            if (!File.Exists(fileName))
-            {
-                throw new FileLoadException(fileName);
-            }
-            return FromBitmap(new Bitmap(fileName), regionOfTexture);
-        }
-
-        public static ITexture FromBitmap(Bitmap bitmap, Box2d regionOfTexture)
-        {
-            ITexture texture;
-            using (Bitmap bmp = new Bitmap(bitmap))
-            {
-                bmp.RotateFlip(RotateFlipType.RotateNoneFlipY);
-                int left = (int)(bmp.Width * regionOfTexture.Left);
-                int bottom = (int)(bmp.Height * regionOfTexture.Bottom);
-                int sizeX = (int)(bmp.Width * regionOfTexture.Width);
-                int sizeY = (int)(bmp.Height * regionOfTexture.Height);
-                using (Bitmap cropped = (Bitmap)bmp.Clone(new Rectangle(left, bottom, sizeX, sizeY), bmp.PixelFormat))
+                this.texFont = new SpriteSheet(texture, charactersPerLine, charactersPerLine, characterBoundingBoxWidth, characterBoundingBoxHeight);
+                // Creating 256 Display Lists
+                this.baseList = (uint)GL.GenLists(256);
+                this.characterSpacing = characterSpacing;
+                //foreach of the 256 possible characters create a a quad 
+                //with texture coordinates and store it in a display list
+                for (uint asciiCode = 0; asciiCode < 256; ++asciiCode)
                 {
-                    texture = TextureLoader.FromBitmap(cropped);
+                    GL.NewList((this.baseList + asciiCode), ListMode.Compile);
+
+                    var texCoords = texFont.CalcSpriteTexCoords(asciiCode - firstAsciiCode);
+                    Box2D.BOX01.DrawTexturedRect(texCoords);
+                    GL.Translate(characterSpacing, 0, 0);   // Move To The next character
+                    GL.EndList();
                 }
             }
-            return texture;
-        }
 
-        public static bool Intersects(this Box2D box, float x, float y)
-        {
-            if (x <= box.MinX || box.MaxX <= x) return false;
-            if (y <= box.MinY || box.MaxY <= y) return false;
-            return true;
+            /// <summary>
+            /// Converts the string2 ASCII.
+            /// </summary>
+            /// <param name="text">The text.</param>
+            /// <returns></returns>
+            public byte[] ConvertString2Ascii(string text)
+            {
+                byte[] bytes = new byte[text.Length];
+                uint pos = 0;
+                foreach (char c in text)
+                {
+                    bytes[pos] = (byte)c;
+                    ++pos;
+                }
+                return bytes;
+            }
+
+            /// <summary>
+            /// Prints the specified x position.
+            /// </summary>
+            /// <param name="xPos">The x position.</param>
+            /// <param name="yPos">The y position.</param>
+            /// <param name="zPos">The z position.</param>
+            /// <param name="size">The size.</param>
+            /// <param name="text">The text.</param>
+            public void Print(float xPos, float yPos, float zPos, float size, string text)
+            {
+                GL.PushMatrix();
+                GL.Translate(xPos, yPos, zPos);
+                GL.Scale(size, size, size);
+                var bytes = ConvertString2Ascii(text);
+                texFont.Activate();
+                PrintRawQuads(bytes);
+                texFont.Deactivate();
+                GL.PopMatrix();
+            }
+
+
+            /// <summary>
+            /// Prints the specified x position.
+            /// </summary>
+            /// <param name="xPos">The x position.</param>
+            /// <param name="yPos">The y position.</param>
+            /// <param name="zPos">The z position.</param>
+            /// <param name="size">The size.</param>
+            /// <param name="text">The text.</param>
+            public void PrintWithSize(float xPos, float yPos, float zPos, float xSize, float ySize, float zSize, string text)
+            {
+                GL.PushMatrix();
+                GL.Translate(xPos, yPos, zPos);
+                GL.Scale(xSize, ySize, zSize);
+                var bytes = ConvertString2Ascii(text);
+                texFont.Activate();
+                PrintRawQuads(bytes);
+                texFont.Deactivate();
+                GL.PopMatrix();
+            }
+
+            /// <summary>
+            /// Widthes the specified text.
+            /// </summary>
+            /// <param name="text">The text.</param>
+            /// <param name="size">The size.</param>
+            /// <returns></returns>
+            public float Width(string text, float size)
+            {
+                return text.Length * size * characterSpacing;
+            }
+
+            /// <summary>
+            /// The base list
+            /// </summary>
+            private readonly uint baseList = 0; // Base Display List For The Font
+                                                /// <summary>
+                                                /// The tex font
+                                                /// </summary>
+            private readonly SpriteSheet texFont;
+            /// <summary>
+            /// The character spacing
+            /// </summary>
+            private readonly float characterSpacing;
+
+            /// <summary>
+            /// Prints the raw quads.
+            /// </summary>
+            /// <param name="text">The text.</param>
+            private void PrintRawQuads(byte[] text)
+            {
+                if (ReferenceEquals(null, text)) return;
+                GL.PushAttrib(AttribMask.ListBit);
+                GL.PushMatrix();
+                GL.ListBase(this.baseList);
+                GL.CallLists(text.Length, ListNameType.UnsignedByte, text); // Write The Text To The Screen
+                GL.PopMatrix();
+                GL.PopAttrib();
+            }
+
+            /// <summary>
+            /// Will be called from the default Dispose method.
+            /// </summary>
+            protected override void DisposeResources()
+            {
+                GL.DeleteLists(this.baseList, 256); // Delete All 256 Display Lists
+            }
         }
     }
 }

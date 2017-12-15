@@ -3,18 +3,29 @@
     public enum InputKey
     {
         ExitApplication,
+
         PlayerOneMoveLeft,
         PlayerOneMoveRight,
         PlayerOneMoveUp,
         PlayerOneMoveDown,
-        PlayerOneThrowMode,
-        PlayerOneUseMode,
+        PlayerOneMoveThrowUseFieldLeft,
+        PlayerOneMoveThrowUseFieldRight,
+        PlayerOneMoveThrowUseFieldUp,
+        PlayerOneMoveThrowUseFieldDown,
+        PlayerOneSwitchMode,
+        PlayerOneSprint,
+        PlayerOneUse,
+
         PlayerTwoMoveLeft,
         PlayerTwoMoveRight,
         PlayerTwoMoveUp,
         PlayerTwoMoveDown,
-        PlayerTwoThrowMode,
-        PlayerTwoUseMode,
-        PlayerOneSprint
+        PlayerTwoMoveThrowUseFieldLeft,
+        PlayerTwoMoveThrowUseFieldRight,
+        PlayerTwoMoveThrowUseFieldUp,
+        PlayerTwoMoveThrowUseFieldDown,
+        PlayerTwoSwitchMode,
+        PlayerTwoSprint,
+        PlayerTwoUse
     }
 }

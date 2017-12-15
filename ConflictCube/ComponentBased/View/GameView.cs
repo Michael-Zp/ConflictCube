@@ -2,6 +2,7 @@
 using OpenTK.Graphics.OpenGL;
 using ConflictCube.ComponentBased.Controller;
 using ConflictCube.ComponentBased.Components;
+using ConflictCube.ComponentBased.Model.Components.UI;
 
 namespace ConflictCube.ComponentBased
 {
@@ -42,6 +43,11 @@ namespace ConflictCube.ComponentBased
 
         private void RenderGameObject(GameObject currentObject)
         {
+            if (!currentObject.Enabled)
+            {
+                return;
+            }
+
             Material currentMat = currentObject.GetComponent<Material>();
             if(currentMat != null)
             {
@@ -53,6 +59,14 @@ namespace ConflictCube.ComponentBased
                 {
                     OpenTKWrapper.DrawBoxWithAlphaChannel(currentObject.Transform.TransformToGlobal(), currentMat.Color);
                 }
+            }
+
+            if(currentObject is TextField)
+            {
+                TextField text = (TextField)currentObject;
+                Transform globalTransform = text.Transform.TransformToGlobal();
+
+                OpenTKWrapper.PrintText(globalTransform.Position.X, globalTransform.Position.Y, globalTransform.Size.X, globalTransform.Size.Y, text.Text);
             }
 
             foreach (GameObject child in currentObject.Children)

@@ -19,6 +19,7 @@ namespace ConflictCube.ComponentBased.Components
         public GameObject Parent;
         public string Name;
         public GameObjectType Type;
+        public bool Enabled;
 
         public GameObject(string name, Transform transform) : this(name, transform, null)
         {}
@@ -26,13 +27,14 @@ namespace ConflictCube.ComponentBased.Components
         public GameObject(string name, Transform transform, GameObject parent) : this(name, transform, parent, GameObjectType.Default)
         {}
 
-        public GameObject(string name, Transform transform, GameObject parent, GameObjectType type)
+        public GameObject(string name, Transform transform, GameObject parent, GameObjectType type, bool enabled = true)
         {
             Name = name;
             Transform = transform;
             Transform.SetOwner(this);
             Parent = parent;
             Type = type;
+            Enabled = enabled;
 
             OnStart();
         }
@@ -105,6 +107,11 @@ namespace ConflictCube.ComponentBased.Components
 
         public void UpdateAll()
         {
+            if(!Enabled)
+            {
+                return;
+            }
+
             OnUpdate();
 
             foreach(GameObject child in Children)
@@ -122,23 +129,23 @@ namespace ConflictCube.ComponentBased.Components
         /// <returns></returns>
         public GameObject FindGameObjectByTypeInChildren<T>() where T : GameObject
         {
-            if(this is T)
+            if (this is T)
             {
                 return this;
             }
 
-            foreach(GameObject child in Children)
+            foreach (GameObject child in Children)
             {
-                if(child is T)
+                if (child is T)
                 {
                     return child;
                 }
             }
 
-            foreach(GameObject child in Children)
+            foreach (GameObject child in Children)
             {
                 GameObject gO = child.FindGameObjectByTypeInChildren<T>();
-                if(gO != null)
+                if (gO != null)
                 {
                     return gO;
                 }
@@ -146,5 +153,38 @@ namespace ConflictCube.ComponentBased.Components
 
             return null;
         }
+
+        /// <summary>
+        /// Find child of type which needs GameObject as a base class.
+        /// Search is done as a Breadth-first search.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public List<GameObject> FindGameObjectsByTypeInChildren<T>() where T : GameObject
+        {
+            List<GameObject> allGameObjects = new List<GameObject>();
+
+            if (this is T)
+            {
+                allGameObjects.Add(this);
+            }
+
+            foreach (GameObject child in Children)
+            {
+                if (child is T)
+                {
+                    allGameObjects.Add(child);
+                }
+            }
+
+            foreach (GameObject child in Children)
+            {
+                allGameObjects.AddRange(child.FindGameObjectsByTypeInChildren<T>());
+            }
+
+            return allGameObjects;
+        }
+
+
     }
 }

@@ -11,9 +11,9 @@ namespace ConflictCube.ComponentBased
 {
     public class GameState
     {
-        public GameObject Game { get; set; }
         public PlayerArea Player1Area { get; set; }
         public PlayerArea Player2Area { get; set; }
+        public Game Game { get; set; }
         public List<Player> Players { get; private set; }
 
         private Transform UiTransform = new Transform(-.8f, 0f, .2f, 1f);
@@ -22,7 +22,7 @@ namespace ConflictCube.ComponentBased
 
         public GameState()
         {
-            Game = new GameObject("Game", new Transform(0, 0, 1, 1), null);
+            Game = new Game("Game", new Transform(0, 0, 1, 1));
             Player1Area = new PlayerArea("Player1Area", new Transform(-0.5f, 0, 0.5f, 1f), Game);
             Player2Area = new PlayerArea("Player2Area", new Transform( 0.5f, 0, 0.5f, 1f), Game);
             Game.AddChild(Player1Area);
@@ -59,24 +59,28 @@ namespace ConflictCube.ComponentBased
                 throw new Exception("Found no active floor for player 2.");
             }
 
+            List<Floor> allFloors = new List<Floor>();
+            allFloors.Add(Player1Floor);
+            allFloors.Add(Player2Floor);
+
 
             //Players
             BoxCollider Player1Collider = new BoxCollider(new Transform(0, 0, 1, 1), false, Player1Floor.CollisionGroup, CollisionType.Player1);
-            Players.Add(new Player("Player0", new Transform(0, 0, .06f, .06f), Player1Collider, playerMat, Player1Floor, Player1Floor, .015f, GameObjectType.Player1));
-            Player1Area.AddChild(Players[0]);
+            Players.Add(new Player("Player0", new Transform(0, 0, .06f, .06f), Player1Collider, playerMat, Player1Floor, 0, allFloors, .015f, GameObjectType.Player1));
+            Player1Floor.AddChild(Players[0]);
             Vector2 globalStartPosition = Player1Floor.FindStartPosition();
-            Players[0].Transform.Position = Player1Area.Transform.TransformToLocal(new Transform(globalStartPosition.X, globalStartPosition.Y, 0, 0)).Position;
+            Players[0].Transform.Position = Player1Floor.Transform.TransformToLocal(new Transform(globalStartPosition.X, globalStartPosition.Y, 0, 0)).Position;
 
             BoxCollider Player2Collider = new BoxCollider(new Transform(0, 0, 1, 1), false, Player2Floor.CollisionGroup, CollisionType.Player2);
-            Players.Add(new Player("Player1", new Transform(0, 0, .06f, .06f), Player2Collider, playerMat, Player2Floor, Player2Floor, .015f, GameObjectType.Player2));
-            Player2Area.AddChild(Players[1]);
+            Players.Add(new Player("Player1", new Transform(0, 0, .06f, .06f), Player2Collider, playerMat, Player2Floor, 1, allFloors, .015f, GameObjectType.Player2));
+            Player2Floor.AddChild(Players[1]);
             globalStartPosition = Player2Floor.FindStartPosition();
-            Players[1].Transform.Position = Player2Area.Transform.TransformToLocal(new Transform(globalStartPosition.X, globalStartPosition.Y, 0, 0)).Position;
+            Players[1].Transform.Position = Player2Floor.Transform.TransformToLocal(new Transform(globalStartPosition.X, globalStartPosition.Y, 0, 0)).Position;
 
 
             //Ghost Players
-            Player1Area.AddChild(new GhostPlayer("GhostPlayer2OnArea1", new Transform(0, 0, .06f, .06f), Player1Area, playerGhostMat, Players[1], GameObjectType.GhostPlayer));
-            Player2Area.AddChild(new GhostPlayer("GhostPlayer1OnArea2", new Transform(0, 0, .06f, .06f), Player2Area, playerGhostMat, Players[0], GameObjectType.GhostPlayer));
+            Player1Floor.AddChild(new GhostPlayer("GhostPlayer2OnArea1", new Transform(0, 0, .06f, .06f), Player1Floor, playerGhostMat, Players[1], GameObjectType.GhostPlayer));
+            Player2Floor.AddChild(new GhostPlayer("GhostPlayer1OnArea2", new Transform(0, 0, .06f, .06f), Player2Floor, playerGhostMat, Players[0], GameObjectType.GhostPlayer));
         }
 
 

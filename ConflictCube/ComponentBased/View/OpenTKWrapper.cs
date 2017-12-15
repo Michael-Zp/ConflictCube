@@ -2,9 +2,9 @@
 using OpenGL = OpenTK.Graphics.OpenGL;
 using Zenseless.Geometry;
 using System.Drawing;
-using Zenseless.OpenGL;
 using ConflictCube.ComponentBased.Components;
 using Zenseless.HLGL;
+using ConflictCube.ComponentBased.Model.Components.UI;
 
 namespace ConflictCube.ComponentBased
 {
@@ -21,52 +21,6 @@ namespace ConflictCube.ComponentBased
                 OpenTKWrapperInstance = new OpenTKWrapper();
             }
             return OpenTKWrapperInstance;
-        }
-
-        private OpenTKWrapper()
-        {
-            EnableTextures();
-        }
-
-        public void DrawBox(Box2D rect, Color color)
-        {
-            GL.Color3(color);
-            DrawBoxVertices(rect);
-            GL.Color3(Color.White);
-        }
-
-        private void DrawBoxVertices(Box2D rect)
-        {
-            GL.Begin(OpenGL.PrimitiveType.Quads);
-            GL.Vertex2(rect.MinX, rect.MinY);
-            GL.Vertex2(rect.MaxX, rect.MinY);
-            GL.Vertex2(rect.MaxX, rect.MaxY);
-            GL.Vertex2(rect.MinX, rect.MaxY);
-            GL.End();
-        }
-        
-
-        public void DrawBoxWithTexture(Box2D rect, ITexture texture)
-        {
-            GL.Color4(StandardColor);
-            texture.Activate();
-            GL.Begin(OpenGL.PrimitiveType.Quads);
-            //Bottom left
-            GL.TexCoord2(0, 1);
-            GL.Vertex2(rect.MinX, rect.MinY);
-            //Bottom right
-            GL.TexCoord2(1, 1);
-            GL.Vertex2(rect.MaxX, rect.MinY);
-            //Top right
-            GL.TexCoord2(1, 0);
-            GL.Vertex2(rect.MaxX, rect.MaxY);
-            //Top left
-            GL.TexCoord2(0, 0);
-            GL.Vertex2(rect.MinX, rect.MaxY);
-
-            GL.End();
-            texture.Deactivate();
-            GL.Disable(OpenGL.EnableCap.Texture2D);
         }
 
         public void DrawBoxWithAlphaChannel(Transform transform, Color color)
@@ -100,6 +54,8 @@ namespace ConflictCube.ComponentBased
         {
             EnableAlphaChannel();
 
+            EnableTextures();
+
             texture.Activate();
             
             GL.Color4(color);
@@ -128,21 +84,20 @@ namespace ConflictCube.ComponentBased
 
             GL.Color4(StandardColor);
 
+            DisableTextures();
+
             DisableAlphaChannel();
         }
 
-        public void DrawBoxWithTextureAndAlphaChannel(Box2D rect, Texture texture)
+        public void PrintText(float xPos, float yPos, float xSize, float ySize, string text)
         {
             EnableAlphaChannel();
-            DrawBoxWithTexture(rect, texture);
-            DisableAlphaChannel();
-        }
+            EnableTextures();
 
-        public void DrawBoxWithAlpha(Box2D rect, Color color)
-        {
-            EnableAlphaChannel();
-            GL.Color4(color);
-            DrawBoxVertices(rect);
+            //Font.Instance().TextureFont.Print(xPos, yPos, 0f, xSize, text);
+            Font.Instance().TextureFont.PrintWithSize(xPos, yPos, 0f, xSize, ySize, 1f, text);
+
+            DisableTextures();
             DisableAlphaChannel();
         }
 
@@ -161,6 +116,11 @@ namespace ConflictCube.ComponentBased
         private void EnableTextures()
         {
             GL.Enable(OpenGL.EnableCap.Texture2D);
+        }
+
+        private void DisableTextures()
+        {
+            GL.Disable(OpenGL.EnableCap.Texture2D);
         }
     }
 }

@@ -22,7 +22,7 @@ namespace ConflictCube.ComponentBased.Components.Objects.Tiles
             FloorTileMaterials.Add(GameObjectType.Wall, new Material(Tilesets.Instance().FloorSheet.Tex, new Box2D(Tilesets.Instance().FloorSheet.CalcSpriteTexCoords(3)), Color.White));
         }
 
-        public FloorTile(int row, int column, string name, Transform transform, GameObject parent, GameObjectType type, Floor FloorOfTile) : base(name, transform, parent, type)
+        public FloorTile(int row, int column, string name, Transform transform, GameObject parent, GameObjectType type, Floor floorOfTile) : base(name, transform, parent, type)
         {
             if(!MaterialsAreInitialized)
             {
@@ -32,6 +32,7 @@ namespace ConflictCube.ComponentBased.Components.Objects.Tiles
 
             Row = row;
             Column = column;
+            FloorOfTile = floorOfTile;
 
             AddMaterialOnCreate();
             AddColliderOnCreate(FloorOfTile.CollisionGroup);

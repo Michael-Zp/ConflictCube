@@ -21,7 +21,8 @@ namespace ConflictCube.ComponentBased.Model.Components.Objects
             {
                 Transform globalPlayerPosition = player.Transform.TransformToGlobal();
                 Transform localPlayerPosition = Transform.TransformToLocal(globalPlayerPosition);
-                Transform.Position = new OpenTK.Vector2(Transform.Position.X, -localPlayerPosition.Position.Y);
+                //does not work
+                //Transform.Position = new OpenTK.Vector2(Transform.Position.X, -localPlayerPosition.Position.Y);
             }
             base.OnUpdate();
         }
