@@ -13,7 +13,9 @@ namespace ConflictCube.ComponentBased.Components
         Hole,
         NonCollider,
         Player1,
-        Player2
+        Player2,
+        PickableSpeedPotion,
+        PickableBlock
     }
 
     public abstract class Collider : Component

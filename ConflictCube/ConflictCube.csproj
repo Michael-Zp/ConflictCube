@@ -86,6 +86,7 @@
     <Compile Include="ComponentBased\Model\Components\GameCallbacks.cs" />
     <Compile Include="ComponentBased\Model\Components\Objects\Game.cs" />
     <Compile Include="ComponentBased\Model\Components\Objects\GhostPlayer.cs" />
+    <Compile Include="ComponentBased\Model\Components\Objects\Pickable.cs" />
     <Compile Include="ComponentBased\Model\Components\Objects\PlayerArea.cs" />
     <Compile Include="ComponentBased\Model\Components\Scene\Camera.cs" />
     <Compile Include="ComponentBased\Model\Components\Objects\PlayerInventory.cs" />
