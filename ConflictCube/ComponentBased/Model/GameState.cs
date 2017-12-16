@@ -70,13 +70,24 @@ namespace ConflictCube.ComponentBased
             Player1Floor.AddChild(Players[0]);
             Vector2 globalStartPosition = Player1Floor.FindStartPosition();
             Players[0].Transform.Position = Player1Floor.Transform.TransformToLocal(new Transform(globalStartPosition.X, globalStartPosition.Y, 0, 0)).Position;
+            //hier pickable initialitsieren player1
+            Transform picSpeedPotion = Player1Floor.GetBoxAtGridPosition(new Vector2(3, 4));
+            picSpeedPotion.Size = picSpeedPotion.Size / 2;
+            BoxCollider colliderPicSpeedPotion = new BoxCollider(new Transform(0, 0, 1, 1), true, Player1Floor.CollisionGroup, CollisionType.PickableSpeedPotion);
+            Material matPicSpeedPotion = new Material(null, null, Color.Yellow);
+            Player1Floor.AddChild(new Pickable("speedpotion", Player1Floor.Transform.TransformToLocal(picSpeedPotion), Player1Floor, colliderPicSpeedPotion, matPicSpeedPotion));
 
             BoxCollider Player2Collider = new BoxCollider(new Transform(0, 0, 1, 1), false, Player2Floor.CollisionGroup, CollisionType.Player2);
             Players.Add(new Player("Player1", new Transform(0, 0, .06f, .06f), Player2Collider, playerMat, Player2Floor, 1, allFloors, .015f, GameObjectType.Player2));
             Player2Floor.AddChild(Players[1]);
             globalStartPosition = Player2Floor.FindStartPosition();
             Players[1].Transform.Position = Player2Floor.Transform.TransformToLocal(new Transform(globalStartPosition.X, globalStartPosition.Y, 0, 0)).Position;
-
+            //hier pickable initialitsieren player2
+            Transform picBlock = Player2Floor.GetBoxAtGridPosition(new Vector2(3, 4));
+            picBlock.Size = picBlock.Size / 2;
+            BoxCollider colliderPicBlock = new BoxCollider(new Transform(0, 0, 1, 1), true, Player2Floor.CollisionGroup, CollisionType.PickableBlock);
+            Material matPicBlock = new Material(null, null, Color.White);
+            Player2Floor.AddChild(new Pickable("speedpotion", Player2Floor.Transform.TransformToLocal(picBlock), Player2Floor, colliderPicBlock, matPicBlock));
 
             //Ghost Players
             Player1Floor.AddChild(new GhostPlayer("GhostPlayer2OnArea1", new Transform(0, 0, .06f, .06f), Player1Floor, playerGhostMat, Players[1], GameObjectType.GhostPlayer));

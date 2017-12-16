@@ -258,6 +258,19 @@ namespace ConflictCube.ComponentBased
             {
                 IsAlive = false;
             }
+            else if (other.Type == CollisionType.PickableSpeedPotion)
+            {
+                CurrentSprintEnergy = MaxSprintEnergy;
+                other.Owner.Enabled = false;
+            }
+            else if (other.Type == CollisionType.PickableBlock)
+            {
+                if (Inventory.Cubes < 9)
+                {
+                    Inventory.Cubes += 1;
+                    other.Owner.Enabled = false;
+                }
+            }
             else if (other.Type == CollisionType.Finish)
             {
                 Console.WriteLine("WonGame");
