@@ -192,19 +192,19 @@ namespace ConflictCube.ComponentBased
             {
                 LastThrowUseFieldUpdate = Time.Time.CurrentTime;
 
-                if (Input.OnButtonDown(ThrowUseUp))
+                if (Input.OnButtonDown(ThrowUseUp, ActiveGamePad))
                 {
                     ThrowUseYOffset += 1;
                 }
-                if (Input.OnButtonDown(ThrowUseDown))
+                if (Input.OnButtonDown(ThrowUseDown, ActiveGamePad))
                 {
                     ThrowUseYOffset -= 1;
                 }
-                if (Input.OnButtonDown(ThrowUseLeft))
+                if (Input.OnButtonDown(ThrowUseLeft, ActiveGamePad))
                 {
                     ThrowUseXOffset -= 1;
                 }
-                if (Input.OnButtonDown(ThrowUseRight))
+                if (Input.OnButtonDown(ThrowUseRight, ActiveGamePad))
                 {
                     ThrowUseXOffset += 1;
                 }
