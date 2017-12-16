@@ -47,5 +47,10 @@ namespace ConflictCube.ComponentBased.Components
                 }
             }
         }
+
+        public void RemoveCollider(Collider colliderToRemove)
+        {
+            CollidersInGroup.Remove(colliderToRemove);
+        }
     }
 }

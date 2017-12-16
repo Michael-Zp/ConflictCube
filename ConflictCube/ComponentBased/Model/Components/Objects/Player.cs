@@ -3,7 +3,6 @@ using System;
 using ConflictCube.ComponentBased.Components;
 using System.Collections.Generic;
 using ConflictCube.ComponentBased.Model.Components.Objects;
-using ConflictCube.GlobalMethods;
 
 namespace ConflictCube.ComponentBased
 {
@@ -64,8 +63,8 @@ namespace ConflictCube.ComponentBased
             if (!MaterialsAreInitialized)
             {
                 MaterialsAreInitialized = true;
-                UseMaterial = new Material(null, null, System.Drawing.Color.FromArgb(128, 255, 0, 0));
-                ThrowMaterial = new Material(null, null, System.Drawing.Color.FromArgb(128, 0, 0, 255));
+                UseMaterial             = new Material(null, null, System.Drawing.Color.FromArgb(128, 255, 0, 0));
+                ThrowMaterial           = new Material(null, null, System.Drawing.Color.FromArgb(128, 0, 0, 255));
             }
 
             ThrowUseField = new ColoredBox("ThrowUseIndicator", new Transform(), UseMaterial, this, false);
@@ -148,20 +147,27 @@ namespace ConflictCube.ComponentBased
 
                 if (UseMode && Inventory.Cubes > 0)
                 {
-                    Floors[CurrentFloor].FloorTiles[indexOfRow, indexOfColumn].ChangeFloorTile(GameObjectType.Wall);
-                    Inventory.Cubes -= 1;
+                    if(Floors[CurrentFloor].FloorTiles[indexOfRow, indexOfColumn].PutCubeOnFloorTile())
+                    {
+                        Inventory.Cubes--;
+                    }
                 }
                 else if (ThrowMode && Inventory.Cubes > 0)
                 {
+                    bool putCube = false;
                     for (int i = 0; i < Floors.Count; i++)
                     {
                         if (i == CurrentFloor)
                         {
                             continue;
                         }
-                        Floors[i].FloorTiles[indexOfRow, indexOfColumn].ChangeFloorTile(GameObjectType.Wall);
+                        putCube = putCube || Floors[i].FloorTiles[indexOfRow, indexOfColumn].PutCubeOnFloorTile();
                     }
-                    Inventory.Cubes -= 1;
+
+                    if(putCube)
+                    {
+                        Inventory.Cubes--;
+                    }
                 }
             }
         }

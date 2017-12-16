@@ -41,6 +41,12 @@ namespace ConflictCube.ComponentBased.Components
             Type = type;
         }
 
+        public override void OnRemove()
+        {
+            base.OnRemove();
+            Group.RemoveCollider(this);
+        }
+
         public virtual void CollidesWith(Collider other, Transform thisTransform, Vector2 movement)
         {
             StandardCollision(other, thisTransform, movement);

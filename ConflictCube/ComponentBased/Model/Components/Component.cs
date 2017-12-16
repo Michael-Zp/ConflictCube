@@ -11,6 +11,11 @@ namespace ConflictCube.ComponentBased.Components
             Owner = owner;
         }
 
+        public virtual void OnRemove()
+        {
+
+        }
+
         public virtual Component Clone()
         {
             Component newComponent = (Component)MemberwiseClone();

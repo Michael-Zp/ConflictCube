@@ -77,6 +77,33 @@ namespace ConflictCube.ComponentBased.Components.Objects.Tiles
             AddColliderOnCreate(FloorOfTile.CollisionGroup);
         }
 
+        /// <summary>
+        /// Tries to set a cube on this floor tile. Change type from Floor->Wall or Hole->Floor.
+        /// Returns true if the cube was used. False if the cube was not used (Trying to set it onto a wall or finish tile)
+        /// </summary>
+        /// <returns></returns>
+        public bool PutCubeOnFloorTile()
+        {
+            switch(Type)
+            {
+                case GameObjectType.Floor:
+                    ChangeFloorTile(GameObjectType.Wall);
+                    return true;
+
+                case GameObjectType.Wall:
+                    return false;
+
+                case GameObjectType.Hole:
+                    ChangeFloorTile(GameObjectType.Floor);
+                    return true;
+
+                case GameObjectType.Finish:
+                    return false;
+            }
+
+            return false;
+        }
+
         public override GameObject Clone()
         {
             FloorTile newGameObject = (FloorTile)base.Clone();

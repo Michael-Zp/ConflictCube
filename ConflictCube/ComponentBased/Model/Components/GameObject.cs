@@ -64,6 +64,7 @@ namespace ConflictCube.ComponentBased.Components
             {
                 if (comp is T)
                 {
+                    comp.OnRemove();
                     Components.Remove(comp);
                     break;
                 }
