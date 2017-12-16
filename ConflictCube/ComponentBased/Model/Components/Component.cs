@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace ConflictCube.ComponentBased.Components
+﻿namespace ConflictCube.ComponentBased.Components
 {
     public abstract class Component
     {
