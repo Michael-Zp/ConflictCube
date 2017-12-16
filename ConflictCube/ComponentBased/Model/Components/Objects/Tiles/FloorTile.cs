@@ -13,6 +13,7 @@ namespace ConflictCube.ComponentBased.Components.Objects.Tiles
 
         private static bool MaterialsAreInitialized = false;
         private Floor FloorOfTile;
+        private int Health = 0;
 
         private static void InitalizeMaterials()
         {
@@ -24,7 +25,7 @@ namespace ConflictCube.ComponentBased.Components.Objects.Tiles
 
         public FloorTile(int row, int column, string name, Transform transform, GameObject parent, GameObjectType type, Floor floorOfTile) : base(name, transform, parent, type)
         {
-            if(!MaterialsAreInitialized)
+            if (!MaterialsAreInitialized)
             {
                 InitalizeMaterials();
                 MaterialsAreInitialized = true;
@@ -34,8 +35,18 @@ namespace ConflictCube.ComponentBased.Components.Objects.Tiles
             Column = column;
             FloorOfTile = floorOfTile;
 
+            InitializeComponentsAndHealth();
+        }
+
+        private void InitializeComponentsAndHealth()
+        {
             AddMaterialOnCreate();
             AddColliderOnCreate(FloorOfTile.CollisionGroup);
+
+            if (Type == GameObjectType.Wall)
+            {
+                Health = 3;
+            }
         }
 
         private void AddMaterialOnCreate()
@@ -63,7 +74,7 @@ namespace ConflictCube.ComponentBased.Components.Objects.Tiles
 
         public void ChangeFloorTile(GameObjectType TypeToTransformTo)
         {
-            if(TypeToTransformTo == Type)
+            if (TypeToTransformTo == Type)
             {
                 return;
             }
@@ -73,8 +84,7 @@ namespace ConflictCube.ComponentBased.Components.Objects.Tiles
 
             Type = TypeToTransformTo;
 
-            AddMaterialOnCreate();
-            AddColliderOnCreate(FloorOfTile.CollisionGroup);
+            InitializeComponentsAndHealth();
         }
 
         /// <summary>
@@ -112,6 +122,18 @@ namespace ConflictCube.ComponentBased.Components.Objects.Tiles
             newGameObject.Column = Column;
 
             return newGameObject;
+        }
+
+        public void HitFloorTileWithSledgeHammer()
+        {
+            if (Type == GameObjectType.Wall)
+            {
+                Health--;
+                if (Health <= 0)
+                {
+                    ChangeFloorTile(GameObjectType.Floor);
+                }
+            }
         }
     }
 }

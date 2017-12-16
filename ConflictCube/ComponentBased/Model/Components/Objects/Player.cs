@@ -12,6 +12,7 @@ namespace ConflictCube.ComponentBased
         public bool IsAlive { get; private set; }
         public bool ThrowMode { get; set; } = false;
         public bool UseMode { get; set; } = false;
+        public bool SledgeHammerMode { get; set; } = false;
         public float MaxSprintEnergy = 100;
         public float CurrentSprintEnergy = 100;
         public float UsedSprintEnergyPerSecond = 100;
@@ -30,6 +31,7 @@ namespace ConflictCube.ComponentBased
         private static bool MaterialsAreInitialized = false;
         private static Material UseMaterial;
         private static Material ThrowMaterial;
+        private static Material SledgeHammerMaterial;
         private float ThrowUseXOffset = 0;
         private float ThrowUseYOffset = 0;
 
@@ -65,6 +67,7 @@ namespace ConflictCube.ComponentBased
                 MaterialsAreInitialized = true;
                 UseMaterial             = new Material(null, null, System.Drawing.Color.FromArgb(128, 255, 0, 0));
                 ThrowMaterial           = new Material(null, null, System.Drawing.Color.FromArgb(128, 0, 0, 255));
+                SledgeHammerMaterial    = new Material(null, null, System.Drawing.Color.FromArgb(128, 0, 255, 0));
             }
 
             ThrowUseField = new ColoredBox("ThrowUseIndicator", new Transform(), UseMaterial, this, false);
@@ -129,16 +132,16 @@ namespace ConflictCube.ComponentBased
 
             if (Input.OnButtonDown(Use, ActiveGamePad))
             {
-                ThrowOrUseBlock();
+                UseCurrentSelectedItem();
             }
 
             Move(moveVector);
             UpdateThrowUseField();
         }
 
-        private void ThrowOrUseBlock()
+        private void UseCurrentSelectedItem()
         {
-            if (UseMode || ThrowMode)
+            if (UseMode || ThrowMode || SledgeHammerMode)
             {
                 Vector2 currentPosOfThrowUseField = Floors[CurrentFloor].GetGridPosition(Transform.TransformToGlobal()) + new Vector2(ThrowUseXOffset, ThrowUseYOffset);
 
@@ -169,12 +172,16 @@ namespace ConflictCube.ComponentBased
                         Inventory.Cubes--;
                     }
                 }
+                else if (SledgeHammerMode)
+                {
+                    Floors[CurrentFloor].FloorTiles[indexOfRow, indexOfColumn].HitFloorTileWithSledgeHammer();
+                }
             }
         }
 
         private void UpdateThrowUseField()
         {
-            if (Time.Time.CooldownIsOver(LastThrowUseFieldUpdate, ThrowUseFieldUpdateCooldown) && ThrowMode || UseMode)
+            if (Time.Time.CooldownIsOver(LastThrowUseFieldUpdate, ThrowUseFieldUpdateCooldown) && ThrowMode || UseMode || SledgeHammerMode)
             {
                 LastThrowUseFieldUpdate = Time.Time.CurrentTime;
 
@@ -291,7 +298,7 @@ namespace ConflictCube.ComponentBased
         /// </summary> 
         public void SwitchBetweenModes()
         {
-            if (!ThrowMode && !UseMode)
+            if (!ThrowMode && !UseMode && !SledgeHammerMode)
             {
                 ThrowUseXOffset = 0;
                 ThrowUseYOffset = 0;
@@ -310,6 +317,13 @@ namespace ConflictCube.ComponentBased
             else if (ThrowMode)
             {
                 ThrowMode = false;
+                SledgeHammerMode = true;
+                ThrowUseField.RemoveComponent<Material>();
+                ThrowUseField.AddComponent(SledgeHammerMaterial);
+            }
+            else if (SledgeHammerMode)
+            {
+                SledgeHammerMode = false;
                 ThrowUseField.Enabled = false;
             }
         }
