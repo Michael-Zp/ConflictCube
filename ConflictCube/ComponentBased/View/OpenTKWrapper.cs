@@ -5,6 +5,7 @@ using System.Drawing;
 using ConflictCube.ComponentBased.Components;
 using Zenseless.HLGL;
 using ConflictCube.ComponentBased.Model.Components.UI;
+using OpenTK;
 
 namespace ConflictCube.ComponentBased
 {
@@ -26,7 +27,7 @@ namespace ConflictCube.ComponentBased
         public void DrawBoxWithAlphaChannel(Transform transform, Color color)
         {
             EnableAlphaChannel();
-
+            
             GL.Color4(color);
             
             GL.Begin(OpenGL.PrimitiveType.Quads);

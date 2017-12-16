@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using OpenTK.Input;
 using System;
+using ConflictCube.GlobalMethods;
 
 namespace ConflictCube.ComponentBased
 {
@@ -26,47 +27,191 @@ namespace ConflictCube.ComponentBased
 
     public static class Input
     {
-        public static Dictionary<Key, InputKey> KeyboardSettings = new Dictionary<Key, InputKey>();
+        public static Dictionary<InputKey, Key> KeyboardSettings = new Dictionary<InputKey, Key>();
         public static Dictionary<InputAxis, float> Axes = new Dictionary<InputAxis, float>();
         public static Dictionary<InputAxis, AxisData> AxesSettings = new Dictionary<InputAxis, AxisData>();
 
-        public static Dictionary<InputKey, bool> ButtonWasPressedDown = new Dictionary<InputKey, bool>();
-        public static Dictionary<InputKey, bool> ButtonIsPressed = new Dictionary<InputKey, bool>();
-        public static Dictionary<InputKey, bool> ButtonWasReleased = new Dictionary<InputKey, bool>();
+        public static Dictionary<InputKey, GamePadButton> GamePadSettings = new Dictionary<InputKey, GamePadButton>();
+        public static Dictionary<InputAxis, GamePadAxis> GamePadAxesSettings = new Dictionary<InputAxis, GamePadAxis>();
 
-        private static KeyboardState LastState;
+
+        private static bool KeyboardState1IsCurrent = true;
+        private static KeyboardState _KeyboardState1 = new KeyboardState();
+        private static KeyboardState _KeyboardState2 = new KeyboardState();
+        private static KeyboardState CurrentKeyboardState {
+            get {
+                if (KeyboardState1IsCurrent)
+                {
+                    return _KeyboardState1;
+                }
+                else
+                {
+                    return _KeyboardState2;
+                }
+            }
+            set {
+                if(KeyboardState1IsCurrent)
+                {
+                    _KeyboardState1 = value;
+                }
+                else
+                {
+                    _KeyboardState2 = value;
+                }
+            }
+        }
+        private static KeyboardState LastKeyboardState {
+            get {
+                if(KeyboardState1IsCurrent)
+                {
+                    return _KeyboardState2;
+                }
+                else
+                {
+                    return _KeyboardState1;
+                }
+            }
+        }
+        /// <summary>
+        /// Keyboard states can not be cloned, so a normal LastKeyboardState = CurrentKeyboardState will not work, because the two states are now the same.
+        /// Use a flag KeyboardState1IsCurrent and two KeyboardStates. Swap these KeyboardStates between Current and Last with this flag (see getters) and only set the current state.
+        /// Kind of hacky but it works.
+        /// </summary>
+        private static void UpdateKeyboardStates()
+        {
+            KeyboardState1IsCurrent = !KeyboardState1IsCurrent;
+            CurrentKeyboardState = Keyboard.GetState();
+        }
+
+
+        private static bool GamePadState1IsCurrent = true;
+        private static List<GamePadState> _GamePadState1 = new List<GamePadState>(GamePadCount);
+        private static List<GamePadState> _GamePadState2 = new List<GamePadState>(GamePadCount);
+        private static List<GamePadState> CurrentGamePadState {
+            get {
+                if (GamePadState1IsCurrent)
+                {
+                    return _GamePadState1;
+                }
+                else
+                {
+                    return _GamePadState2;
+                }
+            }
+            set {
+                if (GamePadState1IsCurrent)
+                {
+                    _GamePadState1 = value;
+                }
+                else
+                {
+                    _GamePadState2 = value;
+                }
+            }
+        }
+        private static List<GamePadState> LastGamePadState {
+            get {
+                if (GamePadState1IsCurrent)
+                {
+                    return _GamePadState2;
+                }
+                else
+                {
+                    return _GamePadState1;
+                }
+            }
+        }
+        /// <summary>
+        /// Keyboard states can not be cloned, so a normal LastGamePadState = CurrentGamePadState will not work, because the two states are now the same.
+        /// Use a flag GamePadState1IsCurrent and two GamePadStates. Swap these GamePadStates between Current and Last with this flag (see getters) and only set the current state.
+        /// Kind of hacky but it works.
+        /// </summary>
+        private static void UpdateGamePadStates()
+        {
+            GamePadState1IsCurrent = !GamePadState1IsCurrent;
+
+            List<GamePadState> currentStates = new List<GamePadState>(GamePadCount);
+
+            for (int i = 0; i < GamePadCount; i++)
+            {
+                currentStates.Add(GamePad.GetState(i));
+            }
+
+            CurrentGamePadState = currentStates;
+        }
+
+        private const int GamePadCount = 4;
 
 
         static Input()
         {
-            KeyboardSettings.Add(Key.Escape, InputKey.ExitApplication);
+            KeyboardSettings.Add(InputKey.ExitApplication, Key.Escape);
+            GamePadSettings.Add(InputKey.ExitApplication, GamePadButton.RightStick);
 
-            //Player 1
-            KeyboardSettings.Add(Key.A, InputKey.PlayerOneMoveLeft);
-            KeyboardSettings.Add(Key.D, InputKey.PlayerOneMoveRight);
-            KeyboardSettings.Add(Key.W, InputKey.PlayerOneMoveUp);
-            KeyboardSettings.Add(Key.S, InputKey.PlayerOneMoveDown);
-            KeyboardSettings.Add(Key.F, InputKey.PlayerOneMoveThrowUseFieldLeft);
-            KeyboardSettings.Add(Key.H, InputKey.PlayerOneMoveThrowUseFieldRight);
-            KeyboardSettings.Add(Key.T, InputKey.PlayerOneMoveThrowUseFieldUp);
-            KeyboardSettings.Add(Key.G, InputKey.PlayerOneMoveThrowUseFieldDown);
-            KeyboardSettings.Add(Key.R, InputKey.PlayerOneSwitchMode);
-            KeyboardSettings.Add(Key.E, InputKey.PlayerOneUse);
-            KeyboardSettings.Add(Key.LShift, InputKey.PlayerOneSprint);
+            //GamePad - Player 1
+
+            GamePadSettings.Add(InputKey.PlayerOneMoveThrowUseFieldUp, GamePadButton.A);
+            GamePadSettings.Add(InputKey.PlayerOneMoveThrowUseFieldRight, GamePadButton.B);
+            GamePadSettings.Add(InputKey.PlayerOneMoveThrowUseFieldDown, GamePadButton.X);
+            GamePadSettings.Add(InputKey.PlayerOneMoveThrowUseFieldLeft, GamePadButton.Y);
+            GamePadSettings.Add(InputKey.PlayerOneSwitchMode, GamePadButton.Start);
+            GamePadSettings.Add(InputKey.PlayerOneUse, GamePadButton.Back);
+            GamePadSettings.Add(InputKey.PlayerOneSprint, GamePadButton.RightShoulder);
+
+            //Player 2
+
+            GamePadSettings.Add(InputKey.PlayerTwoMoveThrowUseFieldUp, GamePadButton.A);
+            GamePadSettings.Add(InputKey.PlayerTwoMoveThrowUseFieldRight, GamePadButton.B);
+            GamePadSettings.Add(InputKey.PlayerTwoMoveThrowUseFieldDown, GamePadButton.X);
+            GamePadSettings.Add(InputKey.PlayerTwoMoveThrowUseFieldLeft, GamePadButton.Y);
+            GamePadSettings.Add(InputKey.PlayerTwoSwitchMode, GamePadButton.Start);
+            GamePadSettings.Add(InputKey.PlayerTwoUse, GamePadButton.Back);
+            GamePadSettings.Add(InputKey.PlayerTwoSprint, GamePadButton.RightShoulder);
+
+
+            //Gamepad - Axes - Player 1
+
+            GamePadAxesSettings.Add(InputAxis.Player1Horizontal, GamePadAxis.LeftPadX);
+            GamePadAxesSettings.Add(InputAxis.Player1Vertical, GamePadAxis.LeftPadY);
+            
+            //Player 2
+
+            GamePadAxesSettings.Add(InputAxis.Player2Horizontal, GamePadAxis.LeftPadX);
+            GamePadAxesSettings.Add(InputAxis.Player2Vertical, GamePadAxis.LeftPadY);
+
+            for(int i = 0; i < GamePadCount; i++)
+            {
+                LastGamePadState.Add(GamePad.GetState(i));
+            }
+
+            //Keyboard - Player 1
+            KeyboardSettings.Add(InputKey.PlayerOneMoveLeft, Key.A);
+            KeyboardSettings.Add(InputKey.PlayerOneMoveRight, Key.D);
+            KeyboardSettings.Add(InputKey.PlayerOneMoveUp, Key.W);
+            KeyboardSettings.Add(InputKey.PlayerOneMoveDown, Key.S);
+            KeyboardSettings.Add(InputKey.PlayerOneMoveThrowUseFieldLeft, Key.F);
+            KeyboardSettings.Add(InputKey.PlayerOneMoveThrowUseFieldRight, Key.H);
+            KeyboardSettings.Add(InputKey.PlayerOneMoveThrowUseFieldUp, Key.T);
+            KeyboardSettings.Add(InputKey.PlayerOneMoveThrowUseFieldDown, Key.G);
+            KeyboardSettings.Add(InputKey.PlayerOneSwitchMode, Key.R);
+            KeyboardSettings.Add(InputKey.PlayerOneUse, Key.E);
+            KeyboardSettings.Add(InputKey.PlayerOneSprint, Key.LShift);
+
+
 
 
             //Player 2
-            KeyboardSettings.Add(Key.J, InputKey.PlayerTwoMoveLeft);
-            KeyboardSettings.Add(Key.L, InputKey.PlayerTwoMoveRight);
-            KeyboardSettings.Add(Key.I, InputKey.PlayerTwoMoveUp);
-            KeyboardSettings.Add(Key.K, InputKey.PlayerTwoMoveDown);
-            KeyboardSettings.Add(Key.Keypad4, InputKey.PlayerTwoMoveThrowUseFieldLeft);
-            KeyboardSettings.Add(Key.Keypad6, InputKey.PlayerTwoMoveThrowUseFieldRight);
-            KeyboardSettings.Add(Key.Keypad8, InputKey.PlayerTwoMoveThrowUseFieldUp);
-            KeyboardSettings.Add(Key.Keypad5, InputKey.PlayerTwoMoveThrowUseFieldDown);
-            KeyboardSettings.Add(Key.Keypad7, InputKey.PlayerTwoSwitchMode);
-            KeyboardSettings.Add(Key.O, InputKey.PlayerTwoUse);
-            KeyboardSettings.Add(Key.RControl, InputKey.PlayerTwoSprint);
+            KeyboardSettings.Add(InputKey.PlayerTwoMoveLeft, Key.J);
+            KeyboardSettings.Add(InputKey.PlayerTwoMoveRight, Key.L);
+            KeyboardSettings.Add(InputKey.PlayerTwoMoveUp, Key.I);
+            KeyboardSettings.Add(InputKey.PlayerTwoMoveDown, Key.K);
+            KeyboardSettings.Add(InputKey.PlayerTwoMoveThrowUseFieldLeft, Key.Keypad4);
+            KeyboardSettings.Add(InputKey.PlayerTwoMoveThrowUseFieldRight, Key.Keypad6);
+            KeyboardSettings.Add(InputKey.PlayerTwoMoveThrowUseFieldUp, Key.Keypad8);
+            KeyboardSettings.Add(InputKey.PlayerTwoMoveThrowUseFieldDown, Key.Keypad5);
+            KeyboardSettings.Add(InputKey.PlayerTwoSwitchMode, Key.Keypad7);
+            KeyboardSettings.Add(InputKey.PlayerTwoUse, Key.O);
+            KeyboardSettings.Add(InputKey.PlayerTwoSprint, Key.RControl);
 
 
             //Axes
@@ -83,39 +228,24 @@ namespace ConflictCube.ComponentBased
         }
 
 
+
+
+
+
+        // Update ----
+
         public static void UpdateInputs()
         {
-            foreach (Key key in KeyboardSettings.Keys)
-            {
-                bool keyIsPressed = Keyboard.GetState().IsKeyDown(key);
-                bool lastIsKeyPressed = LastState.IsKeyDown(key);
+            UpdateKeyboard();
 
+            UpdateGamePadStates();
+        }
 
-                KeyboardSettings.TryGetValue(key, out InputKey input);
-
-                if (keyIsPressed && !lastIsKeyPressed)
-                {
-                    SetInput(input, ButtonWasPressedDown, true);
-                }
-                else if(keyIsPressed && lastIsKeyPressed)
-                {
-                    SetInput(input, ButtonWasPressedDown, false);
-                    SetInput(input, ButtonIsPressed, true);
-                }
-                else if(!keyIsPressed && lastIsKeyPressed)
-                {
-                    SetInput(input, ButtonIsPressed, false);
-                    SetInput(input, ButtonWasReleased, true);
-                }
-                else if (!keyIsPressed && !lastIsKeyPressed)
-                {
-                    SetInput(input, ButtonWasReleased, false);
-                }
-            }
-
+        private static void UpdateKeyboard()
+        {
             UpdateAxes();
 
-            LastState = Keyboard.GetState();
+            UpdateKeyboardStates();
         }
 
         private static void UpdateAxes()
@@ -130,40 +260,11 @@ namespace ConflictCube.ComponentBased
         {
             AxesSettings.TryGetValue(axis, out AxisData data);
 
-            bool foundPositiveKey = false, foundNegativeKey = false;
-            Key positveKey = Key.A, negativeKey = Key.B; //Keys have to be initialized to be used later. If they are not found in the axis data there is an early exist, so Key.A and Key.B are only spaceholders.
-
-            foreach (Key key in KeyboardSettings.Keys)
-            {
-                KeyboardSettings.TryGetValue(key, out InputKey inputKey);
-
-                if (inputKey == data.PositiveKey)
-                {
-                    foundPositiveKey = true;
-                    positveKey = key;
-                    if (foundNegativeKey)
-                        break;
-                }
-
-                if (inputKey == data.NegativeKey)
-                {
-                    foundNegativeKey = true;
-                    negativeKey = key;
-                    if (foundPositiveKey)
-                        break;
-                }
-            }
-
-            if (!foundPositiveKey || !foundNegativeKey)
-            {
-                return;
-            }
+            bool positivePressed = OnButtonIsPressed(data.PositiveKey) || OnButtonDown(data.PositiveKey);
+            bool negativePressed = OnButtonIsPressed(data.NegativeKey) || OnButtonDown(data.NegativeKey);
 
             Axes.TryGetValue(axis, out float currentValue);
-
-            bool positivePressed = Keyboard.GetState().IsKeyDown(positveKey);
-            bool negativePressed = Keyboard.GetState().IsKeyDown(negativeKey);
-
+            
             if (!positivePressed && !negativePressed)
             {
                 currentValue = 0;
@@ -196,74 +297,134 @@ namespace ConflictCube.ComponentBased
         }
 
 
-        public static bool OnButtonDown(Key key)
-        {
-            return (Keyboard.GetState().IsKeyDown(key) && !LastState.IsKeyDown(key));
-        }
 
-        public static bool OnButtonDown(InputKey input)
+
+
+
+        // Get Key states
+
+        private static bool FetchKeyboardKey(InputKey input, out Key key)
         {
-            try
+            if (!KeyboardSettings.ContainsKey(input))
             {
-                ButtonWasPressedDown.TryGetValue(input, out bool state);
-                return state;
-            }
-            catch(Exception)
-            {
+                key = Key.F35;
                 return false;
             }
+            KeyboardSettings.TryGetValue(input, out key);
+            return true;
+        }
+
+        private static bool FetchGamepadKey(InputKey input, out GamePadButton button)
+        {
+            if(!GamePadSettings.ContainsKey(input))
+            {
+                button = GamePadButton.None;
+                return false;
+            }
+            GamePadSettings.TryGetValue(input, out button);
+            return true;
+        }
+
+        public static bool OnGamePadButtonDown(GamePadButton button, int activeGamePad)
+        {
+            return GamePad.GetState(activeGamePad).IsPressed(button) && !LastGamePadState[activeGamePad].IsPressed(button);
+        }
+
+        public static bool OnButtonDown(Key key)
+        {
+            return CurrentKeyboardState.IsKeyDown(key) && !LastKeyboardState.IsKeyDown(key);
+        }
+
+        public static bool OnButtonDown(InputKey input, int activeGamePad = 0)
+        {
+            bool buttonDown = false;
+
+            if(FetchKeyboardKey(input, out Key KeyboardKey))
+            {
+                buttonDown = buttonDown || OnButtonDown(KeyboardKey);
+            }
+
+            if (FetchGamepadKey(input, out GamePadButton gamePadButton))
+            {
+                buttonDown = buttonDown || OnGamePadButtonDown(gamePadButton, activeGamePad);
+            }
+
+            return buttonDown;
+        }
+
+
+        public static bool OnGamePadButtonIsPressed(GamePadButton button, int activeGamePad)
+        {
+            return GamePad.GetState(activeGamePad).IsPressed(button) && LastGamePadState[activeGamePad].IsPressed(button);
         }
 
         public static bool OnButtonIsPressed(Key key)
         {
-            return (Keyboard.GetState().IsKeyDown(key) && LastState.IsKeyDown(key));
+            return CurrentKeyboardState.IsKeyDown(key) && LastKeyboardState.IsKeyDown(key);
         }
 
-        public static bool OnButtonIsPressed(InputKey input)
+        public static bool OnButtonIsPressed(InputKey input, int activeGamePad = 0)
         {
-            try
+            bool buttonPressed = false;
+
+            if (FetchKeyboardKey(input, out Key KeyboardKey))
             {
-                ButtonIsPressed.TryGetValue(input, out bool state);
-                return state;
+                buttonPressed = buttonPressed || OnButtonIsPressed(KeyboardKey);
             }
-            catch (Exception)
+
+            if (FetchGamepadKey(input, out GamePadButton gamePadButton))
             {
-                return false;
+                buttonPressed = buttonPressed || OnGamePadButtonIsPressed(gamePadButton, activeGamePad);
             }
+
+            return buttonPressed;
+        }
+
+        
+        public static bool OnGamePadButtonIsReleased(GamePadButton button, int activeGamePad)
+        {
+            return !GamePad.GetState(activeGamePad).IsPressed(button) && LastGamePadState[activeGamePad].IsPressed(button);
         }
 
         public static bool OnButtonIsReleased(Key key)
         {
-            return (!Keyboard.GetState().IsKeyDown(key) && LastState.IsKeyDown(key));
+            return !CurrentKeyboardState.IsKeyDown(key) && LastKeyboardState.IsKeyDown(key);
         }
 
-        public static bool OnButtonIsReleased(InputKey input)
+        public static bool OnButtonIsReleased(InputKey input, int activeGamePad = 0)
         {
-            try
+            bool buttonReleased = false;
+
+            if (FetchKeyboardKey(input, out Key KeyboardKey))
             {
-                ButtonWasReleased.TryGetValue(input, out bool state);
-                return state;
+                buttonReleased = buttonReleased || OnButtonIsReleased(KeyboardKey);
             }
-            catch (Exception)
+
+            if (FetchGamepadKey(input, out GamePadButton gamePadButton))
             {
-                return false;
+                buttonReleased = buttonReleased || OnGamePadButtonIsReleased(gamePadButton, activeGamePad);
             }
+
+            return buttonReleased;
         }
 
-        public static float GetAxis(InputAxis axis)
+
+
+
+
+        // Get Axes
+
+        public static float GetKeyboardAxis(InputAxis axis)
         {
             Axes.TryGetValue(axis, out float currentValue);
 
             return currentValue;
         }
-
-        private static void SetInput(InputKey input, Dictionary<InputKey, bool> mode, bool state)
+        
+        public static float GetGamePadAxis(InputAxis axis, int activeGamePad)
         {
-            if (mode.ContainsKey(input))
-            {
-                mode.Remove(input);
-            }
-            mode.Add(input, state);
+            GamePadAxesSettings.TryGetValue(axis, out GamePadAxis gpAxis);
+            return (float)Math.Round(GamePad.GetState(activeGamePad).GetAxis(gpAxis), 2);
         }
     }
 

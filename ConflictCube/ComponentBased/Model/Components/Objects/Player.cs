@@ -3,6 +3,7 @@ using System;
 using ConflictCube.ComponentBased.Components;
 using System.Collections.Generic;
 using ConflictCube.ComponentBased.Model.Components.Objects;
+using ConflictCube.GlobalMethods;
 
 namespace ConflictCube.ComponentBased
 {
@@ -42,6 +43,7 @@ namespace ConflictCube.ComponentBased
         private InputKey Sprint;
         private InputKey SwitchMode;
         private InputKey Use;
+        private int ActiveGamePad = 0;
 
 
 
@@ -82,6 +84,7 @@ namespace ConflictCube.ComponentBased
                     Sprint = InputKey.PlayerOneSprint;
                     SwitchMode = InputKey.PlayerOneSwitchMode;
                     Use = InputKey.PlayerOneUse;
+                    ActiveGamePad = 0;
                     break;
 
                 case GameObjectType.Player2:
@@ -94,15 +97,20 @@ namespace ConflictCube.ComponentBased
                     Sprint = InputKey.PlayerTwoSprint;
                     SwitchMode = InputKey.PlayerTwoSwitchMode;
                     Use = InputKey.PlayerTwoUse;
+                    ActiveGamePad = 1;
                     break;
             }
         }
 
         public override void OnUpdate()
         {
-            Vector2 moveVector = new Vector2(Input.GetAxis(Horizontal), Input.GetAxis(Vertical));
+            //Just use GamePadInput for movement
+            //Vector2 moveVector = new Vector2(Input.GetAxis(Horizontal), Input.GetAxis(Vertical));
+            Vector2 moveVector = new Vector2(Input.GetGamePadAxis(Horizontal, ActiveGamePad), Input.GetGamePadAxis(Vertical, ActiveGamePad));
 
-            if ((Input.OnButtonIsPressed(Sprint) || Input.OnButtonDown(Sprint)) && CurrentSprintEnergy > UsedSprintEnergyPerSecond * Time.Time.DifTime)
+            if ((Input.OnButtonIsPressed(Sprint, ActiveGamePad) || Input.OnButtonDown(Sprint, ActiveGamePad))
+                && CurrentSprintEnergy > UsedSprintEnergyPerSecond * Time.Time.DifTime
+                && (moveVector.X != 0 || moveVector.Y != 0))
             {
                 moveVector *= (Speed * 2);
                 CurrentSprintEnergy -= UsedSprintEnergyPerSecond * Time.Time.DifTime;
@@ -115,12 +123,12 @@ namespace ConflictCube.ComponentBased
 
             CurrentSprintEnergy = MathHelper.Clamp(CurrentSprintEnergy, 0, MaxSprintEnergy);
 
-            if (Input.OnButtonDown(SwitchMode))
+            if (Input.OnButtonDown(SwitchMode, ActiveGamePad))
             {
                 SwitchBetweenModes();
             }
 
-            if (Input.OnButtonDown(Use))
+            if (Input.OnButtonDown(Use, ActiveGamePad))
             {
                 ThrowOrUseBlock();
             }
