@@ -25,6 +25,8 @@ namespace ConflictCube.ComponentBased
         /// </summary>
         private float ThrowUseFieldUpdateCooldown = 0.1f;
         private float LastThrowUseFieldUpdate { get; set; }
+        private float SledgeHammerCooldown = 1.0f;
+        private float LastSledgeHammerUse { get; set; }
         private int CurrentFloor;
         private List<Floor> Floors;
 
@@ -58,6 +60,7 @@ namespace ConflictCube.ComponentBased
             Floors = floors;
             CurrentFloor = currentFloor;
             LastThrowUseFieldUpdate = -ThrowUseFieldUpdateCooldown;
+            LastSledgeHammerUse = -SledgeHammerCooldown;
 
             AddComponent(boxCollider);
             AddComponent(material);
@@ -174,7 +177,11 @@ namespace ConflictCube.ComponentBased
                 }
                 else if (SledgeHammerMode)
                 {
-                    Floors[CurrentFloor].FloorTiles[indexOfRow, indexOfColumn].HitFloorTileWithSledgeHammer();
+                    if(Time.Time.CooldownIsOver(LastSledgeHammerUse, SledgeHammerCooldown))
+                    {
+                        LastSledgeHammerUse = Time.Time.CurrentTime;
+                        Floors[CurrentFloor].FloorTiles[indexOfRow, indexOfColumn].HitFloorTileWithSledgeHammer();
+                    }
                 }
             }
         }
