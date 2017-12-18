@@ -3,6 +3,7 @@ using OpenTK.Graphics.OpenGL;
 using ConflictCube.ComponentBased.Controller;
 using ConflictCube.ComponentBased.Components;
 using ConflictCube.ComponentBased.Model.Components.UI;
+using ConflictCube.ComponentBased.View;
 
 namespace ConflictCube.ComponentBased
 {
@@ -38,40 +39,45 @@ namespace ConflictCube.ComponentBased
         public void Render(ViewModel viewModel)
         {
             ClearScreen();
-            RenderGameObject(viewModel.Game);         
+            foreach(Camera camera in viewModel.Cameras)
+            {
+                RenderGameObject(camera.Transform, camera.RootGameObject);
+            }
         }
 
-        private void RenderGameObject(GameObject currentObject)
+        private void RenderGameObject(Transform cameraTransform, GameObject currentObject)
         {
             if (!currentObject.EnabledInHierachy)
             {
                 return;
             }
 
+            Transform globalTransformInCamera = cameraTransform * currentObject.Transform.TransformToGlobal();
+
             Material currentMat = currentObject.GetComponent<Material>();
             if(currentMat != null)
             {
                 if(currentMat.Texture != null)
                 {
-                    OpenTKWrapper.DrawBoxWithTextureAndAlphaChannel(currentObject.Transform.TransformToGlobal(), currentMat.Texture, currentMat.UVCoordinates, currentMat.Color);
+                    OpenTKWrapper.DrawBoxWithTextureAndAlphaChannel(globalTransformInCamera, currentMat.Texture, currentMat.UVCoordinates, currentMat.Color);
                 }
                 else
                 {
-                    OpenTKWrapper.DrawBoxWithAlphaChannel(currentObject.Transform.TransformToGlobal(), currentMat.Color);
+                    OpenTKWrapper.DrawBoxWithAlphaChannel(globalTransformInCamera, currentMat.Color);
                 }
             }
 
             if(currentObject is TextField)
             {
                 TextField text = (TextField)currentObject;
-                Transform globalTransform = text.Transform.TransformToGlobal();
+                Transform globalTransform = globalTransformInCamera;
 
                 OpenTKWrapper.PrintText(globalTransform.Position.X, globalTransform.Position.Y, globalTransform.Size.X, globalTransform.Size.Y, text.Text);
             }
 
             foreach (GameObject child in currentObject.Children)
             {
-                RenderGameObject(child);
+                RenderGameObject(cameraTransform, child);
             }
         }
 

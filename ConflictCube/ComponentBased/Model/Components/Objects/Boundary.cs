@@ -6,7 +6,7 @@ namespace ConflictCube.ComponentBased
     {
         public Boundary(string name, Transform transform, GameObject parent, CollisionGroup group, CollisionType collType) : base(name, transform, parent, GameObjectType.Boundary)
         {
-            AddComponent(new BoxCollider(transform, false, group, collType));
+            AddComponent(new BoxCollider(new Transform(0, 0, 1, 1), false, group, collType));
         }
     }
 }

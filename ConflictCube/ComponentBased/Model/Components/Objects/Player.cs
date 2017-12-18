@@ -303,6 +303,7 @@ namespace ConflictCube.ComponentBased
 
         public override void OnCollision(Collider other)
         {
+            Console.WriteLine(other.Type);
             if (other.Type == CollisionType.LeftBoundary ||
                 other.Type == CollisionType.RightBoundary ||
                 other.Type == CollisionType.TopBoundary ||

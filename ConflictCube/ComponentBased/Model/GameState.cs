@@ -6,11 +6,16 @@ using System.Drawing;
 using ConflictCube.ComponentBased.Controller;
 using OpenTK;
 using ConflictCube.ComponentBased.Model.Components.Objects;
+using ConflictCube.ComponentBased.View;
 
 namespace ConflictCube.ComponentBased
 {
     public class GameState
     {
+        public Camera Player1UICamera = new Camera(new Transform(0, 0, 1, 1), null);
+        public Camera Player2UICamera = new Camera(new Transform(0, 0, 1, 1), null);
+        public Camera Player1Camera = new Camera(new Transform(0, 0, 1, 1), null);
+        public Camera Player2Camera = new Camera(new Transform(0, 0, 1, 1), null);
         public PlayerArea Player1Area { get; set; }
         public PlayerArea Player2Area { get; set; }
         public Game Game { get; set; }
@@ -28,8 +33,15 @@ namespace ConflictCube.ComponentBased
             Game.AddChild(Player1Area);
             Game.AddChild(Player2Area);
 
-            Player1Area.AddChild(SceneBuilder.BuildScene(Levels.Level0, SceneTransform));
-            Player2Area.AddChild(SceneBuilder.BuildScene(Levels.Level0, SceneTransform));
+            GameObject player1Scene = SceneBuilder.BuildScene(Levels.Level0, SceneTransform);
+            Player1Area.AddChild(player1Scene);
+            Player1Camera.RootGameObject = player1Scene;
+
+            GameObject player2Scene = SceneBuilder.BuildScene(Levels.Level0, SceneTransform);
+            Player2Area.AddChild(player2Scene);
+            Player2Camera.RootGameObject = player2Scene;
+
+
             InitializePlayers();
             InitializeUI();
         }
@@ -37,8 +49,13 @@ namespace ConflictCube.ComponentBased
 
         private void InitializeUI()
         {
-            Player1Area.AddChild(new PlayerUI("Player0UI", Players[0], UiTransform, Player1Area));
-            Player2Area.AddChild(new PlayerUI("Player0UI", Players[1], UiTransform, Player2Area));
+            GameObject player1UI = new PlayerUI("Player0UI", Players[0], UiTransform, Player1Area);
+            Player1Area.AddChild(player1UI);
+            Player1UICamera.RootGameObject = player1UI;
+            
+            GameObject player2UI = new PlayerUI("Player0UI", Players[0], UiTransform, Player2Area);
+            Player2Area.AddChild(player2UI);
+            Player2UICamera.RootGameObject = player2UI;
         }
 
         public void InitializePlayers()
@@ -100,6 +117,9 @@ namespace ConflictCube.ComponentBased
             Game.UpdateAll();
 
             CheckLooseCondition();
+
+            Player1Camera.Transform.Position = new Vector2(0, -Players[0].Transform.TransformToGlobal().Position.Y);
+            Player2Camera.Transform.Position = new Vector2(0, -Players[1].Transform.TransformToGlobal().Position.Y);
         }
 
         private void CheckLooseCondition()

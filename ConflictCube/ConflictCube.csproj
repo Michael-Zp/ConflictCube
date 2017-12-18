@@ -93,7 +93,6 @@
     <Compile Include="ComponentBased\Model\Components\Objects\GhostPlayer.cs" />
     <Compile Include="ComponentBased\Model\Components\Objects\Pickable.cs" />
     <Compile Include="ComponentBased\Model\Components\Objects\PlayerArea.cs" />
-    <Compile Include="ComponentBased\Model\Components\Scene\Camera.cs" />
     <Compile Include="ComponentBased\Model\Components\Objects\PlayerInventory.cs" />
     <Compile Include="ComponentBased\Model\Components\Scene\SceneBuilder.cs" />
     <Compile Include="ComponentBased\Model\Components\Material\MaterialData.cs" />
@@ -122,6 +121,7 @@
     </Compile>
     <Compile Include="ComponentBased\Model\Tilesets.cs" />
     <Compile Include="ComponentBased\Model\GameState.cs" />
+    <Compile Include="ComponentBased\View\Camera.cs" />
     <Compile Include="ComponentBased\View\GameView.cs" />
     <Compile Include="ComponentBased\View\MyWindow.cs" />
     <Compile Include="ComponentBased\View\OpenTKWrapper.cs" />
