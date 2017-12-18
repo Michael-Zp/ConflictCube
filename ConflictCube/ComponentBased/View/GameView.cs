@@ -43,7 +43,7 @@ namespace ConflictCube.ComponentBased
 
         private void RenderGameObject(GameObject currentObject)
         {
-            if (!currentObject.Enabled)
+            if (!currentObject.EnabledInHierachy)
             {
                 return;
             }

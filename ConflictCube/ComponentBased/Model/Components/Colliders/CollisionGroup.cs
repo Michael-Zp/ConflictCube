@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using OpenTK;
 
 namespace ConflictCube.ComponentBased.Components
@@ -36,7 +35,7 @@ namespace ConflictCube.ComponentBased.Components
         {
             foreach (Collider other in CollidersInGroup)
             {
-                if (other == collider)
+                if (other == collider || !collider.Owner.EnabledInHierachy || !other.Owner.EnabledInHierachy)
                 {
                     continue;
                 }

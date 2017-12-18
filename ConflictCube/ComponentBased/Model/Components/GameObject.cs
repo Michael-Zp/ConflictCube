@@ -19,7 +19,34 @@ namespace ConflictCube.ComponentBased.Components
         public GameObject Parent;
         public string Name;
         public GameObjectType Type;
-        public bool Enabled;
+        public bool Enabled {
+            private get {
+                return _EnabledSelf;
+            }
+            set {
+                _EnabledSelf = value;
+            }
+        }
+        private bool _EnabledSelf;
+        public bool EnabledSelf {
+            get {
+                return _EnabledSelf;
+            }
+        }
+        public bool EnabledInHierachy {
+            get {
+                GameObject currentGameObject = this;
+                while(currentGameObject != null)
+                {
+                    if(currentGameObject.EnabledSelf == false)
+                    {
+                        return false;
+                    }
+                    currentGameObject = currentGameObject.Parent;
+                }
+                return true;
+            }
+        }
 
         public GameObject(string name, Transform transform) : this(name, transform, null)
         {}
@@ -108,7 +135,7 @@ namespace ConflictCube.ComponentBased.Components
 
         public void UpdateAll()
         {
-            if(!Enabled)
+            if(!EnabledInHierachy)
             {
                 return;
             }

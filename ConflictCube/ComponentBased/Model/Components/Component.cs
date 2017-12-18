@@ -3,10 +3,12 @@
     public abstract class Component
     {
         public GameObject Owner;
+        public bool Enabled;
 
-        public virtual void SetOwner(GameObject owner)
+        public virtual void SetOwner(GameObject owner, bool enabled = true)
         {
             Owner = owner;
+            Enabled = enabled;
         }
 
         public virtual void OnRemove()
