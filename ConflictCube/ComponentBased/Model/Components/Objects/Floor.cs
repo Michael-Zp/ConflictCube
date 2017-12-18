@@ -7,29 +7,9 @@ namespace ConflictCube.ComponentBased
 {
     public class Floor : GameObject
     {
-        public Vector2 FloorTileSize;
-        private int _FloorRows;
-        public int FloorRows {
-            get {
-                return _FloorRows;
-            }
-            set {
-                _FloorRows = value;
-                
-                FloorTileSize.Y = 1.0f / _FloorRows;
-            }
-        }
-        private int _FloorColumns;
-        public int FloorColumns {
-            get {
-                return _FloorColumns;
-            }
-            set {
-                _FloorColumns = value;
-
-                FloorTileSize.X = 1.0f / _FloorColumns;
-            }
-        }
+        public readonly Vector2 FloorTileSize;
+        public int FloorRows { get; set; }
+        public int FloorColumns { get; set; }
 
         public FloorTile[,] FloorTiles { get; set; }
         public float FloorBreakdownInterval { get; set; } = 3.0f;
@@ -43,12 +23,14 @@ namespace ConflictCube.ComponentBased
         public bool FloorShouldBreakDown = false;
 
         //floorSize is the size of the whole floor and not only the part which should be shown.
-        public Floor(string name, Transform transform, GameObject parent, int rows, int columns, CollisionGroup group) : base(name, transform, parent)
+        public Floor(string name, Transform transform, GameObject parent, int rows, int columns, CollisionGroup group, Vector2 tileSize) : base(name, transform, parent)
         {
             FloorTiles = new FloorTile[rows, columns];
             FloorRows = rows;
             FloorColumns = columns;
             CollisionGroup = group;
+
+            FloorTileSize = tileSize;
         }
 
         public override void OnUpdate()

@@ -1,6 +1,7 @@
 ﻿using System;
 using ConflictCube.ComponentBased.Components;
 using ConflictCube.ComponentBased.Components.Objects.Tiles;
+using OpenTK;
 
 namespace ConflictCube.ComponentBased
 {
@@ -15,7 +16,8 @@ namespace ConflictCube.ComponentBased
 
         private static Floor LoadFloor(int levelRows, int levelColumns, GameObjectType[,] floorTiles, string name, Transform areaOfFloor, GameObject parent, CollisionGroup group)
         {
-            Floor floorOfLevel = new Floor(name, areaOfFloor, parent, levelRows, levelColumns, group);
+            Vector2 floorTileSize = new Vector2(areaOfFloor.Size.X / levelColumns, 0.2f);
+            Floor floorOfLevel = new Floor(name, areaOfFloor, parent, levelRows, levelColumns, group, floorTileSize);
 
             for (int row = 0; row < levelRows; row++)
             {
