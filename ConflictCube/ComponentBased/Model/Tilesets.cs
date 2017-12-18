@@ -7,6 +7,7 @@ namespace ConflictCube.ComponentBased
     {
         public SpriteSheet FloorSheet;
         public SpriteSheet PlayerSheet;
+        public SpriteSheet InventoryTextures;
 
         private static Tilesets TilesetsInstance = null;
 
@@ -23,6 +24,7 @@ namespace ConflictCube.ComponentBased
         {
             FloorSheet = new SpriteSheet(TextureLoader.FromBitmap(TexturResource.FloorTileset), 2, 2);
             PlayerSheet = new SpriteSheet(TextureLoader.FromBitmap(TexturResource.PlayerTexture), 1, 1);
+            InventoryTextures = new SpriteSheet(TextureLoader.FromBitmap(InventoryResources.Sledgehammer), 1, 1);
         }
     }
 }

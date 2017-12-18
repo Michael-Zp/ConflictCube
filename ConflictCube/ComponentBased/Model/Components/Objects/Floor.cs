@@ -119,8 +119,8 @@ namespace ConflictCube.ComponentBased
         //TODO: Why do I have to do this fucked up transform?
         public Vector2 GetGridPosition(Transform globalPosition)
         {
-            Transform localPosition = Transform.TransformToLocal(globalPosition).TransformToSpace(Transform);
-            localPosition.Position = -localPosition.Position;
+            Transform localPosition = Transform.TransformToLocal(globalPosition);
+            //localPosition.Position = -localPosition.Position;
            
             float columnPosition = GetColumnOfPosition(localPosition.Position.X);
             float rowPosition = GetRowOfPosition(localPosition.Position.Y);

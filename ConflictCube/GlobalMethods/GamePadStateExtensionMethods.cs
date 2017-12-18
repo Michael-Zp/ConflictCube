@@ -16,6 +16,8 @@ namespace ConflictCube.GlobalMethods
         Back,
         Start,
         None,
+        DPadUp,
+        DPadDown,
     }
 
     public enum GamePadAxis
@@ -59,6 +61,12 @@ namespace ConflictCube.GlobalMethods
 
                 case GamePadButton.Start:
                     return state.Buttons.Start == ButtonState.Pressed;
+
+                case GamePadButton.DPadUp:
+                    return state.DPad.Up == ButtonState.Pressed;
+
+                case GamePadButton.DPadDown:
+                    return state.DPad.Down == ButtonState.Pressed;
 
             }
 

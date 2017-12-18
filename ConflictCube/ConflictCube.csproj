@@ -82,6 +82,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>FontResources.resx</DependentUpon>
     </Compile>
+    <Compile Include="ComponentBased\InventoryResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>InventoryResources.resx</DependentUpon>
+    </Compile>
     <Compile Include="ComponentBased\Model\Components\Colliders\CollisionGroup.cs" />
     <Compile Include="ComponentBased\Model\Components\GameCallbacks.cs" />
     <Compile Include="ComponentBased\Model\Components\Objects\Game.cs" />
@@ -153,6 +158,10 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>TexturResource.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="ComponentBased\InventoryResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>InventoryResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\FloorSpriteSheet.png" />
@@ -168,6 +177,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Blood Bath 2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Textures\Sledgehammer.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

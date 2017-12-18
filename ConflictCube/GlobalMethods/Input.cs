@@ -145,8 +145,11 @@ namespace ConflictCube.ComponentBased
 
         static Input()
         {
+            //GamePad and Keyboard - General
+
             KeyboardSettings.Add(InputKey.ExitApplication, Key.Escape);
             GamePadSettings.Add(InputKey.ExitApplication, GamePadButton.RightStick);
+
 
             //GamePad - Player 1
 
@@ -157,6 +160,8 @@ namespace ConflictCube.ComponentBased
             GamePadSettings.Add(InputKey.PlayerOneSwitchMode, GamePadButton.Start);
             GamePadSettings.Add(InputKey.PlayerOneUse, GamePadButton.Back);
             GamePadSettings.Add(InputKey.PlayerOneSprint, GamePadButton.RightShoulder);
+            GamePadSettings.Add(InputKey.PlayerOneInventoryUp, GamePadButton.DPadUp);
+            GamePadSettings.Add(InputKey.PlayerOneInventoryDown, GamePadButton.DPadDown);
 
             //Player 2
 
@@ -167,6 +172,8 @@ namespace ConflictCube.ComponentBased
             GamePadSettings.Add(InputKey.PlayerTwoSwitchMode, GamePadButton.Start);
             GamePadSettings.Add(InputKey.PlayerTwoUse, GamePadButton.Back);
             GamePadSettings.Add(InputKey.PlayerTwoSprint, GamePadButton.RightShoulder);
+            GamePadSettings.Add(InputKey.PlayerTwoInventoryUp, GamePadButton.DPadUp);
+            GamePadSettings.Add(InputKey.PlayerTwoInventoryDown, GamePadButton.DPadDown);
 
 
             //Gamepad - Axes - Player 1
@@ -196,6 +203,8 @@ namespace ConflictCube.ComponentBased
             KeyboardSettings.Add(InputKey.PlayerOneSwitchMode, Key.R);
             KeyboardSettings.Add(InputKey.PlayerOneUse, Key.E);
             KeyboardSettings.Add(InputKey.PlayerOneSprint, Key.LShift);
+            KeyboardSettings.Add(InputKey.PlayerOneInventoryUp, Key.X);
+            KeyboardSettings.Add(InputKey.PlayerOneInventoryDown, Key.C);
 
 
 
@@ -212,6 +221,8 @@ namespace ConflictCube.ComponentBased
             KeyboardSettings.Add(InputKey.PlayerTwoSwitchMode, Key.Keypad7);
             KeyboardSettings.Add(InputKey.PlayerTwoUse, Key.O);
             KeyboardSettings.Add(InputKey.PlayerTwoSprint, Key.RControl);
+            KeyboardSettings.Add(InputKey.PlayerTwoInventoryUp, Key.Period);
+            KeyboardSettings.Add(InputKey.PlayerTwoInventoryDown, Key.Keypad1);
 
 
             //Axes
@@ -413,6 +424,13 @@ namespace ConflictCube.ComponentBased
 
 
         // Get Axes
+
+        public static float GetAxis(InputAxis axis, int activeGamePad)
+        {
+            float keyboardAxis = GetKeyboardAxis(axis);
+            float gamepadAxis = GetGamePadAxis(axis, activeGamePad);
+            return Math.Abs(keyboardAxis) > Math.Abs(gamepadAxis) ? keyboardAxis : gamepadAxis;
+        }
 
         public static float GetKeyboardAxis(InputAxis axis)
         {

@@ -26,6 +26,10 @@
         PlayerTwoMoveThrowUseFieldDown,
         PlayerTwoSwitchMode,
         PlayerTwoSprint,
-        PlayerTwoUse
+        PlayerTwoUse,
+        PlayerOneInventoryUp,
+        PlayerOneInventoryDown,
+        PlayerTwoInventoryUp,
+        PlayerTwoInventoryDown
     }
 }

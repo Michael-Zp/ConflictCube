@@ -12,7 +12,6 @@ namespace ConflictCube.ComponentBased
         public bool IsAlive { get; private set; }
         public bool ThrowMode { get; set; } = false;
         public bool UseMode { get; set; } = false;
-        public bool SledgeHammerMode { get; set; } = false;
         public float MaxSprintEnergy = 100;
         public float CurrentSprintEnergy = 100;
         public float UsedSprintEnergyPerSecond = 100;
@@ -46,6 +45,8 @@ namespace ConflictCube.ComponentBased
         private InputKey Sprint;
         private InputKey SwitchMode;
         private InputKey Use;
+        private InputKey InventoryUp;
+        private InputKey InventoryDown;
         private int ActiveGamePad = 0;
 
 
@@ -89,6 +90,8 @@ namespace ConflictCube.ComponentBased
                     Sprint = InputKey.PlayerOneSprint;
                     SwitchMode = InputKey.PlayerOneSwitchMode;
                     Use = InputKey.PlayerOneUse;
+                    InventoryUp = InputKey.PlayerOneInventoryUp;
+                    InventoryDown = InputKey.PlayerOneInventoryDown;
                     ActiveGamePad = 0;
                     break;
 
@@ -102,6 +105,8 @@ namespace ConflictCube.ComponentBased
                     Sprint = InputKey.PlayerTwoSprint;
                     SwitchMode = InputKey.PlayerTwoSwitchMode;
                     Use = InputKey.PlayerTwoUse;
+                    InventoryUp = InputKey.PlayerTwoInventoryUp;
+                    InventoryDown = InputKey.PlayerTwoInventoryDown;
                     ActiveGamePad = 1;
                     break;
             }
@@ -110,8 +115,7 @@ namespace ConflictCube.ComponentBased
         public override void OnUpdate()
         {
             //Just use GamePadInput for movement
-            //Vector2 moveVector = new Vector2(Input.GetAxis(Horizontal), Input.GetAxis(Vertical));
-            Vector2 moveVector = new Vector2(Input.GetGamePadAxis(Horizontal, ActiveGamePad), Input.GetGamePadAxis(Vertical, ActiveGamePad));
+            Vector2 moveVector = new Vector2(Input.GetAxis(Horizontal, ActiveGamePad), Input.GetAxis(Vertical, ActiveGamePad));
 
             if ((Input.OnButtonIsPressed(Sprint, ActiveGamePad) || Input.OnButtonDown(Sprint, ActiveGamePad))
                 && CurrentSprintEnergy > UsedSprintEnergyPerSecond * Time.Time.DifTime
@@ -138,61 +142,96 @@ namespace ConflictCube.ComponentBased
                 UseCurrentSelectedItem();
             }
 
+            if (Input.OnButtonDown(InventoryUp, ActiveGamePad))
+            {
+                Inventory.MoveSelectedUp();
+            }
+
+            if (Input.OnButtonDown(InventoryDown, ActiveGamePad))
+            {
+                Inventory.MoveSelectedDown();
+            }
+            
             Move(moveVector);
             UpdateThrowUseField();
 
             //Fake as fuck follow camera ^^
             float globalYPos = Transform.TransformToGlobal().Position.Y;
-            Floors[CurrentFloor].Transform.Position = new Vector2(Floors[CurrentFloor].Transform.Position.X, Floors[CurrentFloor].Transform.Position.Y - globalYPos);
+            //Floors[CurrentFloor].Transform.Position = new Vector2(Floors[CurrentFloor].Transform.Position.X, Floors[CurrentFloor].Transform.Position.Y - globalYPos);
         }
 
         private void UseCurrentSelectedItem()
         {
-            if (UseMode || ThrowMode || SledgeHammerMode)
+            if (UseMode || ThrowMode)
             {
                 Vector2 currentPosOfThrowUseField = Floors[CurrentFloor].GetGridPosition(Transform.TransformToGlobal()) + new Vector2(ThrowUseXOffset, ThrowUseYOffset);
 
                 int indexOfColumn = (int)currentPosOfThrowUseField.X;
                 int indexOfRow = Floors[CurrentFloor].FloorRows - 1 - (int)currentPosOfThrowUseField.Y;
 
-                if (UseMode && Inventory.Cubes > 0)
-                {
-                    if(Floors[CurrentFloor].FloorTiles[indexOfRow, indexOfColumn].PutCubeOnFloorTile())
-                    {
-                        Inventory.Cubes--;
-                    }
-                }
-                else if (ThrowMode && Inventory.Cubes > 0)
-                {
-                    bool putCube = false;
-                    for (int i = 0; i < Floors.Count; i++)
-                    {
-                        if (i == CurrentFloor)
-                        {
-                            continue;
-                        }
-                        putCube = putCube || Floors[i].FloorTiles[indexOfRow, indexOfColumn].PutCubeOnFloorTile();
-                    }
 
-                    if(putCube)
-                    {
-                        Inventory.Cubes--;
-                    }
-                }
-                else if (SledgeHammerMode)
+                switch(Inventory.SelectedItem)
                 {
-                    if(Time.Time.CooldownIsOver(LastSledgeHammerUse, SledgeHammerCooldown))
-                    {
-                        LastSledgeHammerUse = Time.Time.CurrentTime;
-                        Floors[CurrentFloor].FloorTiles[indexOfRow, indexOfColumn].HitFloorTileWithSledgeHammer();
-                    }
+                    case InventoryItems.Sledgehammer:
+                        if (Time.Time.CooldownIsOver(LastSledgeHammerUse, SledgeHammerCooldown))
+                        {
+                            if(UseMode)
+                            {
+                                Floors[CurrentFloor].FloorTiles[indexOfRow, indexOfColumn].HitFloorTileWithSledgeHammer();
+                            }
+                            else if (ThrowMode)
+                            {
+                                for (int i = 0; i < Floors.Count; i++)
+                                {
+                                    if (i == CurrentFloor)
+                                    {
+                                        continue;
+                                    }
+                                    Floors[i].FloorTiles[indexOfRow, indexOfColumn].HitFloorTileWithSledgeHammer();
+                                }
+                            }
+                            LastSledgeHammerUse = Time.Time.CurrentTime;
+                        }
+                        break;
+
+                    case InventoryItems.Cubes:
+                        if(Inventory.Cubes <= 0)
+                        {
+                            break;
+                        }
+
+                        if (UseMode)
+                        {
+                            if (Floors[CurrentFloor].FloorTiles[indexOfRow, indexOfColumn].PutCubeOnFloorTile())
+                            {
+                                Inventory.Cubes--;
+                            }
+                        }
+                        else if (ThrowMode)
+                        {
+                            bool putCube = false;
+                            for (int i = 0; i < Floors.Count; i++)
+                            {
+                                if (i == CurrentFloor)
+                                {
+                                    continue;
+                                }
+                                putCube = putCube || Floors[i].FloorTiles[indexOfRow, indexOfColumn].PutCubeOnFloorTile();
+                            }
+
+                            if (putCube)
+                            {
+                                Inventory.Cubes--;
+                            }
+                        }
+                        break;
                 }
             }
         }
 
         private void UpdateThrowUseField()
         {
-            if (Time.Time.CooldownIsOver(LastThrowUseFieldUpdate, ThrowUseFieldUpdateCooldown) && ThrowMode || UseMode || SledgeHammerMode)
+            if (Time.Time.CooldownIsOver(LastThrowUseFieldUpdate, ThrowUseFieldUpdateCooldown) && ThrowMode || UseMode)
             {
                 LastThrowUseFieldUpdate = Time.Time.CurrentTime;
 
@@ -309,7 +348,7 @@ namespace ConflictCube.ComponentBased
         /// </summary> 
         public void SwitchBetweenModes()
         {
-            if (!ThrowMode && !UseMode && !SledgeHammerMode)
+            if (!ThrowMode && !UseMode)
             {
                 ThrowUseXOffset = 0;
                 ThrowUseYOffset = 0;
@@ -328,13 +367,6 @@ namespace ConflictCube.ComponentBased
             else if (ThrowMode)
             {
                 ThrowMode = false;
-                SledgeHammerMode = true;
-                ThrowUseField.RemoveComponent<Material>();
-                ThrowUseField.AddComponent(SledgeHammerMaterial);
-            }
-            else if (SledgeHammerMode)
-            {
-                SledgeHammerMode = false;
                 ThrowUseField.Enabled = false;
             }
         }
