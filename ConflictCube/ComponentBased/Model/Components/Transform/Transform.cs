@@ -112,7 +112,7 @@ namespace ConflictCube.ComponentBased.Components
             }
 
             Transform newTransform = (Transform)Clone();
-            Transform tempTransform = transform.TransformToSpace(new Transform(GetTransformMatrixToGlobal()));
+            Transform tempTransform = new Transform(GetTransformMatrixToGlobal() * transform.TransformMatrix);
             newTransform.TransformMatrix = tempTransform.TransformMatrix;
 
             return newTransform;
@@ -131,7 +131,7 @@ namespace ConflictCube.ComponentBased.Components
             }
 
             Transform newTransform = (Transform)Clone();
-            Transform tempTransform = transformToLocal.TransformToSpace(new Transform(GetTransformMatrixToGlobal().Inverted()));
+            Transform tempTransform = new Transform(GetTransformMatrixToGlobal().Inverted() * transformToLocal.TransformMatrix);
             newTransform.TransformMatrix = tempTransform.TransformMatrix;
 
             return newTransform;

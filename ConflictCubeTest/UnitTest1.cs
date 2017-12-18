@@ -1,7 +1,7 @@
 ﻿using System;
 using OpenTK;
 using NUnit.Framework;
-using ConflictCube.ComponentBased;
+using ConflictCube.ComponentBased.Components;
 
 namespace ConflictCubeTest
 {
@@ -13,6 +13,25 @@ namespace ConflictCubeTest
         {
             GameWindow window = new GameWindow();
         }
+
+
+        [Test]
+        public void TestTransformLocalToGlobalToLocal()
+        {
+            Transform localTransform = new Transform(0, 1, 2f, 2f);
+
+            Transform globalTransform = new Transform(0, 0, 1, 1);
+
+            GameObject globalObject = new GameObject("global", globalTransform);
+            GameObject localObject = new GameObject("local", localTransform);
+
+            globalObject.AddChild(localObject);
+
+            Vector2 globalPosition = localTransform.TransformToLocal(globalTransform).Position;
+
+            Assert.AreEqual(globalPosition, new Vector2(0, -0.5f));
+        }
+
         /*
         [Test]
         [Category("OpenGlTests")]
@@ -122,8 +141,8 @@ namespace ConflictCubeTest
 
         private void AssertVectorsAreRoughlyTheSame(Vector2 one, Vector2 two, float epsilon = 0.0001f)
         {
-            Assert.That(Math.Abs(one.X - two.X) < epsilon);
-            Assert.That(Math.Abs(one.Y - two.Y) < epsilon);
+            Assert.That(Math.Abs(one.X - two.X) < epsilon, one.X + " - " + two.X + " is bigger than epsilon of " + epsilon);
+            Assert.That(Math.Abs(one.Y - two.Y) < epsilon, one.X + " - " + two.X + " is bigger than epsilon of " + epsilon);
         }
     }
 }

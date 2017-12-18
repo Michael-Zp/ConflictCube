@@ -44,7 +44,8 @@ namespace ConflictCube.ComponentBased
             {
                 Vector2 playerPositionInGrid = GetGridPosition(PlayerOnFloor.Transform.TransformToGlobal());
 
-                if(playerPositionInGrid.Y >= FloorRowThreshold)
+                //If the level has to initialize itself dont start the floor breakdown.
+                if(playerPositionInGrid.Y >= FloorRowThreshold && Time.Time.CurrentTime > 1)
                 {
                     PlayerIsOverThreshold = true;
                 }
@@ -114,13 +115,16 @@ namespace ConflictCube.ComponentBased
             return new Transform(posX, posY, FloorTileSize.X, FloorTileSize.Y);
         }
 
+
+        //TODO: Why do I have to do this fucked up transform?
         public Vector2 GetGridPosition(Transform globalPosition)
         {
-            Transform localPosition = Transform.TransformToLocal(globalPosition);
-
+            Transform localPosition = Transform.TransformToLocal(globalPosition).TransformToSpace(Transform);
+            localPosition.Position = -localPosition.Position;
+           
             float columnPosition = GetColumnOfPosition(localPosition.Position.X);
             float rowPosition = GetRowOfPosition(localPosition.Position.Y);
-
+            
             return new Vector2(columnPosition, rowPosition);
         }
 
@@ -139,6 +143,7 @@ namespace ConflictCube.ComponentBased
             }
             catch(Exception)
             {
+                return FloorTiles[0, 0].Transform;
                 throw new Exception("Found no FloorTile for row: " + boxGridPosition.Y + " and column: " + boxGridPosition.X);
             }
             

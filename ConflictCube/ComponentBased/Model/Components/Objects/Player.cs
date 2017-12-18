@@ -140,6 +140,10 @@ namespace ConflictCube.ComponentBased
 
             Move(moveVector);
             UpdateThrowUseField();
+
+            //Fake as fuck follow camera ^^
+            float globalYPos = Transform.TransformToGlobal().Position.Y;
+            Floors[CurrentFloor].Transform.Position = new Vector2(Floors[CurrentFloor].Transform.Position.X, Floors[CurrentFloor].Transform.Position.Y - globalYPos);
         }
 
         private void UseCurrentSelectedItem()

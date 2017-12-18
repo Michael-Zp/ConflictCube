@@ -119,6 +119,8 @@ namespace ConflictCube.ComponentBased.Components
         public virtual GameObject Clone()
         {
             GameObject newGameObject = (GameObject)MemberwiseClone();
+            newGameObject.Children = new List<GameObject>();
+            newGameObject.Components = new List<Component>();
 
             foreach(GameObject child in Children)
             {
