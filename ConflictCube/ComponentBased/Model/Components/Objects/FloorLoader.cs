@@ -14,10 +14,10 @@ namespace ConflictCube.ComponentBased
             return LoadFloor(rows, columns, FloorTiles, floorName, areaOfFloor, parent, group);
         }
 
-        private static Floor LoadFloor(int levelRows, int levelColumns, GameObjectType[,] floorTiles, string name, Transform areaOfFloor, GameObject parent, CollisionGroup group)
+        private static Floor LoadFloor(int levelRows, int levelColumns, GameObjectType[,] floorTiles, string name, Transform floorTransform, GameObject parent, CollisionGroup group)
         {
-            Vector2 floorTileSize = new Vector2(areaOfFloor.Size.X / levelColumns, 0.2f);
-            Floor floorOfLevel = new Floor(name, areaOfFloor, parent, levelRows, levelColumns, group, floorTileSize);
+            Vector2 floorTileSize = new Vector2(floorTransform.Size.X / levelColumns, 0.2f);
+            Floor floorOfLevel = new Floor(name, floorTransform, parent, levelRows, levelColumns, group, floorTileSize);
 
             for (int row = 0; row < levelRows; row++)
             {
