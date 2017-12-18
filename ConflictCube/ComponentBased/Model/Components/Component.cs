@@ -5,10 +5,14 @@
         public GameObject Owner;
         public bool Enabled;
 
-        public virtual void SetOwner(GameObject owner, bool enabled = true)
+        public Component(bool enabled = true)
+        {
+            Enabled = enabled;
+        }
+
+        public virtual void SetOwner(GameObject owner)
         {
             Owner = owner;
-            Enabled = enabled;
         }
 
         public virtual void OnRemove()
