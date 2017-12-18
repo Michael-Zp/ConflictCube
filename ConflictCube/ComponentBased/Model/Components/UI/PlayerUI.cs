@@ -1,4 +1,6 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
 using ConflictCube.ComponentBased.Components;
 using ConflictCube.ComponentBased.Model.Components.UI;
 
@@ -20,6 +22,10 @@ namespace ConflictCube.ComponentBased
         private TextField CountCubesInInventory;
         private Canvas SelectedCubes;
 
+        private Canvas SprintEnergyBackground;
+        private List<Canvas> SprintEnergyBlocks = new List<Canvas>();
+        private const int SprintBlockCount = 4;
+
         private static Material BackgroundMat = new Material(null, null, Color.White);
         private static Material PlayerAliveMat = new Material(null, null, Color.Green);
         private static Material PlayerDeadMat = new Material(null, null, Color.Red);
@@ -30,6 +36,9 @@ namespace ConflictCube.ComponentBased
         private static Material SledgehammerMaterial;
 
         private static Material SelectedMaterial = new Material(null, null, Color.Red);
+
+        private static Material SprintEnergyBackgroundMaterial = new Material(null, null, Color.Black);
+        private static Material SprintEnergyBlockMaterial = new Material(null, null, Color.Orange);
 
         private static bool IsInitalized = false;
 
@@ -73,6 +82,26 @@ namespace ConflictCube.ComponentBased
             ForegroundLayer.AddChild(CountCubesInInventory);
 
 
+            //Sprint Energy
+
+            ForegroundLayer.AddChild(new TextField("Sprint", new Transform(-.8f, -.35f, .3f, .1f), "Sprint-"));
+            ForegroundLayer.AddChild(new TextField("Energy", new Transform(-.8f, -.45f, .3f, .1f), "energy:"));
+
+            SprintEnergyBackground = new Canvas("SprintEnergyBackground", new Transform(0, -.6f, .8f, .1f), ForegroundLayer, SprintEnergyBackgroundMaterial);
+            ForegroundLayer.AddChild(SprintEnergyBackground);
+
+            float blockHeight = SprintEnergyBackground.Transform.Size.Y * .9f;
+            float blockWidht = (SprintEnergyBackground.Transform.Size.X * .8f) / SprintBlockCount;
+            float marginWidht = (.9f - (SprintEnergyBackground.Transform.Size.X * .8f)) / (SprintBlockCount + 1);
+
+            for (int i = 0; i < SprintBlockCount; i++)
+            {
+                float blockXPosition = SprintEnergyBackground.Transform.MinX + marginWidht + blockWidht + (marginWidht * 1.5f + blockWidht * 2) * i;
+                SprintEnergyBlocks.Add(new Canvas("SprintEnergyBlock" + i, new Transform(blockXPosition, SprintEnergyBackground.Transform.Position.Y, blockWidht, blockHeight), ForegroundLayer, SprintEnergyBlockMaterial));
+                ForegroundLayer.AddChild(SprintEnergyBlocks[i]);
+            }
+
+
             AddChild(BackgroundLayer);
             AddChild(ForegroundLayer);
         }
@@ -112,6 +141,20 @@ namespace ConflictCube.ComponentBased
                     SelectedSledgehammer.Enabled = false;
                     SelectedCubes.Enabled = true;
                     break;
+            }
+
+            float energyRatio = (float)Math.Floor((Player.CurrentSprintEnergy / Player.MaxSprintEnergy) * SprintBlockCount);
+
+            for(int i = 0; i < SprintBlockCount; i++)
+            {
+                if(i < energyRatio)
+                {
+                    SprintEnergyBlocks[i].Enabled = true;
+                }
+                else
+                {
+                    SprintEnergyBlocks[i].Enabled = false;
+                }
             }
 
             CountCubesInInventory.Text = Player.Inventory.Cubes.ToString();
