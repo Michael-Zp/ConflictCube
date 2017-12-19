@@ -23,15 +23,15 @@ namespace ConflictCube.ComponentBased
             GameObject Boundaries = new GameObject("Boundaries", new Transform(0, 0, 1, 1), null);
 
             GameObject topBoundary = new Boundary("TopBoundary", new Transform(0, 3.5f, 1, 0.5f), Boundaries, group, CollisionType.TopBoundary);
-            topBoundary.AddComponent(new Material(null, null, System.Drawing.Color.FromArgb(128, System.Drawing.Color.Red)));
+            topBoundary.AddComponent(new Material(null, null, System.Drawing.Color.FromArgb(0, System.Drawing.Color.Red)));
 
             GameObject bottomBoundary = new Boundary("BottomBoundary", new Transform(0, -2f, 1f, 1f), Boundaries, group, CollisionType.BottomBoundary);
-            bottomBoundary.AddComponent(new Material(null, null, System.Drawing.Color.FromArgb(128, System.Drawing.Color.Green)));
+            bottomBoundary.AddComponent(new Material(null, null, System.Drawing.Color.FromArgb(0, System.Drawing.Color.Green)));
 
-            GameObject rightBoundary = new Boundary("RightBoundary", new Transform(2f, 0f, 1f, 1f), Boundaries, group, CollisionType.RightBoundary);
+            GameObject rightBoundary = new Boundary("RightBoundary", new Transform(2f, 1f, 1f, 2f), Boundaries, group, CollisionType.RightBoundary);
             rightBoundary.AddComponent(new Material(null, null, System.Drawing.Color.FromArgb(0, System.Drawing.Color.Blue)));
 
-            GameObject leftBoundary = new Boundary("LeftBoundary", new Transform(-2f, 0f, 1f, 1f), Boundaries, group, CollisionType.LeftBoundary);
+            GameObject leftBoundary = new Boundary("LeftBoundary", new Transform(-2f, 1f, 1f, 2f), Boundaries, group, CollisionType.LeftBoundary);
             leftBoundary.AddComponent(new Material(null, null, System.Drawing.Color.FromArgb(0, System.Drawing.Color.Violet)));
 
             Boundaries.AddChild(topBoundary);

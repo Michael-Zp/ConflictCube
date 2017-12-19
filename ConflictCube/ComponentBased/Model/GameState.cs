@@ -53,7 +53,7 @@ namespace ConflictCube.ComponentBased
             Player1Area.AddChild(player1UI);
             Player1UICamera.RootGameObject = player1UI;
             
-            GameObject player2UI = new PlayerUI("Player0UI", Players[0], UiTransform, Player2Area);
+            GameObject player2UI = new PlayerUI("Player0UI", Players[1], UiTransform, Player2Area);
             Player2Area.AddChild(player2UI);
             Player2UICamera.RootGameObject = player2UI;
         }
