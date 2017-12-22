@@ -33,11 +33,11 @@ namespace ConflictCube.ComponentBased
             Game.AddChild(Player1Area);
             Game.AddChild(Player2Area);
 
-            GameObject player1Scene = SceneBuilder.BuildScene(Levels.Level0, SceneTransform);
+            GameObject player1Scene = SceneBuilder.BuildScene(Levels.Level2, SceneTransform);
             Player1Area.AddChild(player1Scene);
             Player1Camera.RootGameObject = player1Scene;
 
-            GameObject player2Scene = SceneBuilder.BuildScene(Levels.Level0, SceneTransform);
+            GameObject player2Scene = SceneBuilder.BuildScene(Levels.Level2, SceneTransform);
             Player2Area.AddChild(player2Scene);
             Player2Camera.RootGameObject = player2Scene;
 
@@ -83,25 +83,26 @@ namespace ConflictCube.ComponentBased
 
             //Players
             BoxCollider Player1Collider = new BoxCollider(new Transform(0, 0, 1, 1), false, Player1Floor.CollisionGroup, CollisionType.Player1);
-            Players.Add(new Player("Player0", new Transform(0, 0, .06f, .06f), Player1Collider, playerMat, Player1Floor, 0, allFloors, .015f, GameObjectType.Player1));
+            Players.Add(new Player("Player0", new Transform(0, 0, .06f, .06f), Player1Collider, playerMat, Player1Floor, 0, allFloors, .2f, GameObjectType.Player1));
             Player1Floor.AddChild(Players[0]);
-            Vector2 globalStartPosition = Player1Floor.FindStartPosition();
-            Players[0].Transform.Position = Player1Floor.Transform.TransformToLocal(new Transform(globalStartPosition.X, globalStartPosition.Y, 0, 0)).Position;
+            Players[0].Transform.SetPosition(Player1Floor.FindStartPosition(), WorldRelation.Global);
+            
             //hier pickable initialitsieren player1
             Transform picSpeedPotion = Player1Floor.GetBoxAtGridPosition(new Vector2(3, 4));
-            picSpeedPotion.Size = picSpeedPotion.Size / 2;
+            picSpeedPotion.SetSize(picSpeedPotion.GetSize(WorldRelation.Global) / 2, WorldRelation.Global);
             BoxCollider colliderPicSpeedPotion = new BoxCollider(new Transform(0, 0, 1, 1), true, Player1Floor.CollisionGroup, CollisionType.PickableSpeedPotion);
             Material matPicSpeedPotion = new Material(null, null, Color.Yellow);
             Player1Floor.AddChild(new Pickable("speedpotion", Player1Floor.Transform.TransformToLocal(picSpeedPotion), Player1Floor, colliderPicSpeedPotion, matPicSpeedPotion));
+            
 
             BoxCollider Player2Collider = new BoxCollider(new Transform(0, 0, 1, 1), false, Player2Floor.CollisionGroup, CollisionType.Player2);
-            Players.Add(new Player("Player1", new Transform(0, 0, .06f, .06f), Player2Collider, playerMat, Player2Floor, 1, allFloors, .015f, GameObjectType.Player2));
+            Players.Add(new Player("Player1", new Transform(0, 0, .06f, .06f), Player2Collider, playerMat, Player2Floor, 1, allFloors, .2f, GameObjectType.Player2));
             Player2Floor.AddChild(Players[1]);
-            globalStartPosition = Player2Floor.FindStartPosition();
-            Players[1].Transform.Position = Player2Floor.Transform.TransformToLocal(new Transform(globalStartPosition.X, globalStartPosition.Y, 0, 0)).Position;
+            Players[1].Transform.SetPosition(Player2Floor.FindStartPosition(), WorldRelation.Global);
+
             //hier pickable initialitsieren player2
             Transform picBlock = Player2Floor.GetBoxAtGridPosition(new Vector2(3, 4));
-            picBlock.Size = picBlock.Size / 2;
+            picBlock.SetSize(picBlock.GetSize(WorldRelation.Global) / 2, WorldRelation.Global);
             BoxCollider colliderPicBlock = new BoxCollider(new Transform(0, 0, 1, 1), true, Player2Floor.CollisionGroup, CollisionType.PickableBlock);
             Material matPicBlock = new Material(null, null, Color.White);
             Player2Floor.AddChild(new Pickable("speedpotion", Player2Floor.Transform.TransformToLocal(picBlock), Player2Floor, colliderPicBlock, matPicBlock));
@@ -118,12 +119,16 @@ namespace ConflictCube.ComponentBased
 
             CheckLooseCondition();
 
-            Player1Camera.Transform.Position = new Vector2(0, -Players[0].Transform.TransformToGlobal().Position.Y);
-            Player2Camera.Transform.Position = new Vector2(0, -Players[1].Transform.TransformToGlobal().Position.Y);
+            Player1Camera.Transform.SetPosition(new Vector2(0, -Players[0].Transform.GetPosition(WorldRelation.Global).Y), WorldRelation.Global);
+            Player2Camera.Transform.SetPosition(new Vector2(0, -Players[1].Transform.GetPosition(WorldRelation.Global).Y), WorldRelation.Global);
         }
 
         private void CheckLooseCondition()
         {
+            if(!DebugGame.CanLoose)
+            {
+                return;
+            }
             if (!Players[0].IsAlive && !Players[1].IsAlive)
             {
                 Environment.Exit(0);

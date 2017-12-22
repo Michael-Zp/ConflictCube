@@ -4,8 +4,6 @@ using Zenseless.Geometry;
 using System.Drawing;
 using ConflictCube.ComponentBased.Components;
 using Zenseless.HLGL;
-using ConflictCube.ComponentBased.Model.Components.UI;
-using OpenTK;
 
 namespace ConflictCube.ComponentBased
 {
@@ -33,16 +31,16 @@ namespace ConflictCube.ComponentBased
             GL.Begin(OpenGL.PrimitiveType.Quads);
 
             //Bottom left
-            GL.Vertex2(transform.MinX, transform.MinY);
+            GL.Vertex2(transform.GetMinX(WorldRelation.Global), transform.GetMinY(WorldRelation.Global));
 
             //Bottom right
-            GL.Vertex2(transform.MaxX, transform.MinY);
+            GL.Vertex2(transform.GetMaxX(WorldRelation.Global), transform.GetMinY(WorldRelation.Global));
 
             //Top right
-            GL.Vertex2(transform.MaxX, transform.MaxY);
+            GL.Vertex2(transform.GetMaxX(WorldRelation.Global), transform.GetMaxY(WorldRelation.Global));
 
             //Top left
-            GL.Vertex2(transform.MinX, transform.MaxY);
+            GL.Vertex2(transform.GetMinX(WorldRelation.Global), transform.GetMaxY(WorldRelation.Global));
 
             GL.End();
 
@@ -65,19 +63,19 @@ namespace ConflictCube.ComponentBased
 
             //Bottom left
             GL.TexCoord2(uVCoordinates.MinX, uVCoordinates.MinY);
-            GL.Vertex2(transform.MinX, transform.MinY);
+            GL.Vertex2(transform.GetMinX(WorldRelation.Global), transform.GetMinY(WorldRelation.Global));
 
             //Bottom right
             GL.TexCoord2(uVCoordinates.MaxX, uVCoordinates.MinY);
-            GL.Vertex2(transform.MaxX, transform.MinY);
+            GL.Vertex2(transform.GetMaxX(WorldRelation.Global), transform.GetMinY(WorldRelation.Global));
 
             //Top right
             GL.TexCoord2(uVCoordinates.MaxX, uVCoordinates.MaxY);
-            GL.Vertex2(transform.MaxX, transform.MaxY);
+            GL.Vertex2(transform.GetMaxX(WorldRelation.Global), transform.GetMaxY(WorldRelation.Global));
 
             //Top left
             GL.TexCoord2(uVCoordinates.MinX, uVCoordinates.MaxY);
-            GL.Vertex2(transform.MinX, transform.MaxY);
+            GL.Vertex2(transform.GetMinX(WorldRelation.Global), transform.GetMaxY(WorldRelation.Global));
 
             GL.End();
             

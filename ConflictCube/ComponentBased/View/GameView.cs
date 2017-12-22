@@ -4,6 +4,9 @@ using ConflictCube.ComponentBased.Controller;
 using ConflictCube.ComponentBased.Components;
 using ConflictCube.ComponentBased.Model.Components.UI;
 using ConflictCube.ComponentBased.View;
+using System.Drawing;
+using System;
+using System.Collections.Generic;
 
 namespace ConflictCube.ComponentBased
 {
@@ -43,6 +46,13 @@ namespace ConflictCube.ComponentBased
             {
                 RenderGameObject(camera.Transform, camera.RootGameObject);
             }
+
+            foreach(Tuple<Transform, Color> debugObject in DebugDraws)
+            {
+                OpenTKWrapper.DrawBoxWithAlphaChannel(viewModel.Cameras[2].Transform * debugObject.Item1, debugObject.Item2);
+            }
+
+            DebugDraws.Clear();
         }
 
         private void RenderGameObject(Transform cameraTransform, GameObject currentObject)
@@ -72,7 +82,7 @@ namespace ConflictCube.ComponentBased
                 TextField text = (TextField)currentObject;
                 Transform globalTransform = globalTransformInCamera;
 
-                OpenTKWrapper.PrintText(globalTransform.Position.X, globalTransform.Position.Y, globalTransform.Size.X, globalTransform.Size.Y, text.Text);
+                OpenTKWrapper.PrintText(globalTransform.GetPosition(WorldRelation.Global).X, globalTransform.GetPosition(WorldRelation.Global).Y, globalTransform.GetSize(WorldRelation.Global).X, globalTransform.GetSize(WorldRelation.Global).Y, text.Text);
             }
 
             foreach (GameObject child in currentObject.Children)
@@ -84,6 +94,14 @@ namespace ConflictCube.ComponentBased
         public void CloseWindow()
         {
             Window.Close();
+        }
+
+
+        private static List<Tuple<Transform, Color>> DebugDraws = new List<Tuple<Transform, Color>>();
+
+        public static void DrawDebug(Transform transform, Color color)
+        {
+            DebugDraws.Add(Tuple.Create(transform, color));
         }
         
     }

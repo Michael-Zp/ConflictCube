@@ -64,7 +64,7 @@ namespace ConflictCube.ComponentBased.Components.Objects.Tiles
             }
             else if (Type == GameObjectType.Hole)
             {
-                AddComponent(new BoxCollider(new Transform(0, 0, .8f, .8f), false, group, CollisionType.Hole));
+                AddComponent(new BoxCollider(new Transform(0, 0, .6f, .6f), false, group, CollisionType.Hole));
             }
             else if (Type == GameObjectType.Finish)
             {

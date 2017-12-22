@@ -90,14 +90,14 @@ namespace ConflictCube.ComponentBased
             SprintEnergyBackground = new Canvas("SprintEnergyBackground", new Transform(0, -.6f, .8f, .1f), ForegroundLayer, SprintEnergyBackgroundMaterial);
             ForegroundLayer.AddChild(SprintEnergyBackground);
 
-            float blockHeight = SprintEnergyBackground.Transform.Size.Y * .9f;
-            float blockWidht = (SprintEnergyBackground.Transform.Size.X * .8f) / SprintBlockCount;
-            float marginWidht = (.9f - (SprintEnergyBackground.Transform.Size.X * .8f)) / (SprintBlockCount + 1);
+            float blockHeight = SprintEnergyBackground.Transform.GetSize(WorldRelation.Local).Y * .9f;
+            float blockWidht = (SprintEnergyBackground.Transform.GetSize(WorldRelation.Local).X * .8f) / SprintBlockCount;
+            float marginWidht = (.9f - (SprintEnergyBackground.Transform.GetSize(WorldRelation.Local).X * .8f)) / (SprintBlockCount + 1);
 
             for (int i = 0; i < SprintBlockCount; i++)
             {
-                float blockXPosition = SprintEnergyBackground.Transform.MinX + marginWidht + blockWidht + (marginWidht * 1.5f + blockWidht * 2) * i;
-                SprintEnergyBlocks.Add(new Canvas("SprintEnergyBlock" + i, new Transform(blockXPosition, SprintEnergyBackground.Transform.Position.Y, blockWidht, blockHeight), ForegroundLayer, SprintEnergyBlockMaterial));
+                float blockXPosition = SprintEnergyBackground.Transform.GetMinX(WorldRelation.Local) + marginWidht + blockWidht + (marginWidht * 1.5f + blockWidht * 2) * i;
+                SprintEnergyBlocks.Add(new Canvas("SprintEnergyBlock" + i, new Transform(blockXPosition, SprintEnergyBackground.Transform.GetPosition(WorldRelation.Local).Y, blockWidht, blockHeight), ForegroundLayer, SprintEnergyBlockMaterial));
                 ForegroundLayer.AddChild(SprintEnergyBlocks[i]);
             }
 

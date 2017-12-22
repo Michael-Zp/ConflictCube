@@ -20,16 +20,16 @@ namespace ConflictCubeTest
         {
             Transform localTransform = new Transform(0, 1, 2f, 2f);
 
-            Transform globalTransform = new Transform(0, 0, 1, 1);
+            Transform globalTransform = new Transform(1, 0, 1, 1);
 
             GameObject globalObject = new GameObject("global", globalTransform);
             GameObject localObject = new GameObject("local", localTransform);
 
             globalObject.AddChild(localObject);
 
-            Vector2 globalPosition = localTransform.TransformToLocal(globalTransform).Position;
+            Transform toGlobalTransform = localTransform.TransformToGlobal();
 
-            Assert.AreEqual(globalPosition, new Vector2(0, -0.5f));
+            Assert.AreEqual(new Transform(1, 2f, 2, 2), toGlobalTransform);
         }
 
         /*

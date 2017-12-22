@@ -42,7 +42,7 @@ namespace ConflictCube.ComponentBased.Components
 
                 if (collider.IsCollidingWith(other))
                 {
-                    collider.CollidesWith(other, collider.Owner.Transform, movement);
+                    collider.CollidesWith(other, movement);
                 }
             }
         }

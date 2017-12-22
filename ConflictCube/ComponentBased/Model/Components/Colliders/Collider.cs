@@ -15,7 +15,8 @@ namespace ConflictCube.ComponentBased.Components
         Player1,
         Player2,
         PickableSpeedPotion,
-        PickableBlock
+        PickableBlock,
+        PickableChangeFloors
     }
 
     public abstract class Collider : Component
@@ -49,13 +50,13 @@ namespace ConflictCube.ComponentBased.Components
             Group.RemoveCollider(this);
         }
 
-        public virtual void CollidesWith(Collider other, Transform thisTransform, Vector2 movement)
+        public virtual void CollidesWith(Collider other, Vector2 movement)
         {
-            StandardCollision(other, thisTransform, movement);
+            StandardCollision(other, movement);
             Owner.OnCollision(other);
         }
 
-        public abstract void StandardCollision(Collider other, Transform transform, Vector2 movement);
+        public abstract void StandardCollision(Collider other, Vector2 movement);
 
         public void CheckCollisions(Vector2 movement)
         {

@@ -19,11 +19,6 @@ namespace ConflictCube.ComponentBased
         public PlayerInventory Inventory = new PlayerInventory(1);
 
         private GameObject ThrowUseField { get; set; }
-        /// <summary>
-        ///     Wait time until the ThrowUseField vector can be updated again.
-        /// </summary>
-        private float ThrowUseFieldUpdateCooldown = 0.1f;
-        private float LastThrowUseFieldUpdate { get; set; }
         private float SledgeHammerCooldown = 1.0f;
         private float LastSledgeHammerUse { get; set; }
         private int CurrentFloor;
@@ -60,8 +55,13 @@ namespace ConflictCube.ComponentBased
             IsAlive = isAlive;
             Floors = floors;
             CurrentFloor = currentFloor;
-            LastThrowUseFieldUpdate = -ThrowUseFieldUpdateCooldown;
             LastSledgeHammerUse = -SledgeHammerCooldown;
+
+            if(DebugGame.NoClip)
+            {
+                boxCollider.IsTrigger = true;
+            }
+
 
             AddComponent(boxCollider);
             AddComponent(material);
@@ -114,7 +114,16 @@ namespace ConflictCube.ComponentBased
 
         public override void OnUpdate()
         {
-            //Just use GamePadInput for movement
+            if (DebugGame.Player1PrintPosition && Type == GameObjectType.Player1)
+            {
+                Console.WriteLine(Transform.GetPosition(WorldRelation.Global));
+            }
+
+            if (DebugGame.Player2PrintPosition && Type == GameObjectType.Player2)
+            {
+                Console.WriteLine(Transform.GetPosition(WorldRelation.Global));
+            }
+
             Vector2 moveVector = new Vector2(Input.GetAxis(Horizontal, ActiveGamePad), Input.GetAxis(Vertical, ActiveGamePad));
 
             if ((Input.OnButtonIsPressed(Sprint, ActiveGamePad) || Input.OnButtonDown(Sprint, ActiveGamePad))
@@ -154,10 +163,6 @@ namespace ConflictCube.ComponentBased
             
             Move(moveVector);
             UpdateThrowUseField();
-
-            //Fake as fuck follow camera ^^
-            float globalYPos = Transform.TransformToGlobal().Position.Y;
-            //Floors[CurrentFloor].Transform.Position = new Vector2(Floors[CurrentFloor].Transform.Position.X, Floors[CurrentFloor].Transform.Position.Y - globalYPos);
         }
 
         private void UseCurrentSelectedItem()
@@ -231,10 +236,8 @@ namespace ConflictCube.ComponentBased
 
         private void UpdateThrowUseField()
         {
-            if (Time.Time.CooldownIsOver(LastThrowUseFieldUpdate, ThrowUseFieldUpdateCooldown) && ThrowMode || UseMode)
+            if (ThrowMode || UseMode)
             {
-                LastThrowUseFieldUpdate = Time.Time.CurrentTime;
-
                 if (Input.OnButtonDown(ThrowUseUp, ActiveGamePad))
                 {
                     ThrowUseYOffset += 1;
@@ -303,6 +306,12 @@ namespace ConflictCube.ComponentBased
 
         public override void OnCollision(Collider other)
         {
+            if(DebugGame.PlayerPrintCollisionTypes)
+            {
+                Console.WriteLine(other.Type);
+            }
+
+
             if (other.Type == CollisionType.LeftBoundary ||
                 other.Type == CollisionType.RightBoundary ||
                 other.Type == CollisionType.TopBoundary ||
@@ -313,7 +322,7 @@ namespace ConflictCube.ComponentBased
             }
             else if (other.Type == CollisionType.Hole)
             {
-                IsAlive = false;
+                //IsAlive = false;
             }
             else if (other.Type == CollisionType.PickableSpeedPotion)
             {
@@ -327,6 +336,11 @@ namespace ConflictCube.ComponentBased
                     Inventory.Cubes += 1;
                     other.Owner.Enabled = false;
                 }
+            }
+            else if (other.Type == CollisionType.PickableChangeFloors)
+            {
+                //Not implemented yet
+                other.Owner.Enabled = false;
             }
             else if (other.Type == CollisionType.Finish)
             {
@@ -376,8 +390,8 @@ namespace ConflictCube.ComponentBased
             Vector2 currentPos = Floors[CurrentFloor].GetGridPosition(Transform.TransformToGlobal()) + new Vector2(xOffset, yOffset);
             Transform throwUseTransform = Floors[CurrentFloor].GetBoxAtGridPosition(currentPos);
             Transform throwUseLocalTransform = Floors[CurrentFloor].Transform.TransformToLocal(throwUseTransform);
-            ThrowUseField.Transform.Position = throwUseLocalTransform.Position;
-            ThrowUseField.Transform.Size = throwUseLocalTransform.Size;
+            ThrowUseField.Transform.SetPosition(throwUseLocalTransform.GetPosition(WorldRelation.Global), WorldRelation.Global);
+            ThrowUseField.Transform.SetSize(throwUseLocalTransform.GetSize(WorldRelation.Global), WorldRelation.Global);
         }
     }
 }
