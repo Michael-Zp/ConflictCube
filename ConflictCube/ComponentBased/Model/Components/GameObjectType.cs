@@ -13,9 +13,13 @@
         Scene,
         UI,
         Default,
-        Player1,
-        Player2,
+        PlayerFire,
+        PlayerIce,
         GhostPlayer,
-        Game
+        Game,
+        OrangeBlock,
+        BlueBlock,
+        OrangeFloor,
+        BlueFloor
     }
 }

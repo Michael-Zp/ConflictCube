@@ -127,4 +127,10 @@
   <data name="Level2" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Level2.csv;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
+  <data name="FireIceFirstTest" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FireIceFirstTest.csv;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="FireIceSecondTest" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FireIceSecondTest.csv;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
 </root>

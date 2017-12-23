@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using ConflictCube.ComponentBased.Model.Components.Colliders;
 using OpenTK;
 
 namespace ConflictCube.ComponentBased.Components
@@ -36,6 +37,11 @@ namespace ConflictCube.ComponentBased.Components
             foreach (Collider other in CollidersInGroup)
             {
                 if (other == collider || !collider.Owner.EnabledInHierachy || !other.Owner.EnabledInHierachy)
+                {
+                    continue;
+                }
+                
+                if (!collider.Layer.AreLayersColliding(other.Layer))
                 {
                     continue;
                 }

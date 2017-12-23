@@ -15,5 +15,11 @@
         public static bool NoClip = false;
 
         public static bool DrawBoxColliderCollisions = false;
+
+        public static bool CanDie = true;
+
+        public static bool PrintUseFieldPositionOrangePlayer = false;
+
+        public static bool DebugDrawUseField = false;
     }
 }

@@ -1,4 +1,5 @@
-﻿using OpenTK;
+﻿using ConflictCube.ComponentBased.Model.Components.Colliders;
+using OpenTK;
 
 namespace ConflictCube.ComponentBased.Components
 {
@@ -12,11 +13,12 @@ namespace ConflictCube.ComponentBased.Components
         Wall,
         Hole,
         NonCollider,
-        Player1,
-        Player2,
-        PickableSpeedPotion,
-        PickableBlock,
-        PickableChangeFloors
+        PlayerFire,
+        PlayerIce,
+        OrangeBlock,
+        BlueBlock,
+        OrangeFloor,
+        BlueFloor
     }
 
     public abstract class Collider : Component
@@ -24,11 +26,12 @@ namespace ConflictCube.ComponentBased.Components
         public bool IsTrigger;
         public CollisionGroup Group;
         public CollisionType Type;
+        public CollisionLayer Layer;
 
         public Collider(bool isTrigger, CollisionGroup group) : this(isTrigger, group, CollisionType.NonCollider)
         {}
 
-        public Collider(bool isTrigger, CollisionGroup group, CollisionType type)
+        public Collider(bool isTrigger, CollisionGroup group, CollisionType type, CollisionLayer layer = CollisionLayer.Default)
         {
             IsTrigger = isTrigger;
             if(group == null)
@@ -42,6 +45,7 @@ namespace ConflictCube.ComponentBased.Components
                 Group.AddCollider(this);
             }
             Type = type;
+            Layer = layer;
         }
 
         public override void OnRemove()

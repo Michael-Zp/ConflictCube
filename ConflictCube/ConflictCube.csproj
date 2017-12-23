@@ -89,19 +89,22 @@
       <DependentUpon>InventoryResources.resx</DependentUpon>
     </Compile>
     <Compile Include="ComponentBased\Model\Components\Colliders\CollisionGroup.cs" />
+    <Compile Include="ComponentBased\Model\Components\Colliders\CollisionLayer.cs" />
     <Compile Include="ComponentBased\Model\Components\GameCallbacks.cs" />
     <Compile Include="ComponentBased\Model\Components\Objects\Game.cs" />
     <Compile Include="ComponentBased\Model\Components\Objects\GhostPlayer.cs" />
+    <Compile Include="ComponentBased\Model\Components\Objects\Players\OrangePlayer.cs" />
     <Compile Include="ComponentBased\Model\Components\Objects\Pickable.cs" />
     <Compile Include="ComponentBased\Model\Components\Objects\PlayerArea.cs" />
     <Compile Include="ComponentBased\Model\Components\Objects\PlayerInventory.cs" />
+    <Compile Include="ComponentBased\Model\Components\Objects\Players\BluePlayer.cs" />
     <Compile Include="ComponentBased\Model\Components\Scene\SceneBuilder.cs" />
     <Compile Include="ComponentBased\Model\Components\Material\MaterialData.cs" />
     <Compile Include="ComponentBased\Model\Components\Material\Materials.cs" />
     <Compile Include="ComponentBased\Model\Components\Objects\ColoredBox.cs" />
     <Compile Include="ComponentBased\Model\Components\Objects\Floor.cs" />
     <Compile Include="ComponentBased\Model\Components\Objects\FloorLoader.cs" />
-    <Compile Include="ComponentBased\Model\Components\Objects\Player.cs" />
+    <Compile Include="ComponentBased\Model\Components\Objects\Players\Player.cs" />
     <Compile Include="ComponentBased\Model\Components\Objects\Tiles\FloorTile.cs" />
     <Compile Include="ComponentBased\Model\Components\GameObjectType.cs" />
     <Compile Include="ComponentBased\Model\Components\Objects\Boundary.cs" />
@@ -142,6 +145,8 @@
     <None Include="App.config" />
     <None Include="OpenTK.dll.config" />
     <None Include="packages.config" />
+    <None Include="Resources\FireIceFirstTest.csv" />
+    <None Include="Resources\FireIceSecondTest.csv" />
     <None Include="Resources\Level0.csv" />
     <None Include="Resources\level1.csv" />
     <None Include="Resources\Level2.csv" />
@@ -181,6 +186,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Textures\Sledgehammer.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\FireTileset.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IceTileset.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\FloorTileset.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

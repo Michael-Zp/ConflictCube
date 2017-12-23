@@ -1,4 +1,5 @@
-﻿using OpenTK;
+﻿using ConflictCube.ComponentBased.Model.Components.Colliders;
+using OpenTK;
 using System;
 
 namespace ConflictCube.ComponentBased.Components
@@ -10,7 +11,7 @@ namespace ConflictCube.ComponentBased.Components
         public BoxCollider(Transform transform, bool isTrigger, CollisionGroup group) : this(transform, isTrigger, group, CollisionType.NonCollider)
         {}
 
-        public BoxCollider(Transform transform, bool isTrigger, CollisionGroup group, CollisionType type) : base(isTrigger, group, type)
+        public BoxCollider(Transform transform, bool isTrigger, CollisionGroup group, CollisionType type, CollisionLayer layer = CollisionLayer.Default) : base(isTrigger, group, type, layer)
         {
             Box = transform;
         }

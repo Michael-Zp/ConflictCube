@@ -40,7 +40,7 @@ namespace ConflictCube.ComponentBased
 
         private static GameObjectType[,] GetFloorDataFromLevelfile(string levelData, out int levelRows, out int levelColumns)
         {
-            GameObjectType[] FloorNumberToType = { GameObjectType.Finish, GameObjectType.Floor, GameObjectType.Hole, GameObjectType.Wall };
+            GameObjectType[] FloorNumberToType = { GameObjectType.Finish, GameObjectType.Floor, GameObjectType.Hole, GameObjectType.Wall, GameObjectType.OrangeBlock, GameObjectType.BlueBlock, GameObjectType.OrangeFloor, GameObjectType.BlueFloor };
 
             levelData = levelData.Trim('\n');
             string[] allLines = levelData.Split('\n');

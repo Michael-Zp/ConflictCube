@@ -62,6 +62,44 @@ namespace ConflictCube.ComponentBased {
         
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die 0,0,0,0
+        ///3,1,1,3
+        ///3,1,1,3
+        ///3,4,4,3
+        ///3,5,5,3
+        ///3,4,4,3
+        ///3,1,1,3
+        ///3,1,1,3
+        ///3,1,1,3
+        ///3,1,1,3
+        /// ähnelt.
+        /// </summary>
+        internal static string FireIceFirstTest {
+            get {
+                return ResourceManager.GetString("FireIceFirstTest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die 0,0,0,0
+        ///1,1,1,3
+        ///5,7,7,3
+        ///6,3,5,3
+        ///6,6,4,3
+        ///6,3,5,3
+        ///6,3,1,3
+        ///6,3,1,3
+        ///6,3,1,3
+        ///6,6,1,3
+        /// ähnelt.
+        /// </summary>
+        internal static string FireIceSecondTest {
+            get {
+                return ResourceManager.GetString("FireIceSecondTest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die 0,0,0,0
         ///1,1,1,1
         ///1,3,3,1
         ///1,1,3,3

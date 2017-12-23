@@ -12,9 +12,12 @@ namespace ConflictCube.ComponentBased
             DebugGame.CanLoose = false;
             DebugGame.Player1PrintPosition = false;
             DebugGame.Player2PrintPosition = false;
-            DebugGame.PlayerPrintCollisionTypes = true;
+            DebugGame.PlayerPrintCollisionTypes = false;
             DebugGame.NoClip = false;
             DebugGame.DrawBoxColliderCollisions = false;
+            DebugGame.CanDie = false;
+            DebugGame.PrintUseFieldPositionOrangePlayer = false;
+            DebugGame.DebugDrawUseField = false;
 
             //----
 

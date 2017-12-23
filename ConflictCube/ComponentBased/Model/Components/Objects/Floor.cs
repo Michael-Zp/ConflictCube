@@ -166,12 +166,16 @@ namespace ConflictCube.ComponentBased
 
         private float GetColumnOfPosition(float xPos)
         {
-            return (float)Math.Floor((xPos + 1) / (FloorTileSize.X * 2));
+            float minX = FloorTiles[0, 0].Transform.GetMinX(WorldRelation.Local);
+            float maxX = FloorTiles[0, FloorColumns - 1].Transform.GetMaxX(WorldRelation.Local);
+            return (float)Math.Floor(((xPos - minX) / (maxX - minX)) * FloorColumns);
         }
 
         private float GetRowOfPosition(float yPos)
         {
-            return (float)Math.Floor((yPos + 1) / (FloorTileSize.Y * 2));
+            float minY = FloorTiles[FloorRows - 1, 0].Transform.GetMinY(WorldRelation.Local);
+            float maxY = FloorTiles[0, 0].Transform.GetMaxY(WorldRelation.Local);
+            return (float)Math.Floor(((yPos - minY) / (maxY - minY)) * FloorRows);
         }
     }
 }
