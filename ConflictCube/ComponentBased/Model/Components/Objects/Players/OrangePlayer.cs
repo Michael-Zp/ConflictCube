@@ -10,14 +10,8 @@ namespace ConflictCube.ComponentBased
         {
             Horizontal = InputAxis.Player1Horizontal;
             Vertical = InputAxis.Player1Vertical;
-            ThrowUseUp = InputKey.PlayerOneMoveThrowUseFieldUp;
-            ThrowUseDown = InputKey.PlayerOneMoveThrowUseFieldDown;
-            ThrowUseLeft = InputKey.PlayerOneMoveThrowUseFieldLeft;
-            ThrowUseRight = InputKey.PlayerOneMoveThrowUseFieldRight;
             Sprint = InputKey.PlayerOneSprint;
             HitBlock = InputKey.PlayerOneUse;
-            InventoryUp = InputKey.PlayerOneInventoryUp;
-            InventoryDown = InputKey.PlayerOneInventoryDown;
             ActiveGamePad = 0;
 
             GetComponent<Collider>().Layer = Model.Components.Colliders.CollisionLayer.Orange;
@@ -45,11 +39,6 @@ namespace ConflictCube.ComponentBased
             {
                 GetFloorTileOfUseField().ChangeFloorTile(GameObjectType.Floor);
             }
-        }
-
-        public override void OnCollision(Collider other)
-        {
-            base.OnCollision(other);
         }
     }
 }

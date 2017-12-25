@@ -8,11 +8,6 @@
         PlayerOneMoveRight,
         PlayerOneMoveUp,
         PlayerOneMoveDown,
-        PlayerOneMoveThrowUseFieldLeft,
-        PlayerOneMoveThrowUseFieldRight,
-        PlayerOneMoveThrowUseFieldUp,
-        PlayerOneMoveThrowUseFieldDown,
-        PlayerOneSwitchMode,
         PlayerOneSprint,
         PlayerOneUse,
 
@@ -20,16 +15,7 @@
         PlayerTwoMoveRight,
         PlayerTwoMoveUp,
         PlayerTwoMoveDown,
-        PlayerTwoMoveThrowUseFieldLeft,
-        PlayerTwoMoveThrowUseFieldRight,
-        PlayerTwoMoveThrowUseFieldUp,
-        PlayerTwoMoveThrowUseFieldDown,
-        PlayerTwoSwitchMode,
         PlayerTwoSprint,
         PlayerTwoUse,
-        PlayerOneInventoryUp,
-        PlayerOneInventoryDown,
-        PlayerTwoInventoryUp,
-        PlayerTwoInventoryDown
     }
 }

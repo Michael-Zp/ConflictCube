@@ -1,9 +1,8 @@
 ﻿using OpenTK;
 using System;
 using ConflictCube.ComponentBased.Components;
-using System.Collections.Generic;
-using ConflictCube.ComponentBased.Model.Components.Objects;
 using ConflictCube.ComponentBased.Components.Objects.Tiles;
+using Zenseless.OpenGL;
 
 namespace ConflictCube.ComponentBased
 {
@@ -22,20 +21,17 @@ namespace ConflictCube.ComponentBased
         protected Floor CurrentFloor;
 
         protected static bool MaterialsAreInitialized = false;
-        protected static Material UseMaterial;
+        protected static Material UseMaterialForeground;
+        protected static Material UseMaterialBackground;
         protected float ThrowUseXOffset = 0;
-        protected float ThrowUseYOffset = 0;
+        protected float ThrowUseYOffset = 1;
+        protected float LastUseFieldUpdate = 0;
+        protected float UseFieldUpdateCooldown = 0.1f;
 
         protected InputAxis Horizontal;
         protected InputAxis Vertical;
-        protected InputKey ThrowUseUp;
-        protected InputKey ThrowUseDown;
-        protected InputKey ThrowUseLeft;
-        protected InputKey ThrowUseRight;
         protected InputKey Sprint;
         protected InputKey HitBlock;
-        protected InputKey InventoryUp;
-        protected InputKey InventoryDown;
         protected int ActiveGamePad = 0;
 
 
@@ -55,17 +51,20 @@ namespace ConflictCube.ComponentBased
                 boxCollider.IsTrigger = true;
             }
 
-
+            boxCollider.IgnoreCollisionsWith.Add(CollisionType.PlayerFire);
+            boxCollider.IgnoreCollisionsWith.Add(CollisionType.PlayerIce);
             AddComponent(boxCollider);
             AddComponent(material);
 
             if (!MaterialsAreInitialized)
             {
                 MaterialsAreInitialized = true;
-                UseMaterial             = new Material(null, null, System.Drawing.Color.FromArgb(128, 0, 255, 0));
+                UseMaterialForeground   = new Material(TextureLoader.FromBitmap(TexturResource.UseFieldIndicator), new Zenseless.Geometry.Box2D(0, 0, 1, 1), System.Drawing.Color.FromArgb(255, System.Drawing.Color.White));
+                UseMaterialBackground   = new Material(null, null, System.Drawing.Color.FromArgb(32, 0, 255, 64));
             }
 
-            UseField = new ColoredBox("ThrowUseIndicator", new Transform(), UseMaterial, this);
+            UseField = new ColoredBox("ThrowUseIndicator", new Transform(), UseMaterialForeground, this);
+            UseField.AddComponent(UseMaterialBackground);
             CurrentFloor.AddChild(UseField);
             SetUseFieldWithOffset();
         }
@@ -104,61 +103,76 @@ namespace ConflictCube.ComponentBased
 
         private void UpdateUseField()
         {
-            if (Input.OnButtonDown(ThrowUseUp, ActiveGamePad))
-            {
-                ThrowUseYOffset += 1;
-            }
-            if (Input.OnButtonDown(ThrowUseDown, ActiveGamePad))
-            {
-                ThrowUseYOffset -= 1;
-            }
-            if (Input.OnButtonDown(ThrowUseLeft, ActiveGamePad))
-            {
-                ThrowUseXOffset -= 1;
-            }
-            if (Input.OnButtonDown(ThrowUseRight, ActiveGamePad))
-            {
-                ThrowUseXOffset += 1;
-            }
+            Input.AxesSettings.TryGetValue(Horizontal, out AxisData horizontalAxisData);
+            Input.AxesSettings.TryGetValue(Vertical,   out AxisData verticalAxisData);
 
-            ThrowUseXOffset = MathHelper.Clamp(ThrowUseXOffset, -1, 1);
-            ThrowUseYOffset = MathHelper.Clamp(ThrowUseYOffset, -1, 1);
+            bool horizontalPositive = Input.OnButtonIsPressed(horizontalAxisData.PositiveKey, ActiveGamePad);
+            bool horizontalNegative = Input.OnButtonIsPressed(horizontalAxisData.NegativeKey, ActiveGamePad);
+            bool verticalPositive = Input.OnButtonIsPressed(verticalAxisData.PositiveKey, ActiveGamePad);
+            bool verticalNegative = Input.OnButtonIsPressed(verticalAxisData.NegativeKey, ActiveGamePad);
 
+            if((horizontalPositive || horizontalNegative || verticalPositive || verticalNegative) && Time.Time.CooldownIsOver(LastUseFieldUpdate, UseFieldUpdateCooldown))
+            {
+                LastUseFieldUpdate = Time.Time.CurrentTime;
+                if (horizontalPositive && !horizontalNegative)
+                {
+                    ThrowUseXOffset = 1;
+                }
+                else if (!horizontalPositive && horizontalNegative)
+                {
+                    ThrowUseXOffset = -1;
+                }
+                else
+                {
+                    ThrowUseXOffset = 0;
+                }
+
+                if (verticalPositive && !verticalNegative)
+                {
+                    ThrowUseYOffset = 1;
+                }
+                else if (!verticalPositive && verticalNegative)
+                {
+                    ThrowUseYOffset = -1;
+                }
+                else
+                {
+                    ThrowUseYOffset = 0;
+                }
+            }
+            
             try
             {
+                Vector2 currentPos = CurrentFloor.GetGridPosition(Transform.TransformToGlobal());
+
+                if (currentPos.X + ThrowUseXOffset > CurrentFloor.FloorColumns - 1)
+                {
+                    ThrowUseXOffset = CurrentFloor.FloorColumns - 1;
+                }
+                else if (currentPos.X + ThrowUseXOffset < 0)
+                {
+                    ThrowUseXOffset = 0;
+                }
+
+                if (currentPos.Y + ThrowUseYOffset > CurrentFloor.FloorRows - 1)
+                {
+                    ThrowUseYOffset = CurrentFloor.FloorRows - 1;
+                }
+                else if (currentPos.Y + ThrowUseYOffset < 0)
+                {
+                    ThrowUseYOffset = 0;
+                }
+
                 SetUseFieldWithOffset(ThrowUseXOffset, ThrowUseYOffset);
             }
             catch (Exception)
             {
-                Vector2 currentPos = CurrentFloor.GetGridPosition(Transform.TransformToGlobal()) + new Vector2(ThrowUseXOffset, ThrowUseYOffset);
-
-                if (currentPos.X > CurrentFloor.FloorColumns - 1)
-                {
-                    ThrowUseXOffset -= 1;
-                }
-                else if (currentPos.X < 0)
-                {
-                    ThrowUseXOffset += 1;
-                }
-
-                if (currentPos.Y > CurrentFloor.FloorRows - 1)
-                {
-                    ThrowUseYOffset -= 1;
-                }
-                else if (currentPos.Y < 0)
-                {
-                    ThrowUseYOffset += 1;
-                }
+                SetUseFieldWithOffset();
 
                 Console.WriteLine("Hit boundaries with the ThrowUse Field");
             }
         }
-
-        /// <summary>
-        ///     First check if the player can move. If the player is neither in Throw or Use Mode, add Movement to its MoveVectorThisIteration which will be executed in CollisionGroup.MoveThisIteration().
-        ///     If the player is in Throw/Use Mode, move the target of the throw or use.
-        /// </summary>
-        /// <param name="moveVector"></param>
+        
         public void Move(Vector2 moveVector)
         {
             if (!CanMove())

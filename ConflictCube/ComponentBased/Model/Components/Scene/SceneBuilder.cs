@@ -4,40 +4,50 @@ namespace ConflictCube.ComponentBased
 {
     public class SceneBuilder
     {
-        public static GameObject BuildScene(string level, Transform sceneTransform, bool debugBoundaries = false)
+        public static GameObject BuildScene(string level, Transform sceneTransform)
         {
             GameObject scene = new GameObject("Scene", sceneTransform, null, GameObjectType.Scene);
             CollisionGroup group = new CollisionGroup();
 
             Floor floor = FloorLoader.Instance(level, "Floor", new Transform(0, 0, 1, 1), scene, group);
             scene.AddChild(floor);
-            scene.AddChild(Boundaries(group, floor, debugBoundaries));
+            scene.AddChild(Boundaries(group, floor));
 
             return scene;
         }
 
 
         //TODO: Transforms are not right... Something went terribly wrong in the ToGlobal and ToLocal... Has to be fixxed !!!!
-        private static GameObject Boundaries(CollisionGroup group, Floor floor, bool debugBoundaries)
+        private static GameObject Boundaries(CollisionGroup group, Floor floor)
         {
-            int alpha = debugBoundaries ? 128 : 0;
+            float minXFloor = floor.FloorTiles[0, 0].Transform.GetMinX(WorldRelation.Local);
+            float minYFloor = floor.FloorTiles[floor.FloorRows - 1, 0].Transform.GetMinY(WorldRelation.Local);
 
             float middelOfFloor = floor.FloorRows * floor.FloorTileSize.Y;
-            
+
+            float maxXFloor = floor.FloorTiles[0, floor.FloorColumns - 1].Transform.GetMaxX(WorldRelation.Local);
+            float maxYFloor = floor.FloorTiles[0, 0].Transform.GetMaxY(WorldRelation.Local);
+
+            float widthOfLeftAndRightBoundary = .5f;
+            float heightOfTopAndBottomBoundary = .25f;
+
 
             GameObject Boundaries = new GameObject("Boundaries", new Transform(0, 0, 1, 1), null);
 
-            GameObject topBoundary = new Boundary("TopBoundary", new Transform(0, middelOfFloor * 2 + 1, 1, 1f), Boundaries, group, CollisionType.TopBoundary);
-            topBoundary.AddComponent(new Material(null, null, System.Drawing.Color.FromArgb(alpha, System.Drawing.Color.Red)));
+            GameObject topBoundary = new Boundary("TopBoundary",        new Transform( minXFloor + (maxXFloor - minXFloor) / 2f, maxYFloor + heightOfTopAndBottomBoundary, (maxXFloor - minXFloor) / 2f, heightOfTopAndBottomBoundary), Boundaries, group, CollisionType.TopBoundary);
+            GameObject bottomBoundary = new Boundary("BottomBoundary",  new Transform( minXFloor + (maxXFloor - minXFloor) / 2f, minYFloor - heightOfTopAndBottomBoundary, (maxXFloor - minXFloor) / 2f, heightOfTopAndBottomBoundary), Boundaries, group, CollisionType.BottomBoundary);
 
-            GameObject bottomBoundary = new Boundary("BottomBoundary", new Transform(0, -1f, 1f, 1f), Boundaries, group, CollisionType.BottomBoundary);
-            bottomBoundary.AddComponent(new Material(null, null, System.Drawing.Color.FromArgb(alpha, System.Drawing.Color.Green)));
 
-            GameObject rightBoundary = new Boundary("RightBoundary", new Transform(2f, middelOfFloor, 1f, middelOfFloor), Boundaries, group, CollisionType.RightBoundary);
-            rightBoundary.AddComponent(new Material(null, null, System.Drawing.Color.FromArgb(alpha, System.Drawing.Color.Blue)));
+            GameObject rightBoundary = new Boundary("RightBoundary",    new Transform( maxXFloor + widthOfLeftAndRightBoundary, middelOfFloor, widthOfLeftAndRightBoundary, middelOfFloor), Boundaries, group, CollisionType.RightBoundary);
+            GameObject leftBoundary = new Boundary("LeftBoundary",      new Transform( minXFloor - widthOfLeftAndRightBoundary, middelOfFloor, widthOfLeftAndRightBoundary, middelOfFloor), Boundaries, group, CollisionType.LeftBoundary);
 
-            GameObject leftBoundary = new Boundary("LeftBoundary", new Transform(-2f, middelOfFloor, 1f, middelOfFloor), Boundaries, group, CollisionType.LeftBoundary);
-            leftBoundary.AddComponent(new Material(null, null, System.Drawing.Color.FromArgb(alpha, System.Drawing.Color.Violet)));
+            if(DebugGame.ShowBoundaries)
+            {
+                topBoundary.AddComponent(new Material(null, null, System.Drawing.Color.FromArgb(128, System.Drawing.Color.Red)));
+                bottomBoundary.AddComponent(new Material(null, null, System.Drawing.Color.FromArgb(128, System.Drawing.Color.Green)));
+                rightBoundary.AddComponent(new Material(null, null, System.Drawing.Color.FromArgb(128, System.Drawing.Color.Blue)));
+                leftBoundary.AddComponent(new Material(null, null, System.Drawing.Color.FromArgb(128, System.Drawing.Color.Violet)));
+            }
 
             Boundaries.AddChild(topBoundary);
             Boundaries.AddChild(bottomBoundary);

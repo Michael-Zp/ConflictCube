@@ -10,14 +10,8 @@ namespace ConflictCube.ComponentBased
         {
             Horizontal = InputAxis.Player2Horizontal;
             Vertical = InputAxis.Player2Vertical;
-            ThrowUseUp = InputKey.PlayerTwoMoveThrowUseFieldUp;
-            ThrowUseDown = InputKey.PlayerTwoMoveThrowUseFieldDown;
-            ThrowUseLeft = InputKey.PlayerTwoMoveThrowUseFieldLeft;
-            ThrowUseRight = InputKey.PlayerTwoMoveThrowUseFieldRight;
             Sprint = InputKey.PlayerTwoSprint;
             HitBlock = InputKey.PlayerTwoUse;
-            InventoryUp = InputKey.PlayerTwoInventoryUp;
-            InventoryDown = InputKey.PlayerTwoInventoryDown;
             ActiveGamePad = 1;
 
             GetComponent<Collider>().Layer = Model.Components.Colliders.CollisionLayer.Blue;

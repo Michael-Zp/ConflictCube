@@ -33,12 +33,6 @@ namespace ConflictCube.ComponentBased
         }
 
         
-        /// <summary>
-        ///     Render the given ViewModel. Right now the rendering order is:
-        ///     1. Scene
-        ///     2. UI
-        /// </summary>
-        /// <param name="viewModel"></param>
         public void Render(ViewModel viewModel)
         {
             ClearScreen();
@@ -64,16 +58,20 @@ namespace ConflictCube.ComponentBased
 
             Transform globalTransformInCamera = cameraTransform * currentObject.Transform.TransformToGlobal();
 
-            Material currentMat = currentObject.GetComponent<Material>();
-            if(currentMat != null)
+            List<Material> currentMats = currentObject.GetComponents<Material>();
+
+            foreach(Material currentMat in currentMats)
             {
-                if(currentMat.Texture != null)
+                if (currentMat != null)
                 {
-                    OpenTKWrapper.DrawBoxWithTextureAndAlphaChannel(globalTransformInCamera, currentMat.Texture, currentMat.UVCoordinates, currentMat.Color);
-                }
-                else
-                {
-                    OpenTKWrapper.DrawBoxWithAlphaChannel(globalTransformInCamera, currentMat.Color);
+                    if (currentMat.Texture != null)
+                    {
+                        OpenTKWrapper.DrawBoxWithTextureAndAlphaChannel(globalTransformInCamera, currentMat.Texture, currentMat.UVCoordinates, currentMat.Color);
+                    }
+                    else
+                    {
+                        OpenTKWrapper.DrawBoxWithAlphaChannel(globalTransformInCamera, currentMat.Color);
+                    }
                 }
             }
 

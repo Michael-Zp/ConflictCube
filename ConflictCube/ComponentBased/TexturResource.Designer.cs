@@ -89,5 +89,15 @@ namespace ConflictCube.ComponentBased {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap UseFieldIndicator {
+            get {
+                object obj = ResourceManager.GetObject("UseFieldIndicator", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
     }
 }

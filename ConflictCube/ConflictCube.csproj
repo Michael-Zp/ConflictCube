@@ -196,5 +196,8 @@
   <ItemGroup>
     <None Include="Resources\FloorTileset.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Textures\UseFieldIndicator.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

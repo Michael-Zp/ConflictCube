@@ -99,8 +99,11 @@ namespace ConflictCube.ComponentBased
 
             CheckLooseCondition();
 
-            Player1Camera.Transform.SetPosition(new Vector2(Player1Camera.Transform.GetPosition(WorldRelation.Global).X, -Players[0].Transform.GetPosition(WorldRelation.Global).Y), WorldRelation.Global);
-            Player2Camera.Transform.SetPosition(new Vector2(Player2Camera.Transform.GetPosition(WorldRelation.Global).X, -Players[1].Transform.GetPosition(WorldRelation.Global).Y), WorldRelation.Global);
+            Vector2 player1Pos = Players[0].Transform.GetPosition(WorldRelation.Global);
+            Vector2 player2Pos = Players[1].Transform.GetPosition(WorldRelation.Global);
+
+            Player1Camera.Transform.SetPosition(new Vector2(-player1Pos.X - .5f, -player1Pos.Y), WorldRelation.Global);
+            Player2Camera.Transform.SetPosition(new Vector2(-player2Pos.X + .5f, -player2Pos.Y), WorldRelation.Global);
         }
 
         private void CheckLooseCondition()

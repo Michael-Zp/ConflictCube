@@ -21,5 +21,7 @@
         public static bool PrintUseFieldPositionOrangePlayer = false;
 
         public static bool DebugDrawUseField = false;
+
+        public static bool ShowBoundaries = false;
     }
 }

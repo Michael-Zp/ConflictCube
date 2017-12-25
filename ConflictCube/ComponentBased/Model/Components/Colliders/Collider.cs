@@ -1,5 +1,6 @@
 ﻿using ConflictCube.ComponentBased.Model.Components.Colliders;
 using OpenTK;
+using System.Collections.Generic;
 
 namespace ConflictCube.ComponentBased.Components
 {
@@ -27,6 +28,7 @@ namespace ConflictCube.ComponentBased.Components
         public CollisionGroup Group;
         public CollisionType Type;
         public CollisionLayer Layer;
+        public List<CollisionType> IgnoreCollisionsWith = new List<CollisionType>();
 
         public Collider(bool isTrigger, CollisionGroup group) : this(isTrigger, group, CollisionType.NonCollider)
         {}

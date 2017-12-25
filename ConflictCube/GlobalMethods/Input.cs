@@ -152,28 +152,14 @@ namespace ConflictCube.ComponentBased
 
 
             //GamePad - Player 1
-
-            GamePadSettings.Add(InputKey.PlayerOneMoveThrowUseFieldUp, GamePadButton.A);
-            GamePadSettings.Add(InputKey.PlayerOneMoveThrowUseFieldRight, GamePadButton.B);
-            GamePadSettings.Add(InputKey.PlayerOneMoveThrowUseFieldDown, GamePadButton.X);
-            GamePadSettings.Add(InputKey.PlayerOneMoveThrowUseFieldLeft, GamePadButton.Y);
-            GamePadSettings.Add(InputKey.PlayerOneSwitchMode, GamePadButton.Start);
-            GamePadSettings.Add(InputKey.PlayerOneUse, GamePadButton.Back);
+            
+            GamePadSettings.Add(InputKey.PlayerOneUse, GamePadButton.X);
             GamePadSettings.Add(InputKey.PlayerOneSprint, GamePadButton.RightShoulder);
-            GamePadSettings.Add(InputKey.PlayerOneInventoryUp, GamePadButton.DPadUp);
-            GamePadSettings.Add(InputKey.PlayerOneInventoryDown, GamePadButton.DPadDown);
 
             //Player 2
-
-            GamePadSettings.Add(InputKey.PlayerTwoMoveThrowUseFieldUp, GamePadButton.A);
-            GamePadSettings.Add(InputKey.PlayerTwoMoveThrowUseFieldRight, GamePadButton.B);
-            GamePadSettings.Add(InputKey.PlayerTwoMoveThrowUseFieldDown, GamePadButton.X);
-            GamePadSettings.Add(InputKey.PlayerTwoMoveThrowUseFieldLeft, GamePadButton.Y);
-            GamePadSettings.Add(InputKey.PlayerTwoSwitchMode, GamePadButton.Start);
-            GamePadSettings.Add(InputKey.PlayerTwoUse, GamePadButton.Back);
+            
+            GamePadSettings.Add(InputKey.PlayerTwoUse, GamePadButton.X);
             GamePadSettings.Add(InputKey.PlayerTwoSprint, GamePadButton.RightShoulder);
-            GamePadSettings.Add(InputKey.PlayerTwoInventoryUp, GamePadButton.DPadUp);
-            GamePadSettings.Add(InputKey.PlayerTwoInventoryDown, GamePadButton.DPadDown);
 
 
             //Gamepad - Axes - Player 1
@@ -196,15 +182,8 @@ namespace ConflictCube.ComponentBased
             KeyboardSettings.Add(InputKey.PlayerOneMoveRight, Key.D);
             KeyboardSettings.Add(InputKey.PlayerOneMoveUp, Key.W);
             KeyboardSettings.Add(InputKey.PlayerOneMoveDown, Key.S);
-            KeyboardSettings.Add(InputKey.PlayerOneMoveThrowUseFieldLeft, Key.F);
-            KeyboardSettings.Add(InputKey.PlayerOneMoveThrowUseFieldRight, Key.H);
-            KeyboardSettings.Add(InputKey.PlayerOneMoveThrowUseFieldUp, Key.T);
-            KeyboardSettings.Add(InputKey.PlayerOneMoveThrowUseFieldDown, Key.G);
-            KeyboardSettings.Add(InputKey.PlayerOneSwitchMode, Key.R);
             KeyboardSettings.Add(InputKey.PlayerOneUse, Key.E);
             KeyboardSettings.Add(InputKey.PlayerOneSprint, Key.LShift);
-            KeyboardSettings.Add(InputKey.PlayerOneInventoryUp, Key.X);
-            KeyboardSettings.Add(InputKey.PlayerOneInventoryDown, Key.C);
 
 
 
@@ -214,15 +193,8 @@ namespace ConflictCube.ComponentBased
             KeyboardSettings.Add(InputKey.PlayerTwoMoveRight, Key.L);
             KeyboardSettings.Add(InputKey.PlayerTwoMoveUp, Key.I);
             KeyboardSettings.Add(InputKey.PlayerTwoMoveDown, Key.K);
-            KeyboardSettings.Add(InputKey.PlayerTwoMoveThrowUseFieldLeft, Key.Keypad4);
-            KeyboardSettings.Add(InputKey.PlayerTwoMoveThrowUseFieldRight, Key.Keypad6);
-            KeyboardSettings.Add(InputKey.PlayerTwoMoveThrowUseFieldUp, Key.Keypad8);
-            KeyboardSettings.Add(InputKey.PlayerTwoMoveThrowUseFieldDown, Key.Keypad5);
-            KeyboardSettings.Add(InputKey.PlayerTwoSwitchMode, Key.Keypad7);
             KeyboardSettings.Add(InputKey.PlayerTwoUse, Key.O);
             KeyboardSettings.Add(InputKey.PlayerTwoSprint, Key.RControl);
-            KeyboardSettings.Add(InputKey.PlayerTwoInventoryUp, Key.Period);
-            KeyboardSettings.Add(InputKey.PlayerTwoInventoryDown, Key.Keypad1);
 
 
             //Axes

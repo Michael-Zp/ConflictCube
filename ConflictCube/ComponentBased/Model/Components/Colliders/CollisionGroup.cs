@@ -46,6 +46,11 @@ namespace ConflictCube.ComponentBased.Components
                     continue;
                 }
 
+                if (collider.IgnoreCollisionsWith.Contains(other.Type))
+                {
+                    continue;
+                }
+
                 if (collider.IsCollidingWith(other))
                 {
                     collider.CollidesWith(other, movement);
