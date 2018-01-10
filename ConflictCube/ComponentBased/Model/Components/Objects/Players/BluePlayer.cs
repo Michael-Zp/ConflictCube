@@ -5,18 +5,22 @@ namespace ConflictCube.ComponentBased
 {
     public class BluePlayer : Player
     {
-        public BluePlayer(string name, Transform transform, BoxCollider boxCollider, Material material, GameObject parent, Floor currentFloor, float speed, GameObjectType playerType, bool isAlive = true)
-            : base(name, transform, boxCollider, material, parent, currentFloor, speed, playerType, isAlive)
+        public BluePlayer(string name, Transform transform, BoxCollider boxCollider, Material material, GameObject parent, Floor currentFloor, float speed, GameObjectType playerType, Player otherPlayer, bool isAlive = true)
+            : base(name, transform, boxCollider, material, parent, currentFloor, speed, playerType, otherPlayer, isAlive)
         {
             Horizontal = InputAxis.Player2Horizontal;
             Vertical = InputAxis.Player2Vertical;
             Sprint = InputKey.PlayerTwoSprint;
             HitBlock = InputKey.PlayerTwoUse;
+            SwitchPositionY = InputKey.PlayerTwoSwitchPositionsY;
+            SwitchPositionXY = InputKey.PlayerTwoSwitchPositionsXY;
+            SwitchPositionX = InputKey.PlayerTwoSwitchPositionsX;
             ActiveGamePad = 1;
+
 
             GetComponent<Collider>().Layer = Model.Components.Colliders.CollisionLayer.Blue;
         }
-
+            
         public override void OnUpdate()
         {
             base.OnUpdate();
@@ -32,6 +36,18 @@ namespace ConflictCube.ComponentBased
             if (GetFloorTileOfUseField().Type == GameObjectType.BlueBlock)
             {
                 GetFloorTileOfUseField().ChangeFloorTile(GameObjectType.Floor);
+            }
+        }
+
+        public override void OnCollision(Collider other)
+        {
+            base.OnCollision(other);
+
+            switch(other.Type)
+            {
+                case CollisionType.OrangeFloor:
+                    Die();
+                    break;
             }
         }
     }

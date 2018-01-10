@@ -15,7 +15,7 @@ namespace ConflictCube.ComponentBased
 
         public static OpenTKWrapper Instance()
         {
-            if(OpenTKWrapperInstance == null)
+            if (OpenTKWrapperInstance == null)
             {
                 OpenTKWrapperInstance = new OpenTKWrapper();
             }
@@ -25,41 +25,52 @@ namespace ConflictCube.ComponentBased
         public void DrawBoxWithAlphaChannel(Transform transform, Color color)
         {
             EnableAlphaChannel();
-            
+
             GL.Color4(color);
-            
-            GL.Begin(OpenGL.PrimitiveType.Quads);
 
-            //Bottom left
-            GL.Vertex2(transform.GetMinX(WorldRelation.Global), transform.GetMinY(WorldRelation.Global));
-
-            //Bottom right
-            GL.Vertex2(transform.GetMaxX(WorldRelation.Global), transform.GetMinY(WorldRelation.Global));
-
-            //Top right
-            GL.Vertex2(transform.GetMaxX(WorldRelation.Global), transform.GetMaxY(WorldRelation.Global));
-
-            //Top left
-            GL.Vertex2(transform.GetMinX(WorldRelation.Global), transform.GetMaxY(WorldRelation.Global));
-
-            GL.End();
+            DrawBox(transform);
 
             GL.Color4(StandardColor);
 
             DisableAlphaChannel();
         }
 
-        public void DrawBoxWithTextureAndAlphaChannel(Transform transform, ITexture texture, Box2D uVCoordinates, Color color)
+        public void DrawBox(Transform transform, Color color, ITexture texture, Box2D uVCoordinates, bool alphaChannel = true)
         {
-            EnableAlphaChannel();
-
-            EnableTextures();
-
-            texture.Activate();
+            if (alphaChannel)
+            {
+                EnableAlphaChannel();
+            }
             
             GL.Color4(color);
+            
+            if (texture != null)
+            {
+                EnableTextures();
+                texture.Activate();
 
-            GL.Begin(OpenGL.PrimitiveType.Quads);
+                DrawTexturedBox(transform, uVCoordinates);
+
+                texture.Deactivate();
+                DisableTextures();
+            }
+            else
+            {
+                DrawBox(transform);
+            }
+            
+
+            GL.Color4(StandardColor);
+
+            if (alphaChannel)
+            {
+                DisableAlphaChannel();
+            }
+        }
+
+        private void DrawTexturedBox(Transform transform, Box2D uVCoordinates)
+        {
+            GL.Begin(PrimitiveType.Quads);
 
             //Bottom left
             GL.TexCoord2(uVCoordinates.MinX, uVCoordinates.MinY);
@@ -78,22 +89,32 @@ namespace ConflictCube.ComponentBased
             GL.Vertex2(transform.GetMinX(WorldRelation.Global), transform.GetMaxY(WorldRelation.Global));
 
             GL.End();
-            
-            texture.Deactivate();
+        }
 
-            GL.Color4(StandardColor);
+        private void DrawBox(Transform transform)
+        {
+            GL.Begin(PrimitiveType.Quads);
 
-            DisableTextures();
+            //Bottom left
+            GL.Vertex2(transform.GetMinX(WorldRelation.Global), transform.GetMinY(WorldRelation.Global));
 
-            DisableAlphaChannel();
+            //Bottom right
+            GL.Vertex2(transform.GetMaxX(WorldRelation.Global), transform.GetMinY(WorldRelation.Global));
+
+            //Top right
+            GL.Vertex2(transform.GetMaxX(WorldRelation.Global), transform.GetMaxY(WorldRelation.Global));
+
+            //Top left
+            GL.Vertex2(transform.GetMinX(WorldRelation.Global), transform.GetMaxY(WorldRelation.Global));
+
+            GL.End();
         }
 
         public void PrintText(float xPos, float yPos, float xSize, float ySize, string text)
         {
             EnableAlphaChannel();
             EnableTextures();
-
-            //Font.Instance().TextureFont.Print(xPos, yPos, 0f, xSize, text);
+            
             Font.Instance().TextureFont.PrintWithSize(xPos, yPos, 0f, xSize, ySize, 1f, text);
 
             DisableTextures();

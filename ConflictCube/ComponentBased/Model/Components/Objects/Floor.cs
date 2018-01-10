@@ -14,6 +14,7 @@ namespace ConflictCube.ComponentBased
         public FloorTile[,] FloorTiles { get; set; }
         public float FloorBreakdownInterval { get; set; } = 3.0f;
         public CollisionGroup CollisionGroup;
+        public Transform CurrentCheckpoint = new Transform(0, 0, 1, 1);
 
         private int FloorRowsBrokeDown = 0;
         private float LastFloorBreakdownTime = 0;
@@ -55,7 +56,6 @@ namespace ConflictCube.ComponentBased
             {
                 BreakDownFloor();
             }
-
         }
 
         public void BreakDownFloor()
@@ -94,7 +94,7 @@ namespace ConflictCube.ComponentBased
         /// Return global start position
         /// </summary>
         /// <returns></returns>
-        public Vector2 FindStartPosition()
+        public Transform FindStartPosition()
         {
             int LowestRow = FloorTiles.GetLength(0);
             int LowestRowIndex = LowestRow - 1;
@@ -106,7 +106,8 @@ namespace ConflictCube.ComponentBased
                     FloorTile tile = FloorTiles[i, u];
                     if (tile.Type == GameObjectType.Floor)
                     {
-                        return tile.Transform.GetPosition(WorldRelation.Global);
+                        Vector2 startPos = tile.Transform.GetPosition(WorldRelation.Global);
+                        return new Transform(startPos.X, startPos.Y, 1, 1);
                     }
                 }
             }

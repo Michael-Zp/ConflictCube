@@ -12,60 +12,116 @@ namespace ConflictCube.ComponentBased
 {
     public class GameState
     {
-        public Camera Player1UICamera = new Camera(new Transform(0, 0, 1, 1), null);
-        public Camera Player2UICamera = new Camera(new Transform(0, 0, 1, 1), null);
-        public Camera Player1Camera = new Camera(new Transform(0, 0, 1, 1), null);
-        public Camera Player2Camera = new Camera(new Transform(.85f, 0, 1, 1), null);
-        public PlayerArea Player1Area { get; set; }
-        public PlayerArea Player2Area { get; set; }
+        public Camera UICamera;
+        public Camera Player1Camera;
+        public Camera Player2Camera;
         public Game Game { get; set; }
         public List<Player> Players { get; private set; }
 
-        private Transform UiPlayer1Transform = new Transform(-.8f, 0f, .2f, 1f);
-        private Transform ScenePlayer1Transform = new Transform(.15f, 0, .75f, 1f);
+        private Transform UiPlayer1Transform = new Transform(-.9f, 0f, .1f, 1f);
+        private Transform ScenePlayer1Transform = new Transform(0f, 0, 1f, 1f);
 
-        private Transform UiPlayer2Transform = new Transform(.8f, 0f, .2f, 1f);
-        private Transform ScenePlayer2Transform = new Transform(-.15f, 0, .75f, 1f);
+        private Transform UiPlayer2Transform = new Transform(.9f, 0f, .1f, 1f);
+        private Transform ScenePlayer2Transform = new Transform(0f, 0, 1f, 1f);
 
 
-        public GameState()
+
+        private Button Button;
+
+        public GameState(int windowWidth, int windowHeight)
         {
-            Game = new Game("Game", new Transform(0, 0, 1, 1));
-            Player1Area = new PlayerArea("Player1Area", new Transform(-0.5f, 0, 0.5f, 1f), Game);
-            Player2Area = new PlayerArea("Player2Area", new Transform( 0.5f, 0, 0.5f, 1f), Game);
-            Game.AddChild(Player1Area);
-            Game.AddChild(Player2Area);
+            SetUpCameras(windowWidth, windowHeight);
 
-            GameObject scene = SceneBuilder.BuildScene(Levels.FireIceSecondTest, ScenePlayer1Transform);
-            Player1Area.AddChild(scene);
+            Game = new Game("Game", new Transform(0, 0, 1, 1));
+
+            GameObject scene = SceneBuilder.BuildScene(Levels.FireIceFourthTest, ScenePlayer1Transform);
+            Game.AddChild(scene);
             Player1Camera.RootGameObject = scene;
             Player2Camera.RootGameObject = scene;
-            
+
+            /*
+            Floor floor = (Floor)Game.FindGameObjectByTypeInChildren<Floor>();
+            Transform buttonTransform = floor.GetBoxAtGridPosition(new Vector2(1, 5));
+            buttonTransform.SetSize(buttonTransform.GetSize(WorldRelation.Global) / 2, WorldRelation.Global);
+            buttonTransform = floor.Transform.TransformToLocal(buttonTransform);
+
+            OnButtonChangeFloorEvent changeFloorEvent = new OnButtonChangeFloorEvent(floor);
+            changeFloorEvent.AddChangeOnFloor(1, 2, GameObjectType.OrangeFloor);
+            changeFloorEvent.AddChangeOnFloor(2, 2, GameObjectType.OrangeFloor);
+            changeFloorEvent.AddChangeOnFloor(3, 2, GameObjectType.OrangeFloor);
+            changeFloorEvent.AddChangeOnFloor(4, 2, GameObjectType.OrangeFloor);
+            changeFloorEvent.AddChangeOnFloor(5, 2, GameObjectType.OrangeFloor);
+            changeFloorEvent.AddChangeOnFloor(6, 2, GameObjectType.OrangeFloor);
+
+            Button = new Button("button", buttonTransform, changeFloorEvent, floor.CollisionGroup);
+            floor.AddChild(Button);
+            */
+
             InitializePlayers();
             InitializeUI();
+
+            
+            GameObject testGo = new GameObject("Test", new Transform(0, 0, .2f, .07f));
+            scene.AddChild(testGo);
+            testGo.AddComponent(new Material(Color.White, ShaderResources.Afterglow));
+            testGo.GetComponent<Material>().ShaderParameters1D.Add(Tuple.Create("startTime", Time.Time.CurrentTime));
+            testGo.GetComponent<Material>().ShaderParameters1D.Add(Tuple.Create("direction", 1f));
+            testGo.GetComponent<Material>().ShaderParameters1D.Add(Tuple.Create("lifetime", 1f));
+            testGo.GetComponent<Material>().ShaderParameters3D.Add(Tuple.Create("desiredColor", new Vector3(Color.Orange.R, Color.Orange.G, Color.Orange.B)));
+
+
+            /*
+            GameObject test15Go = new GameObject("Test15", new Transform(-1f, 0, .25f, .5f));
+            testGo.AddChild(test15Go);
+            test15Go.AddComponent(new Material(Color.Orange));
+
+            GameObject test2Go = new GameObject("Test2", new Transform(0, 0, .5f, .5f));
+            testGo.AddChild(test2Go);
+            test2Go.AddComponent(new Material(Color.White, Tilesets.Instance().PlayerSheet.Tex, Tilesets.Instance().PlayerSheet.CalcSpriteTexCoords(0)));
+
+            GameObject test25Go = new GameObject("Test25", new Transform(1f, 0, .25f, .5f));
+            testGo.AddChild(test25Go);
+            test25Go.AddComponent(new Material(Color.Green));
+
+            GameObject test3Go = new GameObject("Test3", new Transform(.5f, .5f, .5f, .5f));
+            testGo.AddChild(test3Go);
+            test3Go.AddComponent(new Material(Color.White, Tilesets.Instance().PlayerSheet.Tex, Tilesets.Instance().PlayerSheet.CalcSpriteTexCoords(0)));
+
+            UICamera.RootGameObject = testGo;
+            */
+        }
+
+        private void SetUpCameras(int windowWidth, int windowHeight)
+        {
+            UICamera = new Camera(new Transform(), null, windowWidth, windowHeight, new Transform());
+
+            Player1Camera = new Camera(new Transform(), null, windowWidth, windowHeight, new Transform(-.42f, 0f, .39f, 1f));
+            Player2Camera = new Camera(new Transform(), null, windowWidth, windowHeight, new Transform( .42f, 0f, .39f, 1f));
         }
         
 
         private void InitializeUI()
         {
-            GameObject player1UI = new PlayerUI("Player0UI", Players[0], UiPlayer1Transform, Player1Area);
-            Player1Area.AddChild(player1UI);
-            Player1UICamera.RootGameObject = player1UI;
+            GameObject ui = new GameObject("UI", new Transform());
+
+            GameObject player1UI = new PlayerUI("Player0UI", Players[0], UiPlayer1Transform, ui);
+            ui.AddChild(player1UI);
             
-            GameObject player2UI = new PlayerUI("Player0UI", Players[1], UiPlayer2Transform, Player2Area);
-            Player2Area.AddChild(player2UI);
-            Player2UICamera.RootGameObject = player2UI;
+            GameObject player2UI = new PlayerUI("Player0UI", Players[1], UiPlayer2Transform, ui);
+            ui.AddChild(player2UI);
+
+            UICamera.RootGameObject = ui;
         }
 
         public void InitializePlayers()
         {
             Players = new List<Player>();
-            Material playerMat = new Material((Texture)Tilesets.Instance().PlayerSheet.Tex, Tilesets.Instance().PlayerSheet.CalcSpriteTexCoords(0), Color.White);
-            Material playerOrangeMat = new Material(null, null, Color.FromArgb(128, Color.Orange));
-            Material playerBlueMat = new Material(null, null, Color.FromArgb(128, Color.DarkBlue));
-            Material playerGhostMat = new Material((Texture)Tilesets.Instance().PlayerSheet.Tex, Tilesets.Instance().PlayerSheet.CalcSpriteTexCoords(0), Color.FromArgb(64, 255, 255, 255));
+            Material playerMat = new Material(Color.White, (Texture)Tilesets.Instance().PlayerSheet.Tex, Tilesets.Instance().PlayerSheet.CalcSpriteTexCoords(0));
+            Material playerOrangeMat = new Material(Color.FromArgb(128, Color.Orange), null, null);
+            Material playerBlueMat = new Material(Color.FromArgb(128, Color.DarkBlue), null, null);
+            Material playerGhostMat = new Material(Color.FromArgb(64, 255, 255, 255), (Texture)Tilesets.Instance().PlayerSheet.Tex, Tilesets.Instance().PlayerSheet.CalcSpriteTexCoords(0));
 
-            Floor floor = (Floor)Player1Area.FindGameObjectByTypeInChildren<Floor>();
+            Floor floor = (Floor)Game.FindGameObjectByTypeInChildren<Floor>();
 
             if (floor == null)
             {
@@ -76,16 +132,20 @@ namespace ConflictCube.ComponentBased
 
             //Players
             BoxCollider Player1Collider = new BoxCollider(new Transform(0, 0, 1, 1), false, floor.CollisionGroup, CollisionType.PlayerFire);
-            Players.Add(new OrangePlayer("FirePlayer", new Transform(0, 0, .06f, .06f), Player1Collider, playerMat, floor, floor, .2f, GameObjectType.PlayerFire));
+            Players.Add(new OrangePlayer("FirePlayer", new Transform(0, 0, .06f, .06f), Player1Collider, playerMat, floor, floor, .2f, GameObjectType.PlayerFire, null));
             floor.AddChild(Players[0]);
-            Players[0].Transform.SetPosition(floor.FindStartPosition(), WorldRelation.Global);
+            Players[0].ResetToLastCheckpoint();
             Players[0].AddChild(new ColoredBox("Player0Orange", new Transform(), playerOrangeMat, Players[0]));
 
             BoxCollider Player2Collider = new BoxCollider(new Transform(0, 0, 1, 1), false, floor.CollisionGroup, CollisionType.PlayerIce);
-            Players.Add(new BluePlayer("IcePlayer", new Transform(0, 0, .06f, .06f), Player2Collider, playerMat, floor, floor, .2f, GameObjectType.PlayerIce));
+            Players.Add(new BluePlayer("IcePlayer", new Transform(0, 0, .06f, .06f), Player2Collider, playerMat, floor, floor, .2f, GameObjectType.PlayerIce, null));
             floor.AddChild(Players[1]);
-            Players[1].Transform.SetPosition(floor.FindStartPosition(), WorldRelation.Global);
+            Players[1].ResetToLastCheckpoint();
             Players[1].AddChild(new ColoredBox("Player1Blue", new Transform(), playerBlueMat, Players[1]));
+
+            //Other Players
+            Players[0].OtherPlayer = Players[1];
+            Players[1].OtherPlayer = Players[0];
 
             //Ghost Players
             floor.AddChild(new GhostPlayer("GhostPlayer2OnArea1", new Transform(0, 0, .06f, .06f), floor, playerGhostMat, Players[1], GameObjectType.GhostPlayer));
@@ -102,8 +162,10 @@ namespace ConflictCube.ComponentBased
             Vector2 player1Pos = Players[0].Transform.GetPosition(WorldRelation.Global);
             Vector2 player2Pos = Players[1].Transform.GetPosition(WorldRelation.Global);
 
-            Player1Camera.Transform.SetPosition(new Vector2(-player1Pos.X - .5f, -player1Pos.Y), WorldRelation.Global);
-            Player2Camera.Transform.SetPosition(new Vector2(-player2Pos.X + .5f, -player2Pos.Y), WorldRelation.Global);
+            Player1Camera.Transform.SetPosition(new Vector2(-player1Pos.X, -player1Pos.Y), WorldRelation.Global);
+            Player2Camera.Transform.SetPosition(new Vector2(-player2Pos.X, -player2Pos.Y), WorldRelation.Global);
+
+            //GameView.DrawDebug(Button.Transform.TransformToGlobal(), Color.Red);
         }
 
         private void CheckLooseCondition()

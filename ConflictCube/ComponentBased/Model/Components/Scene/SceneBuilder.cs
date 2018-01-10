@@ -43,10 +43,10 @@ namespace ConflictCube.ComponentBased
 
             if(DebugGame.ShowBoundaries)
             {
-                topBoundary.AddComponent(new Material(null, null, System.Drawing.Color.FromArgb(128, System.Drawing.Color.Red)));
-                bottomBoundary.AddComponent(new Material(null, null, System.Drawing.Color.FromArgb(128, System.Drawing.Color.Green)));
-                rightBoundary.AddComponent(new Material(null, null, System.Drawing.Color.FromArgb(128, System.Drawing.Color.Blue)));
-                leftBoundary.AddComponent(new Material(null, null, System.Drawing.Color.FromArgb(128, System.Drawing.Color.Violet)));
+                topBoundary.AddComponent(new Material(System.Drawing.Color.Red, null, null));
+                bottomBoundary.AddComponent(new Material(System.Drawing.Color.Green, null, null));
+                rightBoundary.AddComponent(new Material(System.Drawing.Color.Blue, null, null));
+                leftBoundary.AddComponent(new Material(System.Drawing.Color.Violet, null, null));
             }
 
             Boundaries.AddChild(topBoundary);

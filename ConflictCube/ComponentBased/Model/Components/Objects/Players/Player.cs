@@ -14,6 +14,7 @@ namespace ConflictCube.ComponentBased
         public float CurrentSprintEnergy = 100;
         public float UsedSprintEnergyPerSecond = 100;
         public float RegeneratSprintEnergyPerSecond = 20;
+        public Player OtherPlayer;
 
         protected GameObject UseField { get; set; }
         protected float UseCooldown = 1.0f;
@@ -32,6 +33,9 @@ namespace ConflictCube.ComponentBased
         protected InputAxis Vertical;
         protected InputKey Sprint;
         protected InputKey HitBlock;
+        protected InputKey SwitchPositionY;
+        protected InputKey SwitchPositionXY;
+        protected InputKey SwitchPositionX;
         protected int ActiveGamePad = 0;
 
 
@@ -39,12 +43,13 @@ namespace ConflictCube.ComponentBased
         /// <summary>
         ///     Create a new player, with a defined size, position and move speed. The collision box of this player equals his rendering box, given with size and position
         /// </summary>
-        public Player(string name, Transform transform, BoxCollider boxCollider, Material material, GameObject parent, Floor currentFloor, float speed, GameObjectType playerType, bool isAlive = true) : base(name, transform, parent, playerType)
+        public Player(string name, Transform transform, BoxCollider boxCollider, Material material, GameObject parent, Floor currentFloor, float speed, GameObjectType playerType, Player otherPlayer, bool isAlive = true) : base(name, transform, parent, playerType)
         {
             Speed = speed;
             IsAlive = isAlive;
             CurrentFloor = currentFloor;
             LastUse = -UseCooldown;
+            OtherPlayer = otherPlayer;
 
             if(DebugGame.NoClip)
             {
@@ -59,8 +64,8 @@ namespace ConflictCube.ComponentBased
             if (!MaterialsAreInitialized)
             {
                 MaterialsAreInitialized = true;
-                UseMaterialForeground   = new Material(TextureLoader.FromBitmap(TexturResource.UseFieldIndicator), new Zenseless.Geometry.Box2D(0, 0, 1, 1), System.Drawing.Color.FromArgb(255, System.Drawing.Color.White));
-                UseMaterialBackground   = new Material(null, null, System.Drawing.Color.FromArgb(32, 0, 255, 64));
+                UseMaterialForeground   = new Material(System.Drawing.Color.FromArgb(255, System.Drawing.Color.White), TextureLoader.FromBitmap(TexturResource.UseFieldIndicator), new Zenseless.Geometry.Box2D(0, 0, 1, 1));
+                UseMaterialBackground   = new Material(System.Drawing.Color.FromArgb(32, 0, 255, 64), null, null);
             }
 
             UseField = new ColoredBox("ThrowUseIndicator", new Transform(), UseMaterialForeground, this);
@@ -93,7 +98,42 @@ namespace ConflictCube.ComponentBased
                 LastUse = Time.Time.CurrentTime;
                 HitSelectedBlock();
             }
+
+            if (Input.OnButtonDown(SwitchPositionY, ActiveGamePad))
+            {
+                Vector2 thisPosition = Transform.GetPosition(WorldRelation.Global);
+                Vector2 otherPosition = OtherPlayer.Transform.GetPosition(WorldRelation.Global);
+
+                float temp = thisPosition.Y;
+                thisPosition.Y = otherPosition.Y;
+                otherPosition.Y = temp;
+                
+                Transform.SetPosition(thisPosition, WorldRelation.Global);
+                OtherPlayer.Transform.SetPosition(otherPosition, WorldRelation.Global);
+            }
             
+            if (Input.OnButtonDown(SwitchPositionXY, ActiveGamePad))
+            {
+                Vector2 thisPosition = Transform.GetPosition(WorldRelation.Global);
+                Vector2 otherPosition = OtherPlayer.Transform.GetPosition(WorldRelation.Global);
+                
+                Transform.SetPosition(otherPosition, WorldRelation.Global);
+                OtherPlayer.Transform.SetPosition(thisPosition, WorldRelation.Global);
+            }
+            
+            if (Input.OnButtonDown(SwitchPositionX, ActiveGamePad))
+            {
+                Vector2 thisPosition = Transform.GetPosition(WorldRelation.Global);
+                Vector2 otherPosition = OtherPlayer.Transform.GetPosition(WorldRelation.Global);
+
+                float temp = thisPosition.X;
+                thisPosition.X = otherPosition.X;
+                otherPosition.X = temp;
+
+                Transform.SetPosition(thisPosition, WorldRelation.Global);
+                OtherPlayer.Transform.SetPosition(otherPosition, WorldRelation.Global);
+            }
+
             Move(moveVector);
             UpdateUseField();
         }
@@ -106,10 +146,12 @@ namespace ConflictCube.ComponentBased
             Input.AxesSettings.TryGetValue(Horizontal, out AxisData horizontalAxisData);
             Input.AxesSettings.TryGetValue(Vertical,   out AxisData verticalAxisData);
 
-            bool horizontalPositive = Input.OnButtonIsPressed(horizontalAxisData.PositiveKey, ActiveGamePad);
-            bool horizontalNegative = Input.OnButtonIsPressed(horizontalAxisData.NegativeKey, ActiveGamePad);
-            bool verticalPositive = Input.OnButtonIsPressed(verticalAxisData.PositiveKey, ActiveGamePad);
-            bool verticalNegative = Input.OnButtonIsPressed(verticalAxisData.NegativeKey, ActiveGamePad);
+            bool axisIsInUse = Math.Abs(Input.GetAxis(Horizontal, ActiveGamePad)) + Math.Abs(Input.GetAxis(Vertical, ActiveGamePad)) > .4f;
+
+            bool horizontalPositive = Input.OnButtonIsPressed(horizontalAxisData.PositiveKey, ActiveGamePad) || (axisIsInUse && Input.GetAxis(Horizontal, ActiveGamePad) > 0.1f);
+            bool horizontalNegative = Input.OnButtonIsPressed(horizontalAxisData.NegativeKey, ActiveGamePad) || (axisIsInUse && Input.GetAxis(Horizontal, ActiveGamePad) < -0.1f);
+            bool verticalPositive = Input.OnButtonIsPressed(verticalAxisData.PositiveKey, ActiveGamePad) || (axisIsInUse && Input.GetAxis(Vertical, ActiveGamePad) > 0.1f);
+            bool verticalNegative = Input.OnButtonIsPressed(verticalAxisData.NegativeKey, ActiveGamePad) || (axisIsInUse && Input.GetAxis(Vertical, ActiveGamePad) < -0.1f);
 
             if((horizontalPositive || horizontalNegative || verticalPositive || verticalNegative) && Time.Time.CooldownIsOver(LastUseFieldUpdate, UseFieldUpdateCooldown))
             {
@@ -214,8 +256,14 @@ namespace ConflictCube.ComponentBased
         {
             if(DebugGame.CanDie)
             {
-                IsAlive = false;
+                ResetToLastCheckpoint();
+                OtherPlayer.ResetToLastCheckpoint();
             }
+        }
+
+        public void ResetToLastCheckpoint()
+        {
+            Transform.SetPosition(CurrentFloor.FindStartPosition().GetPosition(WorldRelation.Global), WorldRelation.Global);
         }
 
         public bool CanMove()

@@ -1,7 +1,13 @@
 ﻿using System;
 using OpenTK;
+using OpenTK.Graphics.OpenGL;
 using NUnit.Framework;
 using ConflictCube.ComponentBased.Components;
+using ConflictCube.ComponentBased;
+using ConflictCube.ComponentBased.View;
+using System.Drawing;
+using Zenseless.OpenGL;
+using Zenseless.HLGL;
 
 namespace ConflictCubeTest
 {
@@ -30,6 +36,132 @@ namespace ConflictCubeTest
             Transform toGlobalTransform = localTransform.TransformToGlobal();
 
             Assert.AreEqual(new Transform(1, 2f, 2, 2), toGlobalTransform);
+        }
+
+        [Test]
+        [Category("OpenGLTests")]
+        public void TestRenderToTexture()
+        {
+            MyWindow window = new MyWindow();
+            GameView view = new GameView(window);
+
+            GL.Enable(EnableCap.Texture2D);
+            GL.Color4(Color.Red);
+
+            Texture2dGL tex2D = Texture2dGL.Create(window.Width, window.Height, OpenTK.Graphics.OpenGL4.PixelInternalFormat.Rgba);
+            FBO fBO = new FBO(tex2D);
+            
+            fBO.Activate();
+            
+            GL.Begin(PrimitiveType.Quads);
+            //Bottom left
+            GL.TexCoord2(0, 0);
+            GL.Vertex2(-1, -1);
+            //Bottom right
+            GL.TexCoord2(1, 0);
+            GL.Vertex2(1, -1);
+            //Top right
+            GL.TexCoord2(1, 1);
+            GL.Vertex2(1, 1);
+            //Top left
+            GL.TexCoord2(0, 1);
+            GL.Vertex2(-1, 1);
+            GL.End();
+
+            fBO.Deactivate();
+
+            GL.ClearColor(Color.CornflowerBlue);
+            GL.Color4(Color.White);
+
+            while (window.WaitForNextFrame())
+            {
+                GL.Clear(ClearBufferMask.ColorBufferBit);
+
+                tex2D.Activate();
+
+                
+                GL.Begin(PrimitiveType.Quads);
+                GL.TexCoord2(0, 0);
+                GL.Vertex2(-.5f, -.5f);
+                //Bottom right
+                GL.TexCoord2(1, 0);
+                GL.Vertex2(.5f, -.5f);
+                //Top right
+                GL.TexCoord2(1, 1);
+                GL.Vertex2(.5f, .5f);
+                //Top left
+                GL.TexCoord2(0, 1);
+                GL.Vertex2(-.5f, .5f);
+
+                GL.End();
+
+                tex2D.Deactivate();
+
+            }
+        }
+
+        [Test]
+        [Category("OpenGLTests")]
+        public void TestRenderTexture2()
+        {
+            MyWindow window = new MyWindow();
+            GameView view = new GameView(window);
+
+            int FboWidth = window.Width;
+            int FboHeight = window.Height;
+
+            uint FboHandle;
+            uint ColorTexture;
+
+            // Create Color Texture
+            GL.GenTextures(1, out ColorTexture);
+            GL.BindTexture(TextureTarget.Texture2D, ColorTexture);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.Clamp);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.Clamp);
+            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba8, FboWidth, FboHeight, 0, PixelFormat.Rgba, PixelType.UnsignedByte, IntPtr.Zero);
+
+            // test for GL Error here (might be unsupported format)
+
+            GL.BindTexture(TextureTarget.Texture2D, 0); // prevent feedback, reading and writing to the same image is a bad idea
+            
+            // Create a FBO and attach the textures
+            GL.Ext.GenFramebuffers(1, out FboHandle);
+            GL.Ext.BindFramebuffer(FramebufferTarget.FramebufferExt, FboHandle);
+            GL.Ext.FramebufferTexture2D(FramebufferTarget.FramebufferExt, FramebufferAttachment.ColorAttachment0Ext, TextureTarget.Texture2D, ColorTexture, 0);
+
+            // now GL.Ext.CheckFramebufferStatus( FramebufferTarget.FramebufferExt ) can be called, check the end of this page for a snippet.
+            
+            GL.Ext.BindFramebuffer(FramebufferTarget.FramebufferExt, 0); // return to visible framebuffer
+            GL.DrawBuffer(DrawBufferMode.Back);
+
+            while (window.WaitForNextFrame())
+            {
+                GL.Clear(ClearBufferMask.ColorBufferBit);
+
+                GL.BindTexture(TextureTarget.Texture2D, ColorTexture);
+
+
+                GL.Begin(PrimitiveType.Quads);
+                GL.TexCoord2(0, 0);
+                GL.Vertex2(-.5f, -.5f);
+                //Bottom right
+                GL.TexCoord2(1, 0);
+                GL.Vertex2(.5f, -.5f);
+                //Top right
+                GL.TexCoord2(1, 1);
+                GL.Vertex2(.5f, .5f);
+                //Top left
+                GL.TexCoord2(0, 1);
+                GL.Vertex2(-.5f, .5f);
+
+                GL.End();
+
+
+                GL.BindTexture(TextureTarget.Texture2D, 0);
+
+            }
         }
 
         /*
