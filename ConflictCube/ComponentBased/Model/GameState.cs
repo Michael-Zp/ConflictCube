@@ -34,7 +34,7 @@ namespace ConflictCube.ComponentBased
 
             Game = new Game("Game", new Transform(0, 0, 1, 1));
 
-            GameObject scene = SceneBuilder.BuildScene(Levels.FireIceFourthTest, ScenePlayer1Transform);
+            GameObject scene = SceneBuilder.BuildScene(Levels.FireIceFourthTest, new Transform());
             Game.AddChild(scene);
             Player1Camera.RootGameObject = scene;
             Player2Camera.RootGameObject = scene;
@@ -93,10 +93,10 @@ namespace ConflictCube.ComponentBased
 
         private void SetUpCameras(int windowWidth, int windowHeight)
         {
-            UICamera = new Camera(new Transform(), null, windowWidth, windowHeight, new Transform());
+            UICamera = new Camera(new Transform(), null, windowWidth, windowHeight, new Transform(0, 0, 1f, 1f), true);
 
-            Player1Camera = new Camera(new Transform(), null, windowWidth, windowHeight, new Transform(-.42f, 0f, .39f, 1f));
-            Player2Camera = new Camera(new Transform(), null, windowWidth, windowHeight, new Transform( .42f, 0f, .39f, 1f));
+            Player1Camera = new Camera(new Transform(), null, windowWidth, windowHeight, new Transform(-.42f, 0f, .5f, 1f), false);
+            Player2Camera = new Camera(new Transform(), null, windowWidth, windowHeight, new Transform( .42f, 0f, .5f, 1f), false);
         }
         
 

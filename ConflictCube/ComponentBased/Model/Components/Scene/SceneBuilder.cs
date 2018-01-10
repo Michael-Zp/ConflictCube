@@ -16,8 +16,7 @@ namespace ConflictCube.ComponentBased
             return scene;
         }
 
-
-        //TODO: Transforms are not right... Something went terribly wrong in the ToGlobal and ToLocal... Has to be fixxed !!!!
+        
         private static GameObject Boundaries(CollisionGroup group, Floor floor)
         {
             float minXFloor = floor.FloorTiles[0, 0].Transform.GetMinX(WorldRelation.Local);

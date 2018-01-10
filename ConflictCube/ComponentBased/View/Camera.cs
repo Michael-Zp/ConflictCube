@@ -9,17 +9,19 @@ namespace ConflictCube.ComponentBased.View
         public GameObject RootGameObject;
         public FBO FBO;
         public Transform RenderTarget;
+        public bool IsUiCamera;
 
-        public Camera(Transform transform, GameObject rootGameObject, int windowWidth, int windowHeight, Transform renderTarget) 
-            : this(transform, rootGameObject, new FBO(Texture2dGL.Create(windowWidth, windowHeight, OpenTK.Graphics.OpenGL4.PixelInternalFormat.Rgba)), renderTarget)
+        public Camera(Transform transform, GameObject rootGameObject, int windowWidth, int windowHeight, Transform renderTarget, bool isUiCamera) 
+            : this(transform, rootGameObject, new FBO(Texture2dGL.Create(windowWidth, windowHeight, OpenTK.Graphics.OpenGL4.PixelInternalFormat.Rgba)), renderTarget, isUiCamera)
         {}
 
-        public Camera(Transform transform, GameObject rootGameObject, FBO fBO, Transform renderTarget)
+        public Camera(Transform transform, GameObject rootGameObject, FBO fBO, Transform renderTarget, bool isUiCamera)
         {
             Transform = transform;
             RootGameObject = rootGameObject;
             FBO = fBO;
             RenderTarget = renderTarget;
+            IsUiCamera = isUiCamera;
         }
     }
 }
