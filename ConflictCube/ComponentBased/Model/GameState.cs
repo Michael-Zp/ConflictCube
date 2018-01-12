@@ -34,7 +34,7 @@ namespace ConflictCube.ComponentBased
 
             Game = new Game("Game", new Transform(0, 0, 1, 1));
 
-            GameObject scene = SceneBuilder.BuildScene(Levels.FireIceFourthTest, new Transform());
+            GameObject scene = SceneBuilder.BuildScene(Levels.FireIceFirstTest, new Transform());
             Game.AddChild(scene);
             Player1Camera.RootGameObject = scene;
             Player2Camera.RootGameObject = scene;
@@ -61,6 +61,7 @@ namespace ConflictCube.ComponentBased
             InitializeUI();
 
             
+            /*
             GameObject testGo = new GameObject("Test", new Transform(0, 0, .2f, .07f));
             scene.AddChild(testGo);
             testGo.AddComponent(new Material(Color.White, ShaderResources.Afterglow));
@@ -68,7 +69,7 @@ namespace ConflictCube.ComponentBased
             testGo.GetComponent<Material>().ShaderParameters1D.Add(Tuple.Create("direction", 1f));
             testGo.GetComponent<Material>().ShaderParameters1D.Add(Tuple.Create("lifetime", 1f));
             testGo.GetComponent<Material>().ShaderParameters3D.Add(Tuple.Create("desiredColor", new Vector3(Color.Orange.R, Color.Orange.G, Color.Orange.B)));
-
+            */
 
             /*
             GameObject test15Go = new GameObject("Test15", new Transform(-1f, 0, .25f, .5f));

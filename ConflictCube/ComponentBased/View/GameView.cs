@@ -65,7 +65,7 @@ namespace ConflictCube.ComponentBased
             {
                 RenderGameObject(camera.Transform, camera.RootGameObject, camera.FBO);
 
-                OpenTKWrapper.DrawBox(camera.RenderTarget, Color.White, camera.FBO.Texture, new Zenseless.Geometry.Box2D(-1, -1, 1, 1), true);
+                OpenTKWrapper.DrawBox(camera.RenderTarget.GetGlobalRotatedRectangel(), Color.White, camera.FBO.Texture, new Zenseless.Geometry.Box2D(-1, -1, 1, 1), true);
 
                 camera.FBO.Activate();
                 ClearScreen();
@@ -74,7 +74,7 @@ namespace ConflictCube.ComponentBased
 
             foreach(Tuple<Transform, Color> debugObject in DebugDraws)
             {
-                OpenTKWrapper.DrawBoxWithAlphaChannel(viewModel.Cameras[2].Transform * debugObject.Item1, debugObject.Item2);
+                OpenTKWrapper.DrawBoxWithAlphaChannel((viewModel.Cameras[2].Transform * debugObject.Item1).GetGlobalRotatedRectangel(), debugObject.Item2);
             }
 
             DebugDraws.Clear();
@@ -101,15 +101,16 @@ namespace ConflictCube.ComponentBased
                 {
                     if(currentMat.Texture != null)
                     {
-                        OpenTKWrapper.DrawBox(new Transform(), currentMat.Color, currentMat.Texture, currentMat.UVCoordinates, true);
+                        OpenTKWrapper.DrawBox(new Transform().GetGlobalNotRotatedRectangle(), currentMat.Color, currentMat.Texture, currentMat.UVCoordinates, true);
                     }
                     else
                     {
-                        OpenTKWrapper.DrawBox(new Transform(), currentMat.Color, null, null, true);
+                        OpenTKWrapper.DrawBox(new Transform().GetGlobalNotRotatedRectangle(), currentMat.Color, null, null, true);
                     }
                 }
             }
 
+            //TODO: Text is not working anymore since the shader change.
             if(currentObject is TextField)
             {
                 TextField text = (TextField)currentObject;
@@ -121,35 +122,38 @@ namespace ConflictCube.ComponentBased
             //Apply shaders
             foreach (Material currentMat in currentMats)
             {
-                if (!string.IsNullOrEmpty(currentMat.ShaderText))
+                if (currentMat.Shader != null)
                 {
-                    TextureToFrameBuffer t2fb = new TextureToFrameBuffer(currentMat.ShaderText);
-                    t2fb.Draw(RenderFrameBufferObject.Texture, (shader) =>
+                    currentMat.Shader.Activate();
+                    RenderFrameBufferObject.Texture.Activate();
+
+                    GL.Uniform2(currentMat.Shader.GetResourceLocation(ShaderResourceType.Uniform, "iResolution"), (float)Window.Width, (float)Window.Height);
+                    GL.Uniform1(currentMat.Shader.GetResourceLocation(ShaderResourceType.Uniform, "iGlobalTime"), Time.Time.CurrentTime);
+
+                    foreach (Tuple<string, float> parameter in currentMat.ShaderParameters1D)
                     {
-                        GL.Uniform2(shader.GetResourceLocation(ShaderResourceType.Uniform, "iResolution"), (float)Window.Width, (float)Window.Height);
-                        GL.Uniform1(shader.GetResourceLocation(ShaderResourceType.Uniform, "iGlobalTime"), Time.Time.CurrentTime);
+                        GL.Uniform1(currentMat.Shader.GetResourceLocation(ShaderResourceType.Uniform, parameter.Item1), parameter.Item2);
+                    }
 
-                        foreach (Tuple<string, float> parameter in currentMat.ShaderParameters1D)
-                        {
-                            GL.Uniform1(shader.GetResourceLocation(ShaderResourceType.Uniform, parameter.Item1), parameter.Item2);
-                        }
+                    foreach (Tuple<string, Vector2> parameter in currentMat.ShaderParameters2D)
+                    {
+                        GL.Uniform2(currentMat.Shader.GetResourceLocation(ShaderResourceType.Uniform, parameter.Item1), parameter.Item2);
+                    }
 
-                        foreach (Tuple<string, Vector2> parameter in currentMat.ShaderParameters2D)
-                        {
-                            GL.Uniform2(shader.GetResourceLocation(ShaderResourceType.Uniform, parameter.Item1), parameter.Item2);
-                        }
+                    foreach (Tuple<string, Vector3> parameter in currentMat.ShaderParameters3D)
+                    {
+                        GL.Uniform3(currentMat.Shader.GetResourceLocation(ShaderResourceType.Uniform, parameter.Item1), parameter.Item2);
+                    }
 
-                        foreach (Tuple<string, Vector3> parameter in currentMat.ShaderParameters3D)
-                        {
-                            GL.Uniform3(shader.GetResourceLocation(ShaderResourceType.Uniform, parameter.Item1), parameter.Item2);
-                        }
+                    foreach (Tuple<string, Vector4> parameter in currentMat.ShaderParameters4D)
+                    {
+                        GL.Uniform4(currentMat.Shader.GetResourceLocation(ShaderResourceType.Uniform, parameter.Item1), parameter.Item2);
+                    }
 
-                        foreach (Tuple<string, Vector4> parameter in currentMat.ShaderParameters4D)
-                        {
-                            GL.Uniform4(shader.GetResourceLocation(ShaderResourceType.Uniform, parameter.Item1), parameter.Item2);
-                        }
-                    });
-                    t2fb.Dispose();
+                    GL.DrawArrays(PrimitiveType.Quads, 0, 4);
+
+                    RenderFrameBufferObject.Texture.Deactivate();
+                    currentMat.Shader.Deactivate();
                 }
             }
             
@@ -157,8 +161,9 @@ namespace ConflictCube.ComponentBased
             RenderFrameBufferObject.Deactivate();
 
             targetFBO.Activate();
+            
 
-            OpenTKWrapper.DrawBox(globalTransformInCamera, Color.White, RenderFrameBufferObject.Texture, new Zenseless.Geometry.Box2D(-1, -1, 1, 1), true);
+            OpenTKWrapper.DrawBox(globalTransformInCamera.GetGlobalRotatedRectangel(), Color.White, RenderFrameBufferObject.Texture, new Zenseless.Geometry.Box2D(-1, -1, 1, 1), true);
 
             targetFBO.Deactivate();
 

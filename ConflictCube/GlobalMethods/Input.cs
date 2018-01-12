@@ -204,7 +204,7 @@ namespace ConflictCube.ComponentBased
             KeyboardSettings.Add(InputKey.PlayerTwoMoveDown, Key.K);
             KeyboardSettings.Add(InputKey.PlayerTwoSprint, Key.RControl);
             KeyboardSettings.Add(InputKey.PlayerTwoUse, Key.O);
-            KeyboardSettings.Add(InputKey.PlayerTwoSwitchPositionsY, Key.Z);
+            KeyboardSettings.Add(InputKey.PlayerTwoSwitchPositionsY, Key.Y); //Uses QWERTY layout
             KeyboardSettings.Add(InputKey.PlayerTwoSwitchPositionsXY, Key.U);
             KeyboardSettings.Add(InputKey.PlayerTwoSwitchPositionsX, Key.H);
 

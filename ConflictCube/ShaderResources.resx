@@ -137,15 +137,15 @@ void main()
 
     if(direction &gt; 0.0) 
     {
-        color.a = uv.x + 0.5;
+        color.a = uv.x + 0.2;
     }
     else
     {
-        color.a = 1.5 - uv.x;
+        color.a = 1.2 - uv.x;
     }
 
-    //color.a is 1.5 at maximum (only 1 is to clamped)
-    color.a -= (iGlobalTime - startTime) / (1.5 / (1.0 / lifetime));
+    //color.a is 1.2 at maximum (only 1 is to clamped)
+    color.a -= (iGlobalTime - startTime) / (1.2 / (1.0 / lifetime));
 
 	gl_FragColor = color;
 }</value>

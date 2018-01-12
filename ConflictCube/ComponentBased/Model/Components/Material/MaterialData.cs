@@ -9,14 +9,14 @@ namespace ConflictCube.ComponentBased.Components
         public ITexture Texture;
         public Box2D UVCoordinates;
         public Color Color;
-        public string ShaderText;
+        public IShader Shader;
         
-        public MaterialData(ITexture texture, Box2D uvCoordinates, Color color, string shaderText)
+        public MaterialData(ITexture texture, Box2D uvCoordinates, Color color, IShader shader)
         {
             Texture = texture;
             UVCoordinates = uvCoordinates;
             Color = color;
-            ShaderText = shaderText;
+            Shader = shader;
         }
     }
 }

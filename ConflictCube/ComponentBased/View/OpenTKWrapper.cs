@@ -2,7 +2,6 @@
 using OpenGL = OpenTK.Graphics.OpenGL;
 using Zenseless.Geometry;
 using System.Drawing;
-using ConflictCube.ComponentBased.Components;
 using Zenseless.HLGL;
 
 namespace ConflictCube.ComponentBased
@@ -22,20 +21,20 @@ namespace ConflictCube.ComponentBased
             return OpenTKWrapperInstance;
         }
 
-        public void DrawBoxWithAlphaChannel(Transform transform, Color color)
+        public void DrawBoxWithAlphaChannel(Components.Rectangle rect, Color color)
         {
             EnableAlphaChannel();
 
             GL.Color4(color);
 
-            DrawBox(transform);
+            DrawBox(rect);
 
             GL.Color4(StandardColor);
 
             DisableAlphaChannel();
         }
 
-        public void DrawBox(Transform transform, Color color, ITexture texture, Box2D uVCoordinates, bool alphaChannel = true)
+        public void DrawBox(Components.Rectangle rect, Color color, ITexture texture, Box2D uVCoordinates, bool alphaChannel = true)
         {
             if (alphaChannel)
             {
@@ -49,14 +48,14 @@ namespace ConflictCube.ComponentBased
                 EnableTextures();
                 texture.Activate();
 
-                DrawTexturedBox(transform, uVCoordinates);
+                DrawTexturedBox(rect, uVCoordinates);
 
                 texture.Deactivate();
                 DisableTextures();
             }
             else
             {
-                DrawBox(transform);
+                DrawBox(rect);
             }
             
 
@@ -68,44 +67,44 @@ namespace ConflictCube.ComponentBased
             }
         }
 
-        private void DrawTexturedBox(Transform transform, Box2D uVCoordinates)
+        private void DrawTexturedBox(Components.Rectangle rect, Box2D uVCoordinates)
         {
             GL.Begin(PrimitiveType.Quads);
 
             //Bottom left
             GL.TexCoord2(uVCoordinates.MinX, uVCoordinates.MinY);
-            GL.Vertex2(transform.GetMinX(WorldRelation.Global), transform.GetMinY(WorldRelation.Global));
+            GL.Vertex2(rect.BottomLeft);
 
             //Bottom right
             GL.TexCoord2(uVCoordinates.MaxX, uVCoordinates.MinY);
-            GL.Vertex2(transform.GetMaxX(WorldRelation.Global), transform.GetMinY(WorldRelation.Global));
+            GL.Vertex2(rect.BottomRight);
 
             //Top right
             GL.TexCoord2(uVCoordinates.MaxX, uVCoordinates.MaxY);
-            GL.Vertex2(transform.GetMaxX(WorldRelation.Global), transform.GetMaxY(WorldRelation.Global));
+            GL.Vertex2(rect.TopRight);
 
             //Top left
             GL.TexCoord2(uVCoordinates.MinX, uVCoordinates.MaxY);
-            GL.Vertex2(transform.GetMinX(WorldRelation.Global), transform.GetMaxY(WorldRelation.Global));
+            GL.Vertex2(rect.TopLeft);
 
             GL.End();
         }
 
-        private void DrawBox(Transform transform)
+        private void DrawBox(Components.Rectangle rect)
         {
             GL.Begin(PrimitiveType.Quads);
 
             //Bottom left
-            GL.Vertex2(transform.GetMinX(WorldRelation.Global), transform.GetMinY(WorldRelation.Global));
+            GL.Vertex2(rect.BottomLeft);
 
             //Bottom right
-            GL.Vertex2(transform.GetMaxX(WorldRelation.Global), transform.GetMinY(WorldRelation.Global));
+            GL.Vertex2(rect.BottomRight);
 
             //Top right
-            GL.Vertex2(transform.GetMaxX(WorldRelation.Global), transform.GetMaxY(WorldRelation.Global));
+            GL.Vertex2(rect.TopRight);
 
             //Top left
-            GL.Vertex2(transform.GetMinX(WorldRelation.Global), transform.GetMaxY(WorldRelation.Global));
+            GL.Vertex2(rect.TopLeft);
 
             GL.End();
         }

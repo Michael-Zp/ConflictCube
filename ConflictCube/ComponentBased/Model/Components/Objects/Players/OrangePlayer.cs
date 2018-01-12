@@ -1,5 +1,7 @@
 ﻿using ConflictCube.ComponentBased.Components;
+using OpenTK;
 using System;
+using System.Drawing;
 
 namespace ConflictCube.ComponentBased
 {
@@ -16,6 +18,10 @@ namespace ConflictCube.ComponentBased
             SwitchPositionXY = InputKey.PlayerOneSwitchPositionsXY;
             SwitchPositionX = InputKey.PlayerOneSwitchPositionsX;
             ActiveGamePad = 0;
+
+            AfterglowMaterialX.AddShaderParameter("desiredColor", new Vector3(Color.Orange.R, Color.Orange.G, Color.Orange.B));
+            AfterglowMaterialY.AddShaderParameter("desiredColor", new Vector3(Color.Orange.R, Color.Orange.G, Color.Orange.B));
+            AfterglowMaterialXY.AddShaderParameter("desiredColor", new Vector3(Color.Orange.R, Color.Orange.G, Color.Orange.B));
 
 
             GetComponent<Collider>().Layer = Model.Components.Colliders.CollisionLayer.Orange;

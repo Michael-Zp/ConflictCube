@@ -68,13 +68,13 @@ namespace ConflictCube.ComponentBased.Components
             }
         }
 
-        public string ShaderText {
+        public IShader Shader {
             get {
-                string shaderText;
+                IShader shader;
                 try
                 {
-                    shaderText = Materials.GetMaterialData(ID).ShaderText;
-                    return shaderText;
+                    shader = Materials.GetMaterialData(ID).Shader;
+                    return shader;
                 }
                 catch (Exception)
                 {
@@ -90,6 +90,61 @@ namespace ConflictCube.ComponentBased.Components
         public List<Tuple<string, Vector4>> ShaderParameters4D = new List<Tuple<string, Vector4>>();
 
 
+        public void AddShaderParameter(string parameterName, float value)
+        {
+            foreach (Tuple<string, float> param in ShaderParameters1D)
+            {
+                if (param.Item1 == parameterName)
+                {
+                    ShaderParameters1D.Remove(param);
+                    break;
+                }
+            }
+
+            ShaderParameters1D.Add(Tuple.Create(parameterName, value));
+        }
+
+        public void AddShaderParameter(string parameterName, Vector2 value)
+        {
+            foreach (Tuple<string, Vector2> param in ShaderParameters2D)
+            {
+                if (param.Item1 == parameterName)
+                {
+                    ShaderParameters2D.Remove(param);
+                    break;
+                }
+            }
+
+            ShaderParameters2D.Add(Tuple.Create(parameterName, value));
+        }
+
+        public void AddShaderParameter(string parameterName, Vector3 value)
+        {
+            foreach (Tuple<string, Vector3> param in ShaderParameters3D)
+            {
+                if (param.Item1 == parameterName)
+                {
+                    ShaderParameters3D.Remove(param);
+                    break;
+                }
+            }
+
+            ShaderParameters3D.Add(Tuple.Create(parameterName, value));
+        }
+
+        public void AddShaderParameter(string parameterName, Vector4 value)
+        {
+            foreach (Tuple<string, Vector4> param in ShaderParameters4D)
+            {
+                if (param.Item1 == parameterName)
+                {
+                    ShaderParameters4D.Remove(param);
+                    break;
+                }
+            }
+
+            ShaderParameters4D.Add(Tuple.Create(parameterName, value));
+        }
 
 
         public Material(Color color) : this(color, null, null, null)
@@ -101,16 +156,21 @@ namespace ConflictCube.ComponentBased.Components
         public Material(Color color, ITexture texture, Box2D uvCoordinates) : this(color, texture, uvCoordinates, null)
         {}
 
-        public Material(Color color, ITexture texture, Box2D uvCoordinates, string shaderContents)
+        public Material(Color color, ITexture texture, Box2D uvCoordinates, string fragmentShader)
         {
-            Shader shader = new Shader();
+            IShader shader;
 
-            if(String.IsNullOrEmpty(shaderContents))
+            if(String.IsNullOrEmpty(fragmentShader))
             {
-                shaderContents = "";
+                shader = null;
+            }
+            else
+            {
+                shader = ShaderLoader.FromStrings(DefaultShader.VertexShaderScreenQuad, fragmentShader);
             }
 
-            ID = Materials.AddMaterialData(new MaterialData(texture, uvCoordinates, color, shaderContents));
+
+            ID = Materials.AddMaterialData(new MaterialData(texture, uvCoordinates, color, shader));
         }
 
         public override Component Clone()
