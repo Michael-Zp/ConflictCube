@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset name="ConCubeTileset" tilewidth="64" tileheight="64" tilecount="44" columns="0">
+<tileset name="ConCubeTileset" tilewidth="64" tileheight="64" tilecount="48" columns="0">
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="0">
   <image width="64" height="64" source="inkaFinishTexture1.png"/>
@@ -132,5 +132,17 @@
  </tile>
  <tile id="55">
   <image width="64" height="64" source="inkaWaterTexture.png"/>
+ </tile>
+ <tile id="58">
+  <image width="64" height="64" source="buttonOff.png"/>
+ </tile>
+ <tile id="59">
+  <image width="64" height="64" source="buttonOn.png"/>
+ </tile>
+ <tile id="61">
+  <image width="64" height="64" source="inkaIceblockTexture.png"/>
+ </tile>
+ <tile id="62">
+  <image width="64" height="64" source="inkaLavablockTexture.png"/>
  </tile>
 </tileset>
