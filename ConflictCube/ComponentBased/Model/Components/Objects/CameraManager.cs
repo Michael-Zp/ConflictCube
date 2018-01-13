@@ -14,8 +14,8 @@ namespace ConflictCube.ComponentBased.Model.Components.Objects
                 float xSize = value.FloorTileSize.X * value.FloorColumns;
                 float ySize = value.FloorTileSize.Y * value.FloorRows;
 
-                float xZoomFactor = .7f / xSize;
-                float yZoomFactor = 1f / ySize;
+                float xZoomFactor = .9f / xSize;
+                float yZoomFactor = .9f / ySize;
 
                 float zoomFactor = Math.Min(xZoomFactor, yZoomFactor);
 
