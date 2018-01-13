@@ -3,6 +3,7 @@ using System;
 using ConflictCube.ComponentBased.Components;
 using ConflictCube.ComponentBased.Components.Objects.Tiles;
 using Zenseless.OpenGL;
+using System.Drawing;
 
 namespace ConflictCube.ComponentBased
 {
@@ -14,6 +15,7 @@ namespace ConflictCube.ComponentBased
         public float CurrentSprintEnergy = 100;
         public float UsedSprintEnergyPerSecond = 100;
         public float RegeneratSprintEnergyPerSecond = 20;
+        public Player OtherPlayer;
 
         protected GameObject UseField { get; set; }
         protected float UseCooldown = 1.0f;
@@ -32,19 +34,31 @@ namespace ConflictCube.ComponentBased
         protected InputAxis Vertical;
         protected InputKey Sprint;
         protected InputKey HitBlock;
+        protected InputKey SwitchPositionY;
+        protected InputKey SwitchPositionXY;
+        protected InputKey SwitchPositionX;
         protected int ActiveGamePad = 0;
 
+        protected Material AfterglowMaterialY;
+        protected Material AfterglowMaterialX;
+        protected Material AfterglowMaterialXY;
+        protected static float AfterglowLifetime = .25f;
+
+        protected GameObject AfterglowY;
+        protected GameObject AfterglowX;
+        protected GameObject AfterglowXY;
 
 
         /// <summary>
         ///     Create a new player, with a defined size, position and move speed. The collision box of this player equals his rendering box, given with size and position
         /// </summary>
-        public Player(string name, Transform transform, BoxCollider boxCollider, Material material, GameObject parent, Floor currentFloor, float speed, GameObjectType playerType, bool isAlive = true) : base(name, transform, parent, playerType)
+        public Player(string name, Transform transform, BoxCollider boxCollider, Material material, GameObject parent, Floor currentFloor, float speed, GameObjectType playerType, Player otherPlayer, bool isAlive = true) : base(name, transform, parent, playerType)
         {
             Speed = speed;
             IsAlive = isAlive;
             CurrentFloor = currentFloor;
             LastUse = -UseCooldown;
+            OtherPlayer = otherPlayer;
 
             if(DebugGame.NoClip)
             {
@@ -59,9 +73,43 @@ namespace ConflictCube.ComponentBased
             if (!MaterialsAreInitialized)
             {
                 MaterialsAreInitialized = true;
-                UseMaterialForeground   = new Material(TextureLoader.FromBitmap(TexturResource.UseFieldIndicator), new Zenseless.Geometry.Box2D(0, 0, 1, 1), System.Drawing.Color.FromArgb(255, System.Drawing.Color.White));
-                UseMaterialBackground   = new Material(null, null, System.Drawing.Color.FromArgb(32, 0, 255, 64));
+                UseMaterialForeground   = new Material(Color.FromArgb(255, Color.White), TextureLoader.FromBitmap(TexturResource.UseFieldIndicator), new Zenseless.Geometry.Box2D(0, 0, 1, 1));
+                UseMaterialBackground   = new Material(Color.FromArgb(32, 0, 255, 64), null, null);
             }
+
+
+            
+            AfterglowMaterialY = new Material(Color.White, ShaderResources.Afterglow);
+            AfterglowMaterialY.AddShaderParameter("startTime", -AfterglowLifetime);
+            AfterglowMaterialY.AddShaderParameter("direction", 1f);
+            AfterglowMaterialY.AddShaderParameter("lifetime", AfterglowLifetime);
+            AfterglowMaterialY.AddShaderParameter("desiredColor", new Vector3(Color.Pink.R, Color.Pink.G, Color.Pink.B));
+
+            AfterglowMaterialX = new Material(Color.White, ShaderResources.Afterglow);
+            AfterglowMaterialX.AddShaderParameter("startTime", -AfterglowLifetime);
+            AfterglowMaterialX.AddShaderParameter("direction", 1f);
+            AfterglowMaterialX.AddShaderParameter("lifetime", AfterglowLifetime);
+            AfterglowMaterialX.AddShaderParameter("desiredColor", new Vector3(Color.Pink.R, Color.Pink.G, Color.Pink.B));
+
+            AfterglowMaterialXY = new Material(Color.White, ShaderResources.Afterglow);
+            AfterglowMaterialXY.AddShaderParameter("startTime", -AfterglowLifetime);
+            AfterglowMaterialXY.AddShaderParameter("direction", 1f);
+            AfterglowMaterialXY.AddShaderParameter("lifetime", AfterglowLifetime);
+            AfterglowMaterialXY.AddShaderParameter("desiredColor", new Vector3(Color.Pink.R, Color.Pink.G, Color.Pink.B));
+
+            
+            AfterglowY = new GameObject("Afterglow Y", new Transform());
+            AfterglowY.AddComponent(AfterglowMaterialY);
+            AddChild(AfterglowY);
+
+            AfterglowX = new GameObject("Afterglow X", new Transform());
+            AfterglowX.AddComponent(AfterglowMaterialX);
+            AddChild(AfterglowX);
+
+            AfterglowXY = new GameObject("Afterglow XY", new Transform());
+            AfterglowXY.AddComponent(AfterglowMaterialXY);
+            AddChild(AfterglowXY);
+            
 
             UseField = new ColoredBox("ThrowUseIndicator", new Transform(), UseMaterialForeground, this);
             UseField.AddComponent(UseMaterialBackground);
@@ -93,9 +141,142 @@ namespace ConflictCube.ComponentBased
                 LastUse = Time.Time.CurrentTime;
                 HitSelectedBlock();
             }
+
+            if (Input.OnButtonDown(SwitchPositionY, ActiveGamePad))
+            {
+                Vector2 thisPosition = Transform.GetPosition(WorldRelation.Global);
+                Vector2 otherPosition = OtherPlayer.Transform.GetPosition(WorldRelation.Global);
+
+                float temp = thisPosition.Y;
+                thisPosition.Y = otherPosition.Y;
+                otherPosition.Y = temp;
+                
+                Transform.SetPosition(thisPosition, WorldRelation.Global);
+                OtherPlayer.Transform.SetPosition(otherPosition, WorldRelation.Global);
+
+
+                //Afterglow
+
+                ShowYAfterglow();
+                OtherPlayer.ShowYAfterglow();
+
+            }
             
+            if (Input.OnButtonDown(SwitchPositionXY, ActiveGamePad))
+            {
+                Vector2 thisPosition = Transform.GetPosition(WorldRelation.Global);
+                Vector2 otherPosition = OtherPlayer.Transform.GetPosition(WorldRelation.Global);
+                
+                Transform.SetPosition(otherPosition, WorldRelation.Global);
+                OtherPlayer.Transform.SetPosition(thisPosition, WorldRelation.Global);
+
+                //Afterglow
+
+                ShowXYAfterglow();
+                OtherPlayer.ShowXYAfterglow();
+            }
+            
+            if (Input.OnButtonDown(SwitchPositionX, ActiveGamePad))
+            {
+                Vector2 thisPosition = Transform.GetPosition(WorldRelation.Global);
+                Vector2 otherPosition = OtherPlayer.Transform.GetPosition(WorldRelation.Global);
+
+                float temp = thisPosition.X;
+                thisPosition.X = otherPosition.X;
+                otherPosition.X = temp;
+
+                Transform.SetPosition(thisPosition, WorldRelation.Global);
+                OtherPlayer.Transform.SetPosition(otherPosition, WorldRelation.Global);
+
+                //Afterglow
+
+                ShowXAfterglow();
+                OtherPlayer.ShowXAfterglow();
+            }
+
             Move(moveVector);
             UpdateUseField();
+        }
+
+        private void ShowYAfterglow()
+        {
+            Vector2 thisPosition = Transform.GetPosition(WorldRelation.Global);
+            Vector2 otherPosition = OtherPlayer.Transform.GetPosition(WorldRelation.Global);
+
+            AfterglowMaterialY.AddShaderParameter("startTime", Time.Time.CurrentTime);
+
+            if (thisPosition.Y >= otherPosition.Y)
+            {
+                AfterglowMaterialY.AddShaderParameter("direction", -1f);
+
+                AfterglowY.Transform.SetPosition(new Vector2(thisPosition.X, otherPosition.Y + (thisPosition.Y - otherPosition.Y) / 2), WorldRelation.Global);
+
+                float xSize = MathHelper.Clamp((Transform.GetMinY(WorldRelation.Global) - OtherPlayer.Transform.GetMaxY(WorldRelation.Global)) / 2, 0, float.MaxValue);
+                AfterglowY.Transform.SetSize(new Vector2(xSize, Transform.GetSize(WorldRelation.Global).X), WorldRelation.Global);
+                AfterglowY.Transform.SetRotation(90);
+            }
+            else
+            {
+                AfterglowMaterialY.AddShaderParameter("direction", 1f);
+
+                AfterglowY.Transform.SetPosition(new Vector2(thisPosition.X, thisPosition.Y + (otherPosition.Y - thisPosition.Y) / 2), WorldRelation.Global);
+
+                float xSize = MathHelper.Clamp((OtherPlayer.Transform.GetMinY(WorldRelation.Global) - Transform.GetMaxY(WorldRelation.Global)) / 2, 0, float.MaxValue);
+                AfterglowY.Transform.SetSize(new Vector2(xSize, Transform.GetSize(WorldRelation.Global).X), WorldRelation.Global);
+                AfterglowY.Transform.SetRotation(90);
+            }
+        }
+
+
+        private void ShowXAfterglow()
+        {
+            Vector2 thisPosition = Transform.GetPosition(WorldRelation.Global);
+            Vector2 otherPosition = OtherPlayer.Transform.GetPosition(WorldRelation.Global);
+
+            AfterglowMaterialY.AddShaderParameter("startTime", Time.Time.CurrentTime);
+
+            if (thisPosition.X >= otherPosition.X)
+            {
+                AfterglowMaterialY.AddShaderParameter("direction", 1f);
+
+                AfterglowY.Transform.SetPosition(new Vector2(otherPosition.X + (thisPosition.X - otherPosition.X) / 2, thisPosition.Y), WorldRelation.Global);
+
+                float xSize = MathHelper.Clamp((Transform.GetMinX(WorldRelation.Global) - OtherPlayer.Transform.GetMaxX(WorldRelation.Global)) / 2, 0, float.MaxValue);
+                AfterglowY.Transform.SetSize(new Vector2(xSize, Transform.GetSize(WorldRelation.Global).X), WorldRelation.Global);
+                AfterglowY.Transform.SetRotation(0);
+            }
+            else
+            {
+                AfterglowMaterialY.AddShaderParameter("direction", -1f);
+
+                AfterglowY.Transform.SetPosition(new Vector2(thisPosition.X + (otherPosition.X - thisPosition.X) / 2, thisPosition.Y), WorldRelation.Global);
+
+                float xSize = MathHelper.Clamp((OtherPlayer.Transform.GetMinX(WorldRelation.Global) - Transform.GetMaxX(WorldRelation.Global)) / 2, 0, float.MaxValue);
+                AfterglowY.Transform.SetSize(new Vector2(xSize, Transform.GetSize(WorldRelation.Global).X), WorldRelation.Global);
+                AfterglowY.Transform.SetRotation(0);
+            }
+        }
+
+
+        private void ShowXYAfterglow()
+        {
+            Vector2 thisPosition = Transform.GetPosition(WorldRelation.Global);
+            Vector2 otherPosition = OtherPlayer.Transform.GetPosition(WorldRelation.Global);
+
+            AfterglowMaterialY.AddShaderParameter("startTime", Time.Time.CurrentTime);
+            
+            AfterglowMaterialY.AddShaderParameter("direction", 1f);
+
+            AfterglowY.Transform.SetPosition(new Vector2(otherPosition.X + 3 * (thisPosition.X - otherPosition.X) / 4, otherPosition.Y + 3 * (thisPosition.Y - otherPosition.Y) / 4), WorldRelation.Global);
+
+            Components.Rectangle thisRect = Transform.GetGlobalRotatedRectangel();
+            Components.Rectangle otherRect = OtherPlayer.Transform.GetGlobalRotatedRectangel();
+            float xSize = System.Numerics.Vector2.Distance(new System.Numerics.Vector2(thisRect.BottomLeft.X, thisRect.BottomLeft.Y), new System.Numerics.Vector2(otherRect.BottomLeft.X, otherRect.BottomLeft.Y));
+            AfterglowY.Transform.SetSize(new Vector2(xSize / 4, Transform.GetSize(WorldRelation.Global).X), WorldRelation.Global);
+
+            float yDif = Transform.GetMaxY(WorldRelation.Global) - OtherPlayer.Transform.GetMaxY(WorldRelation.Global);
+            float xDif = Transform.GetMaxX(WorldRelation.Global) - OtherPlayer.Transform.GetMaxX(WorldRelation.Global);
+            AfterglowY.Transform.SetRotation(-MathHelper.RadiansToDegrees((float)Math.Atan2(yDif, xDif)));
         }
 
         protected abstract void HitSelectedBlock();
@@ -106,10 +287,12 @@ namespace ConflictCube.ComponentBased
             Input.AxesSettings.TryGetValue(Horizontal, out AxisData horizontalAxisData);
             Input.AxesSettings.TryGetValue(Vertical,   out AxisData verticalAxisData);
 
-            bool horizontalPositive = Input.OnButtonIsPressed(horizontalAxisData.PositiveKey, ActiveGamePad);
-            bool horizontalNegative = Input.OnButtonIsPressed(horizontalAxisData.NegativeKey, ActiveGamePad);
-            bool verticalPositive = Input.OnButtonIsPressed(verticalAxisData.PositiveKey, ActiveGamePad);
-            bool verticalNegative = Input.OnButtonIsPressed(verticalAxisData.NegativeKey, ActiveGamePad);
+            bool axisIsInUse = Math.Abs(Input.GetAxis(Horizontal, ActiveGamePad)) + Math.Abs(Input.GetAxis(Vertical, ActiveGamePad)) > .4f;
+
+            bool horizontalPositive = Input.OnButtonIsPressed(horizontalAxisData.PositiveKey, ActiveGamePad) || (axisIsInUse && Input.GetAxis(Horizontal, ActiveGamePad) > 0.1f);
+            bool horizontalNegative = Input.OnButtonIsPressed(horizontalAxisData.NegativeKey, ActiveGamePad) || (axisIsInUse && Input.GetAxis(Horizontal, ActiveGamePad) < -0.1f);
+            bool verticalPositive = Input.OnButtonIsPressed(verticalAxisData.PositiveKey, ActiveGamePad) || (axisIsInUse && Input.GetAxis(Vertical, ActiveGamePad) > 0.1f);
+            bool verticalNegative = Input.OnButtonIsPressed(verticalAxisData.NegativeKey, ActiveGamePad) || (axisIsInUse && Input.GetAxis(Vertical, ActiveGamePad) < -0.1f);
 
             if((horizontalPositive || horizontalNegative || verticalPositive || verticalNegative) && Time.Time.CooldownIsOver(LastUseFieldUpdate, UseFieldUpdateCooldown))
             {
@@ -214,8 +397,14 @@ namespace ConflictCube.ComponentBased
         {
             if(DebugGame.CanDie)
             {
-                IsAlive = false;
+                ResetToLastCheckpoint();
+                OtherPlayer.ResetToLastCheckpoint();
             }
+        }
+
+        public void ResetToLastCheckpoint()
+        {
+            Transform.SetPosition(CurrentFloor.FindStartPosition().GetPosition(WorldRelation.Global), WorldRelation.Global);
         }
 
         public bool CanMove()

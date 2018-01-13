@@ -10,6 +10,90 @@ namespace ConflictCube.ComponentBased.Components
         Local
     }
 
+    public struct Rectangle
+    {
+        public Vector2 BottomLeft;
+        public Vector2 BottomRight;
+        public Vector2 TopRight;
+        public Vector2 TopLeft;
+
+        public Rectangle(float minX, float maxX, float minY, float maxY)
+        {
+            BottomLeft = new Vector2(minX, minY);
+            BottomRight = new Vector2(maxX, minY);
+            TopRight = new Vector2(maxX, maxY);
+            TopLeft = new Vector2(minX, maxY);
+        }
+
+        public Rectangle(Vector2 bottomLeft, Vector2 bottomRight, Vector2 topRight, Vector2 topLeft)
+        {
+            BottomLeft = bottomLeft;
+            BottomRight = bottomRight;
+            TopRight = topRight;
+            TopLeft = topLeft;
+        }
+    }
+
+    public enum RotationMode
+    {
+        Degree,
+        Radians
+    }
+
+    public static class RectangleExtensionMethods
+    {
+        public static Rectangle Rotate(this Rectangle rect, float angle, RotationMode mode)
+        {
+            if(angle == 0)
+            {
+                return rect;
+            }
+
+            if(mode == RotationMode.Degree)
+            {
+                angle = Zenseless.Geometry.MathHelper.DegreesToRadians(angle);
+            }
+
+            Matrix2 rotationMatrix = Matrix2.CreateRotation(angle);
+
+
+            Vector2 offsetToCenterPoints = new Vector2(-rect.BottomLeft.X - (rect.BottomRight.X - rect.BottomLeft.X) / 2, -rect.BottomLeft.Y - (rect.TopLeft.Y - rect.BottomLeft.Y) / 2);
+
+            rect.BottomLeft += offsetToCenterPoints;
+            rect.BottomRight += offsetToCenterPoints;
+            rect.TopRight += offsetToCenterPoints;
+            rect.TopLeft += offsetToCenterPoints;
+
+            rect.BottomLeft  = rect.BottomLeft.ApplyMatrix2(rotationMatrix);
+            rect.BottomRight = rect.BottomRight.ApplyMatrix2(rotationMatrix);
+            rect.TopRight    = rect.TopRight.ApplyMatrix2(rotationMatrix);
+            rect.TopLeft     = rect.TopLeft.ApplyMatrix2(rotationMatrix);
+
+            rect.BottomLeft -= offsetToCenterPoints;
+            rect.BottomRight -= offsetToCenterPoints;
+            rect.TopRight -= offsetToCenterPoints;
+            rect.TopLeft -= offsetToCenterPoints;
+
+            return rect;
+        }
+    }
+
+    public static class Vector2ExtensionMethods
+    {
+        public static Vector2 ApplyMatrix2(this Vector2 vec, Matrix2 mat)
+        {
+            Vector2 newVec = new Vector2(0);
+
+            newVec.X = mat.M11 * vec.X + mat.M12 * vec.Y;
+            newVec.Y = mat.M21 * vec.X + mat.M22 * vec.Y;
+
+            return newVec;
+        }
+    }
+
+
+
+
     public class Transform : Component, IEquatable<Transform>
     {
         private Matrix3 TransformMatrix;
@@ -95,6 +179,35 @@ namespace ConflictCube.ComponentBased.Components
         }
 
 
+        private float Rotation { get; set; }
+
+
+        /// <summary>
+        /// Get rotation in degree;
+        /// </summary>
+        /// <param name="relation"></param>
+        /// <returns></returns>
+        public float GetRotation(WorldRelation relation)
+        {
+            if (relation == WorldRelation.Local)
+            {
+                return Rotation;
+            }
+            else
+            {
+                return TransformToGlobal().Rotation;
+            }
+        }
+
+        /// <summary>
+        /// Only local rotation can be set. Rotation is set in degree.
+        /// </summary>
+        /// <param name="rotation"></param>
+        public void SetRotation(float rotation)
+        {
+            Rotation = rotation;
+        }
+
         public float GetMinX(WorldRelation relation)
         {
             if(relation == WorldRelation.Local)
@@ -145,9 +258,24 @@ namespace ConflictCube.ComponentBased.Components
             }
         }
 
-        public Transform(Matrix3 matrix)
+        public Rectangle GetGlobalNotRotatedRectangle()
+        {
+            Rectangle rect = new Rectangle(GetMinX(WorldRelation.Global), GetMaxX(WorldRelation.Global), GetMinY(WorldRelation.Global), GetMaxY(WorldRelation.Global));
+            return rect;
+        }
+
+        public Rectangle GetGlobalRotatedRectangel()
+        {
+            Rectangle rect = new Rectangle(GetMinX(WorldRelation.Global), GetMaxX(WorldRelation.Global), GetMinY(WorldRelation.Global), GetMaxY(WorldRelation.Global));
+            rect = rect.Rotate(Rotation, RotationMode.Degree);
+            return rect;
+        }
+
+
+        public Transform(Matrix3 matrix, float rotation = 0)
         {
             TransformMatrix = matrix;
+            Rotation = rotation;
         }
 
         public Transform() : this(0, 0, 1, 1)
@@ -167,6 +295,11 @@ namespace ConflictCube.ComponentBased.Components
             Position = new Vector2(centerX, centerY);
             Size = new Vector2(sizeX, sizeY);
             TransformMatrix.M33 = vector;
+        }
+
+        public Matrix3 GetInverseOfTransform()
+        {
+            return TransformMatrix.Inverted();
         }
 
 
@@ -209,6 +342,25 @@ namespace ConflictCube.ComponentBased.Components
             return currentTransform;
         }
 
+        public float GetGlobalRotation()
+        {
+            if(Owner == null)
+            {
+                return Rotation;
+            }
+
+            GameObject currentOwner = Owner.Parent;
+            float currentRotation = Rotation;
+
+            while(currentOwner != null)
+            {
+                currentRotation += currentOwner.Transform.Rotation;
+                currentOwner = currentOwner.Parent;
+            }
+
+            return currentRotation;
+        }
+
         public Matrix3 GetTransformMatrixToLocal()
         {
             if (Owner == null)
@@ -235,7 +387,7 @@ namespace ConflictCube.ComponentBased.Components
 
         public Transform TransformToGlobal(Transform transform)
         {
-            Transform tempTrans =  new Transform(GetTransformMatrixToGlobal() * transform.TransformMatrix);
+            Transform tempTrans = new Transform(GetTransformMatrixToGlobal() * transform.TransformMatrix, GetGlobalRotation());
             return tempTrans;
         }
 
@@ -247,7 +399,7 @@ namespace ConflictCube.ComponentBased.Components
         public Transform TransformToLocal(Transform transformToLocal)
         {
             Transform newTransform = (Transform)Clone();
-            Transform tempTransform = new Transform(GetTransformMatrixToLocal() * transformToLocal.TransformMatrix);
+            Transform tempTransform = new Transform(GetTransformMatrixToLocal() * transformToLocal.TransformMatrix, Rotation);
             newTransform.TransformMatrix = tempTransform.TransformMatrix;
 
             return newTransform;
@@ -322,12 +474,12 @@ namespace ConflictCube.ComponentBased.Components
 
         public static Transform operator *(Transform transform, Matrix3 matrix)
         {
-            return new Transform(matrix * transform.TransformMatrix);
+            return new Transform(matrix * transform.TransformMatrix, transform.GetGlobalRotation());
         }
 
         public static Transform operator *(Transform transform, Transform other)
         {
-            return new Transform(transform.TransformMatrix * other.TransformMatrix);
+            return new Transform(transform.TransformMatrix * other.TransformMatrix, transform.GetGlobalRotation() + other.GetGlobalRotation());
         }
     }
 

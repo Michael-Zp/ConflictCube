@@ -133,4 +133,19 @@
   <data name="FireIceSecondTest" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\FireIceSecondTest.csv;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
+  <data name="FireIceFourthTest" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FireIceFourthTest.csv;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="FireIceThirdTest" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FireIceThirdTest.csv;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="XShiftTest" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\XShiftTest.csv;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="XYShiftTest" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\XYShiftTest.csv;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="YShiftTest" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\YShiftTest.csv;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
 </root>

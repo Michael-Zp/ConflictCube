@@ -34,6 +34,8 @@ namespace ConflictCube.ComponentBased
                 }
             }
 
+            floorOfLevel.CurrentCheckpoint = floorOfLevel.FindStartPosition();
+
             return floorOfLevel;
         }
 

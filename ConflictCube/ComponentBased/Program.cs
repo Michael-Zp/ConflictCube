@@ -15,7 +15,7 @@ namespace ConflictCube.ComponentBased
             DebugGame.PlayerPrintCollisionTypes = false;
             DebugGame.NoClip = false;
             DebugGame.DrawBoxColliderCollisions = false;
-            DebugGame.CanDie = false;
+            DebugGame.CanDie = true;
             DebugGame.PrintUseFieldPositionOrangePlayer = false;
             DebugGame.DebugDrawUseField = false;
             DebugGame.ShowBoundaries = false;
@@ -24,7 +24,7 @@ namespace ConflictCube.ComponentBased
 
             MyWindow window = new MyWindow(1024, 512);
             GameView view = new GameView(window);
-            GameState state = new GameState();
+            GameState state = new GameState(window.Width, window.Height);
             GameController controller = new GameController();
 
 

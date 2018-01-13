@@ -153,13 +153,19 @@ namespace ConflictCube.ComponentBased
 
             //GamePad - Player 1
             
-            GamePadSettings.Add(InputKey.PlayerOneUse, GamePadButton.X);
             GamePadSettings.Add(InputKey.PlayerOneSprint, GamePadButton.RightShoulder);
+            GamePadSettings.Add(InputKey.PlayerOneUse, GamePadButton.X);
+            GamePadSettings.Add(InputKey.PlayerOneSwitchPositionsX, GamePadButton.Y);
+            GamePadSettings.Add(InputKey.PlayerOneSwitchPositionsXY, GamePadButton.A);
+            GamePadSettings.Add(InputKey.PlayerOneSwitchPositionsY, GamePadButton.B);
 
             //Player 2
-            
-            GamePadSettings.Add(InputKey.PlayerTwoUse, GamePadButton.X);
+
             GamePadSettings.Add(InputKey.PlayerTwoSprint, GamePadButton.RightShoulder);
+            GamePadSettings.Add(InputKey.PlayerTwoUse, GamePadButton.X);
+            GamePadSettings.Add(InputKey.PlayerTwoSwitchPositionsX, GamePadButton.Y);
+            GamePadSettings.Add(InputKey.PlayerTwoSwitchPositionsXY, GamePadButton.A);
+            GamePadSettings.Add(InputKey.PlayerTwoSwitchPositionsY, GamePadButton.B);
 
 
             //Gamepad - Axes - Player 1
@@ -182,8 +188,12 @@ namespace ConflictCube.ComponentBased
             KeyboardSettings.Add(InputKey.PlayerOneMoveRight, Key.D);
             KeyboardSettings.Add(InputKey.PlayerOneMoveUp, Key.W);
             KeyboardSettings.Add(InputKey.PlayerOneMoveDown, Key.S);
-            KeyboardSettings.Add(InputKey.PlayerOneUse, Key.E);
             KeyboardSettings.Add(InputKey.PlayerOneSprint, Key.LShift);
+            KeyboardSettings.Add(InputKey.PlayerOneUse, Key.E);
+            KeyboardSettings.Add(InputKey.PlayerOneSwitchPositionsY, Key.R);
+            KeyboardSettings.Add(InputKey.PlayerOneSwitchPositionsXY, Key.Q);
+            KeyboardSettings.Add(InputKey.PlayerOneSwitchPositionsX, Key.F);
+            KeyboardSettings.Add(InputKey.Zoom, Key.Space);
 
 
 
@@ -193,8 +203,11 @@ namespace ConflictCube.ComponentBased
             KeyboardSettings.Add(InputKey.PlayerTwoMoveRight, Key.L);
             KeyboardSettings.Add(InputKey.PlayerTwoMoveUp, Key.I);
             KeyboardSettings.Add(InputKey.PlayerTwoMoveDown, Key.K);
-            KeyboardSettings.Add(InputKey.PlayerTwoUse, Key.O);
             KeyboardSettings.Add(InputKey.PlayerTwoSprint, Key.RControl);
+            KeyboardSettings.Add(InputKey.PlayerTwoUse, Key.O);
+            KeyboardSettings.Add(InputKey.PlayerTwoSwitchPositionsY, Key.Y); //Uses QWERTY layout
+            KeyboardSettings.Add(InputKey.PlayerTwoSwitchPositionsXY, Key.U);
+            KeyboardSettings.Add(InputKey.PlayerTwoSwitchPositionsX, Key.H);
 
 
             //Axes

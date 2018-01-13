@@ -80,6 +80,23 @@ namespace ConflictCube.ComponentBased {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die 0,0,0
+        ///3,3,3
+        ///7,7,3
+        ///1,1,3
+        ///6,6,3
+        ///1,1,3
+        ///7,7,3
+        ///1,1,1
+        /// ähnelt.
+        /// </summary>
+        internal static string FireIceFourthTest {
+            get {
+                return ResourceManager.GetString("FireIceFourthTest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die 0,0,0,0
         ///1,1,1,3
         ///5,7,7,3
@@ -95,6 +112,23 @@ namespace ConflictCube.ComponentBased {
         internal static string FireIceSecondTest {
             get {
                 return ResourceManager.GetString("FireIceSecondTest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die 0,0,0
+        ///3,3,4
+        ///7,7,1
+        ///3,1,5
+        ///3,5,3
+        ///3,1,3
+        ///6,6,6
+        ///1,1,1
+        /// ähnelt.
+        /// </summary>
+        internal static string FireIceThirdTest {
+            get {
+                return ResourceManager.GetString("FireIceThirdTest", resourceCulture);
             }
         }
         
@@ -182,6 +216,57 @@ namespace ConflictCube.ComponentBased {
         internal static string Level2 {
             get {
                 return ResourceManager.GetString("Level2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die 0,0,0,0,0,0,0,0
+        ///1,1,1,1,1,1,1,1
+        ///1,1,1,1,1,1,1,1
+        ///1,1,1,1,1,1,1,1
+        ///3,3,3,3,3,1,1,1
+        ///6,6,6,6,3,1,1,1
+        ///3,6,3,3,3,1,1,1
+        ///1,6,3,1,1,1,1,1
+        /// ähnelt.
+        /// </summary>
+        internal static string XShiftTest {
+            get {
+                return ResourceManager.GetString("XShiftTest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die 0,0,0
+        ///1,1,1
+        ///1,1,1
+        ///3,5,3
+        ///6,1,6
+        ///6,6,6
+        ///6,6,6
+        ///1,3,3
+        /// ähnelt.
+        /// </summary>
+        internal static string XYShiftTest {
+            get {
+                return ResourceManager.GetString("XYShiftTest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die 0,0,0
+        ///1,1,1
+        ///1,1,1
+        ///1,1,1
+        ///1,3,3
+        ///1,3,6
+        ///3,3,6
+        ///1,1,6
+        /// ähnelt.
+        /// </summary>
+        internal static string YShiftTest {
+            get {
+                return ResourceManager.GetString("YShiftTest", resourceCulture);
             }
         }
     }

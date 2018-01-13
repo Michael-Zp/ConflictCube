@@ -34,26 +34,32 @@ namespace ConflictCube.ComponentBased.Components
 
         public void CheckCollisions(Collider collider, Vector2 movement)
         {
-            foreach (Collider other in CollidersInGroup)
+            //No foreach loop, because events in the CollidesWIth could change the CollidersInGroup list -> Throws exception
+            for(int i = 0; i < CollidersInGroup.Count; i++)
             {
-                if (other == collider || !collider.Owner.EnabledInHierachy || !other.Owner.EnabledInHierachy)
+                if (CollidersInGroup[i] == collider || !collider.Owner.EnabledInHierachy || !CollidersInGroup[i].Owner.EnabledInHierachy)
                 {
                     continue;
                 }
                 
-                if (!collider.Layer.AreLayersColliding(other.Layer))
+                if (!collider.Layer.AreLayersColliding(CollidersInGroup[i].Layer))
                 {
                     continue;
                 }
 
-                if (collider.IgnoreCollisionsWith.Contains(other.Type))
+                if (collider.IgnoreCollisionsWith.Contains(CollidersInGroup[i].Type))
                 {
                     continue;
                 }
 
-                if (collider.IsCollidingWith(other))
+                if (collider.IsCollidingWith(CollidersInGroup[i]))
                 {
-                    collider.CollidesWith(other, movement);
+                    collider.CollidesWith(CollidersInGroup[i], movement);
+
+                    if(CollidersInGroup[i].IsCollidingWith(collider))
+                    {
+                        CollidersInGroup[i].CollidesWith(collider, new Vector2(0, 0));
+                    }
                 }
             }
         }

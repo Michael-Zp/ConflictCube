@@ -10,6 +10,9 @@
         PlayerOneMoveDown,
         PlayerOneSprint,
         PlayerOneUse,
+        PlayerOneSwitchPositionsXY,
+        PlayerOneSwitchPositionsX,
+        PlayerOneSwitchPositionsY,
 
         PlayerTwoMoveLeft,
         PlayerTwoMoveRight,
@@ -17,5 +20,9 @@
         PlayerTwoMoveDown,
         PlayerTwoSprint,
         PlayerTwoUse,
+        PlayerTwoSwitchPositionsXY,
+        PlayerTwoSwitchPositionsX,
+        PlayerTwoSwitchPositionsY,
+        Zoom,
     }
 }

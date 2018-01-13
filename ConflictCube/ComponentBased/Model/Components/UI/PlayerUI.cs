@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Drawing;
 using ConflictCube.ComponentBased.Components;
 using ConflictCube.ComponentBased.Model.Components.UI;
+using OpenTK;
+using Zenseless.OpenGL;
 
 namespace ConflictCube.ComponentBased
 {
@@ -15,20 +17,24 @@ namespace ConflictCube.ComponentBased
 
         private Canvas PlayerHealth;
 
-        private Canvas Sledgehammer;
+        private Canvas BottomButton;
+        private Canvas TopButton;
+        private Canvas LeftButton;
+        private Canvas RightButton;
 
         private Canvas SprintEnergyBackground;
         private List<Canvas> SprintEnergyBlocks = new List<Canvas>();
         private const int SprintBlockCount = 4;
 
-        private static Material BackgroundMat = new Material(null, null, Color.White);
-        private static Material PlayerAliveMat = new Material(null, null, Color.Green);
-        private static Material PlayerDeadMat = new Material(null, null, Color.Red);
+        private static Material BackgroundMat = new Material(Color.White, null, null);
+        private static Material PlayerAliveMat = new Material(Color.Green, null, null);
+        private static Material PlayerDeadMat = new Material(Color.Red, null, null);
         
         private static Material SledgehammerMaterial;
+        private static Material SwapMaterial;
 
-        private static Material SprintEnergyBackgroundMaterial = new Material(null, null, Color.Black);
-        private static Material SprintEnergyBlockMaterial = new Material(null, null, Color.Orange);
+        private static Material SprintEnergyBackgroundMaterial = new Material(Color.Black, null, null);
+        private static Material SprintEnergyBlockMaterial = new Material(Color.Orange, null, null);
 
         private static bool IsInitalized = false;
 
@@ -36,7 +42,8 @@ namespace ConflictCube.ComponentBased
         {
             if(!IsInitalized)
             {
-                SledgehammerMaterial = new Material(Tilesets.Instance().InventoryTextures.Tex, new Zenseless.Geometry.Box2D(0, 0, 1, 1), Color.White);
+                SledgehammerMaterial = new Material(Color.White, Tilesets.Instance().InventoryTextures.Tex, new Zenseless.Geometry.Box2D(0, 0, 1, 1));
+                SwapMaterial = new Material(Color.White, TextureLoader.FromBitmap(TexturResource.Swap), new Zenseless.Geometry.Box2D(0, 0, 1, 1));
             }
 
             Player = player;
@@ -51,10 +58,40 @@ namespace ConflictCube.ComponentBased
             PlayerHealth = new Canvas("Health" + player.Name, new Transform(0, .85f, .8f, .05f), ForegroundLayer, PlayerAliveMat);
             ForegroundLayer.AddChild(PlayerHealth);
 
+            // Abilities
+
+            BottomButton = new Canvas("bottomAbility", new Transform(0, -.05f, .4f, .08f), ForegroundLayer, SledgehammerMaterial);
+            TopButton = new Canvas("topAbility",       new Transform(0, .25f, .4f, .08f), ForegroundLayer, SwapMaterial);
+
+            LeftButton   = new Canvas("leftAbility",   new Transform(-.5f, .1f, .4f, .08f), ForegroundLayer, SwapMaterial);
+            RightButton  = new Canvas("rightAbility",  new Transform( .5f, .1f, .4f, .08f), ForegroundLayer, SwapMaterial);
+            ForegroundLayer.AddChild(BottomButton);
+            ForegroundLayer.AddChild(TopButton);
+            ForegroundLayer.AddChild(LeftButton);
+            ForegroundLayer.AddChild(RightButton);
+
+            Transform topButtonTextTransform = (Transform)TopButton.Transform.Clone();
+            Transform leftButtonTextTransform = (Transform)LeftButton.Transform.Clone();
+            Transform rightButtonTextTransform = (Transform)RightButton.Transform.Clone();
+
+            Vector2 textXYOffset = topButtonTextTransform.GetSize(WorldRelation.Global) / 2;
+            textXYOffset.X += 0.008f;
+
+            Vector2 textXorYOffset = leftButtonTextTransform.GetSize(WorldRelation.Global) / 2;
+            textXorYOffset.X -= 0.005f;
+
+
+            topButtonTextTransform.SetPosition(topButtonTextTransform.GetPosition(WorldRelation.Global) - textXYOffset, WorldRelation.Global);
+            leftButtonTextTransform.SetPosition(leftButtonTextTransform.GetPosition(WorldRelation.Global) - textXorYOffset, WorldRelation.Global);
+            rightButtonTextTransform.SetPosition(rightButtonTextTransform.GetPosition(WorldRelation.Global) - textXorYOffset, WorldRelation.Global);
             
-            
-            Sledgehammer = new Canvas("Sledgehammer", new Transform(0, .45f, .5f, .1f), ForegroundLayer, SledgehammerMaterial);
-            ForegroundLayer.AddChild(Sledgehammer);
+            topButtonTextTransform.SetSize(topButtonTextTransform.GetSize(WorldRelation.Global) * .8f, WorldRelation.Global);
+            leftButtonTextTransform.SetSize(leftButtonTextTransform.GetSize(WorldRelation.Global) * .8f, WorldRelation.Global);
+            rightButtonTextTransform.SetSize(rightButtonTextTransform.GetSize(WorldRelation.Global) * .8f, WorldRelation.Global);
+
+            ForegroundLayer.AddChild(new TextField("xySwap", topButtonTextTransform, "xy"));
+            ForegroundLayer.AddChild(new TextField("xySwap", leftButtonTextTransform, "x"));
+            ForegroundLayer.AddChild(new TextField("xySwap", rightButtonTextTransform, "y"));
 
 
             //Sprint Energy

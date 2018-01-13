@@ -20,14 +20,14 @@ namespace ConflictCube.ComponentBased.Components.Objects.Tiles
         private static void InitalizeMaterials()
         {
             SpriteSheet spriteSheet = Tilesets.Instance().FloorSheetIceFire;
-            FloorTileMaterials.Add(GameObjectType.Finish, new Material(spriteSheet.Tex, new Box2D(spriteSheet.CalcSpriteTexCoords(0)), Color.White));
-            FloorTileMaterials.Add(GameObjectType.Floor,  new Material(spriteSheet.Tex, new Box2D(spriteSheet.CalcSpriteTexCoords(1)), Color.White));
-            FloorTileMaterials.Add(GameObjectType.Hole,   new Material(spriteSheet.Tex, new Box2D(spriteSheet.CalcSpriteTexCoords(2)), Color.White));
-            FloorTileMaterials.Add(GameObjectType.Wall,   new Material(spriteSheet.Tex, new Box2D(spriteSheet.CalcSpriteTexCoords(3)), Color.White));
-            FloorTileMaterials.Add(GameObjectType.OrangeBlock, new Material(spriteSheet.Tex, new Box2D(spriteSheet.CalcSpriteTexCoords(4)), Color.White));
-            FloorTileMaterials.Add(GameObjectType.BlueBlock, new Material(spriteSheet.Tex, new Box2D(spriteSheet.CalcSpriteTexCoords(5)), Color.White));
-            FloorTileMaterials.Add(GameObjectType.OrangeFloor, new Material(spriteSheet.Tex, new Box2D(spriteSheet.CalcSpriteTexCoords(6)), Color.White));
-            FloorTileMaterials.Add(GameObjectType.BlueFloor, new Material(spriteSheet.Tex, new Box2D(spriteSheet.CalcSpriteTexCoords(7)), Color.White));
+            FloorTileMaterials.Add(GameObjectType.Finish, new Material(Color.White, spriteSheet.Tex, new Box2D(spriteSheet.CalcSpriteTexCoords(0))));
+            FloorTileMaterials.Add(GameObjectType.Floor,  new Material(Color.White, spriteSheet.Tex, new Box2D(spriteSheet.CalcSpriteTexCoords(1))));
+            FloorTileMaterials.Add(GameObjectType.Hole,   new Material(Color.White, spriteSheet.Tex, new Box2D(spriteSheet.CalcSpriteTexCoords(2))));
+            FloorTileMaterials.Add(GameObjectType.Wall,   new Material(Color.White, spriteSheet.Tex, new Box2D(spriteSheet.CalcSpriteTexCoords(3))));
+            FloorTileMaterials.Add(GameObjectType.OrangeBlock, new Material(Color.White, spriteSheet.Tex, new Box2D(spriteSheet.CalcSpriteTexCoords(4))));
+            FloorTileMaterials.Add(GameObjectType.BlueBlock, new Material(Color.White, spriteSheet.Tex, new Box2D(spriteSheet.CalcSpriteTexCoords(5))));
+            FloorTileMaterials.Add(GameObjectType.OrangeFloor, new Material(Color.White, spriteSheet.Tex, new Box2D(spriteSheet.CalcSpriteTexCoords(6))));
+            FloorTileMaterials.Add(GameObjectType.BlueFloor, new Material(Color.White, spriteSheet.Tex, new Box2D(spriteSheet.CalcSpriteTexCoords(7))));
         }
 
         public FloorTile(int row, int column, string name, Transform transform, GameObject parent, GameObjectType type, Floor floorOfTile) : base(name, transform, parent, type)
