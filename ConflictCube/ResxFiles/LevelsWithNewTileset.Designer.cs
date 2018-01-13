@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ConflictCube.ComponentBased {
+namespace ConflictCube.ResxFiles {
     using System;
     
     
@@ -22,14 +22,14 @@ namespace ConflictCube.ComponentBased {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class InventoryResources {
+    internal class LevelsWithNewTileset {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal InventoryResources() {
+        internal LevelsWithNewTileset() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace ConflictCube.ComponentBased {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ConflictCube.ComponentBased.InventoryResources", typeof(InventoryResources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ConflictCube.ResxFiles.LevelsWithNewTileset", typeof(LevelsWithNewTileset).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -57,16 +57,6 @@ namespace ConflictCube.ComponentBased {
             }
             set {
                 resourceCulture = value;
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap Sledgehammer {
-            get {
-                object obj = ResourceManager.GetObject("Sledgehammer", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
             }
         }
     }

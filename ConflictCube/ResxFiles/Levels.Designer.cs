@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ConflictCube.ComponentBased {
+namespace ConflictCube.ResxFiles {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace ConflictCube.ComponentBased {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ConflictCube.ComponentBased.Levels", typeof(Levels).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ConflictCube.ResxFiles.Levels", typeof(Levels).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

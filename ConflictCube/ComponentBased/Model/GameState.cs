@@ -34,7 +34,7 @@ namespace ConflictCube.ComponentBased
 
             Game = new Game("Game", new Transform(0, 0, 1, 1));
 
-            GameObject scene = SceneBuilder.BuildScene(Levels.XShiftTest, new Transform());
+            GameObject scene = SceneBuilder.BuildScene(Levels.FireIceFirstTest, new Transform());
             Game.AddChild(scene);
             Player1Camera.RootGameObject = scene;
             Player2Camera.RootGameObject = scene;

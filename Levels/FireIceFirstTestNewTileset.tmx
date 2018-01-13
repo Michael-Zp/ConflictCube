@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" tiledversion="1.0.3" orientation="orthogonal" renderorder="right-down" width="4" height="10" tilewidth="64" tileheight="64" nextobjectid="1">
+ <tileset firstgid="1" source="../ConflictCube/Textures/ConCubeTileset.tsx"/>
+ <layer name="Floor" width="4" height="10">
+  <data encoding="csv">
+1,1,1,1,
+2,2,2,2,
+22,2,2,21,
+40,2,2,42,
+44,2,2,27,
+40,2,2,46,
+51,2,2,34,
+44,2,2,42,
+48,2,2,46,
+20,2,2,24
+</data>
+ </layer>
+ <layer name="Cubes" width="4" height="10">
+  <data encoding="csv">
+0,0,0,0,
+0,0,0,0,
+0,0,0,0,
+0,0,0,0,
+0,62,62,0,
+0,63,63,0,
+0,0,0,0,
+0,0,0,0,
+0,0,0,0,
+0,0,0,0
+</data>
+ </layer>
+</map>

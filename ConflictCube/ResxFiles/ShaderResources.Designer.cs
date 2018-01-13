@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ConflictCube.ComponentBased {
+namespace ConflictCube.ResxFiles {
     using System;
     
     
@@ -22,14 +22,14 @@ namespace ConflictCube.ComponentBased {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class TexturResource {
+    internal class ShaderResources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal TexturResource() {
+        internal ShaderResources() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace ConflictCube.ComponentBased {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ConflictCube.ComponentBased.TexturResource", typeof(TexturResource).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ConflictCube.ResxFiles.ShaderResources", typeof(ShaderResources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,52 +61,25 @@ namespace ConflictCube.ComponentBased {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        ///   Sucht eine lokalisierte Zeichenfolge, die #version 330
+        ///
+        ///uniform vec2 iResolution; //[xResolution, yResolution] of display
+        ///uniform float iGlobalTime; //global time in seconds as float
+        ///uniform float startTime; //Time the shader was first activated on this object
+        ///uniform float direction; //Positive =&gt; up/right; Negative =&gt; down/left
+        ///uniform float lifetime; //How long the effect will be visible
+        ///uniform vec3 desiredColor;
+        ///	
+        ///void main()
+        ///{
+        ///	//create uv to be in the range [0..1]x[0..1]
+        ///	vec2 uv = gl_FragCoord.xy / iResolution;
+        ///
+        ///    //Is the orange which is [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
         /// </summary>
-        internal static System.Drawing.Bitmap FloorTileset {
+        internal static string Afterglow {
             get {
-                object obj = ResourceManager.GetObject("FloorTileset", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap FloorTilesetIceFire {
-            get {
-                object obj = ResourceManager.GetObject("FloorTilesetIceFire", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap PlayerTexture {
-            get {
-                object obj = ResourceManager.GetObject("PlayerTexture", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap Swap {
-            get {
-                object obj = ResourceManager.GetObject("Swap", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap UseFieldIndicator {
-            get {
-                object obj = ResourceManager.GetObject("UseFieldIndicator", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
+                return ResourceManager.GetString("Afterglow", resourceCulture);
             }
         }
     }
