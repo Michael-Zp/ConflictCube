@@ -193,6 +193,7 @@ namespace ConflictCube.ComponentBased
             KeyboardSettings.Add(InputKey.PlayerOneSwitchPositionsY, Key.R);
             KeyboardSettings.Add(InputKey.PlayerOneSwitchPositionsXY, Key.Q);
             KeyboardSettings.Add(InputKey.PlayerOneSwitchPositionsX, Key.F);
+            KeyboardSettings.Add(InputKey.Zoom, Key.Space);
 
 
 

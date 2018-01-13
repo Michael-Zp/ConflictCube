@@ -9,9 +9,9 @@ namespace ConflictCube.ComponentBased.Controller
 
         public ViewModel(GameState state)
         {
-            Cameras.Add(state.UICamera);
             Cameras.Add(state.Player1Camera);
             Cameras.Add(state.Player2Camera);
+            Cameras.Add(state.UICamera);
         }
     }
 }

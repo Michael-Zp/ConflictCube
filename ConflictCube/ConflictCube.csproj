@@ -92,6 +92,7 @@
     <Compile Include="ComponentBased\Model\Components\Colliders\CollisionLayer.cs" />
     <Compile Include="ComponentBased\Model\Components\GameCallbacks.cs" />
     <Compile Include="ComponentBased\Model\Components\Objects\Button.cs" />
+    <Compile Include="ComponentBased\Model\Components\Objects\CameraManager.cs" />
     <Compile Include="ComponentBased\Model\Components\Objects\Events\Event.cs" />
     <Compile Include="ComponentBased\Model\Components\Objects\Events\OnButtonChangeFloorEvent.cs" />
     <Compile Include="ComponentBased\Model\Components\Objects\Game.cs" />

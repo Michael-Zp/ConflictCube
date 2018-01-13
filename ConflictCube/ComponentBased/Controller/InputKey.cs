@@ -23,5 +23,6 @@
         PlayerTwoSwitchPositionsXY,
         PlayerTwoSwitchPositionsX,
         PlayerTwoSwitchPositionsY,
+        Zoom,
     }
 }

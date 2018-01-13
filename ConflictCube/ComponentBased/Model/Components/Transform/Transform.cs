@@ -272,7 +272,7 @@ namespace ConflictCube.ComponentBased.Components
         }
 
 
-        public Transform(Matrix3 matrix, float rotation)
+        public Transform(Matrix3 matrix, float rotation = 0)
         {
             TransformMatrix = matrix;
             Rotation = rotation;
@@ -295,6 +295,11 @@ namespace ConflictCube.ComponentBased.Components
             Position = new Vector2(centerX, centerY);
             Size = new Vector2(sizeX, sizeY);
             TransformMatrix.M33 = vector;
+        }
+
+        public Matrix3 GetInverseOfTransform()
+        {
+            return TransformMatrix.Inverted();
         }
 
 

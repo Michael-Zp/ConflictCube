@@ -19,7 +19,7 @@ namespace ConflictCube.ComponentBased
         private OpenTKWrapper OpenTKWrapper = OpenTKWrapper.Instance();
 
         private FBO RenderFrameBufferObject = null;
-        private bool WindowSizeChanged = false;
+        private bool WindowSizeChanged = true;
 
         /// <summary>
         ///     Match the GL Viewport with the given window and load all Tilesets that are used in the game.
@@ -54,8 +54,11 @@ namespace ConflictCube.ComponentBased
                 {
                     if(!camera.IsUiCamera)
                     {
-                        Vector2 cameraPos = camera.RenderTarget.GetPosition(WorldRelation.Global);
-                        camera.RenderTarget = new Transform(cameraPos.X, cameraPos.Y, (float)Window.Height / (float)Window.Width, 1f);
+                        //Scale camera to keep world propotions in the view
+                        Vector2 cameraPos = camera.Transform.GetPosition(WorldRelation.Global);
+                        camera.Transform = new Transform(camera.RenderTarget.GetInverseOfTransform());
+                        camera.Transform.SetPosition(cameraPos, WorldRelation.Global);
+                        camera.Transform.SetSize(new Vector2(camera.Transform.GetSize(WorldRelation.Global).X / ((float)Window.Width / (float)Window.Height), camera.Transform.GetSize(WorldRelation.Global).Y), WorldRelation.Global);
                     }
                 }
             }

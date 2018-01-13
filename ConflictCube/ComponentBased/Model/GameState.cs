@@ -34,7 +34,7 @@ namespace ConflictCube.ComponentBased
 
             Game = new Game("Game", new Transform(0, 0, 1, 1));
 
-            GameObject scene = SceneBuilder.BuildScene(Levels.FireIceFirstTest, new Transform());
+            GameObject scene = SceneBuilder.BuildScene(Levels.XShiftTest, new Transform());
             Game.AddChild(scene);
             Player1Camera.RootGameObject = scene;
             Player2Camera.RootGameObject = scene;
@@ -60,6 +60,9 @@ namespace ConflictCube.ComponentBased
             InitializePlayers();
             InitializeUI();
 
+
+            CameraManager cameraManager = new CameraManager("CameraManager", new Transform(), new List<Camera>() { Player1Camera, Player2Camera }, (Floor)scene.FindGameObjectByTypeInChildren<Floor>(), Players);
+            scene.AddChild(cameraManager);
             
             /*
             GameObject testGo = new GameObject("Test", new Transform(0, 0, .2f, .07f));
@@ -96,8 +99,8 @@ namespace ConflictCube.ComponentBased
         {
             UICamera = new Camera(new Transform(), null, windowWidth, windowHeight, new Transform(0, 0, 1f, 1f), true);
 
-            Player1Camera = new Camera(new Transform(), null, windowWidth, windowHeight, new Transform(-.42f, 0f, .5f, 1f), false);
-            Player2Camera = new Camera(new Transform(), null, windowWidth, windowHeight, new Transform( .42f, 0f, .5f, 1f), false);
+            Player1Camera = new Camera(new Transform(0, 0, 1f, 1f), null, windowWidth, windowHeight, new Transform(-.42f, 0f, .4f, 1f), false);
+            Player2Camera = new Camera(new Transform(0, 0, 1f, 1f), null, windowWidth, windowHeight, new Transform( .42f, 0f, .4f, 1f), false);
         }
         
 
@@ -159,12 +162,6 @@ namespace ConflictCube.ComponentBased
             Game.UpdateAll();
 
             CheckLooseCondition();
-
-            Vector2 player1Pos = Players[0].Transform.GetPosition(WorldRelation.Global);
-            Vector2 player2Pos = Players[1].Transform.GetPosition(WorldRelation.Global);
-
-            Player1Camera.Transform.SetPosition(new Vector2(-player1Pos.X, -player1Pos.Y), WorldRelation.Global);
-            Player2Camera.Transform.SetPosition(new Vector2(-player2Pos.X, -player2Pos.Y), WorldRelation.Global);
 
             //GameView.DrawDebug(Button.Transform.TransformToGlobal(), Color.Red);
         }
