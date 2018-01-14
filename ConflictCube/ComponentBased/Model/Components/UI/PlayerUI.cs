@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Drawing;
 using ConflictCube.ComponentBased.Components;
 using ConflictCube.ComponentBased.Model.Components.UI;
+using OpenTK;
+using Zenseless.OpenGL;
 
 namespace ConflictCube.ComponentBased
 {
@@ -15,30 +17,24 @@ namespace ConflictCube.ComponentBased
 
         private Canvas PlayerHealth;
 
-        private Canvas Sledgehammer;
-        private Canvas SelectedSledgehammer;
-
-        private Canvas CubesInInventory;
-        private TextField CountCubesInInventory;
-        private Canvas SelectedCubes;
+        private Canvas BottomButton;
+        private Canvas TopButton;
+        private Canvas LeftButton;
+        private Canvas RightButton;
 
         private Canvas SprintEnergyBackground;
         private List<Canvas> SprintEnergyBlocks = new List<Canvas>();
         private const int SprintBlockCount = 4;
 
-        private static Material BackgroundMat = new Material(null, null, Color.White);
-        private static Material PlayerAliveMat = new Material(null, null, Color.Green);
-        private static Material PlayerDeadMat = new Material(null, null, Color.Red);
-        private static Material InventoryMat = new Material(null, null, Color.Wheat);
-
-        private static Material CubeMaterial = new Material(null, null, Color.White);
-        private static Material GrayCubeMaterial = new Material(null, null, Color.Gray);
+        private static Material BackgroundMat = new Material(Color.White, null, null);
+        private static Material PlayerAliveMat = new Material(Color.Green, null, null);
+        private static Material PlayerDeadMat = new Material(Color.Red, null, null);
+        
         private static Material SledgehammerMaterial;
+        private static Material SwapMaterial;
 
-        private static Material SelectedMaterial = new Material(null, null, Color.Red);
-
-        private static Material SprintEnergyBackgroundMaterial = new Material(null, null, Color.Black);
-        private static Material SprintEnergyBlockMaterial = new Material(null, null, Color.Orange);
+        private static Material SprintEnergyBackgroundMaterial = new Material(Color.Black, null, null);
+        private static Material SprintEnergyBlockMaterial = new Material(Color.Orange, null, null);
 
         private static bool IsInitalized = false;
 
@@ -46,7 +42,8 @@ namespace ConflictCube.ComponentBased
         {
             if(!IsInitalized)
             {
-                SledgehammerMaterial = new Material(Tilesets.Instance().InventoryTextures.Tex, new Zenseless.Geometry.Box2D(0, 0, 1, 1), Color.White);
+                SledgehammerMaterial = new Material(Color.White, Tilesets.Instance().InventoryTextures.Tex, new Zenseless.Geometry.Box2D(0, 0, 1, 1));
+                SwapMaterial = new Material(Color.White, TextureLoader.FromBitmap(TexturResource.Swap), new Zenseless.Geometry.Box2D(0, 0, 1, 1));
             }
 
             Player = player;
@@ -61,25 +58,40 @@ namespace ConflictCube.ComponentBased
             PlayerHealth = new Canvas("Health" + player.Name, new Transform(0, .85f, .8f, .05f), ForegroundLayer, PlayerAliveMat);
             ForegroundLayer.AddChild(PlayerHealth);
 
+            // Abilities
 
-            //Inventory
+            BottomButton = new Canvas("bottomAbility", new Transform(0, -.05f, .4f, .08f), ForegroundLayer, SledgehammerMaterial);
+            TopButton = new Canvas("topAbility",       new Transform(0, .25f, .4f, .08f), ForegroundLayer, SwapMaterial);
 
-            ForegroundLayer.AddChild(new TextField("InventoryText", new Transform(-1f, .6f, .3f, .1f), "Inventory"));
-            ForegroundLayer.AddChild(new Canvas("Inventory", new Transform(0, .3f, .8f, .3f), ForegroundLayer, InventoryMat));
+            LeftButton   = new Canvas("leftAbility",   new Transform(-.5f, .1f, .4f, .08f), ForegroundLayer, SwapMaterial);
+            RightButton  = new Canvas("rightAbility",  new Transform( .5f, .1f, .4f, .08f), ForegroundLayer, SwapMaterial);
+            ForegroundLayer.AddChild(BottomButton);
+            ForegroundLayer.AddChild(TopButton);
+            ForegroundLayer.AddChild(LeftButton);
+            ForegroundLayer.AddChild(RightButton);
+
+            Transform topButtonTextTransform = (Transform)TopButton.Transform.Clone();
+            Transform leftButtonTextTransform = (Transform)LeftButton.Transform.Clone();
+            Transform rightButtonTextTransform = (Transform)RightButton.Transform.Clone();
+
+            Vector2 textXYOffset = topButtonTextTransform.GetSize(WorldRelation.Global) / 2;
+            textXYOffset.X += 0.008f;
+
+            Vector2 textXorYOffset = leftButtonTextTransform.GetSize(WorldRelation.Global) / 2;
+            textXorYOffset.X -= 0.005f;
 
 
-            SelectedSledgehammer = new Canvas("SelectedSledgehammer", new Transform(0, .45f, .56f, .115f), ForegroundLayer, SelectedMaterial);
-            ForegroundLayer.AddChild(SelectedSledgehammer);
-            Sledgehammer = new Canvas("Sledgehammer", new Transform(0, .45f, .5f, .1f), ForegroundLayer, SledgehammerMaterial);
-            ForegroundLayer.AddChild(Sledgehammer);
+            topButtonTextTransform.SetPosition(topButtonTextTransform.GetPosition(WorldRelation.Global) - textXYOffset, WorldRelation.Global);
+            leftButtonTextTransform.SetPosition(leftButtonTextTransform.GetPosition(WorldRelation.Global) - textXorYOffset, WorldRelation.Global);
+            rightButtonTextTransform.SetPosition(rightButtonTextTransform.GetPosition(WorldRelation.Global) - textXorYOffset, WorldRelation.Global);
+            
+            topButtonTextTransform.SetSize(topButtonTextTransform.GetSize(WorldRelation.Global) * .8f, WorldRelation.Global);
+            leftButtonTextTransform.SetSize(leftButtonTextTransform.GetSize(WorldRelation.Global) * .8f, WorldRelation.Global);
+            rightButtonTextTransform.SetSize(rightButtonTextTransform.GetSize(WorldRelation.Global) * .8f, WorldRelation.Global);
 
-
-            SelectedCubes = new Canvas("SelectedCubes", new Transform(0, .15f, .56f, .115f), ForegroundLayer, SelectedMaterial);
-            ForegroundLayer.AddChild(SelectedCubes);
-            CubesInInventory = new Canvas("CubesInInventory", new Transform(0, .15f, .5f, .1f), ForegroundLayer, CubeMaterial);
-            ForegroundLayer.AddChild(CubesInInventory);
-            CountCubesInInventory = new TextField("CountCubesInInventory", new Transform(.2f, .0f, .5f, .1f), Player.Inventory.Cubes.ToString());
-            ForegroundLayer.AddChild(CountCubesInInventory);
+            ForegroundLayer.AddChild(new TextField("xySwap", topButtonTextTransform, "xy"));
+            ForegroundLayer.AddChild(new TextField("xySwap", leftButtonTextTransform, "x"));
+            ForegroundLayer.AddChild(new TextField("xySwap", rightButtonTextTransform, "y"));
 
 
             //Sprint Energy
@@ -90,14 +102,14 @@ namespace ConflictCube.ComponentBased
             SprintEnergyBackground = new Canvas("SprintEnergyBackground", new Transform(0, -.6f, .8f, .1f), ForegroundLayer, SprintEnergyBackgroundMaterial);
             ForegroundLayer.AddChild(SprintEnergyBackground);
 
-            float blockHeight = SprintEnergyBackground.Transform.Size.Y * .9f;
-            float blockWidht = (SprintEnergyBackground.Transform.Size.X * .8f) / SprintBlockCount;
-            float marginWidht = (.9f - (SprintEnergyBackground.Transform.Size.X * .8f)) / (SprintBlockCount + 1);
+            float blockHeight = SprintEnergyBackground.Transform.GetSize(WorldRelation.Local).Y * .9f;
+            float blockWidht = (SprintEnergyBackground.Transform.GetSize(WorldRelation.Local).X * .8f) / SprintBlockCount;
+            float marginWidht = (.9f - (SprintEnergyBackground.Transform.GetSize(WorldRelation.Local).X * .8f)) / (SprintBlockCount + 1);
 
             for (int i = 0; i < SprintBlockCount; i++)
             {
-                float blockXPosition = SprintEnergyBackground.Transform.MinX + marginWidht + blockWidht + (marginWidht * 1.5f + blockWidht * 2) * i;
-                SprintEnergyBlocks.Add(new Canvas("SprintEnergyBlock" + i, new Transform(blockXPosition, SprintEnergyBackground.Transform.Position.Y, blockWidht, blockHeight), ForegroundLayer, SprintEnergyBlockMaterial));
+                float blockXPosition = SprintEnergyBackground.Transform.GetMinX(WorldRelation.Local) + marginWidht + blockWidht + (marginWidht * 1.5f + blockWidht * 2) * i;
+                SprintEnergyBlocks.Add(new Canvas("SprintEnergyBlock" + i, new Transform(blockXPosition, SprintEnergyBackground.Transform.GetPosition(WorldRelation.Local).Y, blockWidht, blockHeight), ForegroundLayer, SprintEnergyBlockMaterial));
                 ForegroundLayer.AddChild(SprintEnergyBlocks[i]);
             }
 
@@ -119,30 +131,6 @@ namespace ConflictCube.ComponentBased
                 PlayerHealth.AddComponent(PlayerDeadMat);
             }
 
-            if(Player.Inventory.Cubes > 0)
-            {
-                CubesInInventory.RemoveComponent<Material>();
-                CubesInInventory.AddComponent(CubeMaterial);
-            }
-            else
-            {
-                CubesInInventory.RemoveComponent<Material>();
-                CubesInInventory.AddComponent(GrayCubeMaterial);
-            }
-
-            switch(Player.Inventory.SelectedItem)
-            {
-                case Model.Components.Objects.InventoryItems.Sledgehammer:
-                    SelectedSledgehammer.Enabled = true;
-                    SelectedCubes.Enabled = false;
-                    break;
-                    
-                case Model.Components.Objects.InventoryItems.Cubes:
-                    SelectedSledgehammer.Enabled = false;
-                    SelectedCubes.Enabled = true;
-                    break;
-            }
-
             float energyRatio = (float)Math.Floor((Player.CurrentSprintEnergy / Player.MaxSprintEnergy) * SprintBlockCount);
 
             for(int i = 0; i < SprintBlockCount; i++)
@@ -156,8 +144,6 @@ namespace ConflictCube.ComponentBased
                     SprintEnergyBlocks[i].Enabled = false;
                 }
             }
-
-            CountCubesInInventory.Text = Player.Inventory.Cubes.ToString();
         }
     }
 }

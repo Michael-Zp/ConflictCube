@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ConflictCube.ComponentBased.Components;
+﻿using ConflictCube.ComponentBased.Components;
 
 namespace ConflictCube.ComponentBased.Model.Components.Objects
 {
@@ -21,8 +16,6 @@ namespace ConflictCube.ComponentBased.Model.Components.Objects
             {
                 Transform globalPlayerPosition = player.Transform.TransformToGlobal();
                 Transform localPlayerPosition = Transform.TransformToLocal(globalPlayerPosition);
-                //does not work
-                //Transform.Position = new OpenTK.Vector2(Transform.Position.X, -localPlayerPosition.Position.Y);
             }
             base.OnUpdate();
         }

@@ -110,6 +110,19 @@ namespace ConflictCube.ComponentBased.Components
             return null;
         }
 
+        public List<T> GetComponents<T>() where T : Component
+        {
+            List<T> comps = new List<T>();
+            foreach (Component comp in Components)
+            {
+                if (comp is T)
+                {
+                    comps.Add((T)comp);
+                }
+            }
+            return comps;
+        }
+
         public void AddChild(GameObject child)
         {
             Children.Add(child);

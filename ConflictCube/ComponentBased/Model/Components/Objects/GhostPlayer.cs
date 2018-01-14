@@ -15,8 +15,8 @@ namespace ConflictCube.ComponentBased.Model.Components.Objects
 
         public override void OnUpdate()
         {
-            Transform.Position = ActualPlayer.Transform.Position;
-            Transform.Size = ActualPlayer.Transform.Size;
+            Transform.SetPosition(ActualPlayer.Transform.GetPosition(WorldRelation.Local), WorldRelation.Local);
+            Transform.SetSize(ActualPlayer.Transform.GetSize(WorldRelation.Local), WorldRelation.Local);
             //Rotation
         }
     }

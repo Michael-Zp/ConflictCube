@@ -1,4 +1,6 @@
-﻿using OpenTK;
+﻿using ConflictCube.ComponentBased.Model.Components.Colliders;
+using OpenTK;
+using System.Collections.Generic;
 
 namespace ConflictCube.ComponentBased.Components
 {
@@ -12,10 +14,12 @@ namespace ConflictCube.ComponentBased.Components
         Wall,
         Hole,
         NonCollider,
-        Player1,
-        Player2,
-        PickableSpeedPotion,
-        PickableBlock
+        PlayerFire,
+        PlayerIce,
+        OrangeBlock,
+        BlueBlock,
+        OrangeFloor,
+        BlueFloor
     }
 
     public abstract class Collider : Component
@@ -23,11 +27,13 @@ namespace ConflictCube.ComponentBased.Components
         public bool IsTrigger;
         public CollisionGroup Group;
         public CollisionType Type;
+        public CollisionLayer Layer;
+        public List<CollisionType> IgnoreCollisionsWith = new List<CollisionType>();
 
         public Collider(bool isTrigger, CollisionGroup group) : this(isTrigger, group, CollisionType.NonCollider)
         {}
 
-        public Collider(bool isTrigger, CollisionGroup group, CollisionType type)
+        public Collider(bool isTrigger, CollisionGroup group, CollisionType type, CollisionLayer layer = CollisionLayer.Default)
         {
             IsTrigger = isTrigger;
             if(group == null)
@@ -41,6 +47,7 @@ namespace ConflictCube.ComponentBased.Components
                 Group.AddCollider(this);
             }
             Type = type;
+            Layer = layer;
         }
 
         public override void OnRemove()
@@ -49,13 +56,13 @@ namespace ConflictCube.ComponentBased.Components
             Group.RemoveCollider(this);
         }
 
-        public virtual void CollidesWith(Collider other, Transform thisTransform, Vector2 movement)
+        public virtual void CollidesWith(Collider other, Vector2 movement)
         {
-            StandardCollision(other, thisTransform, movement);
+            StandardCollision(other, movement);
             Owner.OnCollision(other);
         }
 
-        public abstract void StandardCollision(Collider other, Transform transform, Vector2 movement);
+        public abstract void StandardCollision(Collider other, Vector2 movement);
 
         public void CheckCollisions(Vector2 movement)
         {

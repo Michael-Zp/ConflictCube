@@ -14,6 +14,7 @@ namespace ConflictCube.ComponentBased
         public FloorTile[,] FloorTiles { get; set; }
         public float FloorBreakdownInterval { get; set; } = 3.0f;
         public CollisionGroup CollisionGroup;
+        public Transform CurrentCheckpoint = new Transform(0, 0, 1, 1);
 
         private int FloorRowsBrokeDown = 0;
         private float LastFloorBreakdownTime = 0;
@@ -55,11 +56,15 @@ namespace ConflictCube.ComponentBased
             {
                 BreakDownFloor();
             }
-
         }
 
         public void BreakDownFloor()
         {
+            if(!DebugGame.BreakDownFloors)
+            {
+                return;
+            }
+
             if(Time.Time.CurrentTime - LastFloorBreakdownTime > FloorBreakdownInterval)
             {
                 LastFloorBreakdownTime = Time.Time.CurrentTime;
@@ -84,7 +89,12 @@ namespace ConflictCube.ComponentBased
             AddChild(floorTile);
         }
 
-        public Vector2 FindStartPosition()
+
+        /// <summary>
+        /// Return global start position
+        /// </summary>
+        /// <returns></returns>
+        public Transform FindStartPosition()
         {
             int LowestRow = FloorTiles.GetLength(0);
             int LowestRowIndex = LowestRow - 1;
@@ -96,9 +106,8 @@ namespace ConflictCube.ComponentBased
                     FloorTile tile = FloorTiles[i, u];
                     if (tile.Type == GameObjectType.Floor)
                     {
-                        Transform startPos = new Transform(tile.Transform.Position.X, tile.Transform.Position.Y, 0, 0);
-
-                        return Transform.TransformToGlobal(startPos).Position;
+                        Vector2 startPos = tile.Transform.GetPosition(WorldRelation.Global);
+                        return new Transform(startPos.X, startPos.Y, 1, 1);
                     }
                 }
             }
@@ -110,20 +119,18 @@ namespace ConflictCube.ComponentBased
         public Transform BoxInFloorGrid(float row, float column)
         {
             float posX = -1 + column * (FloorTileSize.X * 2.0f) + FloorTileSize.X;
-            float posY = -1 + ((FloorTiles.GetLength(0) - 1) - row) * (FloorTileSize.Y * 2.0f) + FloorTileSize.Y;
+            float posY = ((FloorTiles.GetLength(0) - 1) - row) * (FloorTileSize.Y * 2.0f) + FloorTileSize.Y;
 
             return new Transform(posX, posY, FloorTileSize.X, FloorTileSize.Y);
         }
 
-
-        //TODO: Why do I have to do this fucked up transform?
+        
         public Vector2 GetGridPosition(Transform globalPosition)
         {
             Transform localPosition = Transform.TransformToLocal(globalPosition);
-            //localPosition.Position = -localPosition.Position;
            
-            float columnPosition = GetColumnOfPosition(localPosition.Position.X);
-            float rowPosition = GetRowOfPosition(localPosition.Position.Y);
+            float columnPosition = GetColumnOfPosition(localPosition.GetPosition(WorldRelation.Local).X);
+            float rowPosition = GetRowOfPosition(localPosition.GetPosition(WorldRelation.Local).Y);
             
             return new Vector2(columnPosition, rowPosition);
         }
@@ -152,22 +159,24 @@ namespace ConflictCube.ComponentBased
 
         public Transform GetBoxAtPosition(Transform globalPosition)
         {
-            globalPosition = Transform.TransformToLocal(globalPosition);
-
-            float columnPosition = GetColumnOfPosition(globalPosition.Position.X);
-            float rowPosition = GetRowOfPosition(globalPosition.Position.Y);
+            float columnPosition = GetColumnOfPosition(globalPosition.GetPosition(WorldRelation.Local).X);
+            float rowPosition = GetRowOfPosition(globalPosition.GetPosition(WorldRelation.Local).Y);
 
             return (Transform)FloorTiles[(int)columnPosition, (int)rowPosition].Transform.Clone();
         }
 
         private float GetColumnOfPosition(float xPos)
         {
-            return (float)Math.Floor((xPos + 1) / (FloorTileSize.X * 2));
+            float minX = FloorTiles[0, 0].Transform.GetMinX(WorldRelation.Local);
+            float maxX = FloorTiles[0, FloorColumns - 1].Transform.GetMaxX(WorldRelation.Local);
+            return (float)Math.Floor(((xPos - minX) / (maxX - minX)) * FloorColumns);
         }
 
         private float GetRowOfPosition(float yPos)
         {
-            return (float)Math.Floor((yPos + 1) / (FloorTileSize.Y * 2));
+            float minY = FloorTiles[FloorRows - 1, 0].Transform.GetMinY(WorldRelation.Local);
+            float maxY = FloorTiles[0, 0].Transform.GetMaxY(WorldRelation.Local);
+            return (float)Math.Floor(((yPos - minY) / (maxY - minY)) * FloorRows);
         }
     }
 }

@@ -121,7 +121,16 @@
   <data name="FloorTileset" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Tileset.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="FloorTilesetIceFire" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FloorTileset.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="PlayerTexture" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Player.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Swap" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Textures\Swap.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="UseFieldIndicator" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Textures\UseFieldIndicator.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

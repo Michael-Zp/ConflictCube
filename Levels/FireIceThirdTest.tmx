@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" tiledversion="1.0.3" orientation="orthogonal" renderorder="right-down" width="3" height="8" tilewidth="32" tileheight="32" nextobjectid="1">
+ <tileset firstgid="1" source="FloorTIleset.tsx"/>
+ <layer name="Kachelebene 1" width="3" height="8">
+  <data encoding="csv">
+1,1,1,
+4,4,5,
+8,8,2,
+4,2,6,
+4,6,4,
+4,2,4,
+7,7,7,
+2,2,2
+</data>
+ </layer>
+</map>

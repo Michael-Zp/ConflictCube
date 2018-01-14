@@ -77,6 +77,7 @@
     <Compile Include="ComponentBased\Controller\GameController.cs" />
     <Compile Include="ComponentBased\Controller\InputKey.cs" />
     <Compile Include="ComponentBased\Controller\ViewModel.cs" />
+    <Compile Include="ComponentBased\DebugGame.cs" />
     <Compile Include="ComponentBased\FontResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -88,19 +89,26 @@
       <DependentUpon>InventoryResources.resx</DependentUpon>
     </Compile>
     <Compile Include="ComponentBased\Model\Components\Colliders\CollisionGroup.cs" />
+    <Compile Include="ComponentBased\Model\Components\Colliders\CollisionLayer.cs" />
     <Compile Include="ComponentBased\Model\Components\GameCallbacks.cs" />
+    <Compile Include="ComponentBased\Model\Components\Objects\Button.cs" />
+    <Compile Include="ComponentBased\Model\Components\Objects\CameraManager.cs" />
+    <Compile Include="ComponentBased\Model\Components\Objects\Events\Event.cs" />
+    <Compile Include="ComponentBased\Model\Components\Objects\Events\OnButtonChangeFloorEvent.cs" />
     <Compile Include="ComponentBased\Model\Components\Objects\Game.cs" />
     <Compile Include="ComponentBased\Model\Components\Objects\GhostPlayer.cs" />
+    <Compile Include="ComponentBased\Model\Components\Objects\Players\OrangePlayer.cs" />
     <Compile Include="ComponentBased\Model\Components\Objects\Pickable.cs" />
     <Compile Include="ComponentBased\Model\Components\Objects\PlayerArea.cs" />
     <Compile Include="ComponentBased\Model\Components\Objects\PlayerInventory.cs" />
+    <Compile Include="ComponentBased\Model\Components\Objects\Players\BluePlayer.cs" />
     <Compile Include="ComponentBased\Model\Components\Scene\SceneBuilder.cs" />
     <Compile Include="ComponentBased\Model\Components\Material\MaterialData.cs" />
     <Compile Include="ComponentBased\Model\Components\Material\Materials.cs" />
     <Compile Include="ComponentBased\Model\Components\Objects\ColoredBox.cs" />
     <Compile Include="ComponentBased\Model\Components\Objects\Floor.cs" />
     <Compile Include="ComponentBased\Model\Components\Objects\FloorLoader.cs" />
-    <Compile Include="ComponentBased\Model\Components\Objects\Player.cs" />
+    <Compile Include="ComponentBased\Model\Components\Objects\Players\Player.cs" />
     <Compile Include="ComponentBased\Model\Components\Objects\Tiles\FloorTile.cs" />
     <Compile Include="ComponentBased\Model\Components\GameObjectType.cs" />
     <Compile Include="ComponentBased\Model\Components\Objects\Boundary.cs" />
@@ -136,11 +144,20 @@
     <Compile Include="ComponentBased\Model\Components\Material\Material.cs" />
     <Compile Include="ComponentBased\Model\Components\Transform\Transform.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ShaderResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ShaderResources.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="OpenTK.dll.config" />
     <None Include="packages.config" />
+    <None Include="Resources\FireIceFirstTest.csv" />
+    <None Include="Resources\FireIceFourthTest.csv" />
+    <None Include="Resources\FireIceSecondTest.csv" />
+    <None Include="Resources\FireIceThirdTest.csv" />
     <None Include="Resources\Level0.csv" />
     <None Include="Resources\level1.csv" />
     <None Include="Resources\Level2.csv" />
@@ -162,6 +179,10 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>InventoryResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="ShaderResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ShaderResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\FloorSpriteSheet.png" />
@@ -179,7 +200,26 @@
     <None Include="Resources\Blood Bath 2.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\XShiftTest.csv" />
+    <None Include="Resources\XYShiftTest.csv" />
+    <None Include="Resources\YShiftTest.csv" />
+    <None Include="Shaders\Aftershadow.glsl" />
     <None Include="Textures\Sledgehammer.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\FireTileset.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IceTileset.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\FloorTileset.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Textures\UseFieldIndicator.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Textures\Swap.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -2,10 +2,7 @@
 using OpenGL = OpenTK.Graphics.OpenGL;
 using Zenseless.Geometry;
 using System.Drawing;
-using ConflictCube.ComponentBased.Components;
 using Zenseless.HLGL;
-using ConflictCube.ComponentBased.Model.Components.UI;
-using OpenTK;
 
 namespace ConflictCube.ComponentBased
 {
@@ -17,85 +14,106 @@ namespace ConflictCube.ComponentBased
 
         public static OpenTKWrapper Instance()
         {
-            if(OpenTKWrapperInstance == null)
+            if (OpenTKWrapperInstance == null)
             {
                 OpenTKWrapperInstance = new OpenTKWrapper();
             }
             return OpenTKWrapperInstance;
         }
 
-        public void DrawBoxWithAlphaChannel(Transform transform, Color color)
+        public void DrawBoxWithAlphaChannel(Components.Rectangle rect, Color color)
         {
             EnableAlphaChannel();
-            
+
             GL.Color4(color);
-            
-            GL.Begin(OpenGL.PrimitiveType.Quads);
 
-            //Bottom left
-            GL.Vertex2(transform.MinX, transform.MinY);
-
-            //Bottom right
-            GL.Vertex2(transform.MaxX, transform.MinY);
-
-            //Top right
-            GL.Vertex2(transform.MaxX, transform.MaxY);
-
-            //Top left
-            GL.Vertex2(transform.MinX, transform.MaxY);
-
-            GL.End();
+            DrawBox(rect);
 
             GL.Color4(StandardColor);
 
             DisableAlphaChannel();
         }
 
-        public void DrawBoxWithTextureAndAlphaChannel(Transform transform, ITexture texture, Box2D uVCoordinates, Color color)
+        public void DrawBox(Components.Rectangle rect, Color color, ITexture texture, Box2D uVCoordinates, bool alphaChannel = true)
         {
-            EnableAlphaChannel();
-
-            EnableTextures();
-
-            texture.Activate();
+            if (alphaChannel)
+            {
+                EnableAlphaChannel();
+            }
             
             GL.Color4(color);
-
-            GL.Begin(OpenGL.PrimitiveType.Quads);
-
-            //Bottom left
-            GL.TexCoord2(uVCoordinates.MinX, uVCoordinates.MinY);
-            GL.Vertex2(transform.MinX, transform.MinY);
-
-            //Bottom right
-            GL.TexCoord2(uVCoordinates.MaxX, uVCoordinates.MinY);
-            GL.Vertex2(transform.MaxX, transform.MinY);
-
-            //Top right
-            GL.TexCoord2(uVCoordinates.MaxX, uVCoordinates.MaxY);
-            GL.Vertex2(transform.MaxX, transform.MaxY);
-
-            //Top left
-            GL.TexCoord2(uVCoordinates.MinX, uVCoordinates.MaxY);
-            GL.Vertex2(transform.MinX, transform.MaxY);
-
-            GL.End();
             
-            texture.Deactivate();
+            if (texture != null)
+            {
+                EnableTextures();
+                texture.Activate();
+
+                DrawTexturedBox(rect, uVCoordinates);
+
+                texture.Deactivate();
+                DisableTextures();
+            }
+            else
+            {
+                DrawBox(rect);
+            }
+            
 
             GL.Color4(StandardColor);
 
-            DisableTextures();
+            if (alphaChannel)
+            {
+                DisableAlphaChannel();
+            }
+        }
 
-            DisableAlphaChannel();
+        private void DrawTexturedBox(Components.Rectangle rect, Box2D uVCoordinates)
+        {
+            GL.Begin(PrimitiveType.Quads);
+
+            //Bottom left
+            GL.TexCoord2(uVCoordinates.MinX, uVCoordinates.MinY);
+            GL.Vertex2(rect.BottomLeft);
+
+            //Bottom right
+            GL.TexCoord2(uVCoordinates.MaxX, uVCoordinates.MinY);
+            GL.Vertex2(rect.BottomRight);
+
+            //Top right
+            GL.TexCoord2(uVCoordinates.MaxX, uVCoordinates.MaxY);
+            GL.Vertex2(rect.TopRight);
+
+            //Top left
+            GL.TexCoord2(uVCoordinates.MinX, uVCoordinates.MaxY);
+            GL.Vertex2(rect.TopLeft);
+
+            GL.End();
+        }
+
+        private void DrawBox(Components.Rectangle rect)
+        {
+            GL.Begin(PrimitiveType.Quads);
+
+            //Bottom left
+            GL.Vertex2(rect.BottomLeft);
+
+            //Bottom right
+            GL.Vertex2(rect.BottomRight);
+
+            //Top right
+            GL.Vertex2(rect.TopRight);
+
+            //Top left
+            GL.Vertex2(rect.TopLeft);
+
+            GL.End();
         }
 
         public void PrintText(float xPos, float yPos, float xSize, float ySize, string text)
         {
             EnableAlphaChannel();
             EnableTextures();
-
-            //Font.Instance().TextureFont.Print(xPos, yPos, 0f, xSize, text);
+            
             Font.Instance().TextureFont.PrintWithSize(xPos, yPos, 0f, xSize, ySize, 1f, text);
 
             DisableTextures();

@@ -16,7 +16,8 @@ namespace ConflictCube.ComponentBased
 
         private static Floor LoadFloor(int levelRows, int levelColumns, GameObjectType[,] floorTiles, string name, Transform floorTransform, GameObject parent, CollisionGroup group)
         {
-            Vector2 floorTileSize = new Vector2(floorTransform.Size.X / levelColumns, 0.2f);
+            //Vector2 floorTileSize = new Vector2(floorTransform.GetSize(WorldRelation.Local).X / levelColumns, floorTransform.GetSize(WorldRelation.Local).X / levelColumns);
+            Vector2 floorTileSize = new Vector2(0.13f, 0.13f);
             Floor floorOfLevel = new Floor(name, floorTransform, parent, levelRows, levelColumns, group, floorTileSize);
 
             for (int row = 0; row < levelRows; row++)
@@ -33,6 +34,8 @@ namespace ConflictCube.ComponentBased
                 }
             }
 
+            floorOfLevel.CurrentCheckpoint = floorOfLevel.FindStartPosition();
+
             return floorOfLevel;
         }
 
@@ -40,7 +43,7 @@ namespace ConflictCube.ComponentBased
 
         private static GameObjectType[,] GetFloorDataFromLevelfile(string levelData, out int levelRows, out int levelColumns)
         {
-            GameObjectType[] FloorNumberToType = { GameObjectType.Finish, GameObjectType.Floor, GameObjectType.Hole, GameObjectType.Wall };
+            GameObjectType[] FloorNumberToType = { GameObjectType.Finish, GameObjectType.Floor, GameObjectType.Hole, GameObjectType.Wall, GameObjectType.OrangeBlock, GameObjectType.BlueBlock, GameObjectType.OrangeFloor, GameObjectType.BlueFloor };
 
             levelData = levelData.Trim('\n');
             string[] allLines = levelData.Split('\n');
