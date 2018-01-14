@@ -2,29 +2,28 @@
 using System;
 using ConflictCube.ComponentBased.Components;
 using ConflictCube.ComponentBased.Components.Objects.Tiles;
-using Zenseless.OpenGL;
 using System.Drawing;
+using ConflictCube.ResxFiles;
+using ConflictCube.ComponentBased.Model.Components.Objects.Players;
 
 namespace ConflictCube.ComponentBased
 {
     public abstract class Player : GameObject
     {
         public float Speed { get; protected set; }
-        public bool IsAlive { get; protected set; }
+        public bool IsAlive { get; set; }
         public float MaxSprintEnergy = 100;
         public float CurrentSprintEnergy = 100;
         public float UsedSprintEnergyPerSecond = 100;
         public float RegeneratSprintEnergyPerSecond = 20;
         public Player OtherPlayer;
-
-        protected GameObject UseField { get; set; }
+            
+        protected UseField UseField { get; set; }
         protected float UseCooldown = 1.0f;
         protected float LastUse { get; set; }
         protected Floor CurrentFloor;
 
         protected static bool MaterialsAreInitialized = false;
-        protected static Material UseMaterialForeground;
-        protected static Material UseMaterialBackground;
         protected float ThrowUseXOffset = 0;
         protected float ThrowUseYOffset = 1;
         protected float LastUseFieldUpdate = 0;
@@ -42,7 +41,7 @@ namespace ConflictCube.ComponentBased
         protected Material AfterglowMaterialY;
         protected Material AfterglowMaterialX;
         protected Material AfterglowMaterialXY;
-        protected static float AfterglowLifetime = .25f;
+        protected static float AfterglowLifetime = .5f;
 
         protected GameObject AfterglowY;
         protected GameObject AfterglowX;
@@ -70,12 +69,6 @@ namespace ConflictCube.ComponentBased
             AddComponent(boxCollider);
             AddComponent(material);
 
-            if (!MaterialsAreInitialized)
-            {
-                MaterialsAreInitialized = true;
-                UseMaterialForeground   = new Material(Color.FromArgb(255, Color.White), TextureLoader.FromBitmap(TexturResource.UseFieldIndicator), new Zenseless.Geometry.Box2D(0, 0, 1, 1));
-                UseMaterialBackground   = new Material(Color.FromArgb(32, 0, 255, 64), null, null);
-            }
 
 
             
@@ -111,8 +104,7 @@ namespace ConflictCube.ComponentBased
             AddChild(AfterglowXY);
             
 
-            UseField = new ColoredBox("ThrowUseIndicator", new Transform(), UseMaterialForeground, this);
-            UseField.AddComponent(UseMaterialBackground);
+            UseField = new UseField("ThrowUseIndicator", new Transform());
             CurrentFloor.AddChild(UseField);
             SetUseFieldWithOffset();
         }
@@ -213,7 +205,7 @@ namespace ConflictCube.ComponentBased
 
                 float xSize = MathHelper.Clamp((Transform.GetMinY(WorldRelation.Global) - OtherPlayer.Transform.GetMaxY(WorldRelation.Global)) / 2, 0, float.MaxValue);
                 AfterglowY.Transform.SetSize(new Vector2(xSize, Transform.GetSize(WorldRelation.Global).X), WorldRelation.Global);
-                AfterglowY.Transform.SetRotation(90);
+                AfterglowY.Transform.SetRotation(90, WorldRelation.Global);
             }
             else
             {
@@ -223,7 +215,7 @@ namespace ConflictCube.ComponentBased
 
                 float xSize = MathHelper.Clamp((OtherPlayer.Transform.GetMinY(WorldRelation.Global) - Transform.GetMaxY(WorldRelation.Global)) / 2, 0, float.MaxValue);
                 AfterglowY.Transform.SetSize(new Vector2(xSize, Transform.GetSize(WorldRelation.Global).X), WorldRelation.Global);
-                AfterglowY.Transform.SetRotation(90);
+                AfterglowY.Transform.SetRotation(90, WorldRelation.Global);
             }
         }
 
@@ -243,7 +235,7 @@ namespace ConflictCube.ComponentBased
 
                 float xSize = MathHelper.Clamp((Transform.GetMinX(WorldRelation.Global) - OtherPlayer.Transform.GetMaxX(WorldRelation.Global)) / 2, 0, float.MaxValue);
                 AfterglowY.Transform.SetSize(new Vector2(xSize, Transform.GetSize(WorldRelation.Global).X), WorldRelation.Global);
-                AfterglowY.Transform.SetRotation(0);
+                AfterglowY.Transform.SetRotation(0, WorldRelation.Global);
             }
             else
             {
@@ -253,7 +245,7 @@ namespace ConflictCube.ComponentBased
 
                 float xSize = MathHelper.Clamp((OtherPlayer.Transform.GetMinX(WorldRelation.Global) - Transform.GetMaxX(WorldRelation.Global)) / 2, 0, float.MaxValue);
                 AfterglowY.Transform.SetSize(new Vector2(xSize, Transform.GetSize(WorldRelation.Global).X), WorldRelation.Global);
-                AfterglowY.Transform.SetRotation(0);
+                AfterglowY.Transform.SetRotation(0, WorldRelation.Global);
             }
         }
 
@@ -276,7 +268,7 @@ namespace ConflictCube.ComponentBased
 
             float yDif = Transform.GetMaxY(WorldRelation.Global) - OtherPlayer.Transform.GetMaxY(WorldRelation.Global);
             float xDif = Transform.GetMaxX(WorldRelation.Global) - OtherPlayer.Transform.GetMaxX(WorldRelation.Global);
-            AfterglowY.Transform.SetRotation(-MathHelper.RadiansToDegrees((float)Math.Atan2(yDif, xDif)));
+            AfterglowY.Transform.SetRotation(-MathHelper.RadiansToDegrees((float)Math.Atan2(yDif, xDif)), WorldRelation.Global);
         }
 
         protected abstract void HitSelectedBlock();
@@ -354,13 +346,57 @@ namespace ConflictCube.ComponentBased
 
                 Console.WriteLine("Hit boundaries with the ThrowUse Field");
             }
+
+            if(UseFieldIsOnUsableField())
+            {
+                UseField.Enabled = true;
+            }
+            else
+            {
+                UseField.Enabled = false;
+            }
         }
+
+        protected abstract bool UseFieldIsOnUsableField();
         
         public void Move(Vector2 moveVector)
         {
             if (!CanMove())
             {
                 return;
+            }
+
+            if(moveVector.Length != 0)
+            {
+                float targetAngle = 0;
+
+                if (moveVector.X == 0 && moveVector.Y < 0)
+                {
+                    targetAngle = 180;
+                }
+                else if(moveVector.X == 0 && moveVector.Y > 0)
+                {
+                    targetAngle = 0;
+                }
+                else
+                {
+                    targetAngle = (float)MathHelper.RadiansToDegrees(Math.Acos(Vector2.Dot(new Vector2(0, 1), moveVector.Normalized())));
+                    
+
+                    if (moveVector.X < 0)
+                    {
+                        targetAngle = 360 - targetAngle;
+                    }
+                }
+
+                float currentAngle = Transform.GetRotation(WorldRelation.Local);
+                float angleDist = targetAngle - currentAngle;
+
+
+                float angle = currentAngle + angleDist * (10f * Time.Time.DifTime);
+
+                Transform.SetRotation(angle, WorldRelation.Local);
+
             }
 
             Transform.MoveRelative(moveVector);
@@ -397,8 +433,7 @@ namespace ConflictCube.ComponentBased
         {
             if(DebugGame.CanDie)
             {
-                ResetToLastCheckpoint();
-                OtherPlayer.ResetToLastCheckpoint();
+                IsAlive = false;
             }
         }
 
@@ -426,14 +461,18 @@ namespace ConflictCube.ComponentBased
 
         }
 
-        protected FloorTile GetFloorTileOfUseField()
+        protected LevelTile GetLevelTileOnCubeLayerOfSelectedField()
         {
             Vector2 useFieldGridPos = CurrentFloor.GetGridPosition(Transform.TransformToGlobal()) + new Vector2(ThrowUseXOffset, ThrowUseYOffset);
 
             int indexOfColumn = (int)useFieldGridPos.X;
             int indexOfRow = CurrentFloor.FloorRows - 1 - (int)useFieldGridPos.Y;
 
-            return CurrentFloor.FloorTiles[indexOfRow, indexOfColumn];
+            indexOfRow = MathHelper.Clamp(indexOfRow, 0, CurrentFloor.FloorRows - 1);
+            indexOfColumn = MathHelper.Clamp(indexOfColumn, 0, CurrentFloor.FloorColumns - 1);
+
+
+            return CurrentFloor.CubeTiles[indexOfRow, indexOfColumn];
         }
     }
 }

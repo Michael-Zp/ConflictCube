@@ -9,7 +9,7 @@ namespace ConflictCube.ComponentBased
             //Debug options
 
             DebugGame.BreakDownFloors = false;
-            DebugGame.CanLoose = false;
+            DebugGame.CanLoose = true;
             DebugGame.Player1PrintPosition = false;
             DebugGame.Player2PrintPosition = false;
             DebugGame.PlayerPrintCollisionTypes = false;
@@ -20,7 +20,7 @@ namespace ConflictCube.ComponentBased
             DebugGame.DebugDrawUseField = false;
             DebugGame.ShowBoundaries = false;
 
-            //----
+            //End debug options----
 
             MyWindow window = new MyWindow(1024, 512);
             GameView view = new GameView(window);

@@ -11,7 +11,8 @@ namespace ConflictCube.ComponentBased
         public int FloorRows { get; set; }
         public int FloorColumns { get; set; }
 
-        public FloorTile[,] FloorTiles { get; set; }
+        public LevelTile[,] FloorTiles { get; set; }
+        public LevelTile[,] CubeTiles { get; set; }
         public float FloorBreakdownInterval { get; set; } = 3.0f;
         public CollisionGroup CollisionGroup;
         public Transform CurrentCheckpoint = new Transform(0, 0, 1, 1);
@@ -26,7 +27,8 @@ namespace ConflictCube.ComponentBased
         //floorSize is the size of the whole floor and not only the part which should be shown.
         public Floor(string name, Transform transform, GameObject parent, int rows, int columns, CollisionGroup group, Vector2 tileSize) : base(name, transform, parent)
         {
-            FloorTiles = new FloorTile[rows, columns];
+            FloorTiles = new LevelTile[rows, columns];
+            CubeTiles = new LevelTile[rows, columns];
             FloorRows = rows;
             FloorColumns = columns;
             CollisionGroup = group;
@@ -83,10 +85,12 @@ namespace ConflictCube.ComponentBased
         }
 
 
-        public void AddFloorTile(FloorTile floorTile, int y, int x)
+        public void AddLevelTile(LevelTile floorTile, LevelTile cubeTile, int y, int x)
         {
             FloorTiles[y, x] = floorTile;
+            CubeTiles[y, x] = cubeTile;
             AddChild(floorTile);
+            AddChild(cubeTile);
         }
 
 
@@ -103,7 +107,7 @@ namespace ConflictCube.ComponentBased
             {
                 for (int u = 0; u < FloorTiles.GetLength(1); u++)
                 {
-                    FloorTile tile = FloorTiles[i, u];
+                    LevelTile tile = FloorTiles[i, u];
                     if (tile.Type == GameObjectType.Floor)
                     {
                         Vector2 startPos = tile.Transform.GetPosition(WorldRelation.Global);

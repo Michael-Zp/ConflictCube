@@ -66,6 +66,10 @@ namespace ConflictCube.ComponentBased.Components
                 }
                 return Color.FromArgb(1, 1, 1, 1);
             }
+
+            set {
+                Materials.SetMaterialColor(ID, value);
+            }
         }
 
         public IShader Shader {

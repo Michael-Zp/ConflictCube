@@ -9,7 +9,6 @@
 //------------------------------------------------------------------------------
 
 namespace ConflictCube.ResxFiles {
-    using System;
     
     
     /// <summary>

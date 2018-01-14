@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using Zenseless.OpenGL;
 
 namespace ConflictCube.ComponentBased.Components
@@ -39,6 +40,14 @@ namespace ConflictCube.ComponentBased.Components
             {
                 return null;
             }
+        }
+
+        public static void SetMaterialColor(int ID, Color color)
+        {
+            MaterialData matData = GetMaterialData(ID);
+            AllMaterials.Remove(ID);
+            matData.Color = color;
+            AllMaterials.Add(ID, matData);
         }
     }
 }

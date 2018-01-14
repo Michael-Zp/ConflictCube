@@ -1,4 +1,5 @@
-﻿using Zenseless.OpenGL;
+﻿using ConflictCube.ResxFiles;
+using Zenseless.OpenGL;
 using static ConflictCube.ComponentBased.View.ZenselessWrapper;
 
 namespace ConflictCube.ComponentBased

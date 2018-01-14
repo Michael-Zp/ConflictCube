@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using ConflictCube.ComponentBased.Components;
 using ConflictCube.ComponentBased.Model.Components.UI;
+using ConflictCube.ResxFiles;
 using OpenTK;
 using Zenseless.OpenGL;
 

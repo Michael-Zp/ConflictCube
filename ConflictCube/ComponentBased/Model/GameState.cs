@@ -4,9 +4,9 @@ using ConflictCube.ComponentBased.Components;
 using Zenseless.OpenGL;
 using System.Drawing;
 using ConflictCube.ComponentBased.Controller;
-using OpenTK;
 using ConflictCube.ComponentBased.Model.Components.Objects;
 using ConflictCube.ComponentBased.View;
+using ConflictCube.ResxFiles;
 
 namespace ConflictCube.ComponentBased
 {
@@ -18,10 +18,10 @@ namespace ConflictCube.ComponentBased
         public Game Game { get; set; }
         public List<Player> Players { get; private set; }
 
-        private Transform UiPlayer1Transform = new Transform(-.9f, 0f, .1f, 1f);
+        private Transform UiPlayer1Transform = new Transform(-.85f, -.8f, .15f, .4f);
         private Transform ScenePlayer1Transform = new Transform(0f, 0, 1f, 1f);
 
-        private Transform UiPlayer2Transform = new Transform(.9f, 0f, .1f, 1f);
+        private Transform UiPlayer2Transform = new Transform(.85f, -.8f, .15f, .4f);
         private Transform ScenePlayer2Transform = new Transform(0f, 0, 1f, 1f);
 
 
@@ -34,7 +34,7 @@ namespace ConflictCube.ComponentBased
 
             Game = new Game("Game", new Transform(0, 0, 1, 1));
 
-            GameObject scene = SceneBuilder.BuildScene(Levels.FireIceFirstTest, new Transform());
+            GameObject scene = SceneBuilder.BuildScene(LevelsWithNewTileset.FireIceSecondTestNewTileset, new Transform());
             Game.AddChild(scene);
             Player1Camera.RootGameObject = scene;
             Player2Camera.RootGameObject = scene;
@@ -120,7 +120,7 @@ namespace ConflictCube.ComponentBased
         public void InitializePlayers()
         {
             Players = new List<Player>();
-            Material playerMat = new Material(Color.White, (Texture)Tilesets.Instance().PlayerSheet.Tex, Tilesets.Instance().PlayerSheet.CalcSpriteTexCoords(0));
+            Material playerMat = new Material(Color.White, (Texture)Tilesets.Instance().NewPlayerSheet.Tex, Tilesets.Instance().NewPlayerSheet.CalcSpriteTexCoords(0));
             Material playerOrangeMat = new Material(Color.FromArgb(128, Color.Orange), null, null);
             Material playerBlueMat = new Material(Color.FromArgb(128, Color.DarkBlue), null, null);
             Material playerGhostMat = new Material(Color.FromArgb(64, 255, 255, 255), (Texture)Tilesets.Instance().PlayerSheet.Tex, Tilesets.Instance().PlayerSheet.CalcSpriteTexCoords(0));
@@ -162,8 +162,6 @@ namespace ConflictCube.ComponentBased
             Game.UpdateAll();
 
             CheckLooseCondition();
-
-            //GameView.DrawDebug(Button.Transform.TransformToGlobal(), Color.Red);
         }
 
         private void CheckLooseCondition()
@@ -172,9 +170,14 @@ namespace ConflictCube.ComponentBased
             {
                 return;
             }
-            if (!Players[0].IsAlive && !Players[1].IsAlive)
+
+            if (!Players[0].IsAlive || !Players[1].IsAlive)
             {
-                Environment.Exit(0);
+                foreach(Player player in Players)
+                {
+                    player.ResetToLastCheckpoint();
+                    player.IsAlive = true;
+                }
             }
         }
         

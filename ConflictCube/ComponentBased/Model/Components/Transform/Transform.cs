@@ -203,9 +203,17 @@ namespace ConflictCube.ComponentBased.Components
         /// Only local rotation can be set. Rotation is set in degree.
         /// </summary>
         /// <param name="rotation"></param>
-        public void SetRotation(float rotation)
+        public void SetRotation(float rotation, WorldRelation relation)
         {
-            Rotation = rotation;
+            if (relation == WorldRelation.Local)
+            {
+                Rotation = rotation;
+            }
+            else
+            {
+                Rotation = 0;
+                Rotation = rotation - GetGlobalRotation();
+            }
         }
 
         public float GetMinX(WorldRelation relation)

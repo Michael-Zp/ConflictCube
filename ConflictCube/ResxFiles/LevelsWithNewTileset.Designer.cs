@@ -59,5 +59,57 @@ namespace ConflictCube.ResxFiles {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+        ///&lt;map version=&quot;1.0&quot; tiledversion=&quot;1.0.3&quot; orientation=&quot;orthogonal&quot; renderorder=&quot;right-down&quot; width=&quot;4&quot; height=&quot;10&quot; tilewidth=&quot;64&quot; tileheight=&quot;64&quot; nextobjectid=&quot;1&quot;&gt;
+        /// &lt;tileset firstgid=&quot;1&quot; source=&quot;../ConflictCube/Textures/ConCubeTileset.tsx&quot;/&gt;
+        /// &lt;layer name=&quot;Floor&quot; width=&quot;4&quot; height=&quot;10&quot;&gt;
+        ///  &lt;data encoding=&quot;csv&quot;&gt;
+        ///1,1,1,1,
+        ///4,2,2,4,
+        ///4,2,2,4,
+        ///4,2,2,4,
+        ///4,2,2,4,
+        ///4,2,2,4,
+        ///4,2,2,4,
+        ///4,2,2,4,
+        ///4,2,2,4,
+        ///4,2,2,4
+        ///&lt;/data&gt;
+        /// &lt;/layer&gt;
+        /// &lt;layer name=&quot;Cubes&quot; width=&quot;4&quot; height=&quot;10&quot; [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
+        /// </summary>
+        internal static string FireIceFirstTestNewTileset {
+            get {
+                return ResourceManager.GetString("FireIceFirstTestNewTileset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+        ///&lt;map version=&quot;1.0&quot; tiledversion=&quot;1.0.3&quot; orientation=&quot;orthogonal&quot; renderorder=&quot;right-down&quot; width=&quot;4&quot; height=&quot;10&quot; tilewidth=&quot;64&quot; tileheight=&quot;64&quot; nextobjectid=&quot;1&quot;&gt;
+        /// &lt;tileset firstgid=&quot;1&quot; source=&quot;../ConflictCube/Textures/ConCubeTileset.tsx&quot;/&gt;
+        /// &lt;layer name=&quot;Floor&quot; width=&quot;4&quot; height=&quot;10&quot;&gt;
+        ///  &lt;data encoding=&quot;csv&quot;&gt;
+        ///1,1,1,1,
+        ///2,2,2,9,
+        ///2,44,44,34,
+        ///43,5,2,30,
+        ///43,43,2,19,
+        ///43,4,44,18,
+        ///43,32,44,33,
+        ///43,36,44,23,
+        ///43,34,44,22,
+        ///43,43,2,12
+        ///&lt;/data&gt;
+        /// &lt;/layer&gt;
+        /// &lt;layer name=&quot;Cu [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
+        /// </summary>
+        internal static string FireIceSecondTestNewTileset {
+            get {
+                return ResourceManager.GetString("FireIceSecondTestNewTileset", resourceCulture);
+            }
+        }
     }
 }

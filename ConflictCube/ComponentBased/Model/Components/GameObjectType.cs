@@ -20,6 +20,9 @@
         OrangeBlock,
         BlueBlock,
         OrangeFloor,
-        BlueFloor
+        BlueFloor,
+        None,
+        ActiveButton,
+        NotActiveButton
     }
 }

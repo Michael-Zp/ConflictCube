@@ -1,4 +1,5 @@
 ﻿using ConflictCube.ComponentBased.Components;
+using ConflictCube.ComponentBased.Components.Objects.Tiles;
 using OpenTK;
 using System;
 using System.Drawing;
@@ -38,10 +39,20 @@ namespace ConflictCube.ComponentBased
 
         protected override void HitSelectedBlock()
         {
-            if (GetFloorTileOfUseField().Type == GameObjectType.BlueBlock)
+            if (UseFieldIsOnUsableField())
             {
-                GetFloorTileOfUseField().ChangeFloorTile(GameObjectType.Floor);
+                GetLevelTileOnCubeLayerOfSelectedField().Enabled = false;
             }
+        }
+
+        protected override bool UseFieldIsOnUsableField()
+        {
+            LevelTile useTile = GetLevelTileOnCubeLayerOfSelectedField();
+            if (useTile.Type == GameObjectType.BlueBlock && useTile.EnabledInHierachy)
+            {
+                return true;
+            }
+            return false;
         }
 
         public override void OnCollision(Collider other)
@@ -55,5 +66,6 @@ namespace ConflictCube.ComponentBased
                     break;
             }
         }
+
     }
 }

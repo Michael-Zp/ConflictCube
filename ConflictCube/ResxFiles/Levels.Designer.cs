@@ -8,8 +8,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ConflictCube.ResxFiles {
-    using System;
+namespace ConflictCube.ResxFiles
+{
     
     
     /// <summary>

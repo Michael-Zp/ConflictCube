@@ -6,41 +6,77 @@ using Zenseless.HLGL;
 
 namespace ConflictCube.ComponentBased.Components.Objects.Tiles
 {
-    public class FloorTile : GameObject
+    public class LevelTile : GameObject
     {
-        public static Dictionary<GameObjectType, Material> FloorTileMaterials = new Dictionary<GameObjectType, Material>();
+        public static Dictionary<int, Material> FloorTileMaterials = new Dictionary<int, Material>();
 
         public int Row { get; private set; }
         public int Column { get; private set; }
 
+
+        private static GameObjectType[] TileIndexToObjectType = new GameObjectType[48];
         private static bool MaterialsAreInitialized = false;
         private Floor FloorOfTile;
         private int Health = 0;
+        private int TileIndex = 0;
 
         private static void InitalizeMaterials()
         {
-            SpriteSheet spriteSheet = Tilesets.Instance().FloorSheetIceFire;
-            FloorTileMaterials.Add(GameObjectType.Finish, new Material(Color.White, spriteSheet.Tex, new Box2D(spriteSheet.CalcSpriteTexCoords(0))));
-            FloorTileMaterials.Add(GameObjectType.Floor,  new Material(Color.White, spriteSheet.Tex, new Box2D(spriteSheet.CalcSpriteTexCoords(1))));
-            FloorTileMaterials.Add(GameObjectType.Hole,   new Material(Color.White, spriteSheet.Tex, new Box2D(spriteSheet.CalcSpriteTexCoords(2))));
-            FloorTileMaterials.Add(GameObjectType.Wall,   new Material(Color.White, spriteSheet.Tex, new Box2D(spriteSheet.CalcSpriteTexCoords(3))));
-            FloorTileMaterials.Add(GameObjectType.OrangeBlock, new Material(Color.White, spriteSheet.Tex, new Box2D(spriteSheet.CalcSpriteTexCoords(4))));
-            FloorTileMaterials.Add(GameObjectType.BlueBlock, new Material(Color.White, spriteSheet.Tex, new Box2D(spriteSheet.CalcSpriteTexCoords(5))));
-            FloorTileMaterials.Add(GameObjectType.OrangeFloor, new Material(Color.White, spriteSheet.Tex, new Box2D(spriteSheet.CalcSpriteTexCoords(6))));
-            FloorTileMaterials.Add(GameObjectType.BlueFloor, new Material(Color.White, spriteSheet.Tex, new Box2D(spriteSheet.CalcSpriteTexCoords(7))));
+            SpriteSheet spriteSheet = Tilesets.Instance().NewFloorSheet;
+            AddTileMaterial(GameObjectType.Finish, spriteSheet, 1);
+            AddTileMaterial(GameObjectType.Floor, spriteSheet, 2);
+
+            for (uint i = 3; i <= 41; i++)
+            {
+                AddTileMaterial(GameObjectType.Wall, spriteSheet, i);
+            }
+
+            AddTileMaterial(GameObjectType.None, spriteSheet, 42); //Not used but I dont want to change the spritesheet again...
+
+            AddTileMaterial(GameObjectType.OrangeFloor, spriteSheet, 43);
+            AddTileMaterial(GameObjectType.BlueFloor, spriteSheet, 44);
+            AddTileMaterial(GameObjectType.NotActiveButton, spriteSheet, 45);
+            AddTileMaterial(GameObjectType.ActiveButton, spriteSheet, 46);
+            AddTileMaterial(GameObjectType.BlueBlock, spriteSheet, 47);
+            AddTileMaterial(GameObjectType.OrangeBlock, spriteSheet, 48);
+
+
+            MaterialsAreInitialized = true;
         }
 
-        public FloorTile(int row, int column, string name, Transform transform, GameObject parent, GameObjectType type, Floor floorOfTile) : base(name, transform, parent, type)
+        private static void AddTileMaterial(GameObjectType type, SpriteSheet spriteSheet, uint index)
+        {
+            FloorTileMaterials.Add((int)index, new Material(Color.White, spriteSheet.Tex, new Box2D(spriteSheet.CalcSpriteTexCoords(index - 1))));
+            TileIndexToObjectType[index - 1] = type;
+        }
+
+        public static GameObjectType GetGameObjectTypeForIndex(int index)
+        {
+            if(!MaterialsAreInitialized)
+            {
+                InitalizeMaterials();
+            }
+
+            if(index <= 0)
+            {
+                return GameObjectType.None;
+            }
+
+            return TileIndexToObjectType[index - 1];
+        }
+
+        public LevelTile(int row, int column, string name, Transform transform, GameObject parent, int tileIndex, Floor floorOfTile) : base(name, transform, parent)
         {
             if (!MaterialsAreInitialized)
             {
                 InitalizeMaterials();
-                MaterialsAreInitialized = true;
             }
 
             Row = row;
             Column = column;
             FloorOfTile = floorOfTile;
+            TileIndex = tileIndex;
+            Type = GetGameObjectTypeForIndex(TileIndex);
 
             InitializeComponentsAndHealth();
         }
@@ -58,7 +94,7 @@ namespace ConflictCube.ComponentBased.Components.Objects.Tiles
 
         private void AddMaterialOnCreate()
         {
-            FloorTileMaterials.TryGetValue(Type, out Material material);
+            FloorTileMaterials.TryGetValue(TileIndex, out Material material);
 
             AddComponent(material);
         }
@@ -71,19 +107,19 @@ namespace ConflictCube.ComponentBased.Components.Objects.Tiles
             }
             else if (Type == GameObjectType.OrangeBlock)
             {
-                AddComponent(new BoxCollider(new Transform(0, 0, 1, 1), false, group, CollisionType.OrangeBlock));
+                AddComponent(new BoxCollider(new Transform(0, 0, .85f, .85f), false, group, CollisionType.OrangeBlock));
             }
             else if (Type == GameObjectType.BlueBlock)
             {
-                AddComponent(new BoxCollider(new Transform(0, 0, 1, 1), false, group, CollisionType.BlueBlock));
+                AddComponent(new BoxCollider(new Transform(0, 0, .85f, .85f), false, group, CollisionType.BlueBlock));
             }
             else if (Type == GameObjectType.OrangeFloor)
             {
-                AddComponent(new BoxCollider(new Transform(0, 0, 1, 1), false, group, CollisionType.OrangeFloor, CollisionLayer.Orange));
+                AddComponent(new BoxCollider(new Transform(0, 0, .8f, .8f), false, group, CollisionType.OrangeFloor, CollisionLayer.Orange));
             }
             else if (Type == GameObjectType.BlueFloor)
             {
-                AddComponent(new BoxCollider(new Transform(0, 0, 1, 1), false, group, CollisionType.BlueFloor, CollisionLayer.Blue));
+                AddComponent(new BoxCollider(new Transform(0, 0, .8f, .8f), false, group, CollisionType.BlueFloor, CollisionLayer.Blue));
             }
             else if (Type == GameObjectType.Hole)
             {
@@ -139,7 +175,7 @@ namespace ConflictCube.ComponentBased.Components.Objects.Tiles
 
         public override GameObject Clone()
         {
-            FloorTile newGameObject = (FloorTile)base.Clone();
+            LevelTile newGameObject = (LevelTile)base.Clone();
 
             newGameObject.Row = Row;
             newGameObject.Column = Column;

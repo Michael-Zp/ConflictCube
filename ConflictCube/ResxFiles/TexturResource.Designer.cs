@@ -83,9 +83,29 @@ namespace ConflictCube.ResxFiles {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap NewPlayerTexture {
+            get {
+                object obj = ResourceManager.GetObject("NewPlayerTexture", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap PlayerTexture {
             get {
                 object obj = ResourceManager.GetObject("PlayerTexture", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap SpritesheetNewTextures {
+            get {
+                object obj = ResourceManager.GetObject("SpritesheetNewTextures", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

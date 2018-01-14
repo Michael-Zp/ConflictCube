@@ -49,8 +49,15 @@ namespace ConflictCube.ComponentBased.Components
             {
                 if (other is BoxCollider)
                 {
-                    Transform thisGlobalBox = Box.Owner.Transform.TransformToGlobal();
-                    Transform otherGlobalBox = ((BoxCollider)other).Box.Owner.Transform.TransformToGlobal();
+                    /*
+                        If there are problems change to that:
+                     
+                        Transform thisGlobalBox = Box.Owner.Transform.TransformToGlobal();
+                        Transform otherGlobalBox = ((BoxCollider)other).Box.Owner.Transform.TransformToGlobal();
+                    */
+
+                    Transform thisGlobalBox = GetGlobalCollisionBox();
+                    Transform otherGlobalBox = ((BoxCollider)other).GetGlobalCollisionBox();
 
                     if(DebugGame.DrawBoxColliderCollisions)
                     {
