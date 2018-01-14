@@ -1,5 +1,4 @@
-﻿using OpenTK.Graphics;
-using OpenTK.Graphics.OpenGL;
+﻿using OpenTK.Graphics.OpenGL;
 using ConflictCube.ComponentBased.Controller;
 using ConflictCube.ComponentBased.Components;
 using ConflictCube.ComponentBased.Model.Components.UI;
@@ -117,9 +116,9 @@ namespace ConflictCube.ComponentBased
             if(currentObject is TextField)
             {
                 TextField text = (TextField)currentObject;
-                Transform globalTransform = globalTransformInCamera;
-
-                OpenTKWrapper.PrintText(globalTransform.GetPosition(WorldRelation.Global).X, globalTransform.GetPosition(WorldRelation.Global).Y, globalTransform.GetSize(WorldRelation.Global).X, globalTransform.GetSize(WorldRelation.Global).Y, text.Text);
+                float scaleFactor = 2.625f;
+                OpenTKWrapper.PrintText(0, 0, scaleFactor, scaleFactor, text.Text, text.Font);
+                globalTransformInCamera.SetSize(globalTransformInCamera.GetSize(WorldRelation.Global) / scaleFactor, WorldRelation.Global);
             }
 
             //Apply shaders
@@ -165,7 +164,6 @@ namespace ConflictCube.ComponentBased
 
             targetFBO.Activate();
             
-
             OpenTKWrapper.DrawBox(globalTransformInCamera.GetGlobalRotatedRectangel(), Color.White, RenderFrameBufferObject.Texture, new Zenseless.Geometry.Box2D(-1, -1, 1, 1), true);
 
             targetFBO.Deactivate();

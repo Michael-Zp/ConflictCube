@@ -115,11 +115,11 @@ namespace ConflictCube.ComponentBased.Components.Objects.Tiles
             }
             else if (Type == GameObjectType.OrangeFloor)
             {
-                AddComponent(new BoxCollider(new Transform(0, 0, .8f, .8f), false, group, CollisionType.OrangeFloor, CollisionLayer.Orange));
+                AddComponent(new BoxCollider(new Transform(0, 0, .7f, .7f), false, group, CollisionType.OrangeFloor, CollisionLayer.Orange));
             }
             else if (Type == GameObjectType.BlueFloor)
             {
-                AddComponent(new BoxCollider(new Transform(0, 0, .8f, .8f), false, group, CollisionType.BlueFloor, CollisionLayer.Blue));
+                AddComponent(new BoxCollider(new Transform(0, 0, .7f, .7f), false, group, CollisionType.BlueFloor, CollisionLayer.Blue));
             }
             else if (Type == GameObjectType.Hole)
             {

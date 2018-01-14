@@ -1,5 +1,6 @@
 ﻿using ConflictCube.ComponentBased.Components;
 using ConflictCube.ComponentBased.Components.Objects.Tiles;
+using ConflictCube.ComponentBased.Model.Components.UI;
 using OpenTK;
 using System;
 using System.Drawing;
@@ -69,7 +70,7 @@ namespace ConflictCube.ComponentBased
             switch (other.Type)
             {
                 case CollisionType.BlueFloor:
-                    Die();
+                    Die(Name + " stepped into deadly water without rubber boots.");
                     break;
             }
         }

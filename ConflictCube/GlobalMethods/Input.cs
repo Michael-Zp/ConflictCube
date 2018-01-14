@@ -326,6 +326,11 @@ namespace ConflictCube.ComponentBased
             return GamePad.GetState(activeGamePad).IsPressed(button) && !LastGamePadState[activeGamePad].IsPressed(button);
         }
 
+        public static bool AnyButtonDown()
+        {
+            return CurrentKeyboardState.IsAnyKeyDown && !LastKeyboardState.IsAnyKeyDown;
+        }
+
         public static bool OnButtonDown(Key key)
         {
             return CurrentKeyboardState.IsKeyDown(key) && !LastKeyboardState.IsKeyDown(key);

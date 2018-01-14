@@ -79,6 +79,7 @@
     <Compile Include="ComponentBased\Controller\ViewModel.cs" />
     <Compile Include="ComponentBased\DebugGame.cs" />
     <Compile Include="ComponentBased\Model\Components\Objects\Players\UseField.cs" />
+    <Compile Include="ComponentBased\Model\Components\UI\GameOverScreen.cs" />
     <Compile Include="ResxFiles\FontResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

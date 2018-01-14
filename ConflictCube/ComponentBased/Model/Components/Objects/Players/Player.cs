@@ -5,6 +5,7 @@ using ConflictCube.ComponentBased.Components.Objects.Tiles;
 using System.Drawing;
 using ConflictCube.ResxFiles;
 using ConflictCube.ComponentBased.Model.Components.Objects.Players;
+using ConflictCube.ComponentBased.Model.Components.UI;
 
 namespace ConflictCube.ComponentBased
 {
@@ -17,7 +18,8 @@ namespace ConflictCube.ComponentBased
         public float UsedSprintEnergyPerSecond = 100;
         public float RegeneratSprintEnergyPerSecond = 20;
         public Player OtherPlayer;
-            
+        public GameOverScreen GameOverScreen;
+
         protected UseField UseField { get; set; }
         protected float UseCooldown = 1.0f;
         protected float LastUse { get; set; }
@@ -46,6 +48,7 @@ namespace ConflictCube.ComponentBased
         protected GameObject AfterglowY;
         protected GameObject AfterglowX;
         protected GameObject AfterglowXY;
+
 
 
         /// <summary>
@@ -420,7 +423,7 @@ namespace ConflictCube.ComponentBased
             }
             else if (other.Type == CollisionType.Hole)
             {
-                Die();
+                Die(Name + " fell into a hole");
             }
             else if (other.Type == CollisionType.Finish)
             {
@@ -429,17 +432,19 @@ namespace ConflictCube.ComponentBased
             }
         }
 
-        public void Die()
+        public void Die(string reason)
         {
-            if(DebugGame.CanDie)
+            if(DebugGame.CanDie && IsAlive)
             {
                 IsAlive = false;
+                GameOverScreen.SetDeathReason(reason);
             }
         }
 
         public void ResetToLastCheckpoint()
         {
             Transform.SetPosition(CurrentFloor.FindStartPosition().GetPosition(WorldRelation.Global), WorldRelation.Global);
+            Transform.SetRotation(0, WorldRelation.Global);
         }
 
         public bool CanMove()

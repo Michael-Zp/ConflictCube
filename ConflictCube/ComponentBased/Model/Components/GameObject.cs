@@ -49,12 +49,18 @@ namespace ConflictCube.ComponentBased.Components
         }
 
         public GameObject(string name, Transform transform) : this(name, transform, null)
-        {}
+        { }
+
+        public GameObject(string name, Transform transform, bool enabled = true) : this(name, transform, GameObjectType.Default, enabled)
+        { }
 
         public GameObject(string name, Transform transform, GameObject parent) : this(name, transform, parent, GameObjectType.Default)
         {}
 
-        public GameObject(string name, Transform transform, GameObject parent, GameObjectType type, bool enabled = true)
+        public GameObject(string name, Transform transform, GameObjectType type, bool enabled = true) : this(name, transform, null, type, enabled)
+        { }
+
+            public GameObject(string name, Transform transform, GameObject parent, GameObjectType type, bool enabled = true)
         {
             Name = name;
             Transform = transform;

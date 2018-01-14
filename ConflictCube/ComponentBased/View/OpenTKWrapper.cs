@@ -3,6 +3,7 @@ using OpenGL = OpenTK.Graphics.OpenGL;
 using Zenseless.Geometry;
 using System.Drawing;
 using Zenseless.HLGL;
+using static ConflictCube.ComponentBased.View.ZenselessWrapper;
 
 namespace ConflictCube.ComponentBased
 {
@@ -109,13 +110,16 @@ namespace ConflictCube.ComponentBased
             GL.End();
         }
 
-        public void PrintText(float xPos, float yPos, float xSize, float ySize, string text)
+        public void PrintText(float xPos, float yPos, float xSize, float ySize, string text, MyTextureFont font)
         {
             EnableAlphaChannel();
             EnableTextures();
-            
-            Font.Instance().TextureFont.PrintWithSize(xPos, yPos, 0f, xSize, ySize, 1f, text);
 
+            float characterLength = xSize / text.Length;
+
+            //Text is left/bottom aligned. With this calculation it will be approximately center alingend
+            font.PrintWithSize(xPos - (xSize * 3.8f / 10), yPos - (ySize * 3 / 5), 0f, characterLength, ySize, 1f, text);
+            
             DisableTextures();
             DisableAlphaChannel();
         }

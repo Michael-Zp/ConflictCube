@@ -6,7 +6,8 @@ namespace ConflictCube.ComponentBased
 {
     public class Font
     {
-        public MyTextureFont TextureFont;
+        public MyTextureFont NormalFont;
+        public MyTextureFont BloodBath;
 
         private static Font FontInstance = null;
 
@@ -22,7 +23,8 @@ namespace ConflictCube.ComponentBased
 
         public Font()
         {
-            TextureFont = new MyTextureFont(TextureLoader.FromBitmap(FontResources.Font1), 10, 32, .8f, 1, .7f);
+            NormalFont = new MyTextureFont(TextureLoader.FromBitmap(FontResources.Font1), 10, 32, .8f, 1, .7f);
+            BloodBath = new MyTextureFont(TextureLoader.FromBitmap(FontResources.Blood_Bath_2), 10, 32, .8f, 1, .7f);
         }
     }
 }

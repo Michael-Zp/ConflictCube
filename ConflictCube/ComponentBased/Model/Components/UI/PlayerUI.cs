@@ -54,7 +54,7 @@ namespace ConflictCube.ComponentBased
 
             BackgroundLayer.AddChild(new Canvas("Background", new Transform(0, 0, 1, 1), this, BackgroundMat));
 
-            ForegroundLayer.AddChild(new TextField("HealthText", new Transform(-.85f, .9f, .37f, .1f), "Health"));
+            ForegroundLayer.AddChild(new TextField("HealthText", new Transform(-.85f, .9f, .37f, .1f), "Health", Font.Instance().NormalFont));
 
             PlayerHealth = new Canvas("Health" + player.Name, new Transform(0, .85f, .8f, .05f), ForegroundLayer, PlayerAliveMat);
             ForegroundLayer.AddChild(PlayerHealth);
@@ -90,15 +90,15 @@ namespace ConflictCube.ComponentBased
             leftButtonTextTransform.SetSize(leftButtonTextTransform.GetSize(WorldRelation.Global) * .8f, WorldRelation.Global);
             rightButtonTextTransform.SetSize(rightButtonTextTransform.GetSize(WorldRelation.Global) * .8f, WorldRelation.Global);
 
-            ForegroundLayer.AddChild(new TextField("xySwap", topButtonTextTransform, "xy"));
-            ForegroundLayer.AddChild(new TextField("xySwap", leftButtonTextTransform, "x"));
-            ForegroundLayer.AddChild(new TextField("xySwap", rightButtonTextTransform, "y"));
+            ForegroundLayer.AddChild(new TextField("xySwap", topButtonTextTransform, "xy", Font.Instance().NormalFont));
+            ForegroundLayer.AddChild(new TextField("xySwap", leftButtonTextTransform, "x", Font.Instance().NormalFont));
+            ForegroundLayer.AddChild(new TextField("xySwap", rightButtonTextTransform, "y", Font.Instance().NormalFont));
 
 
             //Sprint Energy
 
-            ForegroundLayer.AddChild(new TextField("Sprint", new Transform(-.8f, -.35f, .3f, .1f), "Sprint-"));
-            ForegroundLayer.AddChild(new TextField("Energy", new Transform(-.8f, -.45f, .3f, .1f), "energy:"));
+            ForegroundLayer.AddChild(new TextField("Sprint", new Transform(-.8f, -.35f, .3f, .1f), "Sprint-", Font.Instance().NormalFont));
+            ForegroundLayer.AddChild(new TextField("Energy", new Transform(-.8f, -.45f, .3f, .1f), "energy:", Font.Instance().NormalFont));
 
             SprintEnergyBackground = new Canvas("SprintEnergyBackground", new Transform(0, -.6f, .8f, .1f), ForegroundLayer, SprintEnergyBackgroundMaterial);
             ForegroundLayer.AddChild(SprintEnergyBackground);

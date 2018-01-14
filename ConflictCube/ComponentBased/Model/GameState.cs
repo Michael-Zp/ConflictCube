@@ -7,6 +7,7 @@ using ConflictCube.ComponentBased.Controller;
 using ConflictCube.ComponentBased.Model.Components.Objects;
 using ConflictCube.ComponentBased.View;
 using ConflictCube.ResxFiles;
+using ConflictCube.ComponentBased.Model.Components.UI;
 
 namespace ConflictCube.ComponentBased
 {
@@ -23,10 +24,11 @@ namespace ConflictCube.ComponentBased
 
         private Transform UiPlayer2Transform = new Transform(.85f, -.8f, .15f, .4f);
         private Transform ScenePlayer2Transform = new Transform(0f, 0, 1f, 1f);
+        
 
-
-
-        private Button Button;
+        //private Button Button;
+        private GameOverScreen GameOverScreen;
+        private GameObject UI;
 
         public GameState(int windowWidth, int windowHeight)
         {
@@ -59,6 +61,7 @@ namespace ConflictCube.ComponentBased
 
             InitializePlayers();
             InitializeUI();
+            InitializeGameOverScreen();
 
 
             CameraManager cameraManager = new CameraManager("CameraManager", new Transform(), new List<Camera>() { Player1Camera, Player2Camera }, (Floor)scene.FindGameObjectByTypeInChildren<Floor>(), Players);
@@ -106,15 +109,15 @@ namespace ConflictCube.ComponentBased
 
         private void InitializeUI()
         {
-            GameObject ui = new GameObject("UI", new Transform());
+            UI = new GameObject("UI", new Transform());
 
-            GameObject player1UI = new PlayerUI("Player0UI", Players[0], UiPlayer1Transform, ui);
-            ui.AddChild(player1UI);
+            GameObject player1UI = new PlayerUI("Player0UI", Players[0], UiPlayer1Transform, UI);
+            UI.AddChild(player1UI);
             
-            GameObject player2UI = new PlayerUI("Player0UI", Players[1], UiPlayer2Transform, ui);
-            ui.AddChild(player2UI);
+            GameObject player2UI = new PlayerUI("Player0UI", Players[1], UiPlayer2Transform, UI);
+            UI.AddChild(player2UI);
 
-            UICamera.RootGameObject = ui;
+            UICamera.RootGameObject = UI;
         }
 
         public void InitializePlayers()
@@ -139,13 +142,13 @@ namespace ConflictCube.ComponentBased
             Players.Add(new OrangePlayer("FirePlayer", new Transform(0, 0, .06f, .06f), Player1Collider, playerMat, floor, floor, .2f, GameObjectType.PlayerFire, null));
             floor.AddChild(Players[0]);
             Players[0].ResetToLastCheckpoint();
-            Players[0].AddChild(new ColoredBox("Player0Orange", new Transform(), playerOrangeMat, Players[0]));
+            Players[0].AddChild(new ColoredBox("Player0Orange", new Transform(), playerOrangeMat));
 
             BoxCollider Player2Collider = new BoxCollider(new Transform(0, 0, 1, 1), false, floor.CollisionGroup, CollisionType.PlayerIce);
             Players.Add(new BluePlayer("IcePlayer", new Transform(0, 0, .06f, .06f), Player2Collider, playerMat, floor, floor, .2f, GameObjectType.PlayerIce, null));
             floor.AddChild(Players[1]);
             Players[1].ResetToLastCheckpoint();
-            Players[1].AddChild(new ColoredBox("Player1Blue", new Transform(), playerBlueMat, Players[1]));
+            Players[1].AddChild(new ColoredBox("Player1Blue", new Transform(), playerBlueMat));
 
             //Other Players
             Players[0].OtherPlayer = Players[1];
@@ -157,28 +160,62 @@ namespace ConflictCube.ComponentBased
         }
 
 
-        public void UpdateAll()
+        private void InitializeGameOverScreen()
         {
-            Game.UpdateAll();
+            GameOverScreen = new GameOverScreen("GameOverScreen", new Transform());
+            UI.AddChild(GameOverScreen);
+            GameOverScreen.Enabled = false;
 
-            CheckLooseCondition();
+            foreach(Player player in Players)
+            {
+                player.GameOverScreen = GameOverScreen;
+            }
         }
 
-        private void CheckLooseCondition()
+
+        public void UpdateAll()
+        {
+            //Axes
+            //GameView.DrawDebug(new Transform(0, 0, 1f, .002f), Color.Red);
+            //GameView.DrawDebug(new Transform(0, 0, .001f, 1f), Color.Blue);
+
+            if (!CheckLooseCondition())
+            {
+                Game.UpdateAll();
+            }
+        }
+
+        private bool CheckLooseCondition()
         {
             if(!DebugGame.CanLoose)
             {
-                return;
+                return false;
             }
 
             if (!Players[0].IsAlive || !Players[1].IsAlive)
             {
-                foreach(Player player in Players)
+                Players[0].IsAlive = false;
+                Players[1].IsAlive = false;
+
+                GameOverScreen.Enabled = true;
+
+                if(Input.AnyButtonDown())
                 {
-                    player.ResetToLastCheckpoint();
-                    player.IsAlive = true;
+                    foreach (Player player in Players)
+                    {
+                        player.ResetToLastCheckpoint();
+                        player.IsAlive = true;
+                    }
+
+                    GameOverScreen.Enabled = false;
+
+                    return true;
                 }
+
+                return true;
             }
+
+            return false;
         }
         
         public ViewModel GetViewModel()
