@@ -78,7 +78,8 @@ namespace ConflictCube.ResxFiles {
         ///4,2,2,4
         ///&lt;/data&gt;
         /// &lt;/layer&gt;
-        /// &lt;layer name=&quot;Cubes&quot; width=&quot;4&quot; height=&quot;10&quot; [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
+        /// &lt;layer name=&quot;Cubes&quot; width=&quot;4&quot; height=&quot;10&quot;&gt;
+        ///  &lt;data encodin [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
         /// </summary>
         internal static string FireIceFirstTestNewTileset {
             get {
@@ -104,11 +105,84 @@ namespace ConflictCube.ResxFiles {
         ///43,43,2,12
         ///&lt;/data&gt;
         /// &lt;/layer&gt;
-        /// &lt;layer name=&quot;Cu [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
+        /// &lt;layer name=&quot;Cubes&quot; width=&quot;4&quot; he [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
         /// </summary>
         internal static string FireIceSecondTestNewTileset {
             get {
                 return ResourceManager.GetString("FireIceSecondTestNewTileset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+        ///&lt;map version=&quot;1.0&quot; tiledversion=&quot;1.0.3&quot; orientation=&quot;orthogonal&quot; renderorder=&quot;right-down&quot; width=&quot;8&quot; height=&quot;8&quot; tilewidth=&quot;64&quot; tileheight=&quot;64&quot; nextobjectid=&quot;1&quot;&gt;
+        /// &lt;tileset firstgid=&quot;1&quot; source=&quot;../../ConflictCube/Textures/ConCubeTileset.tsx&quot;/&gt;
+        /// &lt;layer name=&quot;Floor&quot; width=&quot;8&quot; height=&quot;8&quot;&gt;
+        ///  &lt;data encoding=&quot;csv&quot;&gt;
+        ///1,1,1,1,1,1,1,1,
+        ///2,2,2,2,2,2,2,2,
+        ///2,2,2,2,2,2,2,2,
+        ///2,2,2,2,2,2,2,2,
+        ///3,3,3,3,3,2,2,2,
+        ///43,43,43,43,4,2,2,2,
+        ///8,43,19,10,4,2,2,2,
+        ///2,43,25,2,2,2,2,2
+        ///&lt;/data&gt;        /// [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
+        /// </summary>
+        internal static string XShiftTest {
+            get {
+                return ResourceManager.GetString("XShiftTest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+        ///&lt;map version=&quot;1.0&quot; tiledversion=&quot;1.0.3&quot; orientation=&quot;orthogonal&quot; renderorder=&quot;right-down&quot; width=&quot;3&quot; height=&quot;8&quot; tilewidth=&quot;64&quot; tileheight=&quot;64&quot; nextobjectid=&quot;1&quot;&gt;
+        /// &lt;tileset firstgid=&quot;1&quot; source=&quot;../../ConflictCube/Textures/ConCubeTileset.tsx&quot;/&gt;
+        /// &lt;layer name=&quot;Floor&quot; width=&quot;3&quot; height=&quot;8&quot;&gt;
+        ///  &lt;data encoding=&quot;csv&quot;&gt;
+        ///1,1,1,
+        ///2,2,2,
+        ///2,2,2,
+        ///10,2,30,
+        ///43,2,43,
+        ///43,43,43,
+        ///43,43,43,
+        ///2,6,12
+        ///&lt;/data&gt;
+        /// &lt;/layer&gt;
+        /// &lt;layer name=&quot;Cubes&quot; width=&quot;3&quot; height=&quot;8&quot;&gt;
+        ///  &lt;data encoding=&quot;csv&quot; [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
+        /// </summary>
+        internal static string XYShiftTest {
+            get {
+                return ResourceManager.GetString("XYShiftTest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+        ///&lt;map version=&quot;1.0&quot; tiledversion=&quot;1.0.3&quot; orientation=&quot;orthogonal&quot; renderorder=&quot;right-down&quot; width=&quot;3&quot; height=&quot;8&quot; tilewidth=&quot;64&quot; tileheight=&quot;64&quot; nextobjectid=&quot;1&quot;&gt;
+        /// &lt;tileset firstgid=&quot;1&quot; source=&quot;../../ConflictCube/Textures/ConCubeTileset.tsx&quot;/&gt;
+        /// &lt;layer name=&quot;Floor&quot; width=&quot;3&quot; height=&quot;8&quot;&gt;
+        ///  &lt;data encoding=&quot;csv&quot;&gt;
+        ///1,1,1,
+        ///2,2,2,
+        ///2,2,2,
+        ///2,2,2,
+        ///2,18,10,
+        ///2,12,43,
+        ///37,41,43,
+        ///2,2,43
+        ///&lt;/data&gt;
+        /// &lt;/layer&gt;
+        /// &lt;layer name=&quot;Cubes&quot; width=&quot;3&quot; height=&quot;8&quot;&gt;
+        ///  &lt;data encoding=&quot;csv&quot;&gt;
+        /// [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
+        /// </summary>
+        internal static string YShiftTest {
+            get {
+                return ResourceManager.GetString("YShiftTest", resourceCulture);
             }
         }
     }

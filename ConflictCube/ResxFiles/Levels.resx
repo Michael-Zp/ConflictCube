@@ -118,26 +118,53 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="Level0" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Level0.csv;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="level1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\level1.csv;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="Level2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Level2.csv;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
   <data name="FireIceFirstTest" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\FireIceFirstTest.csv;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="FireIceSecondTest" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\FireIceSecondTest.csv;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="FireIceFourthTest" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\FireIceFourthTest.csv;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
+  <data name="FireIceSecondTest" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FireIceSecondTest.csv;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
   <data name="FireIceThirdTest" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\FireIceThirdTest.csv;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="Level0" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Level0.csv;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="Level0Left" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Level0Left.csv;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="Level0Middle" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Level0Middle.csv;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="Level0Right" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Level0Right.csv;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="level1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\level1.csv;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="Level1Left" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Level1Left.csv;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="Level1Middle" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Level1Middle.csv;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="Level1Right" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Level1Right.csv;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="Level2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Level2.csv;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="Level2Left" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Level2Left.csv;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="Level2Middle" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Level2Middle.csv;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="Level2Right" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Level2Right.csv;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="XShiftTest" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\XShiftTest.csv;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>

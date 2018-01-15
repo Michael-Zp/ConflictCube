@@ -8,8 +8,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ConflictCube.ResxFiles
-{
+namespace ConflictCube.ResxFiles {
+    using System;
     
     
     /// <summary>
@@ -64,7 +64,7 @@ namespace ConflictCube.ResxFiles
         ///   Sucht eine lokalisierte Zeichenfolge, die 0,0,0,0
         ///3,1,1,3
         ///3,1,1,3
-        ///3,4,4,3
+        ///3,1,1,3
         ///3,5,5,3
         ///3,4,4,3
         ///3,1,1,3
@@ -152,6 +152,83 @@ namespace ConflictCube.ResxFiles
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die 0,0,0,0
+        ///1,1,1,1
+        ///1,3,3,1
+        ///1,1,3,3
+        ///2,1,1,3
+        ///3,3,1,1
+        ///3,3,1,2
+        ///3,3,1,1
+        ///3,1,1,1
+        ///3,1,3,3
+        /// ähnelt.
+        /// </summary>
+        internal static string Level0Left {
+            get {
+                return ResourceManager.GetString("Level0Left", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die 3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        /// ähnelt.
+        /// </summary>
+        internal static string Level0Middle {
+            get {
+                return ResourceManager.GetString("Level0Middle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die 0,0,0,0
+        ///1,1,1,1
+        ///1,3,3,1
+        ///1,1,3,3
+        ///2,1,1,3
+        ///3,3,1,1
+        ///3,3,1,2
+        ///3,3,1,1
+        ///3,1,1,1
+        ///3,1,3,3
+        /// ähnelt.
+        /// </summary>
+        internal static string Level0Right {
+            get {
+                return ResourceManager.GetString("Level0Right", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die 0,0,0,0,0,0,0,0,0,0
         ///1,3,3,3,3,3,3,3,3,3
         ///1,1,1,1,1,1,1,1,1,1
@@ -187,6 +264,113 @@ namespace ConflictCube.ResxFiles
         
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die 0,0,0,0,0,0,0,0,0,0
+        ///1,3,3,3,3,3,3,3,3,3
+        ///1,1,1,1,1,1,1,1,1,1
+        ///3,3,3,3,2,3,3,3,1,3
+        ///1,1,1,1,1,2,2,2,1,1
+        ///1,2,2,1,1,1,1,1,1,1
+        ///1,1,3,3,3,3,3,3,3,3
+        ///3,1,3,1,1,1,1,1,1,1
+        ///3,1,3,1,3,3,3,3,3,1
+        ///1,1,3,1,3,1,1,1,3,1
+        ///1,3,3,1,3,1,3,1,3,1
+        ///1,1,1,1,3,1,3,1,3,1
+        ///3,3,3,3,3,1,3,1,1,1
+        ///1,1,1,1,1,1,3,3,3,3
+        ///1,3,3,3,3,3,3,1,1,1
+        ///1,3,3,1,2,1,2,1,3,1
+        ///1,1,3,1,2,1,1,1,3,1
+        ///3,1,3,1,1,1,1,1,3,1
+        ///3,1,1,1,3,3,3,3,3,1
+        ///3,3,3,3,3,1,1,1,1,1
+        ///1,1,1,1,1,1,3,3,3,3
+        ///1,3,3,3,1,1,3,1,1,1
+        ///1,1,1,3,1,1,3,1,3,1
+        ///3,3,1,3,1,2,3,1,3,1
+        ///1,1,1,3,1,1,1,1,3,1
+        ///1,3,3,3,3,3, [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
+        /// </summary>
+        internal static string Level1Left {
+            get {
+                return ResourceManager.GetString("Level1Left", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die 3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        /// ähnelt.
+        /// </summary>
+        internal static string Level1Middle {
+            get {
+                return ResourceManager.GetString("Level1Middle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die 0,0,0,0,0,0,0,0,0,0
+        ///1,3,3,3,3,3,3,3,3,3
+        ///1,1,1,1,1,1,1,1,1,1
+        ///3,3,3,3,2,3,3,3,1,3
+        ///1,1,1,1,1,2,2,2,1,1
+        ///1,2,2,1,1,1,1,1,1,1
+        ///1,1,3,3,3,3,3,3,3,3
+        ///3,1,3,1,1,1,1,1,1,1
+        ///3,1,3,1,3,3,3,3,3,1
+        ///1,1,3,1,3,1,1,1,3,1
+        ///1,3,3,1,3,1,3,1,3,1
+        ///1,1,1,1,3,1,3,1,3,1
+        ///3,3,3,3,3,1,3,1,1,1
+        ///1,1,1,1,1,1,3,3,3,3
+        ///1,3,3,3,3,3,3,1,1,1
+        ///1,3,3,1,2,1,2,1,3,1
+        ///1,1,3,1,2,1,1,1,3,1
+        ///3,1,3,1,1,1,1,1,3,1
+        ///3,1,1,1,3,3,3,3,3,1
+        ///3,3,3,3,3,1,1,1,1,1
+        ///1,1,1,1,1,1,3,3,3,3
+        ///1,3,3,3,1,1,3,1,1,1
+        ///1,1,1,3,1,1,3,1,3,1
+        ///3,3,1,3,1,2,3,1,3,1
+        ///1,1,1,3,1,1,1,1,3,1
+        ///1,3,3,3,3,3, [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
+        /// </summary>
+        internal static string Level1Right {
+            get {
+                return ResourceManager.GetString("Level1Right", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die 0,0,0,0,0,0,0,0,0,0
         ///1,1,1,1,1,1,1,1,1,1
         ///1,3,3,3,2,2,3,3,3,1
         ///1,3,1,1,1,1,1,1,1,1
@@ -216,6 +400,183 @@ namespace ConflictCube.ResxFiles
         internal static string Level2 {
             get {
                 return ResourceManager.GetString("Level2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die 0,0,0,0,0,0,0,0,0,0
+        ///1,1,1,1,1,1,1,1,1,1
+        ///1,3,3,3,2,2,3,3,3,1
+        ///1,3,1,1,1,1,1,1,1,1
+        ///1,3,1,3,1,1,3,3,3,3
+        ///1,3,1,3,1,1,1,1,1,3
+        ///1,3,1,3,1,1,1,3,1,3
+        ///1,1,1,3,1,1,1,3,1,3
+        ///3,3,3,3,1,1,1,3,1,3
+        ///1,1,1,3,3,3,1,3,1,3
+        ///2,2,1,1,1,1,1,3,1,1
+        ///1,1,1,3,3,3,3,3,3,2
+        ///1,3,3,3,1,1,1,3,3,2
+        ///1,3,1,1,1,3,1,3,3,2
+        ///1,3,1,3,1,3,1,3,3,1
+        ///1,3,1,3,1,3,1,1,1,1
+        ///1,3,1,3,1,3,3,3,3,3
+        ///1,3,1,3,1,1,1,1,1,1
+        ///1,3,1,3,3,3,3,3,1,1
+        ///1,3,1,1,3,1,1,1,1,1
+        ///1,3,3,1,3,1,3,3,3,3
+        ///1,1,1,1,3,1,1,1,1,3
+        ///3,3,3,3,3,3,3,3,1,3
+        ///1,1,1,1,1,1,1,1,1,3
+        ///1,3,3,3,2,3,1,3,3,3
+        ///1,3,1,1,1,3, [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
+        /// </summary>
+        internal static string Level2Left {
+            get {
+                return ResourceManager.GetString("Level2Left", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die 3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        ///3
+        /// ähnelt.
+        /// </summary>
+        internal static string Level2Middle {
+            get {
+                return ResourceManager.GetString("Level2Middle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die 0,0,0,0,0,0,0,0,0,0
+        ///1,1,1,1,1,1,1,1,1,1
+        ///1,3,3,3,2,2,3,3,3,1
+        ///1,3,1,1,1,1,1,1,1,1
+        ///1,3,1,3,1,1,3,3,3,3
+        ///1,3,1,3,1,1,1,1,1,3
+        ///1,3,1,3,1,1,1,3,1,3
+        ///1,1,1,3,1,1,1,3,1,3
+        ///3,3,3,3,1,1,1,3,1,3
+        ///1,1,1,3,3,3,1,3,1,3
+        ///2,2,1,1,1,1,1,3,1,1
+        ///1,1,1,3,3,3,3,3,3,2
+        ///1,3,3,3,1,1,1,3,3,2
+        ///1,3,1,1,1,3,1,3,3,2
+        ///1,3,1,3,1,3,1,3,3,1
+        ///1,3,1,3,1,3,1,1,1,1
+        ///1,3,1,3,1,3,3,3,3,3
+        ///1,3,1,3,1,1,1,1,1,1
+        ///1,3,1,3,3,3,3,3,1,1
+        ///1,3,1,1,3,1,1,1,1,1
+        ///1,3,3,1,3,1,3,3,3,3
+        ///1,1,1,1,3,1,1,1,1,3
+        ///3,3,3,3,3,3,3,3,1,3
+        ///1,1,1,1,1,1,1,1,1,3
+        ///1,3,3,3,2,3,1,3,3,3
+        ///1,3,1,1,1,3, [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
+        /// </summary>
+        internal static string Level2Right {
+            get {
+                return ResourceManager.GetString("Level2Right", resourceCulture);
             }
         }
         

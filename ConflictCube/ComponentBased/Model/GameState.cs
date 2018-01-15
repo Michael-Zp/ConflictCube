@@ -19,10 +19,10 @@ namespace ConflictCube.ComponentBased
         public Game Game { get; set; }
         public List<Player> Players { get; private set; }
 
-        private Transform UiPlayer1Transform = new Transform(-.85f, -.8f, .15f, .4f);
+        private Transform UiPlayer1Transform = new Transform(-.9f, -.8f, .1f, .4f);
         private Transform ScenePlayer1Transform = new Transform(0f, 0, 1f, 1f);
 
-        private Transform UiPlayer2Transform = new Transform(.85f, -.8f, .15f, .4f);
+        private Transform UiPlayer2Transform = new Transform(.9f, -.8f, .1f, .4f);
         private Transform ScenePlayer2Transform = new Transform(0f, 0, 1f, 1f);
         
 
@@ -36,7 +36,7 @@ namespace ConflictCube.ComponentBased
 
             Game = new Game("Game", new Transform(0, 0, 1, 1));
 
-            GameObject scene = SceneBuilder.BuildScene(LevelsWithNewTileset.FireIceSecondTestNewTileset, new Transform());
+            GameObject scene = SceneBuilder.BuildScene(LevelsWithNewTileset.XYShiftTest, new Transform());
             Game.AddChild(scene);
             Player1Camera.RootGameObject = scene;
             Player2Camera.RootGameObject = scene;

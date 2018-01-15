@@ -168,8 +168,9 @@
     <None Include="Resources\FireIceSecondTestNewTileset.tmx" />
     <None Include="Resources\FireIceThirdTest.csv" />
     <None Include="Resources\Level0.csv" />
-    <None Include="Resources\level1.csv" />
-    <None Include="Resources\Level2.csv" />
+    <None Include="Resources\Level0Left.csv" />
+    <None Include="Resources\Level0Middle.csv" />
+    <None Include="Resources\Level0Right.csv" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="ResxFiles\FontResources.resx">
@@ -201,6 +202,14 @@
     <None Include="Resources\FloorSpriteSheet.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\level1.csv" />
+    <None Include="Resources\Level1Left.csv" />
+    <None Include="Resources\Level1Middle.csv" />
+    <None Include="Resources\Level1Right.csv" />
+    <None Include="Resources\Level2.csv" />
+    <None Include="Resources\Level2Left.csv" />
+    <None Include="Resources\Level2Middle.csv" />
+    <None Include="Resources\Level2Right.csv" />
     <None Include="Resources\Tileset.png" />
   </ItemGroup>
   <ItemGroup>
@@ -214,8 +223,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\XShiftTest.csv" />
+    <None Include="Resources\XShiftTest.tmx" />
     <None Include="Resources\XYShiftTest.csv" />
+    <None Include="Resources\XYShiftTest.tmx" />
     <None Include="Resources\YShiftTest.csv" />
+    <None Include="Resources\YShiftTest.tmx" />
     <None Include="Shaders\Aftershadow.glsl" />
     <None Include="Textures\Sledgehammer.jpg" />
   </ItemGroup>
