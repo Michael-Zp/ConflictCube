@@ -19,6 +19,7 @@ namespace ConflictCube.ComponentBased
             DebugGame.PrintUseFieldPositionOrangePlayer = false;
             DebugGame.DebugDrawUseField = false;
             DebugGame.ShowBoundaries = false;
+            DebugGame.PrintFPS = true;
 
             //End debug options----
 

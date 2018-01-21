@@ -23,5 +23,7 @@
         public static bool DebugDrawUseField = false;
 
         public static bool ShowBoundaries = false;
+
+        public static bool PrintFPS = false;
     }
 }

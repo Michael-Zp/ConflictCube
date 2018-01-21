@@ -36,7 +36,7 @@ namespace ConflictCube.ComponentBased
 
             Game = new Game("Game", new Transform(0, 0, 1, 1));
 
-            GameObject scene = SceneBuilder.BuildScene(LevelsWithNewTileset.XYShiftTest, new Transform());
+            GameObject scene = SceneBuilder.BuildScene(LevelsWithNewTileset.XShiftTest, new Transform());
             Game.AddChild(scene);
             Player1Camera.RootGameObject = scene;
             Player2Camera.RootGameObject = scene;
@@ -126,7 +126,7 @@ namespace ConflictCube.ComponentBased
             Material playerMat = new Material(Color.White, (Texture)Tilesets.Instance().NewPlayerSheet.Tex, Tilesets.Instance().NewPlayerSheet.CalcSpriteTexCoords(0));
             Material playerOrangeMat = new Material(Color.FromArgb(128, Color.Orange), null, null);
             Material playerBlueMat = new Material(Color.FromArgb(128, Color.DarkBlue), null, null);
-            Material playerGhostMat = new Material(Color.FromArgb(64, 255, 255, 255), (Texture)Tilesets.Instance().PlayerSheet.Tex, Tilesets.Instance().PlayerSheet.CalcSpriteTexCoords(0));
+            Material playerGhostMat = new Material(Color.FromArgb(64, 255, 255, 255), (Texture)Tilesets.Instance().NewPlayerSheet.Tex, Tilesets.Instance().PlayerSheet.CalcSpriteTexCoords(0));
 
             Floor floor = (Floor)Game.FindGameObjectByTypeInChildren<Floor>();
 
@@ -155,8 +155,8 @@ namespace ConflictCube.ComponentBased
             Players[1].OtherPlayer = Players[0];
 
             //Ghost Players
-            floor.AddChild(new GhostPlayer("GhostPlayer2OnArea1", new Transform(0, 0, .06f, .06f), floor, playerGhostMat, Players[1], GameObjectType.GhostPlayer));
-            floor.AddChild(new GhostPlayer("GhostPlayer1OnArea2", new Transform(0, 0, .06f, .06f), floor, playerGhostMat, Players[0], GameObjectType.GhostPlayer));
+            //floor.AddChild(new GhostPlayer("GhostPlayer2OnArea1", new Transform(0, 0, .06f, .06f), floor, playerGhostMat, Players[1], GameObjectType.GhostPlayer));
+            //floor.AddChild(new GhostPlayer("GhostPlayer1OnArea2", new Transform(0, 0, .06f, .06f), floor, playerGhostMat, Players[0], GameObjectType.GhostPlayer));
         }
 
 

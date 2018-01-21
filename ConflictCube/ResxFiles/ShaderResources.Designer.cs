@@ -8,8 +8,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ConflictCube.ResxFiles
-{
+namespace ConflictCube.ResxFiles {
+    using System;
     
     
     /// <summary>
@@ -70,16 +70,35 @@ namespace ConflictCube.ResxFiles
         ///uniform float lifetime; //How long the effect will be visible
         ///uniform vec3 desiredColor;
         ///	
+        ///in vec2 uv;
+        ///
         ///void main()
         ///{
-        ///	//create uv to be in the range [0..1]x[0..1]
-        ///	vec2 uv = gl_FragCoord.xy / iResolution;
-        ///
-        ///    //Is the orange which is [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
+        ///    //create uv to be in the range [0..1]x[0..1]
+        ///	vec2 uv = gl_FragCoord.xy / iResolution; [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
         /// </summary>
         internal static string Afterglow {
             get {
                 return ResourceManager.GetString("Afterglow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die #version 330
+        ///
+        ///in vec2 uvPos;
+        ///
+        ///out vec2 uv;
+        ///	
+        ///void main()
+        ///{
+        ///    uv = uvPos;
+        ///    gl_Position = vec4(uv, 0, 1);
+        ///} ähnelt.
+        /// </summary>
+        internal static string StandardVertexShader {
+            get {
+                return ResourceManager.GetString("StandardVertexShader", resourceCulture);
             }
         }
     }

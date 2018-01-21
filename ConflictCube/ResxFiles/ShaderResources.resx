@@ -127,27 +127,44 @@ uniform float direction; //Positive =&gt; up/right; Negative =&gt; down/left
 uniform float lifetime; //How long the effect will be visible
 uniform vec3 desiredColor;
 	
+in vec2 uv;
+
 void main()
 {
-	//create uv to be in the range [0..1]x[0..1]
+    //create uv to be in the range [0..1]x[0..1]
 	vec2 uv = gl_FragCoord.xy / iResolution;
+
+    //gl_FragColor = vec4(1, 1, 1, 1);
 
     //Is the orange which is defined in System.Drawings.Color
     vec4 color = vec4(desiredColor, 1);
 
     if(direction &gt; 0.0) 
     {
-        color.a = uv.x + 0.2;
+        color.a = uv.x + 0.5;
     }
     else
     {
-        color.a = 1.2 - uv.x;
+        color.a = 1.5 - uv.x;
     }
 
-    //color.a is 1.2 at maximum (only 1 is to clamped)
-    color.a -= (iGlobalTime - startTime) / (1.2 / (1.0 / lifetime));
+    //color.a is 1.5 at maximum (only 1 is to clamped)
+    color.a -= (iGlobalTime - startTime) / (1.5 / (1.0 / lifetime));
 
 	gl_FragColor = color;
+}</value>
+  </data>
+  <data name="StandardVertexShader" xml:space="preserve">
+    <value>#version 330
+
+in vec2 uvPos;
+
+out vec2 uv;
+	
+void main()
+{
+    uv = uvPos;
+    gl_Position = vec4(uv, 0, 1);
 }</value>
   </data>
 </root>

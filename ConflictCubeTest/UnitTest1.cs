@@ -4,10 +4,8 @@ using OpenTK.Graphics.OpenGL;
 using NUnit.Framework;
 using ConflictCube.ComponentBased.Components;
 using ConflictCube.ComponentBased;
-using ConflictCube.ComponentBased.View;
 using System.Drawing;
 using Zenseless.OpenGL;
-using Zenseless.HLGL;
 
 namespace ConflictCubeTest
 {
@@ -19,7 +17,20 @@ namespace ConflictCubeTest
         {
             GameWindow window = new GameWindow();
         }
+        
+        [Test]
+        public void TestNewDrawMethod()
+        {
+            MyWindow window = new MyWindow();
+            GameView view = new GameView(window);
 
+            Material mat = new Material(Color.White, Tilesets.Instance().NewPlayerSheet.Tex, new Zenseless.Geometry.Box2D(0, 0, 1, 1));
+
+            while(window.WaitForNextFrame())
+            {
+                OpenTKWrapper.Instance().DrawBox(new ConflictCube.ComponentBased.Components.Rectangle(-.5f, .5f, -.5f, .5f), Color.White, mat.Texture, mat.UVCoordinates);
+            }
+        }
 
         [Test]
         public void TestTransformLocalToGlobalToLocal()

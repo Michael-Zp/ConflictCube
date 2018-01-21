@@ -4,12 +4,22 @@ using Zenseless.Geometry;
 using System.Drawing;
 using Zenseless.HLGL;
 using static ConflictCube.ComponentBased.View.ZenselessWrapper;
+using System.Runtime.InteropServices;
+using System;
+using ConflictCube.ComponentBased.Components;
+using OpenTK;
+using Zenseless.OpenGL;
 
 namespace ConflictCube.ComponentBased
 {
-    class OpenTKWrapper
+    public class OpenTKWrapper
     {
         public Color StandardColor = Color.White;
+        public float WindowHeight = 0;
+        public float WindowWidth = 0;
+
+        private VAO VertexArrayObject = new VAO(OpenTK.Graphics.OpenGL4.PrimitiveType.Quads);
+
 
         private static OpenTKWrapper OpenTKWrapperInstance = null;
 
@@ -35,7 +45,8 @@ namespace ConflictCube.ComponentBased
             DisableAlphaChannel();
         }
 
-        public void DrawBox(Components.Rectangle rect, Color color, ITexture texture, Box2D uVCoordinates, bool alphaChannel = true)
+
+        public void DrawBox(Components.Rectangle rect, Color color, ITexture texture, Box2D uVCoordinates, IShader shader, Material currentMat, bool alphaChannel = true)
         {
             if (alphaChannel)
             {
@@ -43,8 +54,46 @@ namespace ConflictCube.ComponentBased
             }
             
             GL.Color4(color);
+
+            if (shader != null)
+            {
+                shader.Activate();
+
+                GL.Uniform2(shader.GetResourceLocation(ShaderResourceType.Uniform, "iResolution"), WindowWidth, WindowHeight);
+                GL.Uniform1(shader.GetResourceLocation(ShaderResourceType.Uniform, "iGlobalTime"), Time.Time.CurrentTime);
+
+                foreach (Tuple<string, float> parameter in currentMat.ShaderParameters1D)
+                {
+                    GL.Uniform1(currentMat.Shader.GetResourceLocation(ShaderResourceType.Uniform, parameter.Item1), parameter.Item2);
+                }
+
+                foreach (Tuple<string, Vector2> parameter in currentMat.ShaderParameters2D)
+                {
+                    GL.Uniform2(currentMat.Shader.GetResourceLocation(ShaderResourceType.Uniform, parameter.Item1), parameter.Item2);
+                }
+
+                foreach (Tuple<string, Vector3> parameter in currentMat.ShaderParameters3D)
+                {
+                    GL.Uniform3(currentMat.Shader.GetResourceLocation(ShaderResourceType.Uniform, parameter.Item1), parameter.Item2);
+                }
+
+                foreach (Tuple<string, Vector4> parameter in currentMat.ShaderParameters4D)
+                {
+                    GL.Uniform4(currentMat.Shader.GetResourceLocation(ShaderResourceType.Uniform, parameter.Item1), parameter.Item2);
+                }
+
+                Vector2[] uvCoords = new Vector2[]
+                {
+                    Vector2.Zero,
+                    Vector2.UnitX,
+                    Vector2.One,
+                    Vector2.UnitY
+                };
+
+                VertexArrayObject.SetAttribute((int)Material.VertexShaderAttributes.UvPosition, uvCoords, OpenTK.Graphics.OpenGL4.VertexAttribPointerType.Float, 2);
+            }
             
-            if (texture != null)
+            if (texture != null && uVCoordinates != null)
             {
                 EnableTextures();
                 texture.Activate();
@@ -58,6 +107,11 @@ namespace ConflictCube.ComponentBased
             {
                 DrawBox(rect);
             }
+
+            if(shader != null)
+            {
+                shader.Deactivate();
+            }
             
 
             GL.Color4(StandardColor);
@@ -67,6 +121,9 @@ namespace ConflictCube.ComponentBased
                 DisableAlphaChannel();
             }
         }
+
+        public static int DrawnBoxes = 0;
+
 
         private void DrawTexturedBox(Components.Rectangle rect, Box2D uVCoordinates)
         {
@@ -90,6 +147,14 @@ namespace ConflictCube.ComponentBased
 
             GL.End();
         }
+
+        [StructLayout(LayoutKind.Sequential, Pack = 1)]
+        struct Vertex
+        {
+            public float x, y;
+            public float u, v;
+            public float r, g, b, a;
+        };
 
         private void DrawBox(Components.Rectangle rect)
         {
@@ -117,9 +182,10 @@ namespace ConflictCube.ComponentBased
 
             float characterLength = xSize / text.Length;
 
-            //Text is left/bottom aligned. With this calculation it will be approximately center alingend
+            //Text iText is left/bottom aligned. With this calculation it will be approximately center alingend      
             font.PrintWithSize(xPos - (xSize * 3.8f / 10), yPos - (ySize * 3 / 5), 0f, characterLength, ySize, 1f, text);
             
+
             DisableTextures();
             DisableAlphaChannel();
         }
@@ -128,7 +194,7 @@ namespace ConflictCube.ComponentBased
         private void EnableAlphaChannel()
         {
             GL.Enable(EnableCap.Blend);
-            GL.BlendFunc(BlendingFactorSrc.SrcAlpha, OpenGL.BlendingFactorDest.OneMinusSrcAlpha);
+            GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
         }
 
         private void DisableAlphaChannel()

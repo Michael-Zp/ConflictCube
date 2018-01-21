@@ -63,7 +63,7 @@ namespace ConflictCube.ComponentBased
             switch(other.Type)
             {
                 case CollisionType.OrangeFloor:
-                    Die(Name + " stepped into lava without fire resistent boots.");
+                    Die(Name + " stepped into lava without fire resistant boots.");
                     break;
             }
         }
