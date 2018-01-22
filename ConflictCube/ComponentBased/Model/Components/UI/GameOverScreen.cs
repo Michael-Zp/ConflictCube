@@ -16,7 +16,7 @@ namespace ConflictCube.ComponentBased.Model.Components.UI
             AddChild(new TextField("Press any key...", new Transform(0f, -.7f, 1.5f, .15f), "Press any key to start over...", Font.Instance().BloodBath));
 
 
-            DeathReason = new TextField("DeathReason", new Transform(0f, -.1f, 1, .2f), "", Font.Instance().BloodBath);
+            DeathReason = new TextField("DeathReason", new Transform(0f, -.1f, 1, .15f), "", Font.Instance().BloodBath);
             SetDeathReason();
             AddChild(DeathReason);
         }

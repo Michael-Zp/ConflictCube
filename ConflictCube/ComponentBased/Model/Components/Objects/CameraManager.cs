@@ -9,73 +9,40 @@ namespace ConflictCube.ComponentBased.Model.Components.Objects
     public class CameraManager : GameObject
     {
         private List<Camera> Cameras;
-        private Floor Floor {
-            set {
-                float xSize = value.FloorTileSize.X * value.FloorColumns;
-                float ySize = value.FloorTileSize.Y * value.FloorRows;
-
-                float xZoomFactor = .9f / xSize;
-                float yZoomFactor = .9f / ySize;
-
-                float zoomFactor = Math.Min(xZoomFactor, yZoomFactor);
-
-                ZoomFactor = MathHelper.Clamp(zoomFactor, 0, 1);
-            }
-        }
-        private float ZoomFactor = 0;
-        private bool WasZoomedOut = false;
-        private bool IsZoomedOut = false;
         private List<Player> Players;
 
-        public CameraManager(string name, Transform transform, List<Camera> cameras, Floor floor, List<Player> players) : base(name, transform)
+        public CameraManager(string name, Transform transform, List<Camera> cameras, List<Player> players) : base(name, transform)
         {
             Cameras = cameras;
-            Floor = floor;
             Players = players;
+
+            foreach(Camera camera in cameras)
+            {
+                camera.Transform.SetPosition(new Vector2(0f, -1f), WorldRelation.Global);
+            }
         }
 
         public override void OnUpdate()
         {
-            if (Input.OnButtonDown(InputKey.Zoom, 0))
+            Vector2 player0Pos = Players[0].Transform.GetPosition(WorldRelation.Global);
+            Vector2 player1Pos = Players[1].Transform.GetPosition(WorldRelation.Global);
+
+            Vector2 averagePlayerPos = (player0Pos + player1Pos) / 2;
+            float playerDistance = (float)Math.Sqrt(Math.Pow(player0Pos.X - player1Pos.X, 2) + Math.Pow(player0Pos.Y - player1Pos.Y, 2));
+
+            float zoomFactor = 1f;
+            if(playerDistance > 1.8f)
             {
-                IsZoomedOut = !IsZoomedOut;
+                Console.WriteLine("Zoom");
+                zoomFactor = 1.8f / playerDistance;
             }
+            
 
-            if (IsZoomedOut)
+            foreach (Camera camera in Cameras)
             {
-                if(!WasZoomedOut)
-                {
-                    foreach (Camera camera in Cameras)
-                    {
-                        camera.Transform.SetSize(new Vector2(ZoomFactor, ZoomFactor), WorldRelation.Global);
-                        camera.Transform.SetPosition(new Vector2(0f, -camera.Transform.GetSize(WorldRelation.Global).Y), WorldRelation.Local);
-                    }
-                }
+                camera.Transform.SetSize(new Vector2(zoomFactor, zoomFactor), WorldRelation.Global);
+                camera.Transform.SetPosition(-averagePlayerPos, WorldRelation.Global);
             }
-            else
-            {
-                if(WasZoomedOut)
-                {
-                    foreach (Camera camera in Cameras)
-                    {
-                        camera.Transform.SetSize(new Vector2(1, 1), WorldRelation.Global);
-                    }
-                }
-                for (int i = 0; i < Cameras.Count && i < Players.Count; i++)
-                {
-                    UpdateCameraPositionToCenterOnPlayer(Cameras[i], Players[i]);
-                }
-            }
-
-            WasZoomedOut = IsZoomedOut;
-        }
-
-
-        private void UpdateCameraPositionToCenterOnPlayer(Camera camera, Player player)
-        {
-            Vector2 playerPos = player.Transform.GetPosition(WorldRelation.Global);
-
-            camera.Transform.SetPosition(new Vector2(-playerPos.X, -playerPos.Y), WorldRelation.Global);
         }
     }
 }

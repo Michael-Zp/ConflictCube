@@ -23,7 +23,7 @@ namespace ConflictCube.ComponentBased
 
             //End debug options----
 
-            MyWindow window = new MyWindow(1024, 512);
+            MyWindow window = new MyWindow(512, 512);
             GameView view = new GameView(window);
             GameState state = new GameState(window.Width, window.Height);
             GameController controller = new GameController();

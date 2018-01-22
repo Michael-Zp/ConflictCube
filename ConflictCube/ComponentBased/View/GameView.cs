@@ -6,7 +6,6 @@ using ConflictCube.ComponentBased.View;
 using System.Drawing;
 using System;
 using System.Collections.Generic;
-using Zenseless.OpenGL;
 using OpenTK;
 
 namespace ConflictCube.ComponentBased
@@ -15,8 +14,6 @@ namespace ConflictCube.ComponentBased
     {
         private MyWindow Window;
         private OpenTKWrapper OpenTKWrapper = OpenTKWrapper.Instance();
-        
-        private bool WindowSizeChanged = true;
 
         /// <summary>
         ///     Match the GL Viewport with the given window and load all Tilesets that are used in the game.
@@ -31,7 +28,6 @@ namespace ConflictCube.ComponentBased
                 GL.Viewport(0, 0, Window.Width, Window.Height);
                 OpenTKWrapper.WindowHeight = Window.Height;
                 OpenTKWrapper.WindowWidth = Window.Width;
-                WindowSizeChanged = true;
             };
 
             OpenTKWrapper.WindowHeight = Window.Height;
@@ -48,20 +44,15 @@ namespace ConflictCube.ComponentBased
         
         public void Render(ViewModel viewModel)
         {
-            if(WindowSizeChanged)
+            foreach(Camera camera in viewModel.Cameras)
             {
-                WindowSizeChanged = false;
-
-                foreach(Camera camera in viewModel.Cameras)
+                if(!camera.IsUiCamera)
                 {
-                    if(!camera.IsUiCamera)
-                    {
-                        //Scale camera to keep world propotions in the view
-                        Vector2 cameraPos = camera.Transform.GetPosition(WorldRelation.Global);
-                        camera.Transform = new Transform(camera.RenderTarget.GetInverseOfTransform());
-                        camera.Transform.SetPosition(cameraPos, WorldRelation.Global);
-                        camera.Transform.SetSize(new Vector2(camera.Transform.GetSize(WorldRelation.Global).X / ((float)Window.Width / (float)Window.Height), camera.Transform.GetSize(WorldRelation.Global).Y), WorldRelation.Global);
-                    }
+                    //Scale camera to keep world propotions in the view
+                    Vector2 cameraPos = camera.Transform.GetPosition(WorldRelation.Global);
+                    camera.Transform = new Transform(camera.RenderTarget.GetInverseOfTransform());
+                    camera.Transform.SetPosition(cameraPos, WorldRelation.Global);
+                    camera.Transform.SetSize(new Vector2(camera.Transform.GetSize(WorldRelation.Global).X / ((float)Window.Width / (float)Window.Height), camera.Transform.GetSize(WorldRelation.Global).Y), WorldRelation.Global);
                 }
             }
 
@@ -72,7 +63,7 @@ namespace ConflictCube.ComponentBased
                 RenderGameObject(camera.Transform, camera.RootGameObject);
                 camera.FBO.Deactivate();
 
-                OpenTKWrapper.DrawBox(camera.RenderTarget.GetGlobalRotatedRectangel(), Color.White, camera.FBO.Texture, new Zenseless.Geometry.Box2D(-1, -1, 1, 1), null, null, true);
+                OpenTKWrapper.DrawBox(camera.RenderTarget.GetGlobalRotatedRectangle(), Color.White, camera.FBO.Texture, new Zenseless.Geometry.Box2D(-1, -1, 1, 1), null, null, true);
 
                 camera.FBO.Activate();
                 ClearScreen();
@@ -81,7 +72,7 @@ namespace ConflictCube.ComponentBased
 
             foreach(Tuple<Transform, Color> debugObject in DebugDraws)
             {
-                OpenTKWrapper.DrawBoxWithAlphaChannel((viewModel.Cameras[2].Transform * debugObject.Item1).GetGlobalRotatedRectangel(), debugObject.Item2);
+                OpenTKWrapper.DrawBoxWithAlphaChannel((viewModel.Cameras[2].Transform * debugObject.Item1).GetGlobalRotatedRectangle(), debugObject.Item2);
             }
 
             DebugDraws.Clear();
@@ -94,7 +85,7 @@ namespace ConflictCube.ComponentBased
                 return;
             }
             
-            Transform globalTransformInCamera = cameraTransform * currentObject.Transform.TransformToGlobal();
+            Transform globalTransform = currentObject.Transform.TransformToGlobal();
 
             List<Material> currentMats = currentObject.GetComponents<Material>();
 
@@ -102,18 +93,11 @@ namespace ConflictCube.ComponentBased
             {
                 if (currentMat != null)
                 {
-                    OpenTKWrapper.DrawBox(globalTransformInCamera.GetGlobalRotatedRectangel(), currentMat.Color, currentMat.Texture, currentMat.UVCoordinates, currentMat.Shader, currentMat, true);
+                    var globalRotRect = globalTransform.GetGlobalRotatedRectangle();
+                    globalRotRect = globalRotRect.ApplyTransform(cameraTransform);
 
-                    /*
-                    if (currentMat.Texture != null)
-                    {
-                        OpenTKWrapper.DrawBox(globalTransformInCamera.GetGlobalRotatedRectangel(), currentMat.Color, currentMat.Texture, currentMat.UVCoordinates, currentMat.Shader, currentMat, true);
-                    }
-                    else
-                    {
-                        OpenTKWrapper.DrawBox(globalTransformInCamera.GetGlobalRotatedRectangel(), currentMat.Color, null, null, null, null, true);
-                    }
-                    */
+                    OpenTKWrapper.DrawBox(globalRotRect, currentMat.Color, currentMat.Texture, currentMat.UVCoordinates, currentMat.Shader, currentMat, true);
+                    
                 }
             }
 
@@ -122,8 +106,10 @@ namespace ConflictCube.ComponentBased
             {
                 TextField text = (TextField)currentObject;
                 float scaleFactor = 2.625f;
-                //OpenTKWrapper.PrintText(0, 0, scaleFactor, scaleFactor, text.Text, text.Font);
-                globalTransformInCamera.SetSize(globalTransformInCamera.GetSize(WorldRelation.Global) / scaleFactor, WorldRelation.Global);
+                Vector2 position = globalTransform.GetPosition(WorldRelation.Global);
+                Vector2 size = globalTransform.GetSize(WorldRelation.Global);
+                OpenTKWrapper.PrintText(position.X, position.Y, size.X, size.Y, text.Text, text.Font);
+                globalTransform.SetSize(globalTransform.GetSize(WorldRelation.Global) / scaleFactor, WorldRelation.Global);
             }
             
 

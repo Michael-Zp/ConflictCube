@@ -76,19 +76,19 @@ namespace ConflictCube.ComponentBased
 
             
             AfterglowMaterialY = new Material(Color.White, ShaderResources.Afterglow);
-            AfterglowMaterialY.AddShaderParameter("startTime", -AfterglowLifetime);
+            AfterglowMaterialY.AddShaderParameter("startTime", -AfterglowLifetime * 2);
             AfterglowMaterialY.AddShaderParameter("direction", 1f);
             AfterglowMaterialY.AddShaderParameter("lifetime", AfterglowLifetime);
             AfterglowMaterialY.AddShaderParameter("desiredColor", new Vector3(Color.Pink.R, Color.Pink.G, Color.Pink.B));
 
             AfterglowMaterialX = new Material(Color.White, ShaderResources.Afterglow);
-            AfterglowMaterialX.AddShaderParameter("startTime", -AfterglowLifetime);
+            AfterglowMaterialX.AddShaderParameter("startTime", -AfterglowLifetime * 2);
             AfterglowMaterialX.AddShaderParameter("direction", 1f);
             AfterglowMaterialX.AddShaderParameter("lifetime", AfterglowLifetime);
             AfterglowMaterialX.AddShaderParameter("desiredColor", new Vector3(Color.Pink.R, Color.Pink.G, Color.Pink.B));
 
             AfterglowMaterialXY = new Material(Color.White, ShaderResources.Afterglow);
-            AfterglowMaterialXY.AddShaderParameter("startTime", -AfterglowLifetime);
+            AfterglowMaterialXY.AddShaderParameter("startTime", -AfterglowLifetime * 2);
             AfterglowMaterialXY.AddShaderParameter("direction", 1f);
             AfterglowMaterialXY.AddShaderParameter("lifetime", AfterglowLifetime);
             AfterglowMaterialXY.AddShaderParameter("desiredColor", new Vector3(Color.Pink.R, Color.Pink.G, Color.Pink.B));
@@ -96,15 +96,15 @@ namespace ConflictCube.ComponentBased
             
             AfterglowY = new GameObject("Afterglow Y", new Transform());
             AfterglowY.AddComponent(AfterglowMaterialY);
-            AddChild(AfterglowY);
+            Parent.AddChild(AfterglowY);
 
             AfterglowX = new GameObject("Afterglow X", new Transform());
             AfterglowX.AddComponent(AfterglowMaterialX);
-            AddChild(AfterglowX);
+            Parent.AddChild(AfterglowX);
 
             AfterglowXY = new GameObject("Afterglow XY", new Transform());
             AfterglowXY.AddComponent(AfterglowMaterialXY);
-            AddChild(AfterglowXY);
+            Parent.AddChild(AfterglowXY);
             
 
             UseField = new UseField("ThrowUseIndicator", new Transform());
@@ -264,8 +264,8 @@ namespace ConflictCube.ComponentBased
 
             AfterglowY.Transform.SetPosition(new Vector2(otherPosition.X + 3 * (thisPosition.X - otherPosition.X) / 4, otherPosition.Y + 3 * (thisPosition.Y - otherPosition.Y) / 4), WorldRelation.Global);
 
-            Components.Rectangle thisRect = Transform.GetGlobalRotatedRectangel();
-            Components.Rectangle otherRect = OtherPlayer.Transform.GetGlobalRotatedRectangel();
+            Components.Rectangle thisRect = Transform.GetGlobalRotatedRectangle();
+            Components.Rectangle otherRect = OtherPlayer.Transform.GetGlobalRotatedRectangle();
             float xSize = System.Numerics.Vector2.Distance(new System.Numerics.Vector2(thisRect.BottomLeft.X, thisRect.BottomLeft.Y), new System.Numerics.Vector2(otherRect.BottomLeft.X, otherRect.BottomLeft.Y));
             AfterglowY.Transform.SetSize(new Vector2(xSize / 4, Transform.GetSize(WorldRelation.Global).X), WorldRelation.Global);
 

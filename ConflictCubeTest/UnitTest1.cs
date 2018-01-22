@@ -28,7 +28,7 @@ namespace ConflictCubeTest
 
             while(window.WaitForNextFrame())
             {
-                OpenTKWrapper.Instance().DrawBox(new ConflictCube.ComponentBased.Components.Rectangle(-.5f, .5f, -.5f, .5f), Color.White, mat.Texture, mat.UVCoordinates);
+                OpenTKWrapper.Instance().DrawBox(new ConflictCube.ComponentBased.Components.Rectangle(-.5f, .5f, -.5f, .5f), Color.White, mat.Texture, mat.UVCoordinates, null, null, true);
             }
         }
 

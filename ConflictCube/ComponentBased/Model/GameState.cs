@@ -14,16 +14,9 @@ namespace ConflictCube.ComponentBased
     public class GameState
     {
         public Camera UICamera;
-        public Camera Player1Camera;
-        public Camera Player2Camera;
+        public Camera MainCamera;
         public Game Game { get; set; }
         public List<Player> Players { get; private set; }
-
-        private Transform UiPlayer1Transform = new Transform(-.9f, -.8f, .1f, .4f);
-        private Transform ScenePlayer1Transform = new Transform(0f, 0, 1f, 1f);
-
-        private Transform UiPlayer2Transform = new Transform(.9f, -.8f, .1f, .4f);
-        private Transform ScenePlayer2Transform = new Transform(0f, 0, 1f, 1f);
         
 
         //private Button Button;
@@ -38,8 +31,7 @@ namespace ConflictCube.ComponentBased
 
             GameObject scene = SceneBuilder.BuildScene(LevelsWithNewTileset.XShiftTest, new Transform());
             Game.AddChild(scene);
-            Player1Camera.RootGameObject = scene;
-            Player2Camera.RootGameObject = scene;
+            MainCamera.RootGameObject = scene;
 
             /*
             Floor floor = (Floor)Game.FindGameObjectByTypeInChildren<Floor>();
@@ -64,7 +56,7 @@ namespace ConflictCube.ComponentBased
             InitializeGameOverScreen();
 
 
-            CameraManager cameraManager = new CameraManager("CameraManager", new Transform(), new List<Camera>() { Player1Camera, Player2Camera }, (Floor)scene.FindGameObjectByTypeInChildren<Floor>(), Players);
+            CameraManager cameraManager = new CameraManager("CameraManager", new Transform(), new List<Camera>() { MainCamera }, Players);
             scene.AddChild(cameraManager);
             
             /*
@@ -100,22 +92,15 @@ namespace ConflictCube.ComponentBased
 
         private void SetUpCameras(int windowWidth, int windowHeight)
         {
-            UICamera = new Camera(new Transform(), null, windowWidth, windowHeight, new Transform(0, 0, 1f, 1f), true);
+            UICamera = new Camera(new Transform(0, 0, 1f, 1f), null, windowWidth, windowHeight, new Transform(0, 0, 1f, 1f), true);
 
-            Player1Camera = new Camera(new Transform(0, 0, 1f, 1f), null, windowWidth, windowHeight, new Transform(-.42f, 0f, .4f, 1f), false);
-            Player2Camera = new Camera(new Transform(0, 0, 1f, 1f), null, windowWidth, windowHeight, new Transform( .42f, 0f, .4f, 1f), false);
+            MainCamera = new Camera(new Transform(0, 0, 1f, 1f), null, windowWidth, windowHeight, new Transform(0f, 0f, 1f, 1f), false);
         }
         
 
         private void InitializeUI()
         {
             UI = new GameObject("UI", new Transform());
-
-            GameObject player1UI = new PlayerUI("Player0UI", Players[0], UiPlayer1Transform, UI);
-            UI.AddChild(player1UI);
-            
-            GameObject player2UI = new PlayerUI("Player0UI", Players[1], UiPlayer2Transform, UI);
-            UI.AddChild(player2UI);
 
             UICamera.RootGameObject = UI;
         }
