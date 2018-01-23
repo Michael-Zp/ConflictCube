@@ -27,6 +27,17 @@ namespace ConflictCube.ComponentBased.Model.Components.UI
             }
         }
 
+        public override void OnEnable()
+        {
+            WasEnabledLastFrame = false;
+        }
+
+
+        public override void OnDisable()
+        {
+            WasEnabledLastFrame = false;
+        }
+
         public override void OnUpdate()
         {
             //If OnUpdate is called the object is enabled

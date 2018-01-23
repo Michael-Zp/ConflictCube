@@ -19,6 +19,9 @@ namespace ConflictCube.ComponentBased
         public float RegeneratSprintEnergyPerSecond = 20;
         public Player OtherPlayer;
         public GameOverScreen GameOverScreen;
+        public GameWonScreen GameWonScreen;
+        public Action ShowMenu;
+        private bool WasOnFinishLastFrame = false;
 
         protected UseField UseField { get; set; }
         protected float UseCooldown = 1.0f;
@@ -115,6 +118,7 @@ namespace ConflictCube.ComponentBased
         public override void OnUpdate()
         {
             CheckLooseCondition();
+            CheckWinCondition();
 
             if (!IsAlive)
             {
@@ -468,8 +472,11 @@ namespace ConflictCube.ComponentBased
             }
             else if (other.Type == CollisionType.Finish)
             {
-                Console.WriteLine("WonGame");
-                //Environment.Exit(0);
+                WasOnFinishLastFrame = true;
+            }
+            else if (other.Type != CollisionType.Finish)
+            {
+                WasOnFinishLastFrame = false;
             }
         }
 
@@ -495,18 +502,17 @@ namespace ConflictCube.ComponentBased
 
         private void SetUseFieldWithOffset(float xOffset = 0, float yOffset = 0)
         {
-            Vector2 currentPos = CurrentFloor.GetGridPosition(Transform.TransformToGlobal()) + new Vector2(xOffset, yOffset);
+            Vector2 currentPos = CurrentFloor.GetGridPosition(Transform.TransformToGlobal()) + new Vector2(xOffset, -yOffset);
             Transform throwUseTransform = CurrentFloor.GetBoxAtGridPosition(currentPos);
             UseField.Transform.SetPosition(throwUseTransform.GetPosition(WorldRelation.Global), WorldRelation.Global);
             UseField.Transform.SetSize(throwUseTransform.GetSize(WorldRelation.Global), WorldRelation.Global);
             
             if(DebugGame.DebugDrawUseField)
             {
-                GameView.DrawDebug(UseField.Transform.TransformToGlobal(), System.Drawing.Color.Red);
+                GameView.DrawDebug(UseField.Transform.TransformToGlobal(), Color.Red);
             }
 
         }
-
 
         private void CheckLooseCondition()
         {
@@ -529,7 +535,22 @@ namespace ConflictCube.ComponentBased
 
                     OtherPlayer.ResetToLastCheckpoint();
                     OtherPlayer.IsAlive = true;
-                    
+
+                    GameOverScreen.Enabled = false;
+                }
+            }
+        }
+
+        private void CheckWinCondition()
+        {
+            if (WasOnFinishLastFrame && OtherPlayer.WasOnFinishLastFrame)
+            {
+                GameWonScreen.Enabled = true;
+
+                if (Input.AnyButtonDown())
+                {
+                    ShowMenu.Invoke();
+
                     GameOverScreen.Enabled = false;
                 }
             }
@@ -537,10 +558,10 @@ namespace ConflictCube.ComponentBased
 
         protected LevelTile GetLevelTileOnCubeLayerOfSelectedField()
         {
-            Vector2 useFieldGridPos = CurrentFloor.GetGridPosition(Transform.TransformToGlobal()) + new Vector2(ThrowUseXOffset, ThrowUseYOffset);
+            Vector2 useFieldGridPos = CurrentFloor.GetGridPosition(Transform.TransformToGlobal()) + new Vector2(ThrowUseXOffset, -ThrowUseYOffset);
 
             int indexOfColumn = (int)useFieldGridPos.X;
-            int indexOfRow = CurrentFloor.FloorRows - 1 - (int)useFieldGridPos.Y;
+            int indexOfRow = (int)useFieldGridPos.Y;
 
             indexOfRow = MathHelper.Clamp(indexOfRow, 0, CurrentFloor.FloorRows - 1);
             indexOfColumn = MathHelper.Clamp(indexOfColumn, 0, CurrentFloor.FloorColumns - 1);

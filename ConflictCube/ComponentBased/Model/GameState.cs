@@ -33,7 +33,7 @@ namespace ConflictCube.ComponentBased
         {
             Game = new Game("Game", new Transform(0, 0, 1, 1));
 
-            ActiveScene = SceneBuilder.BuildLevel(level, new Transform(), WindowWidth, WindowHeight);
+            ActiveScene = SceneBuilder.BuildLevel(this, level, new Transform(), WindowWidth, WindowHeight);
 
             Game.AddChild(ActiveScene.RootGameObject);
         }

@@ -72,7 +72,7 @@ namespace ConflictCube.ComponentBased
 
             foreach(Tuple<Transform, Color> debugObject in DebugDraws)
             {
-                OpenTKWrapper.DrawBoxWithAlphaChannel((viewModel.Cameras[2].Transform * debugObject.Item1).GetGlobalRotatedRectangle(), debugObject.Item2);
+                OpenTKWrapper.DrawBoxWithAlphaChannel((viewModel.Cameras[0].Transform * debugObject.Item1).GetGlobalRotatedRectangle(), debugObject.Item2);
             }
 
             DebugDraws.Clear();

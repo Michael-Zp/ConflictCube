@@ -63,6 +63,16 @@ namespace ConflictCube.ResxFiles {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap FiremanTexture {
+            get {
+                object obj = ResourceManager.GetObject("FiremanTexture", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap FloorTileset {
             get {
                 object obj = ResourceManager.GetObject("FloorTileset", resourceCulture);
@@ -76,16 +86,6 @@ namespace ConflictCube.ResxFiles {
         internal static System.Drawing.Bitmap FloorTilesetIceFire {
             get {
                 object obj = ResourceManager.GetObject("FloorTilesetIceFire", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap NewPlayerTexture {
-            get {
-                object obj = ResourceManager.GetObject("NewPlayerTexture", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -126,6 +126,16 @@ namespace ConflictCube.ResxFiles {
         internal static System.Drawing.Bitmap UseFieldIndicator {
             get {
                 object obj = ResourceManager.GetObject("UseFieldIndicator", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap WelderTexture {
+            get {
+                object obj = ResourceManager.GetObject("WelderTexture", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

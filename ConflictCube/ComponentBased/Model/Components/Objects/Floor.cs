@@ -150,7 +150,7 @@ namespace ConflictCube.ComponentBased
             Transform localTransform;
             try
             {
-                localTransform = FloorTiles[FloorRows - (int)boxGridPosition.Y - 1, (int)boxGridPosition.X].Transform;
+                localTransform = FloorTiles[(int)boxGridPosition.Y, (int)boxGridPosition.X].Transform;
             }
             catch(Exception)
             {

@@ -82,6 +82,7 @@
     <Compile Include="ComponentBased\Model\Components\Objects\Players\UseField.cs" />
     <Compile Include="ComponentBased\Model\Components\UI\ButtonGroup.cs" />
     <Compile Include="ComponentBased\Model\Components\UI\DoActionOnButtonClick.cs" />
+    <Compile Include="ComponentBased\Model\Components\UI\GameWonScreen.cs" />
     <Compile Include="ComponentBased\Model\Components\UI\GameOverScreen.cs" />
     <Compile Include="ResxFiles\FontResources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -254,6 +255,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Textures\Fireman.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Textures\welder.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

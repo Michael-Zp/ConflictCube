@@ -40,6 +40,15 @@ namespace ConflictCube.ComponentBased.Components
             }
             set {
                 _EnabledSelf = value;
+
+                if(value)
+                {
+                    OnEnable();
+                }
+                else
+                {
+                    OnDisable();
+                }
             }
         }
         private bool _EnabledSelf;

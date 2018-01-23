@@ -21,5 +21,15 @@
         {
 
         }
+
+        public virtual void OnEnable()
+        {
+
+        }
+
+        public virtual void OnDisable()
+        {
+
+        }
     }
 }

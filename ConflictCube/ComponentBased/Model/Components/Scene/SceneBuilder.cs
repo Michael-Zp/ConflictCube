@@ -58,13 +58,17 @@ namespace ConflictCube.ComponentBased
             
             ButtonGroup buttonsInLevelSelect = new ButtonGroup("ButtonGroup", new Transform());
 
-            Action level1OnClick = new Action(() => { state.BuildScene(LevelsWithNewTileset.XShiftTest); });
-            Action level2OnClick = new Action(() => { state.BuildScene(LevelsWithNewTileset.YShiftTest); });
-            Action level3OnClick = new Action(() => { state.BuildScene(LevelsWithNewTileset.FireIceFirstTestNewTileset); });
+            Action level1OnClick = new Action(() => { state.BuildScene(LevelsWithNewTileset.FireIceFirstTestNewTileset); });
+            Action level2OnClick = new Action(() => { state.BuildScene(LevelsWithNewTileset.FireIceSecondTestNewTileset); });
+            Action level3OnClick = new Action(() => { state.BuildScene(LevelsWithNewTileset.YShiftTest); });
+            Action level4OnClick = new Action(() => { state.BuildScene(LevelsWithNewTileset.XShiftTest); });
+            Action level5OnClick = new Action(() => { state.BuildScene(LevelsWithNewTileset.XYShiftTest); });
 
-            buttonsInLevelSelect.AddButton(new Transform(0,  .5f, .8f, .2f), new TextField("Level1", new Transform(0,  .5f,  .7f, .15f), "Level 1", Font.Instance().NormalFont), level1OnClick);
-            buttonsInLevelSelect.AddButton(new Transform(0,   0f, .8f, .2f), new TextField("Level2", new Transform(0,   0f,  .7f, .15f), "Level 2", Font.Instance().NormalFont), level2OnClick);
-            buttonsInLevelSelect.AddButton(new Transform(0, -.5f, .8f, .2f), new TextField("Level3", new Transform(0, -.5f,  .7f, .15f), "Level 3", Font.Instance().NormalFont), level3OnClick);
+            buttonsInLevelSelect.AddButton(new Transform(0,  .8f, .8f, .15f), new TextField("Level1", new Transform(0,  .8f, .7f, .15f), "Level 1", Font.Instance().NormalFont), level1OnClick);
+            buttonsInLevelSelect.AddButton(new Transform(0,  .4f, .8f, .15f), new TextField("Level2", new Transform(0,  .4f, .7f, .15f), "Level 2", Font.Instance().NormalFont), level2OnClick);
+            buttonsInLevelSelect.AddButton(new Transform(0,  .0f, .8f, .15f), new TextField("Level3", new Transform(0,   0f, .7f, .15f), "Level 3", Font.Instance().NormalFont), level3OnClick);
+            buttonsInLevelSelect.AddButton(new Transform(0, -.4f, .8f, .15f), new TextField("Level4", new Transform(0, -.4f, .7f, .15f), "Level 4", Font.Instance().NormalFont), level4OnClick);
+            buttonsInLevelSelect.AddButton(new Transform(0, -.8f, .8f, .15f), new TextField("Level5", new Transform(0, -.8f, .7f, .15f), "Level 5", Font.Instance().NormalFont), level5OnClick);
 
             levelSelect.AddChild(buttonsInLevelSelect);
 
@@ -102,7 +106,7 @@ namespace ConflictCube.ComponentBased
         }
 
 
-        public static Scene BuildLevel(string level, Transform sceneTransform, int windowWidth, int windowHeight)
+        public static Scene BuildLevel(GameState state, string level, Transform sceneTransform, int windowWidth, int windowHeight)
         {
             GameObject scene = new GameObject("Scene", sceneTransform, null, GameObjectType.Scene);
             GameObject game = new GameObject("Game", new Transform());
@@ -141,6 +145,7 @@ namespace ConflictCube.ComponentBased
             List<Player> players = InitializePlayers(floor);
             ui.AddChild(InitializeUI());
             ui.AddChild(InitializeGameOverScreen(players));
+            ui.AddChild(InitializeGameWonScreen(players, state));
 
 
             CameraManager cameraManager = new CameraManager("CameraManager", new Transform(), new List<Camera>() { mainCamera }, players);
@@ -169,10 +174,10 @@ namespace ConflictCube.ComponentBased
         private static List<Player> InitializePlayers(Floor floor)
         {
             List<Player> players = new List<Player>();
-            Material playerMat = new Material(Color.White, (Texture)Tilesets.Instance().NewPlayerSheet.Tex, Tilesets.Instance().NewPlayerSheet.CalcSpriteTexCoords(0));
+            Material playerFiremanMat = new Material(Color.White, (Texture)Tilesets.Instance().FiremanSheet.Tex, Tilesets.Instance().FiremanSheet.CalcSpriteTexCoords(0));
+            Material playerWelderMat = new Material(Color.White, (Texture)Tilesets.Instance().WelderSheet.Tex, Tilesets.Instance().WelderSheet.CalcSpriteTexCoords(0));
             Material playerOrangeMat = new Material(Color.FromArgb(128, Color.Orange), null, null);
             Material playerBlueMat = new Material(Color.FromArgb(128, Color.DarkBlue), null, null);
-            Material playerGhostMat = new Material(Color.FromArgb(64, 255, 255, 255), (Texture)Tilesets.Instance().NewPlayerSheet.Tex, Tilesets.Instance().PlayerSheet.CalcSpriteTexCoords(0));
             
             if (floor == null)
             {
@@ -181,16 +186,14 @@ namespace ConflictCube.ComponentBased
 
             //Players
             BoxCollider Player1Collider = new BoxCollider(new Transform(0, 0, 1, 1), false, floor.CollisionGroup, CollisionType.PlayerFire);
-            players.Add(new OrangePlayer("FirePlayer", new Transform(0, 0, .06f, .06f), Player1Collider, playerMat, floor, floor, 20f, GameObjectType.PlayerFire, null));
+            players.Add(new OrangePlayer("FirePlayer", new Transform(0, 0, .06f, .06f), Player1Collider, playerFiremanMat, floor, floor, 20f, GameObjectType.PlayerFire, null));
             floor.AddChild(players[0]);
             players[0].ResetToLastCheckpoint();
-            players[0].AddChild(new ColoredBox("Player0Orange", new Transform(), playerOrangeMat));
 
             BoxCollider Player2Collider = new BoxCollider(new Transform(0, 0, 1, 1), false, floor.CollisionGroup, CollisionType.PlayerIce);
-            players.Add(new BluePlayer("IcePlayer", new Transform(0, 0, .06f, .06f), Player2Collider, playerMat, floor, floor, 20f, GameObjectType.PlayerIce, null));
+            players.Add(new BluePlayer("IcePlayer", new Transform(0, 0, .06f, .06f), Player2Collider, playerWelderMat, floor, floor, 20f, GameObjectType.PlayerIce, null));
             floor.AddChild(players[1]);
             players[1].ResetToLastCheckpoint();
-            players[1].AddChild(new ColoredBox("Player1Blue", new Transform(), playerBlueMat));
 
             //Other Players
             players[0].OtherPlayer = players[1];
@@ -211,6 +214,21 @@ namespace ConflictCube.ComponentBased
             }
 
             return gos;
+        }
+
+
+        private static GameObject InitializeGameWonScreen(List<Player> players, GameState state)
+        {
+            GameWonScreen gws = new GameWonScreen("GameWonScreen", new Transform());
+            gws.Enabled = false;
+
+            foreach (Player player in players)
+            {
+                player.GameWonScreen = gws;
+                player.ShowMenu = new Action(() => { state.BuildMenu(); });
+            }
+
+            return gws;
         }
 
 

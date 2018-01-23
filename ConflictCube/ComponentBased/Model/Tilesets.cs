@@ -9,7 +9,8 @@ namespace ConflictCube.ComponentBased
         public SpriteSheet FloorSheet;
         public SpriteSheet FloorSheetIceFire;
         public SpriteSheet PlayerSheet;
-        public SpriteSheet NewPlayerSheet;
+        public SpriteSheet FiremanSheet;
+        public SpriteSheet WelderSheet;
         public SpriteSheet InventoryTextures;
         public SpriteSheet NewFloorSheet;
 
@@ -29,7 +30,8 @@ namespace ConflictCube.ComponentBased
             FloorSheet = new SpriteSheet(TextureLoader.FromBitmap(TexturResource.FloorTileset), 2, 2);
             FloorSheetIceFire = new SpriteSheet(TextureLoader.FromBitmap(TexturResource.FloorTilesetIceFire), 2, 4);
             PlayerSheet = new SpriteSheet(TextureLoader.FromBitmap(TexturResource.PlayerTexture), 1, 1);
-            NewPlayerSheet = new SpriteSheet(TextureLoader.FromBitmap(TexturResource.NewPlayerTexture), 1, 1);
+            FiremanSheet = new SpriteSheet(TextureLoader.FromBitmap(TexturResource.FiremanTexture), 1, 1);
+            WelderSheet = new SpriteSheet(TextureLoader.FromBitmap(TexturResource.WelderTexture), 1, 1);
             InventoryTextures = new SpriteSheet(TextureLoader.FromBitmap(InventoryResources.Sledgehammer), 1, 1);
             NewFloorSheet = new SpriteSheet(TextureLoader.FromBitmap(TexturResource.SpritesheetNewTextures), 5, 10, .98f, .98f);
         }
