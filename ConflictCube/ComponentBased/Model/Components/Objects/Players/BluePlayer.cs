@@ -1,6 +1,5 @@
 ﻿using ConflictCube.ComponentBased.Components;
 using ConflictCube.ComponentBased.Components.Objects.Tiles;
-using ConflictCube.ComponentBased.Model.Components.UI;
 using OpenTK;
 using System;
 using System.Drawing;

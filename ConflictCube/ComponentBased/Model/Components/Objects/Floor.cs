@@ -180,7 +180,7 @@ namespace ConflictCube.ComponentBased
         {
             float minY = FloorTiles[FloorRows - 1, 0].Transform.GetMinY(WorldRelation.Local);
             float maxY = FloorTiles[0, 0].Transform.GetMaxY(WorldRelation.Local);
-            return (float)Math.Floor(((yPos - minY) / (maxY - minY)) * FloorRows);
+            return FloorRows - 1 - (float)Math.Floor(((yPos - minY) / (maxY - minY)) * FloorRows);
         }
     }
 }

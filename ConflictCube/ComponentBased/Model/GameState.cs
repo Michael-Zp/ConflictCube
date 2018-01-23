@@ -1,207 +1,52 @@
-﻿using System.Collections.Generic;
-using System;
-using ConflictCube.ComponentBased.Components;
-using Zenseless.OpenGL;
-using System.Drawing;
+﻿using ConflictCube.ComponentBased.Components;
 using ConflictCube.ComponentBased.Controller;
 using ConflictCube.ComponentBased.Model.Components.Objects;
-using ConflictCube.ComponentBased.View;
-using ConflictCube.ResxFiles;
-using ConflictCube.ComponentBased.Model.Components.UI;
 
 namespace ConflictCube.ComponentBased
 {
     public class GameState
     {
-        public Camera UICamera;
-        public Camera MainCamera;
         public Game Game { get; set; }
-        public List<Player> Players { get; private set; }
+        public Scene ActiveScene;
+
+        private int WindowWidth;
+        private int WindowHeight;
         
-
-        //private Button Button;
-        private GameOverScreen GameOverScreen;
-        private GameObject UI;
-
         public GameState(int windowWidth, int windowHeight)
         {
-            SetUpCameras(windowWidth, windowHeight);
+            WindowWidth = windowWidth;
+            WindowHeight = windowHeight;
 
-            Game = new Game("Game", new Transform(0, 0, 1, 1));
-
-            GameObject scene = SceneBuilder.BuildScene(LevelsWithNewTileset.XShiftTest, new Transform());
-            Game.AddChild(scene);
-            MainCamera.RootGameObject = scene;
-
-            /*
-            Floor floor = (Floor)Game.FindGameObjectByTypeInChildren<Floor>();
-            Transform buttonTransform = floor.GetBoxAtGridPosition(new Vector2(1, 5));
-            buttonTransform.SetSize(buttonTransform.GetSize(WorldRelation.Global) / 2, WorldRelation.Global);
-            buttonTransform = floor.Transform.TransformToLocal(buttonTransform);
-
-            OnButtonChangeFloorEvent changeFloorEvent = new OnButtonChangeFloorEvent(floor);
-            changeFloorEvent.AddChangeOnFloor(1, 2, GameObjectType.OrangeFloor);
-            changeFloorEvent.AddChangeOnFloor(2, 2, GameObjectType.OrangeFloor);
-            changeFloorEvent.AddChangeOnFloor(3, 2, GameObjectType.OrangeFloor);
-            changeFloorEvent.AddChangeOnFloor(4, 2, GameObjectType.OrangeFloor);
-            changeFloorEvent.AddChangeOnFloor(5, 2, GameObjectType.OrangeFloor);
-            changeFloorEvent.AddChangeOnFloor(6, 2, GameObjectType.OrangeFloor);
-
-            Button = new Button("button", buttonTransform, changeFloorEvent, floor.CollisionGroup);
-            floor.AddChild(Button);
-            */
-
-            InitializePlayers();
-            InitializeUI();
-            InitializeGameOverScreen();
-
-
-            CameraManager cameraManager = new CameraManager("CameraManager", new Transform(), new List<Camera>() { MainCamera }, Players);
-            scene.AddChild(cameraManager);
-            
-            /*
-            GameObject testGo = new GameObject("Test", new Transform(0, 0, .2f, .07f));
-            scene.AddChild(testGo);
-            testGo.AddComponent(new Material(Color.White, ShaderResources.Afterglow));
-            testGo.GetComponent<Material>().ShaderParameters1D.Add(Tuple.Create("startTime", Time.Time.CurrentTime));
-            testGo.GetComponent<Material>().ShaderParameters1D.Add(Tuple.Create("direction", 1f));
-            testGo.GetComponent<Material>().ShaderParameters1D.Add(Tuple.Create("lifetime", 1f));
-            testGo.GetComponent<Material>().ShaderParameters3D.Add(Tuple.Create("desiredColor", new Vector3(Color.Orange.R, Color.Orange.G, Color.Orange.B)));
-            */
-
-            /*
-            GameObject test15Go = new GameObject("Test15", new Transform(-1f, 0, .25f, .5f));
-            testGo.AddChild(test15Go);
-            test15Go.AddComponent(new Material(Color.Orange));
-
-            GameObject test2Go = new GameObject("Test2", new Transform(0, 0, .5f, .5f));
-            testGo.AddChild(test2Go);
-            test2Go.AddComponent(new Material(Color.White, Tilesets.Instance().PlayerSheet.Tex, Tilesets.Instance().PlayerSheet.CalcSpriteTexCoords(0)));
-
-            GameObject test25Go = new GameObject("Test25", new Transform(1f, 0, .25f, .5f));
-            testGo.AddChild(test25Go);
-            test25Go.AddComponent(new Material(Color.Green));
-
-            GameObject test3Go = new GameObject("Test3", new Transform(.5f, .5f, .5f, .5f));
-            testGo.AddChild(test3Go);
-            test3Go.AddComponent(new Material(Color.White, Tilesets.Instance().PlayerSheet.Tex, Tilesets.Instance().PlayerSheet.CalcSpriteTexCoords(0)));
-
-            UICamera.RootGameObject = testGo;
-            */
-        }
-
-        private void SetUpCameras(int windowWidth, int windowHeight)
-        {
-            UICamera = new Camera(new Transform(0, 0, 1f, 1f), null, windowWidth, windowHeight, new Transform(0, 0, 1f, 1f), true);
-
-            MainCamera = new Camera(new Transform(0, 0, 1f, 1f), null, windowWidth, windowHeight, new Transform(0f, 0f, 1f, 1f), false);
+            BuildMenu();
         }
         
-
-        private void InitializeUI()
+        public void BuildMenu()
         {
-            UI = new GameObject("UI", new Transform());
+            Game = new Game("Game", new Transform(0, 0, 1, 1));
 
-            UICamera.RootGameObject = UI;
+            ActiveScene = SceneBuilder.BuildMenu(this, WindowWidth, WindowHeight);
+
+            Game.AddChild(ActiveScene.RootGameObject);
         }
 
-        public void InitializePlayers()
+        public void BuildScene(string level)
         {
-            Players = new List<Player>();
-            Material playerMat = new Material(Color.White, (Texture)Tilesets.Instance().NewPlayerSheet.Tex, Tilesets.Instance().NewPlayerSheet.CalcSpriteTexCoords(0));
-            Material playerOrangeMat = new Material(Color.FromArgb(128, Color.Orange), null, null);
-            Material playerBlueMat = new Material(Color.FromArgb(128, Color.DarkBlue), null, null);
-            Material playerGhostMat = new Material(Color.FromArgb(64, 255, 255, 255), (Texture)Tilesets.Instance().NewPlayerSheet.Tex, Tilesets.Instance().PlayerSheet.CalcSpriteTexCoords(0));
+            Game = new Game("Game", new Transform(0, 0, 1, 1));
 
-            Floor floor = (Floor)Game.FindGameObjectByTypeInChildren<Floor>();
+            ActiveScene = SceneBuilder.BuildLevel(level, new Transform(), WindowWidth, WindowHeight);
 
-            if (floor == null)
-            {
-                throw new Exception("Found no active floor for player 1.");
-            }
-            
-
-
-            //Players
-            BoxCollider Player1Collider = new BoxCollider(new Transform(0, 0, 1, 1), false, floor.CollisionGroup, CollisionType.PlayerFire);
-            Players.Add(new OrangePlayer("FirePlayer", new Transform(0, 0, .06f, .06f), Player1Collider, playerMat, floor, floor, .2f, GameObjectType.PlayerFire, null));
-            floor.AddChild(Players[0]);
-            Players[0].ResetToLastCheckpoint();
-            Players[0].AddChild(new ColoredBox("Player0Orange", new Transform(), playerOrangeMat));
-
-            BoxCollider Player2Collider = new BoxCollider(new Transform(0, 0, 1, 1), false, floor.CollisionGroup, CollisionType.PlayerIce);
-            Players.Add(new BluePlayer("IcePlayer", new Transform(0, 0, .06f, .06f), Player2Collider, playerMat, floor, floor, .2f, GameObjectType.PlayerIce, null));
-            floor.AddChild(Players[1]);
-            Players[1].ResetToLastCheckpoint();
-            Players[1].AddChild(new ColoredBox("Player1Blue", new Transform(), playerBlueMat));
-
-            //Other Players
-            Players[0].OtherPlayer = Players[1];
-            Players[1].OtherPlayer = Players[0];
-
-            //Ghost Players
-            //floor.AddChild(new GhostPlayer("GhostPlayer2OnArea1", new Transform(0, 0, .06f, .06f), floor, playerGhostMat, Players[1], GameObjectType.GhostPlayer));
-            //floor.AddChild(new GhostPlayer("GhostPlayer1OnArea2", new Transform(0, 0, .06f, .06f), floor, playerGhostMat, Players[0], GameObjectType.GhostPlayer));
+            Game.AddChild(ActiveScene.RootGameObject);
         }
-
-
-        private void InitializeGameOverScreen()
-        {
-            GameOverScreen = new GameOverScreen("GameOverScreen", new Transform());
-            UI.AddChild(GameOverScreen);
-            GameOverScreen.Enabled = false;
-
-            foreach(Player player in Players)
-            {
-                player.GameOverScreen = GameOverScreen;
-            }
-        }
-
 
         public void UpdateAll()
         {
             //Axes
             //GameView.DrawDebug(new Transform(0, 0, 1f, .002f), Color.Red);
             //GameView.DrawDebug(new Transform(0, 0, .001f, 1f), Color.Blue);
-
-            if (!CheckLooseCondition())
-            {
-                Game.UpdateAll();
-            }
+            
+            Game.UpdateAll();
         }
 
-        private bool CheckLooseCondition()
-        {
-            if(!DebugGame.CanLoose)
-            {
-                return false;
-            }
-
-            if (!Players[0].IsAlive || !Players[1].IsAlive)
-            {
-                Players[0].IsAlive = false;
-                Players[1].IsAlive = false;
-
-                GameOverScreen.Enabled = true;
-
-                if(Input.AnyButtonDown())
-                {
-                    foreach (Player player in Players)
-                    {
-                        player.ResetToLastCheckpoint();
-                        player.IsAlive = true;
-                    }
-
-                    GameOverScreen.Enabled = false;
-
-                    return true;
-                }
-
-                return true;
-            }
-
-            return false;
-        }
         
         public ViewModel GetViewModel()
         {

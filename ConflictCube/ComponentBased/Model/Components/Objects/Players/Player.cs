@@ -114,6 +114,13 @@ namespace ConflictCube.ComponentBased
 
         public override void OnUpdate()
         {
+            CheckLooseCondition();
+
+            if (!IsAlive)
+            {
+                return;
+            }
+
             Vector2 moveVector = new Vector2(Input.GetAxis(Horizontal, ActiveGamePad), Input.GetAxis(Vertical, ActiveGamePad));
 
             if ((Input.OnButtonIsPressed(Sprint, ActiveGamePad) || Input.OnButtonDown(Sprint, ActiveGamePad))
@@ -145,16 +152,32 @@ namespace ConflictCube.ComponentBased
                 float temp = thisPosition.Y;
                 thisPosition.Y = otherPosition.Y;
                 otherPosition.Y = temp;
+
+                Vector2 thisSize = Transform.GetSize(WorldRelation.Global);
+                Transform thisTempTransform = new Transform(thisPosition.X, thisPosition.Y, thisSize.X, thisSize.Y);
+                Vector2 thisTargetGridPosition = CurrentFloor.GetGridPosition(thisTempTransform);
                 
-                Transform.SetPosition(thisPosition, WorldRelation.Global);
-                OtherPlayer.Transform.SetPosition(otherPosition, WorldRelation.Global);
+                Vector2 otherSize = OtherPlayer.Transform.GetSize(WorldRelation.Global);
+                Transform otherTempTransform = new Transform(otherPosition.X, otherPosition.Y, otherSize.X, otherSize.Y);
+                Vector2 otherTargetGridPositon = CurrentFloor.GetGridPosition(otherTempTransform);
+                if (CurrentFloor.FloorTiles[(int)thisTargetGridPosition.Y, (int)thisTargetGridPosition.X].Type == GameObjectType.Wall ||
+                    CurrentFloor.FloorTiles[(int)otherTargetGridPositon.Y, (int)otherTargetGridPositon.X].Type == GameObjectType.Wall)
+                {
+                    //Play duh sound
+                    ShowYAfterglow();
+                    OtherPlayer.ShowYAfterglow();
+                }
+                else
+                {
+                    Transform.SetPosition(thisPosition, WorldRelation.Global);
+                    OtherPlayer.Transform.SetPosition(otherPosition, WorldRelation.Global);
 
 
-                //Afterglow
+                    //Afterglow
 
-                ShowYAfterglow();
-                OtherPlayer.ShowYAfterglow();
-
+                    ShowYAfterglow();
+                    OtherPlayer.ShowYAfterglow();
+                }
             }
             
             if (Input.OnButtonDown(SwitchPositionXY, ActiveGamePad))
@@ -164,7 +187,7 @@ namespace ConflictCube.ComponentBased
                 
                 Transform.SetPosition(otherPosition, WorldRelation.Global);
                 OtherPlayer.Transform.SetPosition(thisPosition, WorldRelation.Global);
-
+                
                 //Afterglow
 
                 ShowXYAfterglow();
@@ -179,17 +202,35 @@ namespace ConflictCube.ComponentBased
                 float temp = thisPosition.X;
                 thisPosition.X = otherPosition.X;
                 otherPosition.X = temp;
+                
+                Vector2 thisSize = Transform.GetSize(WorldRelation.Global);
+                Transform thisTempTransform = new Transform(thisPosition.X, thisPosition.Y, thisSize.X, thisSize.Y);
+                Vector2 thisTargetGridPosition = CurrentFloor.GetGridPosition(thisTempTransform);
 
-                Transform.SetPosition(thisPosition, WorldRelation.Global);
-                OtherPlayer.Transform.SetPosition(otherPosition, WorldRelation.Global);
+                Vector2 otherSize = OtherPlayer.Transform.GetSize(WorldRelation.Global);
+                Transform otherTempTransform = new Transform(otherPosition.X, otherPosition.Y, otherSize.X, otherSize.Y);
+                Vector2 otherTargetGridPositon = CurrentFloor.GetGridPosition(otherTempTransform);
+                if (CurrentFloor.FloorTiles[(int)thisTargetGridPosition.Y, (int)thisTargetGridPosition.X].Type == GameObjectType.Wall ||
+                    CurrentFloor.FloorTiles[(int)otherTargetGridPositon.Y, (int)otherTargetGridPositon.X].Type == GameObjectType.Wall)
+                {
+                    //Play duh sound
+                    ShowXAfterglow();
+                    OtherPlayer.ShowXAfterglow();
+                }
+                else
+                {
+                    Transform.SetPosition(thisPosition, WorldRelation.Global);
+                    OtherPlayer.Transform.SetPosition(otherPosition, WorldRelation.Global);
 
-                //Afterglow
 
-                ShowXAfterglow();
-                OtherPlayer.ShowXAfterglow();
+                    //Afterglow
+
+                    ShowXAfterglow();
+                    OtherPlayer.ShowXAfterglow();
+                }
             }
 
-            Move(moveVector);
+            Move(moveVector * Time.Time.DifTime);
             UpdateUseField();
         }
 
@@ -464,6 +505,34 @@ namespace ConflictCube.ComponentBased
                 GameView.DrawDebug(UseField.Transform.TransformToGlobal(), System.Drawing.Color.Red);
             }
 
+        }
+
+
+        private void CheckLooseCondition()
+        {
+            if (!DebugGame.CanLoose)
+            {
+                return;
+            }
+
+            if (!IsAlive || !OtherPlayer.IsAlive)
+            {
+                IsAlive = false;
+                OtherPlayer.IsAlive = false;
+
+                GameOverScreen.Enabled = true;
+
+                if (Input.AnyButtonDown())
+                {
+                    ResetToLastCheckpoint();
+                    IsAlive = true;
+
+                    OtherPlayer.ResetToLastCheckpoint();
+                    OtherPlayer.IsAlive = true;
+                    
+                    GameOverScreen.Enabled = false;
+                }
+            }
         }
 
         protected LevelTile GetLevelTileOnCubeLayerOfSelectedField()
