@@ -1,17 +1,28 @@
 ﻿using ConflictCube.ComponentBased.Components;
 using ConflictCube.ComponentBased.Components.Objects.Tiles;
-using ConflictCube.ComponentBased.Model.Components.UI;
+using ConflictCube.ComponentBased.Model.Components.Colliders;
 using OpenTK;
 using System;
 using System.Drawing;
+using Zenseless.OpenGL;
 
 namespace ConflictCube.ComponentBased
 {
     public class OrangePlayer : Player
     {
-        public OrangePlayer(string name, Transform transform, BoxCollider boxCollider, Material material, GameObject parent, Floor currentFloor, float speed, GameObjectType playerType, Player otherPlayer, bool isAlive = true)
-            : base(name, transform, boxCollider, material, parent, currentFloor, speed, playerType, otherPlayer, isAlive)
+        private Material FiremanMaterial;
+        private bool MaterialsAreInitialized;
+
+
+        public OrangePlayer(string name, Floor currentFloor, GameObject parent)
+            : base(name, currentFloor, parent, GameObjectType.PlayerFire, CollisionType.PlayerFire, CollisionLayer.Orange)
         {
+            if(!MaterialsAreInitialized)
+            {
+                MaterialsAreInitialized = true;
+                FiremanMaterial = new Material(Color.White, (Texture)Tilesets.Instance().FiremanSheet.Tex, Tilesets.Instance().FiremanSheet.CalcSpriteTexCoords(0));
+            }
+
             Horizontal = InputAxis.Player1Horizontal;
             Vertical = InputAxis.Player1Vertical;
             Sprint = InputKey.PlayerOneSprint;
@@ -26,7 +37,9 @@ namespace ConflictCube.ComponentBased
             AfterglowMaterialXY.AddShaderParameter("desiredColor", new Vector3(Color.Orange.R, Color.Orange.G, Color.Orange.B));
 
 
-            GetComponent<Collider>().Layer = Model.Components.Colliders.CollisionLayer.Orange;
+            GetComponent<Collider>().IgnoreCollisionsWith.Add(CollisionType.PlayerIce);
+            
+            AddComponent(FiremanMaterial);
         }
 
         public override void OnUpdate()

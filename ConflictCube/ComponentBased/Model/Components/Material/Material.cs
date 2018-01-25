@@ -16,15 +16,9 @@ namespace ConflictCube.ComponentBased.Components
 
         public ITexture Texture {
             get {
-                ITexture tex;
                 try
                 {
-                    tex = Materials.GetMaterialData(ID)?.Texture;
-                    if(tex != null)
-                    {
-                        return tex;
-                    }
-                    return null;
+                    return Materials.GetMaterialData(ID)?.Texture;
                 }
                 catch(Exception)
                 {
@@ -36,7 +30,6 @@ namespace ConflictCube.ComponentBased.Components
 
         public Box2D UVCoordinates {
             get {
-                Box2D uvCoordinates;
                 try
                 {
                     return Materials.GetMaterialData(ID)?.UVCoordinates;
@@ -51,11 +44,9 @@ namespace ConflictCube.ComponentBased.Components
 
         public Color Color {
             get {
-                Color color;
                 try
                 {
-                    color = Materials.GetMaterialData(ID).Color;
-                    return color;
+                    return Materials.GetMaterialData(ID).Color;
                 }
                 catch (Exception)
                 {
@@ -71,11 +62,9 @@ namespace ConflictCube.ComponentBased.Components
 
         public IShader Shader {
             get {
-                IShader shader;
                 try
                 {
-                    shader = Materials.GetMaterialData(ID).Shader;
-                    return shader;
+                    return Materials.GetMaterialData(ID).Shader;
                 }
                 catch (Exception)
                 {

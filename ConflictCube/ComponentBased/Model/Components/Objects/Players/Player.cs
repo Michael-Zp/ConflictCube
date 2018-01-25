@@ -5,34 +5,53 @@ using ConflictCube.ComponentBased.Components.Objects.Tiles;
 using System.Drawing;
 using ConflictCube.ResxFiles;
 using ConflictCube.ComponentBased.Model.Components.Objects.Players;
-using ConflictCube.ComponentBased.Model.Components.UI;
+using ConflictCube.ComponentBased.Model.Components.Colliders;
+using ConflictCube.ComponentBased.Model.Components.Objects;
 
 namespace ConflictCube.ComponentBased
 {
     public abstract class Player : GameObject
     {
-        public float Speed { get; protected set; }
-        public bool IsAlive { get; set; }
+        public float Speed { get; protected set; } = 20;
+        public bool IsAlive { get; set; } = true;
         public float MaxSprintEnergy = 100;
         public float CurrentSprintEnergy = 100;
         public float UsedSprintEnergyPerSecond = 100;
         public float RegeneratSprintEnergyPerSecond = 20;
-        public Player OtherPlayer;
-        public GameOverScreen GameOverScreen;
-        public GameWonScreen GameWonScreen;
-        public Action ShowMenu;
-        private bool WasOnFinishLastFrame = false;
+        public bool CanMove = true;
+        public Player OtherPlayer { private get; set; }
 
-        protected UseField UseField { get; set; }
-        protected float UseCooldown = 1.0f;
-        protected float LastUse { get; set; }
+        private IGameManager _GameManager;
+        private IGameManager GameManager {
+            get {
+                if(_GameManager == null)
+                {
+                    _GameManager = (GameManager)GameObject.FindGameObjectByType<GameManager>();
+                }
+                return _GameManager;
+            }
+        }
+        private ISwitchPlayers _SwitchPlayer;
+        private ISwitchPlayers SwitchPlayers {
+            get {
+                if (_SwitchPlayer == null)
+                {
+                    _SwitchPlayer = (PlayerSwitcher)GameObject.FindGameObjectByType<PlayerSwitcher>();
+                }
+                return _SwitchPlayer;
+            }
+        }
+
+        private float UseCooldown = 1.0f;
+        private float LastUse { get; set; }
+        
+        private float ThrowUseXOffset = 0;
+        private float ThrowUseYOffset = 1;
+        private float LastUseFieldUpdate = 0;
+        private float UseFieldUpdateCooldown = 0.1f;
+        
         protected Floor CurrentFloor;
-
-        protected static bool MaterialsAreInitialized = false;
-        protected float ThrowUseXOffset = 0;
-        protected float ThrowUseYOffset = 1;
-        protected float LastUseFieldUpdate = 0;
-        protected float UseFieldUpdateCooldown = 0.1f;
+        protected UseField UseField { get; set; }
 
         protected InputAxis Horizontal;
         protected InputAxis Vertical;
@@ -46,36 +65,33 @@ namespace ConflictCube.ComponentBased
         protected Material AfterglowMaterialY;
         protected Material AfterglowMaterialX;
         protected Material AfterglowMaterialXY;
-        protected static float AfterglowLifetime = .5f;
+        private static float AfterglowLifetime = .5f;
 
         protected GameObject AfterglowY;
         protected GameObject AfterglowX;
         protected GameObject AfterglowXY;
 
 
+        protected abstract void HitSelectedBlock();
+        protected abstract bool UseFieldIsOnUsableField();
+
 
         /// <summary>
         ///     Create a new player, with a defined size, position and move speed. The collision box of this player equals his rendering box, given with size and position
         /// </summary>
-        public Player(string name, Transform transform, BoxCollider boxCollider, Material material, GameObject parent, Floor currentFloor, float speed, GameObjectType playerType, Player otherPlayer, bool isAlive = true) : base(name, transform, parent, playerType)
+        protected Player(string name, Floor currentFloor, GameObject parent, GameObjectType playerType, CollisionType collisionType, CollisionLayer collisionLayer) : base(name, new Transform(0, 0, .06f, .06f), parent, playerType)
         {
-            Speed = speed;
-            IsAlive = isAlive;
             CurrentFloor = currentFloor;
             LastUse = -UseCooldown;
-            OtherPlayer = otherPlayer;
 
-            if(DebugGame.NoClip)
+            BoxCollider collider = new BoxCollider(new Transform(0, 0, 1, 1), false, currentFloor.CollisionGroup, collisionType, collisionLayer);
+
+            if (DebugGame.NoClip)
             {
-                boxCollider.IsTrigger = true;
+                collider.IsTrigger = true;
             }
 
-            boxCollider.IgnoreCollisionsWith.Add(CollisionType.PlayerFire);
-            boxCollider.IgnoreCollisionsWith.Add(CollisionType.PlayerIce);
-            AddComponent(boxCollider);
-            AddComponent(material);
-
-
+            AddComponent(collider);
 
             
             AfterglowMaterialY = new Material(Color.White, ShaderResources.Afterglow);
@@ -97,29 +113,24 @@ namespace ConflictCube.ComponentBased
             AfterglowMaterialXY.AddShaderParameter("desiredColor", new Vector3(Color.Pink.R, Color.Pink.G, Color.Pink.B));
 
             
-            AfterglowY = new GameObject("Afterglow Y", new Transform());
+            AfterglowY = new GameObject("Afterglow Y", new Transform(), CurrentFloor);
             AfterglowY.AddComponent(AfterglowMaterialY);
-            Parent.AddChild(AfterglowY);
 
-            AfterglowX = new GameObject("Afterglow X", new Transform());
+            AfterglowX = new GameObject("Afterglow X", new Transform(), CurrentFloor);
             AfterglowX.AddComponent(AfterglowMaterialX);
-            Parent.AddChild(AfterglowX);
 
-            AfterglowXY = new GameObject("Afterglow XY", new Transform());
+            AfterglowXY = new GameObject("Afterglow XY", new Transform(), CurrentFloor);
             AfterglowXY.AddComponent(AfterglowMaterialXY);
-            Parent.AddChild(AfterglowXY);
             
 
-            UseField = new UseField("ThrowUseIndicator", new Transform());
-            CurrentFloor.AddChild(UseField);
+            UseField = new UseField("ThrowUseIndicator", new Transform(), CurrentFloor);
             SetUseFieldWithOffset();
+
+            ResetPositionToLastCheckpoint();
         }
 
         public override void OnUpdate()
         {
-            CheckLooseCondition();
-            CheckWinCondition();
-
             if (!IsAlive)
             {
                 return;
@@ -147,51 +158,22 @@ namespace ConflictCube.ComponentBased
                 LastUse = Time.Time.CurrentTime;
                 HitSelectedBlock();
             }
+            
 
             if (Input.OnButtonDown(SwitchPositionY, ActiveGamePad))
             {
-                Vector2 thisPosition = Transform.GetPosition(WorldRelation.Global);
-                Vector2 otherPosition = OtherPlayer.Transform.GetPosition(WorldRelation.Global);
+                SwitchPlayers.SwitchYAxis();
 
-                float temp = thisPosition.Y;
-                thisPosition.Y = otherPosition.Y;
-                otherPosition.Y = temp;
+                //Afterglow
 
-                Vector2 thisSize = Transform.GetSize(WorldRelation.Global);
-                Transform thisTempTransform = new Transform(thisPosition.X, thisPosition.Y, thisSize.X, thisSize.Y);
-                Vector2 thisTargetGridPosition = CurrentFloor.GetGridPosition(thisTempTransform);
-                
-                Vector2 otherSize = OtherPlayer.Transform.GetSize(WorldRelation.Global);
-                Transform otherTempTransform = new Transform(otherPosition.X, otherPosition.Y, otherSize.X, otherSize.Y);
-                Vector2 otherTargetGridPositon = CurrentFloor.GetGridPosition(otherTempTransform);
-                if (CurrentFloor.FloorTiles[(int)thisTargetGridPosition.Y, (int)thisTargetGridPosition.X].Type == GameObjectType.Wall ||
-                    CurrentFloor.FloorTiles[(int)otherTargetGridPositon.Y, (int)otherTargetGridPositon.X].Type == GameObjectType.Wall)
-                {
-                    //Play duh sound
-                    ShowYAfterglow();
-                    OtherPlayer.ShowYAfterglow();
-                }
-                else
-                {
-                    Transform.SetPosition(thisPosition, WorldRelation.Global);
-                    OtherPlayer.Transform.SetPosition(otherPosition, WorldRelation.Global);
-
-
-                    //Afterglow
-
-                    ShowYAfterglow();
-                    OtherPlayer.ShowYAfterglow();
-                }
+                ShowYAfterglow();
+                OtherPlayer.ShowYAfterglow();
             }
             
             if (Input.OnButtonDown(SwitchPositionXY, ActiveGamePad))
             {
-                Vector2 thisPosition = Transform.GetPosition(WorldRelation.Global);
-                Vector2 otherPosition = OtherPlayer.Transform.GetPosition(WorldRelation.Global);
-                
-                Transform.SetPosition(otherPosition, WorldRelation.Global);
-                OtherPlayer.Transform.SetPosition(thisPosition, WorldRelation.Global);
-                
+                SwitchPlayers.SwitchXYAxis();
+
                 //Afterglow
 
                 ShowXYAfterglow();
@@ -200,42 +182,38 @@ namespace ConflictCube.ComponentBased
             
             if (Input.OnButtonDown(SwitchPositionX, ActiveGamePad))
             {
-                Vector2 thisPosition = Transform.GetPosition(WorldRelation.Global);
-                Vector2 otherPosition = OtherPlayer.Transform.GetPosition(WorldRelation.Global);
-
-                float temp = thisPosition.X;
-                thisPosition.X = otherPosition.X;
-                otherPosition.X = temp;
+                SwitchPlayers.SwitchXAxis();
                 
-                Vector2 thisSize = Transform.GetSize(WorldRelation.Global);
-                Transform thisTempTransform = new Transform(thisPosition.X, thisPosition.Y, thisSize.X, thisSize.Y);
-                Vector2 thisTargetGridPosition = CurrentFloor.GetGridPosition(thisTempTransform);
+                //Afterglow
 
-                Vector2 otherSize = OtherPlayer.Transform.GetSize(WorldRelation.Global);
-                Transform otherTempTransform = new Transform(otherPosition.X, otherPosition.Y, otherSize.X, otherSize.Y);
-                Vector2 otherTargetGridPositon = CurrentFloor.GetGridPosition(otherTempTransform);
-                if (CurrentFloor.FloorTiles[(int)thisTargetGridPosition.Y, (int)thisTargetGridPosition.X].Type == GameObjectType.Wall ||
-                    CurrentFloor.FloorTiles[(int)otherTargetGridPositon.Y, (int)otherTargetGridPositon.X].Type == GameObjectType.Wall)
-                {
-                    //Play duh sound
-                    ShowXAfterglow();
-                    OtherPlayer.ShowXAfterglow();
-                }
-                else
-                {
-                    Transform.SetPosition(thisPosition, WorldRelation.Global);
-                    OtherPlayer.Transform.SetPosition(otherPosition, WorldRelation.Global);
-
-
-                    //Afterglow
-
-                    ShowXAfterglow();
-                    OtherPlayer.ShowXAfterglow();
-                }
+                ShowXAfterglow();
+                OtherPlayer.ShowXAfterglow();
             }
 
             Move(moveVector * Time.Time.DifTime);
             UpdateUseField();
+        }
+
+        public bool LevelTileIsWalkable(Vector2 position)
+        {
+            Vector2 size = Transform.TransformToGlobal().GetSize(WorldRelation.Global);
+            Vector2 gridPos = CurrentFloor.GetGridPosition(new Transform(position.X, position.Y, size.X, size.Y));
+
+            switch (CurrentFloor.FloorTiles[(int)gridPos.Y, (int)gridPos.X].Type)
+            {
+                case GameObjectType.Wall:
+                    return false;
+            }
+
+            switch(CurrentFloor.CubeTiles[(int)gridPos.Y, (int)gridPos.X].Type)
+            {
+                case GameObjectType.OrangeBlock:
+                    return false;
+                case GameObjectType.BlueBlock:
+                    return false;
+            }
+
+            return true;
         }
 
         private void ShowYAfterglow()
@@ -319,8 +297,7 @@ namespace ConflictCube.ComponentBased
             AfterglowY.Transform.SetRotation(-MathHelper.RadiansToDegrees((float)Math.Atan2(yDif, xDif)), WorldRelation.Global);
         }
 
-        protected abstract void HitSelectedBlock();
-        
+
 
         private void UpdateUseField()
         {
@@ -405,11 +382,10 @@ namespace ConflictCube.ComponentBased
             }
         }
 
-        protected abstract bool UseFieldIsOnUsableField();
         
         public void Move(Vector2 moveVector)
         {
-            if (!CanMove())
+            if (!CanMove)
             {
                 return;
             }
@@ -456,27 +432,10 @@ namespace ConflictCube.ComponentBased
             {
                 Console.WriteLine(other.Type);
             }
-
-
-            if (other.Type == CollisionType.LeftBoundary ||
-                other.Type == CollisionType.RightBoundary ||
-                other.Type == CollisionType.TopBoundary ||
-                other.Type == CollisionType.BottomBoundary ||
-                other.Type == CollisionType.Wall)
-            {
-
-            }
-            else if (other.Type == CollisionType.Hole)
+            
+            if (other.Type == CollisionType.Hole)
             {
                 Die(Name + " fell into a hole");
-            }
-            else if (other.Type == CollisionType.Finish)
-            {
-                WasOnFinishLastFrame = true;
-            }
-            else if (other.Type != CollisionType.Finish)
-            {
-                WasOnFinishLastFrame = false;
             }
         }
 
@@ -485,19 +444,21 @@ namespace ConflictCube.ComponentBased
             if(DebugGame.CanDie && IsAlive)
             {
                 IsAlive = false;
-                GameOverScreen.SetDeathReason(reason);
+                GameManager.SetDeathReason(reason);
             }
         }
 
-        public void ResetToLastCheckpoint()
+        public GameObjectType GetTypeOfFloortileAtPlayerPos()
+        {
+            Vector2 currentGridPosition = CurrentFloor.GetGridPosition(Transform);
+            return CurrentFloor.FloorTiles[(int)currentGridPosition.Y, (int)currentGridPosition.X].Type;
+        }
+
+        
+        public void ResetPositionToLastCheckpoint()
         {
             Transform.SetPosition(CurrentFloor.FindStartPosition().GetPosition(WorldRelation.Global), WorldRelation.Global);
             Transform.SetRotation(0, WorldRelation.Global);
-        }
-
-        public bool CanMove()
-        {
-            return IsAlive;
         }
 
         private void SetUseFieldWithOffset(float xOffset = 0, float yOffset = 0)
@@ -512,48 +473,6 @@ namespace ConflictCube.ComponentBased
                 GameView.DrawDebug(UseField.Transform.TransformToGlobal(), Color.Red);
             }
 
-        }
-
-        private void CheckLooseCondition()
-        {
-            if (!DebugGame.CanLoose)
-            {
-                return;
-            }
-
-            if (!IsAlive || !OtherPlayer.IsAlive)
-            {
-                IsAlive = false;
-                OtherPlayer.IsAlive = false;
-
-                GameOverScreen.Enabled = true;
-
-                if (Input.AnyButtonDown())
-                {
-                    ResetToLastCheckpoint();
-                    IsAlive = true;
-
-                    OtherPlayer.ResetToLastCheckpoint();
-                    OtherPlayer.IsAlive = true;
-
-                    GameOverScreen.Enabled = false;
-                }
-            }
-        }
-
-        private void CheckWinCondition()
-        {
-            if (WasOnFinishLastFrame && OtherPlayer.WasOnFinishLastFrame)
-            {
-                GameWonScreen.Enabled = true;
-
-                if (Input.AnyButtonDown())
-                {
-                    ShowMenu.Invoke();
-
-                    GameOverScreen.Enabled = false;
-                }
-            }
         }
 
         protected LevelTile GetLevelTileOnCubeLayerOfSelectedField()

@@ -10,7 +10,7 @@ namespace ConflictCube.ComponentBased.Model.Components.Objects
         private Material DeactivatedMaterial = new Material(System.Drawing.Color.OrangeRed, null, null);
         private Material ActivatedMaterial = new Material(System.Drawing.Color.Green, null, null);
 
-        public Button(string name, Transform transform, Event eventToFireOnActivate, CollisionGroup group) : base(name, transform)
+        public Button(string name, Transform transform, Event eventToFireOnActivate, CollisionGroup group, GameObject parent) : base(name, transform, parent)
         {
             Event = eventToFireOnActivate;
             AddComponent(DeactivatedMaterial);

@@ -4,7 +4,7 @@ using ConflictCube.ComponentBased.Model.Components.Objects;
 
 namespace ConflictCube.ComponentBased
 {
-    public class GameState
+    public class GameState : IBuildScene, IBuildMenu
     {
         public Game Game { get; set; }
         public Scene ActiveScene;
@@ -22,20 +22,16 @@ namespace ConflictCube.ComponentBased
         
         public void BuildMenu()
         {
-            Game = new Game("Game", new Transform(0, 0, 1, 1));
+            Game = new Game("ActiveScene", new Transform(0, 0, 1, 1), null);
 
-            ActiveScene = SceneBuilder.BuildMenu(this, WindowWidth, WindowHeight);
-
-            Game.AddChild(ActiveScene.RootGameObject);
+            ActiveScene = SceneBuilder.BuildMenu(this, WindowWidth, WindowHeight, Game);
         }
 
         public void BuildScene(string level)
         {
-            Game = new Game("Game", new Transform(0, 0, 1, 1));
+            Game = new Game("ActiveScene", new Transform(0, 0, 1, 1), null);
 
-            ActiveScene = SceneBuilder.BuildLevel(this, level, new Transform(), WindowWidth, WindowHeight);
-
-            Game.AddChild(ActiveScene.RootGameObject);
+            ActiveScene = SceneBuilder.BuildLevel(this, level, new Transform(), WindowWidth, WindowHeight, Game);
         }
 
         public void UpdateAll()

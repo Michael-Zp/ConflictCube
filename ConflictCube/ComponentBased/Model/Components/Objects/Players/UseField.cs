@@ -14,7 +14,7 @@ namespace ConflictCube.ComponentBased.Model.Components.Objects.Players
 
         private static int MaxAlpha = 150;
 
-        public UseField(string name, Transform transform) : base(name, transform)
+        public UseField(string name, Transform transform, GameObject parent) : base(name, transform, parent)
         {
             if (!MaterialsAreInitialized)
             {

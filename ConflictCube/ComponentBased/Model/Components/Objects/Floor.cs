@@ -25,7 +25,7 @@ namespace ConflictCube.ComponentBased
         public bool FloorShouldBreakDown = false;
 
         //floorSize is the size of the whole floor and not only the part which should be shown.
-        public Floor(string name, Transform transform, GameObject parent, int rows, int columns, CollisionGroup group, Vector2 tileSize) : base(name, transform, parent)
+        public Floor(string name, Transform transform, int rows, int columns, CollisionGroup group, Vector2 tileSize, GameObject parent) : base(name, transform, parent)
         {
             FloorTiles = new LevelTile[rows, columns];
             CubeTiles = new LevelTile[rows, columns];
@@ -89,8 +89,8 @@ namespace ConflictCube.ComponentBased
         {
             FloorTiles[y, x] = floorTile;
             CubeTiles[y, x] = cubeTile;
-            AddChild(floorTile);
-            AddChild(cubeTile);
+            floorTile.Parent = this;
+            cubeTile.Parent = this;
         }
 
 

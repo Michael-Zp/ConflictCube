@@ -9,16 +9,15 @@ namespace ConflictCube.ComponentBased.Model.Components.UI
 
         private const float SizePerCharacterInDeathReason = 0.04f;
 
-        public GameOverScreen(string name, Transform transform, bool enabled = true) : base(name, transform)
+        public GameOverScreen(string name, Transform transform, GameObject parent, bool enabled = true) : base(name, transform, parent, enabled)
         {
-            AddChild(new ColoredBox("GameOverBackground", new Transform(), new Material(Color.FromArgb(245, Color.Black))));
-            AddChild(new TextField("GameOverText", new Transform(0f, .4f, 1f, .3f), "Game over", Font.Instance().BloodBath));
-            AddChild(new TextField("Press any key...", new Transform(0f, -.7f, 1.5f, .15f), "Press any key to start over...", Font.Instance().BloodBath));
+            new ColoredBox("GameOverBackground", new Transform(), new Material(Color.FromArgb(245, Color.Black)), this);
+            new TextField("GameOverText", new Transform(0f, .4f, 1f, .3f), "Game over", Font.Instance().BloodBath, this);
+            new TextField("Press any key...", new Transform(0f, -.7f, 1.5f, .15f), "Press any key to start over...", Font.Instance().BloodBath, this);
 
 
-            DeathReason = new TextField("DeathReason", new Transform(0f, -.1f, 1, .15f), "", Font.Instance().BloodBath);
+            DeathReason = new TextField("DeathReason", new Transform(0f, -.1f, 1, .15f), "", Font.Instance().BloodBath, this);
             SetDeathReason();
-            AddChild(DeathReason);
         }
 
         public void SetDeathReason(string text = "Death reason")

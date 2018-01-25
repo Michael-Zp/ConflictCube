@@ -9,18 +9,18 @@ namespace ConflictCube.ComponentBased
 {
     public static class FloorLoader
     {
-        public static Floor Instance(string levelData, string floorName, Transform areaOfFloor, GameObject parent, CollisionGroup group)
+        public static Floor Instance(string levelData, string floorName, Transform areaOfFloor, CollisionGroup group, GameObject parent)
         {
             List<int[,]> FloorTiles = ReadLayersOfLevel(levelData, out int rows, out int columns);
 
-            return LoadFloor(rows, columns, FloorTiles, floorName, areaOfFloor, parent, group);
+            return LoadFloor(rows, columns, FloorTiles, floorName, areaOfFloor, group, parent);
         }
 
-        private static Floor LoadFloor(int levelRows, int levelColumns, List<int[,]> floorTiles, string name, Transform floorTransform, GameObject parent, CollisionGroup group)
+        private static Floor LoadFloor(int levelRows, int levelColumns, List<int[,]> floorTiles, string name, Transform floorTransform, CollisionGroup group, GameObject parent)
         {
             //Vector2 floorTileSize = new Vector2(floorTransform.GetSize(WorldRelation.Local).X / levelColumns, floorTransform.GetSize(WorldRelation.Local).X / levelColumns);
             Vector2 floorTileSize = new Vector2(0.13f, 0.13f);
-            Floor floorOfLevel = new Floor(name, floorTransform, parent, levelRows, levelColumns, group, floorTileSize);
+            Floor floorOfLevel = new Floor(name, floorTransform, levelRows, levelColumns, group, floorTileSize, parent);
 
             for (int row = 0; row < levelRows; row++)
             {
@@ -30,8 +30,8 @@ namespace ConflictCube.ComponentBased
                     
                     string tileName = "FloorTile, " + floorTiles.ToString() + " row: " + row + " column: " + column;
                     
-                    LevelTile floorTile = new LevelTile(row, column, tileName, tileTransform, parent, floorTiles[0][row, column], floorOfLevel);
-                    LevelTile cubeTile = new LevelTile(row, column, tileName, tileTransform, parent, floorTiles[1][row, column], floorOfLevel);
+                    LevelTile floorTile = new LevelTile(row, column, tileName, tileTransform, floorTiles[0][row, column], floorOfLevel, floorOfLevel);
+                    LevelTile cubeTile = new LevelTile(row, column, tileName, tileTransform, floorTiles[1][row, column], floorOfLevel, floorOfLevel);
 
 
                     floorOfLevel.AddLevelTile(floorTile, cubeTile, row, column);

@@ -65,7 +65,7 @@ namespace ConflictCube.ComponentBased.Components.Objects.Tiles
             return TileIndexToObjectType[index - 1];
         }
 
-        public LevelTile(int row, int column, string name, Transform transform, GameObject parent, int tileIndex, Floor floorOfTile) : base(name, transform, parent)
+        public LevelTile(int row, int column, string name, Transform transform, int tileIndex, Floor floorOfTile, GameObject parent) : base(name, transform, parent)
         {
             if (!MaterialsAreInitialized)
             {

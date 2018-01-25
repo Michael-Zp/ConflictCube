@@ -11,7 +11,7 @@ namespace ConflictCube.ComponentBased.Model.Components.Objects
         private List<Camera> Cameras;
         private List<Player> Players;
 
-        public CameraManager(string name, Transform transform, List<Camera> cameras, List<Player> players) : base(name, transform)
+        public CameraManager(string name, Transform transform, List<Camera> cameras, List<Player> players, GameObject parent) : base(name, transform, parent)
         {
             Cameras = cameras;
             Players = players;

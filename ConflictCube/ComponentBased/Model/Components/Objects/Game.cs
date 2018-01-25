@@ -6,7 +6,7 @@ namespace ConflictCube.ComponentBased.Model.Components.Objects
 {
     public class Game : GameObject
     {
-        public Game(string name, Transform transform) : base(name, transform, null, GameObjectType.Game)
+        public Game(string name, Transform transform, GameObject parent) : base(name, transform, parent, GameObjectType.Game)
         {
 
         }

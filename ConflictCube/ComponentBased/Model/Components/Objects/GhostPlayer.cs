@@ -6,7 +6,7 @@ namespace ConflictCube.ComponentBased.Model.Components.Objects
     {
         private Player ActualPlayer;
 
-        public GhostPlayer(string name, Transform transform, GameObject parent, Material material, Player actualPlayer, GameObjectType type) : base(name, transform, parent, type)
+        public GhostPlayer(string name, Transform transform, Material material, Player actualPlayer, GameObjectType type, GameObject parent) : base(name, transform, parent, type)
         {
             ActualPlayer = actualPlayer;
 

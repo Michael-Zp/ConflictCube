@@ -18,7 +18,7 @@ namespace ConflictCube.ComponentBased.Model.Components.UI
 
         private bool WasEnabledLastFrame = false;
 
-        public ButtonGroup(string name, Transform transform) : base(name, transform)
+        public ButtonGroup(string name, Transform transform, GameObject parent) : base(name, transform, parent)
         {
             if(!MaterialsAreInitalized)
             {
@@ -93,7 +93,7 @@ namespace ConflictCube.ComponentBased.Model.Components.UI
 
         public void AddButton(Transform transform, TextField textField, Action action)
         {
-            ColoredBox buttonBox = new ColoredBox("btn" + textField.Text, transform, NotActiveMat);
+            ColoredBox buttonBox = new ColoredBox("btn" + textField.Text, transform, NotActiveMat, this);
             Buttons.Add(buttonBox);
             Texts.Add(textField);
 
@@ -103,8 +103,7 @@ namespace ConflictCube.ComponentBased.Model.Components.UI
             }
             OnClicks.Add(action);
 
-            AddChild(buttonBox);
-            AddChild(textField);
+            textField.Parent = this;
 
             UpdateSelectedButton();
         }

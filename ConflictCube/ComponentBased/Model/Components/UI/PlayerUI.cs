@@ -52,24 +52,19 @@ namespace ConflictCube.ComponentBased
             ForegroundLayer = new GameObject("ForegroundPlayerUI", new Transform(0, 0, 1, 1), this);
             
 
-            BackgroundLayer.AddChild(new Canvas("Background", new Transform(0, 0, 1, 1), this, BackgroundMat));
+            new Canvas("Background", new Transform(0, 0, 1, 1), BackgroundMat, BackgroundLayer);
 
-            ForegroundLayer.AddChild(new TextField("HealthText", new Transform(-.85f, .9f, .37f, .1f), "Health", Font.Instance().NormalFont));
+            new TextField("HealthText", new Transform(-.85f, .9f, .37f, .1f), "Health", Font.Instance().NormalFont, ForegroundLayer);
 
-            PlayerHealth = new Canvas("Health" + player.Name, new Transform(0, .85f, .8f, .05f), ForegroundLayer, PlayerAliveMat);
-            ForegroundLayer.AddChild(PlayerHealth);
+            PlayerHealth = new Canvas("Health" + player.Name, new Transform(0, .85f, .8f, .05f), PlayerAliveMat, ForegroundLayer);
 
             // Abilities
 
-            BottomButton = new Canvas("bottomAbility", new Transform(0, -.05f, .4f, .08f), ForegroundLayer, SledgehammerMaterial);
-            TopButton = new Canvas("topAbility",       new Transform(0, .25f, .4f, .08f), ForegroundLayer, SwapMaterial);
+            BottomButton = new Canvas("bottomAbility", new Transform(0, -.05f, .4f, .08f), SledgehammerMaterial, ForegroundLayer);
+            TopButton = new Canvas("topAbility",       new Transform(0, .25f, .4f, .08f), SwapMaterial, ForegroundLayer);
 
-            LeftButton   = new Canvas("leftAbility",   new Transform(-.5f, .1f, .4f, .08f), ForegroundLayer, SwapMaterial);
-            RightButton  = new Canvas("rightAbility",  new Transform( .5f, .1f, .4f, .08f), ForegroundLayer, SwapMaterial);
-            ForegroundLayer.AddChild(BottomButton);
-            ForegroundLayer.AddChild(TopButton);
-            ForegroundLayer.AddChild(LeftButton);
-            ForegroundLayer.AddChild(RightButton);
+            LeftButton   = new Canvas("leftAbility",   new Transform(-.5f, .1f, .4f, .08f), SwapMaterial, ForegroundLayer);
+            RightButton  = new Canvas("rightAbility",  new Transform( .5f, .1f, .4f, .08f), SwapMaterial, ForegroundLayer);
 
             Transform topButtonTextTransform = (Transform)TopButton.Transform.Clone();
             Transform leftButtonTextTransform = (Transform)LeftButton.Transform.Clone();
@@ -90,18 +85,17 @@ namespace ConflictCube.ComponentBased
             leftButtonTextTransform.SetSize(leftButtonTextTransform.GetSize(WorldRelation.Global) * .8f, WorldRelation.Global);
             rightButtonTextTransform.SetSize(rightButtonTextTransform.GetSize(WorldRelation.Global) * .8f, WorldRelation.Global);
 
-            ForegroundLayer.AddChild(new TextField("xySwap", topButtonTextTransform, "xy", Font.Instance().NormalFont));
-            ForegroundLayer.AddChild(new TextField("xySwap", leftButtonTextTransform, "x", Font.Instance().NormalFont));
-            ForegroundLayer.AddChild(new TextField("xySwap", rightButtonTextTransform, "y", Font.Instance().NormalFont));
+            new TextField("xySwap", topButtonTextTransform, "xy", Font.Instance().NormalFont, ForegroundLayer);
+            new TextField("xySwap", leftButtonTextTransform, "x", Font.Instance().NormalFont, ForegroundLayer);
+            new TextField("xySwap", rightButtonTextTransform, "y", Font.Instance().NormalFont, ForegroundLayer);
 
 
             //Sprint Energy
 
-            ForegroundLayer.AddChild(new TextField("Sprint", new Transform(-.8f, -.35f, .3f, .1f), "Sprint-", Font.Instance().NormalFont));
-            ForegroundLayer.AddChild(new TextField("Energy", new Transform(-.8f, -.45f, .3f, .1f), "energy:", Font.Instance().NormalFont));
+            new TextField("Sprint", new Transform(-.8f, -.35f, .3f, .1f), "Sprint-", Font.Instance().NormalFont, ForegroundLayer);
+            new TextField("Energy", new Transform(-.8f, -.45f, .3f, .1f), "energy:", Font.Instance().NormalFont, ForegroundLayer);
 
-            SprintEnergyBackground = new Canvas("SprintEnergyBackground", new Transform(0, -.6f, .8f, .1f), ForegroundLayer, SprintEnergyBackgroundMaterial);
-            ForegroundLayer.AddChild(SprintEnergyBackground);
+            SprintEnergyBackground = new Canvas("SprintEnergyBackground", new Transform(0, -.6f, .8f, .1f), SprintEnergyBackgroundMaterial, ForegroundLayer);
 
             float blockHeight = SprintEnergyBackground.Transform.GetSize(WorldRelation.Local).Y * .9f;
             float blockWidht = (SprintEnergyBackground.Transform.GetSize(WorldRelation.Local).X * .8f) / SprintBlockCount;
@@ -110,13 +104,8 @@ namespace ConflictCube.ComponentBased
             for (int i = 0; i < SprintBlockCount; i++)
             {
                 float blockXPosition = SprintEnergyBackground.Transform.GetMinX(WorldRelation.Local) + marginWidht + blockWidht + (marginWidht * 1.5f + blockWidht * 2) * i;
-                SprintEnergyBlocks.Add(new Canvas("SprintEnergyBlock" + i, new Transform(blockXPosition, SprintEnergyBackground.Transform.GetPosition(WorldRelation.Local).Y, blockWidht, blockHeight), ForegroundLayer, SprintEnergyBlockMaterial));
-                ForegroundLayer.AddChild(SprintEnergyBlocks[i]);
+                SprintEnergyBlocks.Add(new Canvas("SprintEnergyBlock" + i, new Transform(blockXPosition, SprintEnergyBackground.Transform.GetPosition(WorldRelation.Local).Y, blockWidht, blockHeight), SprintEnergyBlockMaterial, ForegroundLayer));
             }
-
-
-            AddChild(BackgroundLayer);
-            AddChild(ForegroundLayer);
         }
 
         public override void OnUpdate()

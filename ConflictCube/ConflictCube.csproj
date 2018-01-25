@@ -79,11 +79,17 @@
     <Compile Include="ComponentBased\Controller\InputKey.cs" />
     <Compile Include="ComponentBased\Controller\ViewModel.cs" />
     <Compile Include="ComponentBased\DebugGame.cs" />
+    <Compile Include="ComponentBased\Model\Components\Objects\GameManager.cs" />
+    <Compile Include="ComponentBased\Model\Components\Objects\IGameManager.cs" />
+    <Compile Include="ComponentBased\Model\Components\Objects\ISwitchPlayers.cs" />
+    <Compile Include="ComponentBased\Model\Components\Objects\PlayerSwitcher.cs" />
     <Compile Include="ComponentBased\Model\Components\Objects\Players\UseField.cs" />
     <Compile Include="ComponentBased\Model\Components\UI\ButtonGroup.cs" />
     <Compile Include="ComponentBased\Model\Components\UI\DoActionOnButtonClick.cs" />
     <Compile Include="ComponentBased\Model\Components\UI\GameWonScreen.cs" />
     <Compile Include="ComponentBased\Model\Components\UI\GameOverScreen.cs" />
+    <Compile Include="ComponentBased\Model\IBuildMenu.cs" />
+    <Compile Include="ComponentBased\Model\IBuildScene.cs" />
     <Compile Include="ResxFiles\FontResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

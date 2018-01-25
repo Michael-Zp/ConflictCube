@@ -16,7 +16,7 @@ namespace ConflictCube.ComponentBased.Model.Components.UI
         private Action ActionOnKeyPress;
         private KeyPressType KeyPressType;
 
-        public DoActionOnButtonClick(string name, Transform transform, Key key, Action actionOnKeyPress, KeyPressType keyPressType) : base(name, transform)
+        public DoActionOnButtonClick(string name, Transform transform, Key key, Action actionOnKeyPress, KeyPressType keyPressType, GameObject parent) : base(name, transform, parent)
         {
             Key = key;
             ActionOnKeyPress = actionOnKeyPress;

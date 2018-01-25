@@ -17,6 +17,15 @@
 
         }
 
+
+        /// <summary>
+        /// Will be called after all updates are called
+        /// </summary>
+        public virtual void OnLateUpdate()
+        {
+
+        }
+
         public virtual void OnCollision(Collider other)
         {
 

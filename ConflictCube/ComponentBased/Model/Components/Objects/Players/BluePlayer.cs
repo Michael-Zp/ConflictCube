@@ -1,16 +1,28 @@
 ﻿using ConflictCube.ComponentBased.Components;
 using ConflictCube.ComponentBased.Components.Objects.Tiles;
+using ConflictCube.ComponentBased.Model.Components.Colliders;
 using OpenTK;
 using System;
 using System.Drawing;
+using Zenseless.OpenGL;
 
 namespace ConflictCube.ComponentBased
 {
     public class BluePlayer : Player
     {
-        public BluePlayer(string name, Transform transform, BoxCollider boxCollider, Material material, GameObject parent, Floor currentFloor, float speed, GameObjectType playerType, Player otherPlayer, bool isAlive = true)
-            : base(name, transform, boxCollider, material, parent, currentFloor, speed, playerType, otherPlayer, isAlive)
+        private Material WelderMaterial;
+        private bool MaterialsAreInitialized;
+
+        public BluePlayer(string name, Floor currentFloor, GameObject parent)
+            : base(name, currentFloor, parent, GameObjectType.PlayerIce, CollisionType.PlayerIce, CollisionLayer.Orange)
         {
+            if (!MaterialsAreInitialized)
+            {
+                MaterialsAreInitialized = true;
+                WelderMaterial = new Material(Color.White, (Texture)Tilesets.Instance().WelderSheet.Tex, Tilesets.Instance().WelderSheet.CalcSpriteTexCoords(0));
+
+            }
+
             Horizontal = InputAxis.Player2Horizontal;
             Vertical = InputAxis.Player2Vertical;
             Sprint = InputKey.PlayerTwoSprint;
@@ -24,7 +36,9 @@ namespace ConflictCube.ComponentBased
             AfterglowMaterialY.AddShaderParameter("desiredColor", new Vector3(Color.Blue.R, Color.Blue.G, Color.Blue.B));
             AfterglowMaterialXY.AddShaderParameter("desiredColor", new Vector3(Color.Blue.R, Color.Blue.G, Color.Blue.B));
 
-            GetComponent<Collider>().Layer = Model.Components.Colliders.CollisionLayer.Blue;
+            GetComponent<Collider>().IgnoreCollisionsWith.Add(CollisionType.PlayerFire);
+
+            AddComponent(WelderMaterial);
         }
             
         public override void OnUpdate()

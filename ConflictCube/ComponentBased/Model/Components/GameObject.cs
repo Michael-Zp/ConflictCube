@@ -22,14 +22,25 @@ namespace ConflictCube.ComponentBased.Components
                 return _Parent;
             }
             set {
+                if (_Parent != null)
+                {
+                    _Parent.Children.Remove(this);
+                }
+                else if(RootGameObjectNode.Contains(this))
+                {
+                    RootGameObjectNode.Remove(this);
+                }
+
                 if (value != null)
                 {
-                    _Parent = value;
+                    value.Children.Add(this);
                 }
                 else
                 {
-                    _Parent = RootGameObject;
+                    RootGameObjectNode.Add(this);
                 }
+                _Parent = value;
+
             }
         }
         public string Name;
@@ -71,18 +82,8 @@ namespace ConflictCube.ComponentBased.Components
                 return true;
             }
         }
-
-
-        public GameObject(string name, Transform transform) : this(name, transform, null)
-        { }
-
-        public GameObject(string name, Transform transform, bool enabled = true) : this(name, transform, GameObjectType.Default, enabled)
-        { }
-
-        public GameObject(string name, Transform transform, GameObject parent) : this(name, transform, parent, GameObjectType.Default)
-        { }
-
-        public GameObject(string name, Transform transform, GameObjectType type, bool enabled = true) : this(name, transform, null, type, enabled)
+        
+        public GameObject(string name, Transform transform, GameObject parent, bool enabled = true) : this(name, transform, parent, GameObjectType.Default, enabled)
         { }
 
         public GameObject(string name, Transform transform, GameObject parent, GameObjectType type, bool enabled = true)
@@ -149,12 +150,6 @@ namespace ConflictCube.ComponentBased.Components
             return comps;
         }
 
-        public void AddChild(GameObject child)
-        {
-            Children.Add(child);
-            child.Parent = this;
-        }
-
         public virtual GameObject Clone()
         {
             GameObject newGameObject = (GameObject)MemberwiseClone();
@@ -176,6 +171,13 @@ namespace ConflictCube.ComponentBased.Components
 
         public void UpdateAll()
         {
+            CallAllOnUpdate();
+
+            CallAllOnLateUpdate();
+        }
+
+        private void CallAllOnUpdate()
+        {
             if (!EnabledInHierachy)
             {
                 return;
@@ -185,7 +187,22 @@ namespace ConflictCube.ComponentBased.Components
 
             foreach (GameObject child in Children)
             {
-                child.UpdateAll();
+                child.CallAllOnUpdate();
+            }
+        }
+
+        private void CallAllOnLateUpdate()
+        {
+            if (!EnabledInHierachy)
+            {
+                return;
+            }
+
+            OnLateUpdate();
+
+            foreach (GameObject child in Children)
+            {
+                child.CallAllOnLateUpdate();
             }
         }
 
@@ -258,12 +275,7 @@ namespace ConflictCube.ComponentBased.Components
         //Static
 
 
-        private static GameObject RootGameObject;
-
-        static GameObject()
-        {
-            RootGameObject = new GameObject("Root", new Transform());
-        }
+        private static List<GameObject> RootGameObjectNode = new List<GameObject>();
 
         /// <summary>
         /// Destroies a game object.
@@ -277,6 +289,10 @@ namespace ConflictCube.ComponentBased.Components
                 gameObject.OnDestroy();
                 gameObject.Parent.Children.Remove(gameObject);
             }
+            else
+            {
+                RootGameObjectNode.Remove(gameObject);
+            }
         }
 
 
@@ -288,28 +304,31 @@ namespace ConflictCube.ComponentBased.Components
         /// <returns></returns>
         public static GameObject FindGameObjectByType<T>() where T : GameObject
         {
-            if (RootGameObject is T)
+            foreach(GameObject rootGameObjects in RootGameObjectNode)
             {
-                return RootGameObject;
-            }
-
-            foreach (GameObject child in RootGameObject.Children)
-            {
-                if (child is T)
+                if (rootGameObjects is T)
                 {
-                    return child;
+                    return rootGameObjects;
+                }
+
+                foreach (GameObject child in rootGameObjects.Children)
+                {
+                    if (child is T)
+                    {
+                        return child;
+                    }
+                }
+
+                foreach (GameObject child in rootGameObjects.Children)
+                {
+                    GameObject gO = child.FindGameObjectByTypeInChildren<T>();
+                    if (gO != null)
+                    {
+                        return gO;
+                    }
                 }
             }
-
-            foreach (GameObject child in RootGameObject.Children)
-            {
-                GameObject gO = child.FindGameObjectByTypeInChildren<T>();
-                if (gO != null)
-                {
-                    return gO;
-                }
-            }
-
+            
             return null;
         }
 
@@ -323,22 +342,25 @@ namespace ConflictCube.ComponentBased.Components
         {
             List<GameObject> allGameObjects = new List<GameObject>();
 
-            if (RootGameObject is T)
+            foreach(GameObject rootGameObjects in RootGameObjectNode)
             {
-                allGameObjects.Add(RootGameObject);
-            }
-
-            foreach (GameObject child in RootGameObject.Children)
-            {
-                if (child is T)
+                if (rootGameObjects is T)
                 {
-                    allGameObjects.Add(child);
+                    allGameObjects.Add(rootGameObjects);
                 }
-            }
 
-            foreach (GameObject child in RootGameObject.Children)
-            {
-                allGameObjects.AddRange(child.FindGameObjectsByTypeInChildren<T>());
+                foreach (GameObject child in rootGameObjects.Children)
+                {
+                    if (child is T)
+                    {
+                        allGameObjects.Add(child);
+                    }
+                }
+
+                foreach (GameObject child in rootGameObjects.Children)
+                {
+                    allGameObjects.AddRange(child.FindGameObjectsByTypeInChildren<T>());
+                }
             }
 
             return allGameObjects;
