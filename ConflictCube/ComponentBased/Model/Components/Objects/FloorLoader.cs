@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Xml;
 using ConflictCube.ComponentBased.Components;
 using ConflictCube.ComponentBased.Components.Objects.Tiles;
+using ConflictCube.ComponentBased.Model.Components.Objects;
+using ConflictCube.ComponentBased.Model.Components.Objects.Events;
 using OpenTK;
 
 namespace ConflictCube.ComponentBased
@@ -18,7 +20,6 @@ namespace ConflictCube.ComponentBased
 
         private static Floor LoadFloor(int levelRows, int levelColumns, List<int[,]> floorTiles, string name, Transform floorTransform, CollisionGroup group, GameObject parent)
         {
-            //Vector2 floorTileSize = new Vector2(floorTransform.GetSize(WorldRelation.Local).X / levelColumns, floorTransform.GetSize(WorldRelation.Local).X / levelColumns);
             Vector2 floorTileSize = new Vector2(0.13f, 0.13f);
             Floor floorOfLevel = new Floor(name, floorTransform, levelRows, levelColumns, group, floorTileSize, parent);
 
@@ -27,20 +28,62 @@ namespace ConflictCube.ComponentBased
                 for (int column = 0; column < levelColumns; column++)
                 {
                     Transform tileTransform = floorOfLevel.BoxInFloorGrid(row, column);
-                    
+
                     string tileName = "FloorTile, " + floorTiles.ToString() + " row: " + row + " column: " + column;
-                    
+
                     LevelTile floorTile = new LevelTile(row, column, tileName, tileTransform, floorTiles[0][row, column], floorOfLevel, floorOfLevel);
-                    LevelTile cubeTile = new LevelTile(row, column, tileName, tileTransform, floorTiles[1][row, column], floorOfLevel, floorOfLevel);
+                    LevelTile buttonTile = new LevelTile(row, column, tileName, tileTransform, floorTiles[1][row, column], floorOfLevel, floorOfLevel);
+                    LevelTile cubeTile = new LevelTile(row, column, tileName, tileTransform, floorTiles[2][row, column], floorOfLevel, floorOfLevel);
+
+                    if (buttonTile.Type == GameObjectType.NotActiveButton)
+                    {
+                        buttonTile.Event = GenerateEvent(row, column, levelRows, levelColumns, floorTiles, floorOfLevel);
+                    }
 
 
-                    floorOfLevel.AddLevelTile(floorTile, cubeTile, row, column);
+                    floorOfLevel.AddLevelTile(floorTile, buttonTile, cubeTile, row, column);
                 }
             }
 
             floorOfLevel.CurrentCheckpoint = floorOfLevel.FindStartPosition();
 
             return floorOfLevel;
+        }
+
+        private static OnButtonChangeFloorEvent GenerateEvent(int row, int column, int levelRows, int levelColumns, List<int[,]> floorTiles, Floor floor)
+        {
+            OnButtonChangeFloorEvent btnEvent = new OnButtonChangeFloorEvent(floor);
+
+            for (int i = 3; i < floorTiles.Count; i++)
+            {
+                if (LevelTile.GetGameObjectTypeForIndex(floorTiles[i][row, column]) != GameObjectType.NotActiveButton)
+                {
+                    continue;
+                }
+
+
+                for (int tempRow = 0; tempRow < levelRows; tempRow++)
+                {
+                    for (int tempColumn = 0; tempColumn < levelColumns; tempColumn++)
+                    {
+                        if (row == tempRow && column == tempColumn)
+                        {
+                            continue;
+                        }
+
+                        GameObjectType type = LevelTile.GetGameObjectTypeForIndex(floorTiles[i][tempRow, tempColumn]);
+
+                        if (type == GameObjectType.None)
+                        {
+                            continue;
+                        }
+
+                        btnEvent.AddChangeOnFloor(tempRow, tempColumn, type);
+                    }
+                }
+            }
+
+            return btnEvent;
         }
 
 
@@ -56,9 +99,9 @@ namespace ConflictCube.ComponentBased
             levelRows = -1;
             levelColumns = -1;
 
-            foreach(XmlNode layerData in layersData)
+            foreach (XmlNode layerData in layersData)
             {
-                if(levelRows == -1 || levelColumns == -1)
+                if (levelRows == -1 || levelColumns == -1)
                 {
                     layersOfLevel.Add(GetFloorDataFromLevelfile(layerData.InnerText, out levelRows, out levelColumns));
                 }
@@ -127,7 +170,7 @@ namespace ConflictCube.ComponentBased
 
             string[] levelLines = levelData.Split('\n');
 
-            for(int i = 0; i < levelLines.Length; i++)
+            for (int i = 0; i < levelLines.Length; i++)
             {
                 levelLines[i] = levelLines[i].Trim().TrimEnd(',');
             }

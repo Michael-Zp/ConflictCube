@@ -1,4 +1,6 @@
 ﻿using ConflictCube.ComponentBased.Model.Components.Colliders;
+using ConflictCube.ComponentBased.Model.Components.Objects.Events;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using Zenseless.Geometry;
@@ -8,16 +10,17 @@ namespace ConflictCube.ComponentBased.Components.Objects.Tiles
 {
     public class LevelTile : GameObject
     {
-        public static Dictionary<int, Material> FloorTileMaterials = new Dictionary<int, Material>();
+        
 
         public int Row { get; private set; }
         public int Column { get; private set; }
+        public OnButtonChangeFloorEvent Event { private get; set; }
 
-
+        private static Dictionary<int, Material> FloorTileMaterials = new Dictionary<int, Material>();
+        private static Dictionary<GameObjectType, List<uint>> ReverseMaterialList = new Dictionary<GameObjectType, List<uint>>();
         private static GameObjectType[] TileIndexToObjectType = new GameObjectType[48];
         private static bool MaterialsAreInitialized = false;
         private Floor FloorOfTile;
-        private int Health = 0;
         private int TileIndex = 0;
 
         private static void InitalizeMaterials()
@@ -48,6 +51,16 @@ namespace ConflictCube.ComponentBased.Components.Objects.Tiles
         {
             FloorTileMaterials.Add((int)index, new Material(Color.White, spriteSheet.Tex, new Box2D(spriteSheet.CalcSpriteTexCoords(index - 1))));
             TileIndexToObjectType[index - 1] = type;
+            
+            if(ReverseMaterialList.ContainsKey(type))
+            {
+                ReverseMaterialList.TryGetValue(type, out List<uint> values);
+                values.Add(index);
+            }
+            else
+            {
+                ReverseMaterialList.Add(type, new List<uint>() { index });
+            }
         }
 
         public static GameObjectType GetGameObjectTypeForIndex(int index)
@@ -65,7 +78,7 @@ namespace ConflictCube.ComponentBased.Components.Objects.Tiles
             return TileIndexToObjectType[index - 1];
         }
 
-        public LevelTile(int row, int column, string name, Transform transform, int tileIndex, Floor floorOfTile, GameObject parent) : base(name, transform, parent)
+        public LevelTile(int row, int column, string name, Transform transform, int tileIndex, Floor floorOfTile, GameObject parent, OnButtonChangeFloorEvent changeEvent = null) : base(name, transform, parent)
         {
             if (!MaterialsAreInitialized)
             {
@@ -76,20 +89,16 @@ namespace ConflictCube.ComponentBased.Components.Objects.Tiles
             Column = column;
             FloorOfTile = floorOfTile;
             TileIndex = tileIndex;
+            Event = changeEvent;
             Type = GetGameObjectTypeForIndex(TileIndex);
 
-            InitializeComponentsAndHealth();
+            InitializeComponents();
         }
 
-        private void InitializeComponentsAndHealth()
+        private void InitializeComponents()
         {
             AddMaterialOnCreate();
             AddColliderOnCreate(FloorOfTile.CollisionGroup);
-
-            if (Type == GameObjectType.Wall)
-            {
-                Health = 3;
-            }
         }
 
         private void AddMaterialOnCreate()
@@ -129,6 +138,22 @@ namespace ConflictCube.ComponentBased.Components.Objects.Tiles
             {
                 AddComponent(new BoxCollider(new Transform(0, 0, 1, 1), true, group, CollisionType.Finish));
             }
+            else if (Type == GameObjectType.NotActiveButton)
+            {
+                AddComponent(new BoxCollider(new Transform(0, 0, .9f, .9f), true, group, CollisionType.Finish));
+            }
+        }
+
+        public override void OnCollision(Collider other)
+        {
+            if(Type != GameObjectType.NotActiveButton)
+            {
+                return;
+            }
+
+            Event?.StartEvent();
+
+            ChangeFloorTile(GameObjectType.ActiveButton);
         }
 
         public void ChangeFloorTile(GameObjectType TypeToTransformTo)
@@ -141,9 +166,15 @@ namespace ConflictCube.ComponentBased.Components.Objects.Tiles
             RemoveComponent<Material>();
             RemoveComponent<Collider>();
 
+            ReverseMaterialList.TryGetValue(TypeToTransformTo, out List<uint> possibleTileIndies);
+
+            Random random = new Random((int)Time.Time.CurrentTime);
+
+            TileIndex = (int)possibleTileIndies[random.Next(0, possibleTileIndies.Count - 1)];
+            
             Type = TypeToTransformTo;
 
-            InitializeComponentsAndHealth();
+            InitializeComponents();
         }
 
         /// <summary>
@@ -181,18 +212,6 @@ namespace ConflictCube.ComponentBased.Components.Objects.Tiles
             newGameObject.Column = Column;
 
             return newGameObject;
-        }
-
-        public void HitFloorTileWithSledgeHammer()
-        {
-            if (Type == GameObjectType.Wall)
-            {
-                Health--;
-                if (Health <= 0)
-                {
-                    ChangeFloorTile(GameObjectType.Floor);
-                }
-            }
         }
     }
 }

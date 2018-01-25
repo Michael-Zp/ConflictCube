@@ -24,7 +24,7 @@ namespace ConflictCubeTest
             MyWindow window = new MyWindow();
             GameView view = new GameView(window);
 
-            Material mat = new Material(Color.White, Tilesets.Instance().NewPlayerSheet.Tex, new Zenseless.Geometry.Box2D(0, 0, 1, 1));
+            Material mat = new Material(Color.White, Tilesets.Instance().FiremanSheet.Tex, new Zenseless.Geometry.Box2D(0, 0, 1, 1));
 
             while(window.WaitForNextFrame())
             {
@@ -39,10 +39,9 @@ namespace ConflictCubeTest
 
             Transform globalTransform = new Transform(1, 0, 1, 1);
 
-            GameObject globalObject = new GameObject("global", globalTransform);
-            GameObject localObject = new GameObject("local", localTransform);
-
-            globalObject.AddChild(localObject);
+            GameObject globalObject = new GameObject("global", globalTransform, null);
+            GameObject localObject = new GameObject("local", localTransform, globalObject);
+            
 
             Transform toGlobalTransform = localTransform.TransformToGlobal();
 

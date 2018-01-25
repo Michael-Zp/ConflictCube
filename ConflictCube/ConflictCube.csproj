@@ -213,6 +213,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\level1.csv" />
+    <None Include="Resources\level1.tmx" />
     <None Include="Resources\Level1Left.csv" />
     <None Include="Resources\Level1Middle.csv" />
     <None Include="Resources\Level1Right.csv" />
@@ -220,6 +221,7 @@
     <None Include="Resources\Level2Left.csv" />
     <None Include="Resources\Level2Middle.csv" />
     <None Include="Resources\Level2Right.csv" />
+    <None Include="Resources\level3.tmx" />
     <None Include="Resources\Tileset.png" />
   </ItemGroup>
   <ItemGroup>
@@ -232,6 +234,7 @@
     <None Include="Resources\Blood Bath 2.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\tutlevel.tmx" />
     <None Include="Resources\XShiftTest.csv" />
     <None Include="Resources\XShiftTest.tmx" />
     <None Include="Resources\XYShiftTest.csv" />

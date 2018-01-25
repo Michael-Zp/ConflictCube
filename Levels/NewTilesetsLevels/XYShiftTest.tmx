@@ -13,6 +13,18 @@
 2,6,12
 </data>
  </layer>
+ <layer name="Buttons" width="3" height="8">
+  <data encoding="csv">
+0,0,0,
+0,0,0,
+0,0,0,
+0,0,0,
+0,0,0,
+0,0,0,
+0,0,0,
+0,0,0
+</data>
+ </layer>
  <layer name="Cubes" width="3" height="8">
   <data encoding="csv">
 0,0,0,

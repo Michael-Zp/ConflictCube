@@ -63,7 +63,7 @@ namespace ConflictCube.ResxFiles {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
         ///&lt;map version=&quot;1.0&quot; tiledversion=&quot;1.0.3&quot; orientation=&quot;orthogonal&quot; renderorder=&quot;right-down&quot; width=&quot;4&quot; height=&quot;10&quot; tilewidth=&quot;64&quot; tileheight=&quot;64&quot; nextobjectid=&quot;1&quot;&gt;
-        /// &lt;tileset firstgid=&quot;1&quot; source=&quot;../ConflictCube/Textures/ConCubeTileset.tsx&quot;/&gt;
+        /// &lt;tileset firstgid=&quot;1&quot; source=&quot;../../ConflictCube/Textures/ConCubeTileset.tsx&quot;/&gt;
         /// &lt;layer name=&quot;Floor&quot; width=&quot;4&quot; height=&quot;10&quot;&gt;
         ///  &lt;data encoding=&quot;csv&quot;&gt;
         ///1,1,1,1,
@@ -78,8 +78,7 @@ namespace ConflictCube.ResxFiles {
         ///4,2,2,4
         ///&lt;/data&gt;
         /// &lt;/layer&gt;
-        /// &lt;layer name=&quot;Cubes&quot; width=&quot;4&quot; height=&quot;10&quot;&gt;
-        ///  &lt;data encodin [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
+        /// &lt;layer name=&quot;Buttons&quot; width=&quot;4&quot; height [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
         /// </summary>
         internal static string FireIceFirstTestNewTileset {
             get {
@@ -90,7 +89,7 @@ namespace ConflictCube.ResxFiles {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
         ///&lt;map version=&quot;1.0&quot; tiledversion=&quot;1.0.3&quot; orientation=&quot;orthogonal&quot; renderorder=&quot;right-down&quot; width=&quot;4&quot; height=&quot;10&quot; tilewidth=&quot;64&quot; tileheight=&quot;64&quot; nextobjectid=&quot;1&quot;&gt;
-        /// &lt;tileset firstgid=&quot;1&quot; source=&quot;../ConflictCube/Textures/ConCubeTileset.tsx&quot;/&gt;
+        /// &lt;tileset firstgid=&quot;1&quot; source=&quot;../../ConflictCube/Textures/ConCubeTileset.tsx&quot;/&gt;
         /// &lt;layer name=&quot;Floor&quot; width=&quot;4&quot; height=&quot;10&quot;&gt;
         ///  &lt;data encoding=&quot;csv&quot;&gt;
         ///1,1,1,1,
@@ -105,11 +104,76 @@ namespace ConflictCube.ResxFiles {
         ///43,43,2,12
         ///&lt;/data&gt;
         /// &lt;/layer&gt;
-        /// &lt;layer name=&quot;Cubes&quot; width=&quot;4&quot; he [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
+        /// &lt;layer name= [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
         /// </summary>
         internal static string FireIceSecondTestNewTileset {
             get {
                 return ResourceManager.GetString("FireIceSecondTestNewTileset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+        ///&lt;map version=&quot;1.0&quot; tiledversion=&quot;1.0.3&quot; orientation=&quot;orthogonal&quot; renderorder=&quot;right-down&quot; width=&quot;5&quot; height=&quot;5&quot; tilewidth=&quot;64&quot; tileheight=&quot;64&quot; nextobjectid=&quot;1&quot;&gt;
+        /// &lt;tileset firstgid=&quot;1&quot; source=&quot;../../ConflictCube/Textures/ConCubeTileset.tsx&quot;/&gt;
+        /// &lt;layer name=&quot;Floor&quot; width=&quot;5&quot; height=&quot;5&quot;&gt;
+        ///  &lt;data encoding=&quot;csv&quot;&gt;
+        ///33,1,21,19,1,
+        ///2,2,16,2,18,
+        ///44,17,40,2,20,
+        ///2,43,20,43,2,
+        ///33,43,2,44,2
+        ///&lt;/data&gt;
+        /// &lt;/layer&gt;
+        /// &lt;layer name=&quot;Buttons&quot; width=&quot;5&quot; height=&quot;5&quot;&gt;
+        ///  &lt;data encoding=&quot;cs [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
+        /// </summary>
+        internal static string level1 {
+            get {
+                return ResourceManager.GetString("level1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+        ///&lt;map version=&quot;1.0&quot; tiledversion=&quot;1.0.3&quot; orientation=&quot;orthogonal&quot; renderorder=&quot;right-down&quot; width=&quot;15&quot; height=&quot;15&quot; tilewidth=&quot;64&quot; tileheight=&quot;64&quot; nextobjectid=&quot;1&quot;&gt;
+        /// &lt;tileset firstgid=&quot;1&quot; source=&quot;../../ConflictCube/Textures/ConCubeTileset.tsx&quot;/&gt;
+        /// &lt;layer name=&quot;Floor&quot; width=&quot;15&quot; height=&quot;15&quot;&gt;
+        ///  &lt;data encoding=&quot;csv&quot;&gt;
+        ///2,2,2,6,2,2,2,9,3,3,3,3,31,27,10,
+        ///2,6,2,8,2,6,2,4,2,2,2,2,30,21,28,
+        ///2,4,2,2,2,4,2,8,2,9,7,2,12,29,32,
+        ///2,12,3,3,3,26,10,2,2,8,2,2,2,2,4,
+        ///2,2,2,2,2,34,26, [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
+        /// </summary>
+        internal static string level3 {
+            get {
+                return ResourceManager.GetString("level3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+        ///&lt;map version=&quot;1.0&quot; tiledversion=&quot;1.0.3&quot; orientation=&quot;orthogonal&quot; renderorder=&quot;right-down&quot; width=&quot;5&quot; height=&quot;15&quot; tilewidth=&quot;64&quot; tileheight=&quot;64&quot; nextobjectid=&quot;1&quot;&gt;
+        /// &lt;tileset firstgid=&quot;1&quot; source=&quot;../../ConflictCube/Textures/ConCubeTileset.tsx&quot;/&gt;
+        /// &lt;layer name=&quot;Floor&quot; width=&quot;5&quot; height=&quot;15&quot;&gt;
+        ///  &lt;data encoding=&quot;csv&quot;&gt;
+        ///1,1,1,1,1,
+        ///5,3,31,3,7,
+        ///2,2,4,2,2,
+        ///2,2,4,2,2,
+        ///2,9,26,10,2,
+        ///2,34,33,11,2,
+        ///2,4,44,44,44,
+        ///2,4,2,43,43,
+        ///43,12,3,10,43,
+        ///43,43,43,4,43,
+        ///6,44,2,8,43,
+        ///4,44, [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
+        /// </summary>
+        internal static string tutlevel {
+            get {
+                return ResourceManager.GetString("tutlevel", resourceCulture);
             }
         }
         
@@ -151,8 +215,8 @@ namespace ConflictCube.ResxFiles {
         ///2,6,12
         ///&lt;/data&gt;
         /// &lt;/layer&gt;
-        /// &lt;layer name=&quot;Cubes&quot; width=&quot;3&quot; height=&quot;8&quot;&gt;
-        ///  &lt;data encoding=&quot;csv&quot; [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
+        /// &lt;layer name=&quot;Buttons&quot; width=&quot;3&quot; height=&quot;8&quot;&gt;
+        ///  &lt;data encoding=&quot;cs [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
         /// </summary>
         internal static string XYShiftTest {
             get {
@@ -176,9 +240,8 @@ namespace ConflictCube.ResxFiles {
         ///2,2,43
         ///&lt;/data&gt;
         /// &lt;/layer&gt;
-        /// &lt;layer name=&quot;Cubes&quot; width=&quot;3&quot; height=&quot;8&quot;&gt;
-        ///  &lt;data encoding=&quot;csv&quot;&gt;
-        /// [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
+        /// &lt;layer name=&quot;Buttons&quot; width=&quot;3&quot; height=&quot;8&quot;&gt;
+        ///  &lt;data encoding=&quot;csv&quot;&gt; [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
         /// </summary>
         internal static string YShiftTest {
             get {

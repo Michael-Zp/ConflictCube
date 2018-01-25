@@ -14,7 +14,7 @@ namespace ConflictCube.ComponentBased
         private bool MaterialsAreInitialized;
 
         public BluePlayer(string name, Floor currentFloor, GameObject parent)
-            : base(name, currentFloor, parent, GameObjectType.PlayerIce, CollisionType.PlayerIce, CollisionLayer.Orange)
+            : base(name, currentFloor, parent, GameObjectType.PlayerIce, CollisionType.PlayerIce, CollisionLayer.Blue)
         {
             if (!MaterialsAreInitialized)
             {

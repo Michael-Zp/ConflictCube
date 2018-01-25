@@ -5,7 +5,6 @@ using ConflictCube.ComponentBased.View;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using Zenseless.OpenGL;
 using ConflictCube.ResxFiles;
 
 namespace ConflictCube.ComponentBased
@@ -59,7 +58,7 @@ namespace ConflictCube.ComponentBased
             Action level2OnClick = new Action(() => { buildScene.BuildScene(LevelsWithNewTileset.FireIceSecondTestNewTileset); });
             Action level3OnClick = new Action(() => { buildScene.BuildScene(LevelsWithNewTileset.YShiftTest); });
             Action level4OnClick = new Action(() => { buildScene.BuildScene(LevelsWithNewTileset.XShiftTest); });
-            Action level5OnClick = new Action(() => { buildScene.BuildScene(LevelsWithNewTileset.XYShiftTest); });
+            Action level5OnClick = new Action(() => { buildScene.BuildScene(LevelsWithNewTileset.level1); });
 
             buttonsInLevelSelect.AddButton(new Transform(0, .8f, .8f, .15f), new TextField("Level1", new Transform(0, .8f, .7f, .15f), "Level 1", Font.Instance().NormalFont, null), level1OnClick);
             buttonsInLevelSelect.AddButton(new Transform(0, .4f, .8f, .15f), new TextField("Level2", new Transform(0, .4f, .7f, .15f), "Level 2", Font.Instance().NormalFont, null), level2OnClick);

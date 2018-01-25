@@ -12,6 +12,7 @@ namespace ConflictCube.ComponentBased
         public int FloorColumns { get; set; }
 
         public LevelTile[,] FloorTiles { get; set; }
+        public LevelTile[,] ButtonTiles { get; set; }
         public LevelTile[,] CubeTiles { get; set; }
         public float FloorBreakdownInterval { get; set; } = 3.0f;
         public CollisionGroup CollisionGroup;
@@ -28,6 +29,7 @@ namespace ConflictCube.ComponentBased
         public Floor(string name, Transform transform, int rows, int columns, CollisionGroup group, Vector2 tileSize, GameObject parent) : base(name, transform, parent)
         {
             FloorTiles = new LevelTile[rows, columns];
+            ButtonTiles = new LevelTile[rows, columns];
             CubeTiles = new LevelTile[rows, columns];
             FloorRows = rows;
             FloorColumns = columns;
@@ -85,11 +87,13 @@ namespace ConflictCube.ComponentBased
         }
 
 
-        public void AddLevelTile(LevelTile floorTile, LevelTile cubeTile, int y, int x)
+        public void AddLevelTile(LevelTile floorTile, LevelTile buttonTile, LevelTile cubeTile, int y, int x)
         {
             FloorTiles[y, x] = floorTile;
+            ButtonTiles[y, x] = buttonTile;
             CubeTiles[y, x] = cubeTile;
             floorTile.Parent = this;
+            buttonTile.Parent = this;
             cubeTile.Parent = this;
         }
 
