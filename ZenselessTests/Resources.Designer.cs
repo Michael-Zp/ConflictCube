@@ -69,5 +69,14 @@ namespace ZenselessTests {
                 return ((byte[])(obj));
             }
         }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.IO.UnmanagedMemoryStream ähnlich wie System.IO.MemoryStream.
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream BirdWhistle {
+            get {
+                return ResourceManager.GetStream("BirdWhistle", resourceCulture);
+            }
+        }
     }
 }

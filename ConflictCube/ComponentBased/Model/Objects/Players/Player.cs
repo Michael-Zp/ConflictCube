@@ -7,6 +7,7 @@ using ConflictCube.ResxFiles;
 using ConflictCube.ComponentBased.Model.Components.Objects.Players;
 using ConflictCube.ComponentBased.Model.Components.Colliders;
 using ConflictCube.ComponentBased.Model.Components.Objects;
+using ConflictCube.ComponentBased.Model.Components.Sound;
 
 namespace ConflictCube.ComponentBased
 {
@@ -24,7 +25,7 @@ namespace ConflictCube.ComponentBased
         private IGameManager _GameManager = null;
         private IGameManager GameManager {
             get {
-                if(_GameManager == null)
+                if (_GameManager == null)
                 {
                     _GameManager = (GameManager)GameObject.FindGameObjectByType<GameManager>();
                 }
@@ -44,12 +45,15 @@ namespace ConflictCube.ComponentBased
 
         private float UseCooldown = 1.0f;
         private float LastUse { get; set; }
-        
+
         private float ThrowUseXOffset = 0;
         private float ThrowUseYOffset = 1;
         private float LastUseFieldUpdate = 0;
         private float UseFieldUpdateCooldown = 0.1f;
-        
+
+        private float LastFrameSpeed = 0;
+        private AudioPlayer FootstepsSound;
+
         protected Floor CurrentFloor;
         protected UseField UseField { get; set; }
 
@@ -92,7 +96,7 @@ namespace ConflictCube.ComponentBased
             }
 
             AddComponent(collider);
-            
+
             AfterglowMaterialY = new Material(Color.White, ShaderResources.Afterglow);
             AfterglowMaterialY.AddShaderParameter("startTime", -AfterglowLifetime * 2);
             AfterglowMaterialY.AddShaderParameter("direction", 1f);
@@ -111,7 +115,7 @@ namespace ConflictCube.ComponentBased
             AfterglowMaterialXY.AddShaderParameter("lifetime", AfterglowLifetime);
             AfterglowMaterialXY.AddShaderParameter("desiredColor", new Vector3(Color.Pink.R, Color.Pink.G, Color.Pink.B));
 
-            
+
             AfterglowY = new GameObject("Afterglow Y", new Transform(), CurrentFloor);
             AfterglowY.AddComponent(AfterglowMaterialY);
 
@@ -120,10 +124,14 @@ namespace ConflictCube.ComponentBased
 
             AfterglowXY = new GameObject("Afterglow XY", new Transform(), CurrentFloor);
             AfterglowXY.AddComponent(AfterglowMaterialXY);
-            
+
 
             UseField = new UseField("ThrowUseIndicator", new Transform(), CurrentFloor);
             SetUseFieldWithOffset();
+
+
+            FootstepsSound = new AudioPlayer(AudioResources.Walking, true);
+
 
             ResetPositionToLastCheckpoint();
         }
@@ -151,13 +159,13 @@ namespace ConflictCube.ComponentBased
             }
 
             CurrentSprintEnergy = MathHelper.Clamp(CurrentSprintEnergy, 0, MaxSprintEnergy);
-            
+
             if (Input.OnButtonDown(HitBlock, ActiveGamePad) && Time.Time.CooldownIsOver(LastUse, UseCooldown))
             {
                 LastUse = Time.Time.CurrentTime;
                 HitSelectedBlock();
             }
-            
+
 
             if (Input.OnButtonDown(SwitchPositionY, ActiveGamePad))
             {
@@ -167,7 +175,7 @@ namespace ConflictCube.ComponentBased
                 //ShowYAfterglow();
                 //OtherPlayer.ShowYAfterglow();
             }
-            
+
             if (Input.OnButtonDown(SwitchPositionXY, ActiveGamePad))
             {
                 SwitchPlayers.SwitchXYAxis();
@@ -176,17 +184,38 @@ namespace ConflictCube.ComponentBased
                 //ShowXYAfterglow();
                 //OtherPlayer.ShowXYAfterglow();
             }
-            
+
             if (Input.OnButtonDown(SwitchPositionX, ActiveGamePad))
             {
                 SwitchPlayers.SwitchXAxis();
-                
+
                 //Afterglow
                 //ShowXAfterglow();
                 //OtherPlayer.ShowXAfterglow();
             }
 
-            Move(moveVector * Time.Time.DifTime);
+            moveVector *= Time.Time.DifTime;
+
+            Move(moveVector);
+
+            //l == 0
+            if (moveVector.Length < 0.03f)
+            {
+                if (LastFrameSpeed > 0.03f)
+                {
+                    FootstepsSound.StopAudio();
+                }
+            }
+            else
+            {
+                if (LastFrameSpeed < 0.03f)
+                {
+                    FootstepsSound.PlayAudio();
+                }
+            }
+
+            LastFrameSpeed = moveVector.Length;
+
             UpdateUseField();
         }
 
@@ -201,7 +230,7 @@ namespace ConflictCube.ComponentBased
                     return false;
             }
 
-            switch(CurrentFloor.CubeTiles[(int)gridPos.Y, (int)gridPos.X].Type)
+            switch (CurrentFloor.CubeTiles[(int)gridPos.Y, (int)gridPos.X].Type)
             {
                 case GameObjectType.OrangeBlock:
                     return false;
@@ -278,7 +307,7 @@ namespace ConflictCube.ComponentBased
             Vector2 otherPosition = OtherPlayer.Transform.GetPosition(WorldRelation.Global);
 
             AfterglowMaterialY.AddShaderParameter("startTime", Time.Time.CurrentTime);
-            
+
             AfterglowMaterialY.AddShaderParameter("direction", 1f);
 
             AfterglowY.Transform.SetPosition(new Vector2(otherPosition.X + 3 * (thisPosition.X - otherPosition.X) / 4, otherPosition.Y + 3 * (thisPosition.Y - otherPosition.Y) / 4), WorldRelation.Global);
@@ -298,7 +327,7 @@ namespace ConflictCube.ComponentBased
         private void UpdateUseField()
         {
             Input.AxesSettings.TryGetValue(Horizontal, out AxisData horizontalAxisData);
-            Input.AxesSettings.TryGetValue(Vertical,   out AxisData verticalAxisData);
+            Input.AxesSettings.TryGetValue(Vertical, out AxisData verticalAxisData);
 
             bool axisIsInUse = Math.Abs(Input.GetAxis(Horizontal, ActiveGamePad)) + Math.Abs(Input.GetAxis(Vertical, ActiveGamePad)) > .4f;
 
@@ -307,7 +336,7 @@ namespace ConflictCube.ComponentBased
             bool verticalPositive = Input.OnButtonIsPressed(verticalAxisData.PositiveKey, ActiveGamePad) || (axisIsInUse && Input.GetAxis(Vertical, ActiveGamePad) > 0.1f);
             bool verticalNegative = Input.OnButtonIsPressed(verticalAxisData.NegativeKey, ActiveGamePad) || (axisIsInUse && Input.GetAxis(Vertical, ActiveGamePad) < -0.1f);
 
-            if((horizontalPositive || horizontalNegative || verticalPositive || verticalNegative) && Time.Time.CooldownIsOver(LastUseFieldUpdate, UseFieldUpdateCooldown))
+            if ((horizontalPositive || horizontalNegative || verticalPositive || verticalNegative) && Time.Time.CooldownIsOver(LastUseFieldUpdate, UseFieldUpdateCooldown))
             {
                 LastUseFieldUpdate = Time.Time.CurrentTime;
                 if (horizontalPositive && !horizontalNegative)
@@ -336,7 +365,7 @@ namespace ConflictCube.ComponentBased
                     ThrowUseYOffset = 0;
                 }
             }
-            
+
             try
             {
                 Vector2 currentPos = CurrentFloor.GetGridPosition(Transform.TransformToGlobal());
@@ -368,7 +397,7 @@ namespace ConflictCube.ComponentBased
                 Console.WriteLine("Hit boundaries with the ThrowUse Field");
             }
 
-            if(UseFieldIsOnUsableField())
+            if (UseFieldIsOnUsableField())
             {
                 UseField.Enabled = true;
             }
@@ -378,7 +407,7 @@ namespace ConflictCube.ComponentBased
             }
         }
 
-        
+
         public void Move(Vector2 moveVector)
         {
             if (!CanMove)
@@ -386,7 +415,7 @@ namespace ConflictCube.ComponentBased
                 return;
             }
 
-            if(moveVector.Length != 0)
+            if (moveVector.Length != 0)
             {
                 float targetAngle = 0;
 
@@ -394,14 +423,14 @@ namespace ConflictCube.ComponentBased
                 {
                     targetAngle = 180;
                 }
-                else if(moveVector.X == 0 && moveVector.Y > 0)
+                else if (moveVector.X == 0 && moveVector.Y > 0)
                 {
                     targetAngle = 0;
                 }
                 else
                 {
                     targetAngle = (float)MathHelper.RadiansToDegrees(Math.Acos(Vector2.Dot(new Vector2(0, 1), moveVector.Normalized())));
-                    
+
 
                     if (moveVector.X < 0)
                     {
@@ -424,11 +453,11 @@ namespace ConflictCube.ComponentBased
 
         public override void OnCollision(Collider other)
         {
-            if(DebugGame.PlayerPrintCollisionTypes)
+            if (DebugGame.PlayerPrintCollisionTypes)
             {
                 Console.WriteLine(other.Type);
             }
-            
+
             if (other.Type == CollisionType.Hole)
             {
                 Die(Name + " fell into a hole");
@@ -437,7 +466,7 @@ namespace ConflictCube.ComponentBased
 
         public void Die(string reason)
         {
-            if(DebugGame.CanDie && IsAlive)
+            if (DebugGame.CanDie && IsAlive)
             {
                 IsAlive = false;
                 GameManager.SetDeathReason(reason);
@@ -459,8 +488,8 @@ namespace ConflictCube.ComponentBased
             Transform throwUseTransform = CurrentFloor.GetBoxAtGridPosition(currentPos);
             UseField.Transform.SetPosition(throwUseTransform.GetPosition(WorldRelation.Global), WorldRelation.Global);
             UseField.Transform.SetSize(throwUseTransform.GetSize(WorldRelation.Global), WorldRelation.Global);
-            
-            if(DebugGame.DebugDrawUseField)
+
+            if (DebugGame.DebugDrawUseField)
             {
                 GameView.DrawDebug(UseField.Transform.TransformToGlobal(), Color.Red);
             }

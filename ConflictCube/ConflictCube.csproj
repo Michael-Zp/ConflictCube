@@ -95,6 +95,15 @@
     <Compile Include="ComponentBased\Model\Objects\GameOverScreen.cs" />
     <Compile Include="ComponentBased\Model\IBuildMenu.cs" />
     <Compile Include="ComponentBased\Model\IBuildScene.cs" />
+    <Compile Include="GlobalMethods\Audio\Audio.cs" />
+    <Compile Include="GlobalMethods\Audio\CachedSound.cs" />
+    <Compile Include="GlobalMethods\Audio\CachedSoundSampleProvider.cs" />
+    <Compile Include="GlobalMethods\Audio\LoopingAudio.cs" />
+    <Compile Include="ResxFiles\AudioResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AudioResources.resx</DependentUpon>
+    </Compile>
     <Compile Include="ResxFiles\FontResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -199,6 +208,10 @@
     <None Include="Resources\Level0Right.csv" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="ResxFiles\AudioResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>AudioResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="ResxFiles\FontResources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>FontResources.Designer.cs</LastGenOutput>
@@ -300,6 +313,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Particles\Particle-Sprite-Smoke-1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\05 - Manowar.mp3" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Audio\BirdWhistle.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Audio\Walking.wav" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

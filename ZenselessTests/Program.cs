@@ -1,6 +1,6 @@
-﻿using NAudio.Wave;
-using System.IO;
+﻿using System;
 using System.Threading;
+using ConflictCube.GlobalMethods.Audio;
 
 namespace ZenselessTests
 {
@@ -8,15 +8,36 @@ namespace ZenselessTests
     {
         static void Main(string[] args)
         {
-            using (var audio = new Mp3FileReader(new MemoryStream(Resources._05___Manowar)))
-            using (var oDevice = new WaveOutEvent())
+            var sound = new CachedSound(Resources.BirdWhistle);
+
+            var song = Audio.Instance.LoopSound(sound);
+            
+
+            for(int i = 0; i < 20; i++)
             {
-                oDevice.Init(audio);
-                oDevice.Play();
-                while (oDevice.PlaybackState == PlaybackState.Playing)
+                Thread.Sleep(1000);
+
+                Console.WriteLine("---");
+                foreach(var input in Audio.Instance.mixer.MixerInputs)
                 {
-                    Thread.Sleep(100000);
+                    Console.WriteLine(input.ToString());
                 }
+                Console.WriteLine("---");
+            }
+
+            Audio.Instance.StopSound(song);
+
+
+            for (int i = 0; i < 4; i++)
+            {
+                Thread.Sleep(1000);
+
+                Console.WriteLine("---");
+                foreach (var input in Audio.Instance.mixer.MixerInputs)
+                {
+                    Console.WriteLine(input.ToString());
+                }
+                Console.WriteLine("---");
             }
         }
     }

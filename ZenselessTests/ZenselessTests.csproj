@@ -97,5 +97,14 @@
   <ItemGroup>
     <None Include="Resources\05 - Manowar.mp3" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ConflictCube\ConflictCube.csproj">
+      <Project>{f7124b93-9e54-49f0-8ed9-00aba61d7166}</Project>
+      <Name>ConflictCube</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BirdWhistle.wav" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
