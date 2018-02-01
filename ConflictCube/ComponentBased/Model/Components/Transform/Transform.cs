@@ -95,7 +95,6 @@ namespace ConflictCube.ComponentBased.Components
 
         public static Rectangle ApplyTransform(this Rectangle rect, Transform transform)
         {
-
             Vector2 scale = transform.GetSize(WorldRelation.Global);
 
             //The rect could be rotated, BottomLeft could be at the TopRight position
@@ -148,7 +147,7 @@ namespace ConflictCube.ComponentBased.Components
 
     public class Transform : Component, IEquatable<Transform>
     {
-        private Matrix3 TransformMatrix;
+        public Matrix3 TransformMatrix;
 
         private Vector2 Position {
             get {

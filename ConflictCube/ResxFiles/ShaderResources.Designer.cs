@@ -75,7 +75,7 @@ namespace ConflictCube.ResxFiles {
         ///void main()
         ///{
         ///    //create uv to be in the range [0..1]x[0..1]
-        ///	vec2 uv = gl_FragCoord.xy / iResolution; [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
+        ///	//vec2 uv = gl_FragCoord.xy / iResolutio [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
         /// </summary>
         internal static string Afterglow {
             get {
@@ -86,14 +86,76 @@ namespace ConflictCube.ResxFiles {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die #version 330
         ///
+        ///uniform vec2 iResolution; //[xResolution, yResolution] of display
+        ///uniform float iGlobalTime; //global time in seconds as float
+        ///uniform float startTime; //Time the shader was first activated on this object
+        ///uniform float direction; //Positive =&gt; up/right; Negative =&gt; down/left
+        ///uniform float lifetime; //How long the effect will be visible
+        ///uniform vec3 desiredColor;
+        ///	
+        ///in vec2 uv;
+        ///
+        ///void main()
+        ///{
+        ///    gl_FragColor = vec4(vec3(min(distance(uv, vec2(1)), distance(uv, vec2(0)))), 1);
+        ///} ähnelt.
+        /// </summary>
+        internal static string FragmentTest {
+            get {
+                return ResourceManager.GetString("FragmentTest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die #version 330
+        ///
+        ///uniform vec2 iResolution; //[xResolution, yResolution] of display
+        ///uniform float iGlobalTime; //global time in seconds as float
+        ///uniform sampler2D tex;
+        ///uniform float minXuv;
+        ///uniform float maxXuv;
+        ///uniform float minYuv;
+        ///uniform float maxYuv;
+        ///
+        ///
+        ///in vec2 pos;
+        ///in vec2 uv;
+        ///
+        ///float rand(float seed)
+        ///{
+        ///	return fract(sin(seed) * 1231534.9);
+        ///}
+        ///
+        ///vec2 scaleBack(in vec2 toScale) 
+        ///{
+        ///    vec2 scaledVec = vec2(0);
+        ///    scaledVec.x = toScale.x * (maxXuv - minXuv) + minXuv;
+        ///    scaledVec.y = to [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
+        /// </summary>
+        internal static string Liquid {
+            get {
+                return ResourceManager.GetString("Liquid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die #version 330
+        ///
+        ///uniform mat4 camera;
+        ///
         ///in vec2 uvPos;
+        ///in vec2 position;
         ///
         ///out vec2 uv;
+        ///out vec2 pos;
         ///	
         ///void main()
         ///{
         ///    uv = uvPos;
-        ///    gl_Position = vec4(uv, 0, 1);
+        ///    pos = position;
+        ///    gl_Position = camera * vec4(position, 0, 1);
+        ///    
+        ///    //gl_Position = vec4(-position, 0, 1);
         ///} ähnelt.
         /// </summary>
         internal static string StandardVertexShader {

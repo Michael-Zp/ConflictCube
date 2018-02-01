@@ -46,14 +46,22 @@ namespace ConflictCube.ComponentBased
         {
             foreach(Camera camera in viewModel.Cameras)
             {
-                if(!camera.IsUiCamera)
+                //Scale camera to keep world propotions in the view
+                Vector2 newRenderTargetAspectRatio;
+                if(Window.Width > Window.Height)
                 {
-                    //Scale camera to keep world propotions in the view
-                    Vector2 cameraPos = camera.Transform.GetPosition(WorldRelation.Global);
-                    camera.Transform = new Transform(camera.RenderTarget.GetInverseOfTransform());
-                    camera.Transform.SetPosition(cameraPos, WorldRelation.Global);
-                    camera.Transform.SetSize(new Vector2(camera.Transform.GetSize(WorldRelation.Global).X / ((float)Window.Width / (float)Window.Height), camera.Transform.GetSize(WorldRelation.Global).Y), WorldRelation.Global);
+                    newRenderTargetAspectRatio = new Vector2((float)Window.Height / (float)Window.Width, 1);
                 }
+                else if(Window.Height > Window.Width)
+                {
+                    newRenderTargetAspectRatio = new Vector2(1, (float)Window.Width / (float)Window.Height);
+                }
+                else
+                {
+                    newRenderTargetAspectRatio = new Vector2(1);
+                }
+
+                camera.RenderTarget.SetSize(camera.OriginalRenderTargetSize * newRenderTargetAspectRatio, WorldRelation.Global);
             }
 
             ClearScreen();
@@ -63,7 +71,7 @@ namespace ConflictCube.ComponentBased
                 RenderGameObject(camera.Transform, camera.RootGameObject);
                 camera.FBO.Deactivate();
 
-                OpenTKWrapper.DrawBox(camera.RenderTarget.GetGlobalRotatedRectangle(), Color.White, camera.FBO.Texture, new Zenseless.Geometry.Box2D(-1, -1, 1, 1), null, null, true);
+                OpenTKWrapper.DrawBox(camera.RenderTarget, Color.White, camera.FBO.Texture, new Zenseless.Geometry.Box2D(-1, -1, 1, 1), null, null, new Transform(), true);
 
                 camera.FBO.Activate();
                 ClearScreen();
@@ -77,6 +85,7 @@ namespace ConflictCube.ComponentBased
 
             DebugDraws.Clear();
         }
+        
 
         public void RenderGameObject(Transform cameraTransform, GameObject currentObject)
         {
@@ -91,13 +100,9 @@ namespace ConflictCube.ComponentBased
 
             foreach(Material currentMat in currentMats)
             {
-                if (currentMat != null)
+                if (currentMat != null && currentMat.Enabled)
                 {
-                    var globalRotRect = globalTransform.GetGlobalRotatedRectangle();
-                    globalRotRect = globalRotRect.ApplyTransform(cameraTransform);
-
-                    OpenTKWrapper.DrawBox(globalRotRect, currentMat.Color, currentMat.Texture, currentMat.UVCoordinates, currentMat.Shader, currentMat, true);
-                    
+                    OpenTKWrapper.DrawBox(globalTransform, currentMat.Color, currentMat.Texture, currentMat.UVCoordinates, currentMat.Shader, currentMat, cameraTransform, true);
                 }
             }
 

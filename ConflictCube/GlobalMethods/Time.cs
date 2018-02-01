@@ -3,8 +3,9 @@ using System;
 
 namespace ConflictCube.Time
 {
-    public class Time
+    public static class Time
     {
+        private static float RealTime = 0;
         private static float _CurrentTime = 0;
         private static float LastSecond = 0;
         private static float FrameCount = 0;
@@ -14,7 +15,9 @@ namespace ConflictCube.Time
             }
 
             set {
-                DifTime = value - _CurrentTime;
+                DifTime = value - RealTime;
+                DifTime *= TimeScale;
+
 
                 if (DebugGame.PrintFPS)
                 {
@@ -30,11 +33,13 @@ namespace ConflictCube.Time
                     }
                 }
 
-                _CurrentTime = value;
+                _CurrentTime = _CurrentTime + DifTime;
+                RealTime = value;
             }
         }
 
         public static float DifTime { get; set; }
+        public static float TimeScale { get; set; } = 1;
 
 
         public static bool CooldownIsOver(float LastTime, float Cooldown)

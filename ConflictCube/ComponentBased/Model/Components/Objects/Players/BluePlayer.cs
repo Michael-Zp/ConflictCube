@@ -1,6 +1,7 @@
 ﻿using ConflictCube.ComponentBased.Components;
 using ConflictCube.ComponentBased.Components.Objects.Tiles;
 using ConflictCube.ComponentBased.Model.Components.Colliders;
+using ConflictCube.ComponentBased.Model.Components.ParticleSystem;
 using OpenTK;
 using System;
 using System.Drawing;
@@ -55,7 +56,12 @@ namespace ConflictCube.ComponentBased
         {
             if (UseFieldIsOnUsableField())
             {
-                GetLevelTileOnCubeLayerOfSelectedField().Enabled = false;
+                LevelTile tile = GetLevelTileOnCubeLayerOfSelectedField();
+                tile.GetComponent<Material>().Enabled = false;
+                tile.GetComponent<ParticleSystem>().Enabled = true;
+                tile.GetComponent<Collider>().Enabled = false;
+                tile.Type = GameObjectType.None;
+                Destroy(tile, tile.GetComponent<ParticleSystem>().Lifetime);
             }
         }
 
@@ -81,5 +87,10 @@ namespace ConflictCube.ComponentBased
             }
         }
 
+        public override void ResetPositionToLastCheckpoint()
+        {
+            Transform.SetPosition(CurrentFloor.BluePlayerCheckpoint.GetPosition(WorldRelation.Global), WorldRelation.Global);
+            Transform.SetRotation(0, WorldRelation.Global);
+        }
     }
 }

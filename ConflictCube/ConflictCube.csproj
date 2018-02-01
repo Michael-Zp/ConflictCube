@@ -81,9 +81,13 @@
     <Compile Include="ComponentBased\DebugGame.cs" />
     <Compile Include="ComponentBased\Model\Components\Objects\GameManager.cs" />
     <Compile Include="ComponentBased\Model\Components\Objects\IGameManager.cs" />
-    <Compile Include="ComponentBased\Model\Components\Objects\ISwitchPlayers.cs" />
-    <Compile Include="ComponentBased\Model\Components\Objects\PlayerSwitcher.cs" />
+    <Compile Include="ComponentBased\Model\Components\Objects\IngameMenu.cs" />
+    <Compile Include="ComponentBased\Model\Components\Objects\Players\ISwitchPlayers.cs" />
+    <Compile Include="ComponentBased\Model\Components\Objects\Players\PlayerSwitcher.cs" />
     <Compile Include="ComponentBased\Model\Components\Objects\Players\UseField.cs" />
+    <Compile Include="ComponentBased\Model\Components\ParticleSystem\Particle.cs" />
+    <Compile Include="ComponentBased\Model\Components\ParticleSystem\ParticleSystem.cs" />
+    <Compile Include="ComponentBased\Model\Components\Physics\PhysicsObject.cs" />
     <Compile Include="ComponentBased\Model\Components\UI\ButtonGroup.cs" />
     <Compile Include="ComponentBased\Model\Components\UI\DoActionOnButtonClick.cs" />
     <Compile Include="ComponentBased\Model\Components\UI\GameWonScreen.cs" />
@@ -139,6 +143,16 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>LevelsWithNewTileset.resx</DependentUpon>
     </Compile>
+    <Compile Include="ResxFiles\ParticleSystemResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ParticleSystemResources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="ResxFiles\TempResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TempResources.resx</DependentUpon>
+    </Compile>
     <Compile Include="ResxFiles\TexturResource.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -177,6 +191,7 @@
     <None Include="Resources\FireIceSecondTest.csv" />
     <None Include="Resources\FireIceSecondTestNewTileset.tmx" />
     <None Include="Resources\FireIceThirdTest.csv" />
+    <None Include="Resources\FragmentTest.glslx" />
     <None Include="Resources\Level0.csv" />
     <None Include="Resources\Level0Left.csv" />
     <None Include="Resources\Level0Middle.csv" />
@@ -194,6 +209,14 @@
     <EmbeddedResource Include="ResxFiles\LevelsWithNewTileset.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>LevelsWithNewTileset.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ResxFiles\ParticleSystemResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ParticleSystemResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ResxFiles\TempResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>TempResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="ResxFiles\TexturResource.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -267,6 +290,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Textures\welder.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Particles\IceParticle.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Particles\MagmaParticle.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Particles\Particle-Sprite-Smoke-1.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,5 +1,7 @@
 ﻿using ConflictCube.ComponentBased.Components;
+using OpenTK;
 using Zenseless.OpenGL;
+using System;
 
 namespace ConflictCube.ComponentBased.View
 {
@@ -9,6 +11,7 @@ namespace ConflictCube.ComponentBased.View
         public GameObject RootGameObject;
         public FBO FBO;
         public Transform RenderTarget;
+        public Vector2 OriginalRenderTargetSize;
         public bool IsUiCamera;
 
         public Camera(Transform transform, GameObject rootGameObject, int windowWidth, int windowHeight, Transform renderTarget, bool isUiCamera) 
@@ -21,6 +24,13 @@ namespace ConflictCube.ComponentBased.View
             RootGameObject = rootGameObject;
             FBO = fBO;
             RenderTarget = renderTarget;
+
+            if(RenderTarget == null)
+            {
+                throw new ArgumentNullException("renderTarget");
+            }
+
+            OriginalRenderTargetSize = RenderTarget.GetSize(WorldRelation.Global);
             IsUiCamera = isUiCamera;
         }
     }

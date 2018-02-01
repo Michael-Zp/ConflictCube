@@ -1,9 +1,34 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace ConflictCube.ComponentBased.Components
 {
     public class GameObject : GameCallbacks
     {
+        public bool CallOnStart = true;
+        public bool CallOnDestroy = true;
+        /// <summary>
+        /// Will also include the OnUpdate() call in all the components of the game object.
+        /// </summary>
+        public bool CallOnUpdate = true;
+        public bool CallOnLateUpdate = true;
+        public bool CallOnEnable = true;
+        public bool CallOnDisable = true;
+
+        /// <summary>
+        /// If the CallOnUpdate flag is set to false and this flag is set to true, then no OnUpdate
+        /// will be called on the children of this GameObject.
+        /// </summary>
+        public bool IncludeChildrenInCallOnUpdateFlag = false;
+        
+        /// <summary>
+        /// If the CallOnLateUpdate flag is set to false and this flag is set to true, then no OnLateUpdate
+        /// will be called on the children of this GameObject.
+        /// </summary>
+        public bool IncludeChildrenInCallOnLateUpdateFlag = false;
+
+        private bool DestroyAtEndOfFrame = false;
+
         private Transform _Transform;
         public Transform Transform {
             get {
@@ -26,7 +51,7 @@ namespace ConflictCube.ComponentBased.Components
                 {
                     _Parent.Children.Remove(this);
                 }
-                else if(RootGameObjectNode.Contains(this))
+                else if (RootGameObjectNode.Contains(this))
                 {
                     RootGameObjectNode.Remove(this);
                 }
@@ -50,15 +75,22 @@ namespace ConflictCube.ComponentBased.Components
                 return _EnabledSelf;
             }
             set {
+                if (DestroyAtEndOfFrame)
+                {
+                    return;
+                }
+
                 _EnabledSelf = value;
 
-                if(value)
+                if (value)
                 {
-                    OnEnable();
+                    if(CallOnEnable)
+                        OnEnable();
                 }
                 else
                 {
-                    OnDisable();
+                    if(CallOnDisable)
+                        OnDisable();
                 }
             }
         }
@@ -82,7 +114,7 @@ namespace ConflictCube.ComponentBased.Components
                 return true;
             }
         }
-        
+
         public GameObject(string name, Transform transform, GameObject parent, bool enabled = true) : this(name, transform, parent, GameObjectType.Default, enabled)
         { }
 
@@ -95,7 +127,8 @@ namespace ConflictCube.ComponentBased.Components
             Type = type;
             Enabled = enabled;
 
-            OnStart();
+            if(CallOnStart)
+                OnStart();
         }
 
 
@@ -171,9 +204,11 @@ namespace ConflictCube.ComponentBased.Components
 
         public void UpdateAll()
         {
-            CallAllOnUpdate();
+            if(CallOnUpdate || !IncludeChildrenInCallOnUpdateFlag)
+                CallAllOnUpdate();
 
-            CallAllOnLateUpdate();
+            if (CallOnLateUpdate || !IncludeChildrenInCallOnLateUpdateFlag)
+                CallAllOnLateUpdate();
         }
 
         private void CallAllOnUpdate()
@@ -183,7 +218,18 @@ namespace ConflictCube.ComponentBased.Components
                 return;
             }
 
-            OnUpdate();
+            if(CallOnUpdate)
+            {
+                OnUpdate();
+
+                foreach(Component comp in Components)
+                {
+                    if(comp.Enabled)
+                    {
+                        comp.OnUpdate();
+                    }
+                }
+            }
 
             foreach (GameObject child in Children)
             {
@@ -198,7 +244,8 @@ namespace ConflictCube.ComponentBased.Components
                 return;
             }
 
-            OnLateUpdate();
+            if(CallOnLateUpdate)
+                OnLateUpdate();
 
             foreach (GameObject child in Children)
             {
@@ -276,23 +323,20 @@ namespace ConflictCube.ComponentBased.Components
 
 
         private static List<GameObject> RootGameObjectNode = new List<GameObject>();
+        private static List<Tuple<float, GameObject>> GameObjectsToBeDestroied = new List<Tuple<float, GameObject>>();
 
         /// <summary>
         /// Destroies a game object.
         /// Can only be destroied if the GameObject has a parent.
         /// </summary>
         /// <param name="gameObject"></param>
-        public static void Destroy(GameObject gameObject)
+        public static void Destroy(GameObject gameObject, float afterTime = 0)
         {
-            if (gameObject.Parent != null)
-            {
+            if(gameObject.CallOnDestroy)
                 gameObject.OnDestroy();
-                gameObject.Parent.Children.Remove(gameObject);
-            }
-            else
-            {
-                RootGameObjectNode.Remove(gameObject);
-            }
+            gameObject.DestroyAtEndOfFrame = true;
+            gameObject.Enabled = false;
+            GameObjectsToBeDestroied.Add(Tuple.Create(Time.Time.CurrentTime + afterTime, gameObject));
         }
 
 
@@ -304,7 +348,7 @@ namespace ConflictCube.ComponentBased.Components
         /// <returns></returns>
         public static GameObject FindGameObjectByType<T>() where T : GameObject
         {
-            foreach(GameObject rootGameObjects in RootGameObjectNode)
+            foreach (GameObject rootGameObjects in RootGameObjectNode)
             {
                 if (rootGameObjects is T)
                 {
@@ -328,7 +372,7 @@ namespace ConflictCube.ComponentBased.Components
                     }
                 }
             }
-            
+
             return null;
         }
 
@@ -342,7 +386,7 @@ namespace ConflictCube.ComponentBased.Components
         {
             List<GameObject> allGameObjects = new List<GameObject>();
 
-            foreach(GameObject rootGameObjects in RootGameObjectNode)
+            foreach (GameObject rootGameObjects in RootGameObjectNode)
             {
                 if (rootGameObjects is T)
                 {
@@ -364,6 +408,29 @@ namespace ConflictCube.ComponentBased.Components
             }
 
             return allGameObjects;
+        }
+
+        public static void DestroyGameObjects()
+        {
+            foreach(Tuple<float, GameObject> obj in GameObjectsToBeDestroied)
+            {
+                if(Time.Time.CurrentTime >= obj.Item1)
+                {
+                    foreach(Component comp in obj.Item2.Components)
+                    {
+                        comp.OnRemove();
+                    }
+
+                    if (obj.Item2.Parent != null)
+                    {
+                        obj.Item2.Parent.Children.Remove(obj.Item2);
+                    }
+                    else
+                    {
+                        RootGameObjectNode.Remove(obj.Item2);
+                    }
+                }
+            }
         }
     }
 }

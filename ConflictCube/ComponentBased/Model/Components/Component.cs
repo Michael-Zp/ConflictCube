@@ -28,5 +28,10 @@
 
             return newComponent;
         }
+
+        public virtual void OnUpdate()
+        {
+
+        }
     }
 }

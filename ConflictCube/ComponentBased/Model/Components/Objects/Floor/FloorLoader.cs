@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Xml;
 using ConflictCube.ComponentBased.Components;
 using ConflictCube.ComponentBased.Components.Objects.Tiles;
-using ConflictCube.ComponentBased.Model.Components.Objects;
 using ConflictCube.ComponentBased.Model.Components.Objects.Events;
 using OpenTK;
 
@@ -35,6 +34,22 @@ namespace ConflictCube.ComponentBased
                     LevelTile buttonTile = new LevelTile(row, column, tileName, tileTransform, floorTiles[1][row, column], floorOfLevel, floorOfLevel);
                     LevelTile cubeTile = new LevelTile(row, column, tileName, tileTransform, floorTiles[2][row, column], floorOfLevel, floorOfLevel);
 
+                    switch(floorTiles[3][row, column])
+                    {
+                        case 42:
+                            floorOfLevel.BluePlayerCheckpoint = tileTransform;
+                            floorOfLevel.OrangePlayerCheckpoint = tileTransform;
+                            break;
+
+                        case 43:
+                            floorOfLevel.OrangePlayerCheckpoint = tileTransform;
+                            break;
+
+                        case 44:
+                            floorOfLevel.BluePlayerCheckpoint = tileTransform;
+                            break;
+                    }
+
                     if (buttonTile.Type == GameObjectType.NotActiveButton)
                     {
                         buttonTile.Event = GenerateEvent(row, column, levelRows, levelColumns, floorTiles, floorOfLevel);
@@ -44,8 +59,6 @@ namespace ConflictCube.ComponentBased
                     floorOfLevel.AddLevelTile(floorTile, buttonTile, cubeTile, row, column);
                 }
             }
-
-            floorOfLevel.CurrentCheckpoint = floorOfLevel.FindStartPosition();
 
             return floorOfLevel;
         }

@@ -17,7 +17,7 @@ namespace ConflictCube.ComponentBased.Components
         }
 
         public static CollisionGroup DefaultCollisionGroup { get; private set; } = new CollisionGroup();
-        
+
         public void AddCollider(Collider collider)
         {
             CollidersInGroup.Add(collider);
@@ -26,7 +26,7 @@ namespace ConflictCube.ComponentBased.Components
 
         public void AddRangeColliders(IEnumerable<Collider> colliders)
         {
-            foreach(Collider collider in colliders)
+            foreach (Collider collider in colliders)
             {
                 AddCollider(collider);
             }
@@ -34,14 +34,24 @@ namespace ConflictCube.ComponentBased.Components
 
         public void CheckCollisions(Collider collider, Vector2 movement)
         {
+            if (!collider.Enabled)
+            {
+                return;
+            }
+
             //No foreach loop, because events in the CollidesWIth could change the CollidersInGroup list -> Throws exception
-            for(int i = 0; i < CollidersInGroup.Count; i++)
+            for (int i = 0; i < CollidersInGroup.Count; i++)
             {
                 if (CollidersInGroup[i] == collider || !collider.Owner.EnabledInHierachy || !CollidersInGroup[i].Owner.EnabledInHierachy)
                 {
                     continue;
                 }
-                
+
+                if (!CollidersInGroup[i].Enabled)
+                {
+                    continue;
+                }
+
                 if (!collider.Layer.AreLayersColliding(CollidersInGroup[i].Layer))
                 {
                     continue;
@@ -56,7 +66,7 @@ namespace ConflictCube.ComponentBased.Components
                 {
                     collider.CollidesWith(CollidersInGroup[i], movement);
 
-                    if(CollidersInGroup[i].IsCollidingWith(collider))
+                    if (CollidersInGroup[i].IsCollidingWith(collider))
                     {
                         CollidersInGroup[i].CollidesWith(collider, new Vector2(0, 0));
                     }

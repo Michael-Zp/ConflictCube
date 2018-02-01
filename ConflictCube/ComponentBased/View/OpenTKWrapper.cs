@@ -46,8 +46,11 @@ namespace ConflictCube.ComponentBased
         }
 
 
-        public void DrawBox(Components.Rectangle rect, Color color, ITexture texture, Box2D uVCoordinates, IShader shader, Material currentMat, bool alphaChannel = true)
+        public void DrawBox(Transform globalTransform, Color color, ITexture texture, Box2D uVCoordinates, IShader shader, Material currentMat, Transform cameraTransform, bool alphaChannel = true)
         {
+            var rect = globalTransform.GetGlobalRotatedRectangle();
+
+
             if (alphaChannel)
             {
                 EnableAlphaChannel();
@@ -82,30 +85,92 @@ namespace ConflictCube.ComponentBased
                     GL.Uniform4(currentMat.Shader.GetResourceLocation(ShaderResourceType.Uniform, parameter.Item1), parameter.Item2);
                 }
 
-                Vector2[] uvCoords = new Vector2[]
+                Vector2[] uvCoords;
+
+                if (texture != null && uVCoordinates != null)
                 {
-                    Vector2.Zero,
-                    Vector2.UnitX,
-                    Vector2.One,
-                    Vector2.UnitY
+                    GL.Uniform1(currentMat.Shader.GetResourceLocation(ShaderResourceType.Uniform, "tex"), texture.ID);
+                    uvCoords = new Vector2[]
+                    {
+                        new Vector2(uVCoordinates.MinX, uVCoordinates.MinY),
+                        new Vector2(uVCoordinates.MaxX, uVCoordinates.MinY),
+                        new Vector2(uVCoordinates.MaxX, uVCoordinates.MaxY),
+                        new Vector2(uVCoordinates.MinX, uVCoordinates.MaxY),
+                    };
+
+                    GL.Uniform1(currentMat.Shader.GetResourceLocation(ShaderResourceType.Uniform, "minXuv"), uVCoordinates.MinX);
+                    GL.Uniform1(currentMat.Shader.GetResourceLocation(ShaderResourceType.Uniform, "maxXuv"), uVCoordinates.MaxX);
+                    GL.Uniform1(currentMat.Shader.GetResourceLocation(ShaderResourceType.Uniform, "minYuv"), uVCoordinates.MinY);
+                    GL.Uniform1(currentMat.Shader.GetResourceLocation(ShaderResourceType.Uniform, "maxYuv"), uVCoordinates.MaxY);
+                }
+                else
+                {
+                    uvCoords = new Vector2[]
+                    {
+                        Vector2.Zero,
+                        Vector2.UnitX,
+                        Vector2.One,
+                        Vector2.UnitY
+                    };
+                }
+
+                int uvPos = currentMat.Shader.GetResourceLocation(ShaderResourceType.Attribute, "uvPos");
+
+                VertexArrayObject.SetAttribute(uvPos, uvCoords, OpenTK.Graphics.OpenGL4.VertexAttribPointerType.Float, 2);
+                
+                float minX = cameraTransform.GetMinX(WorldRelation.Global);
+                float maxX = cameraTransform.GetMaxX(WorldRelation.Global);
+                float minY = cameraTransform.GetMinY(WorldRelation.Global);
+                float maxY = cameraTransform.GetMaxY(WorldRelation.Global);
+                
+                Matrix4 cameraMatrix = System.Numerics.Matrix4x4.CreateOrthographicOffCenter(minX, maxX, minY, maxY, 0, 1).ToOpenTK().Inverted();
+                
+                int locCamera = currentMat.Shader.GetResourceLocation(ShaderResourceType.Uniform, "camera");
+
+                GL.UniformMatrix4(locCamera, false, ref cameraMatrix);
+
+                Vector2[] positions = new Vector2[]
+                {
+                    rect.BottomLeft,
+                    rect.BottomRight,
+                    rect.TopRight,
+                    rect.TopLeft
                 };
 
-                VertexArrayObject.SetAttribute((int)Material.VertexShaderAttributes.UvPosition, uvCoords, OpenTK.Graphics.OpenGL4.VertexAttribPointerType.Float, 2);
+                int posPos = currentMat.Shader.GetResourceLocation(ShaderResourceType.Attribute, "position");
+
+                VertexArrayObject.SetAttribute(posPos, positions, OpenTK.Graphics.OpenGL4.VertexAttribPointerType.Float, 2);
             }
-            
+
             if (texture != null && uVCoordinates != null)
             {
                 EnableTextures();
                 texture.Activate();
+            }
 
-                DrawTexturedBox(rect, uVCoordinates);
 
-                texture.Deactivate();
-                DisableTextures();
+            if(shader != null)
+            {
+                VertexArrayObject.Draw();
             }
             else
             {
-                DrawBox(rect);
+                rect = rect.ApplyTransform(cameraTransform);
+
+                if (texture != null && uVCoordinates != null)
+                {
+                    DrawTexturedBox(rect, uVCoordinates);
+                }
+                else
+                {
+                    DrawBox(rect);
+                }
+            }
+
+            if(texture != null && uVCoordinates != null)
+            { 
+                texture.Deactivate();
+                DisableTextures();
             }
 
             if(shader != null)

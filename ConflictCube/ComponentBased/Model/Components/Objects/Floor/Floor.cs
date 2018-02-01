@@ -16,7 +16,8 @@ namespace ConflictCube.ComponentBased
         public LevelTile[,] CubeTiles { get; set; }
         public float FloorBreakdownInterval { get; set; } = 3.0f;
         public CollisionGroup CollisionGroup;
-        public Transform CurrentCheckpoint = new Transform(0, 0, 1, 1);
+        public Transform BluePlayerCheckpoint;
+        public Transform OrangePlayerCheckpoint;
 
         private int FloorRowsBrokeDown = 0;
         private float LastFloorBreakdownTime = 0;
@@ -95,33 +96,6 @@ namespace ConflictCube.ComponentBased
             floorTile.Parent = this;
             buttonTile.Parent = this;
             cubeTile.Parent = this;
-        }
-
-
-        /// <summary>
-        /// Return global start position
-        /// </summary>
-        /// <returns></returns>
-        public Transform FindStartPosition()
-        {
-            int LowestRow = FloorTiles.GetLength(0);
-            int LowestRowIndex = LowestRow - 1;
-
-            for (int i = LowestRowIndex; i >= 0; i--)
-            {
-                for (int u = 0; u < FloorTiles.GetLength(1); u++)
-                {
-                    LevelTile tile = FloorTiles[i, u];
-                    if (tile.Type == GameObjectType.Floor)
-                    {
-                        Vector2 startPos = tile.Transform.GetPosition(WorldRelation.Global);
-                        return new Transform(startPos.X, startPos.Y, 1, 1);
-                    }
-                }
-            }
-
-            // No tile in the whole level is of type floor....
-            throw new Exception("No start position found");
         }
 
         public Transform BoxInFloorGrid(float row, float column)

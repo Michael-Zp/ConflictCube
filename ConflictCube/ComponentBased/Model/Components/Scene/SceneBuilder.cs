@@ -101,34 +101,16 @@ namespace ConflictCube.ComponentBased
             Floor floor = FloorLoader.Instance(level, "Floor", new Transform(0, 0, 1, 1), group, game);
             Boundaries(group, floor, game);
 
-            /*
-            Floor floor = (Floor)Game.FindGameObjectByTypeInChildren<Floor>();
-            Transform buttonTransform = floor.GetBoxAtGridPosition(new Vector2(1, 5));
-            buttonTransform.SetSize(buttonTransform.GetSize(WorldRelation.Global) / 2, WorldRelation.Global);
-            buttonTransform = floor.Transform.TransformToLocal(buttonTransform);
-
-            OnButtonChangeFloorEvent changeFloorEvent = new OnButtonChangeFloorEvent(floor);
-            changeFloorEvent.AddChangeOnFloor(1, 2, GameObjectType.OrangeFloor);
-            changeFloorEvent.AddChangeOnFloor(2, 2, GameObjectType.OrangeFloor);
-            changeFloorEvent.AddChangeOnFloor(3, 2, GameObjectType.OrangeFloor);
-            changeFloorEvent.AddChangeOnFloor(4, 2, GameObjectType.OrangeFloor);
-            changeFloorEvent.AddChangeOnFloor(5, 2, GameObjectType.OrangeFloor);
-            changeFloorEvent.AddChangeOnFloor(6, 2, GameObjectType.OrangeFloor);
-
-            Button = new Button("button", buttonTransform, changeFloorEvent, floor.CollisionGroup);
-            floor.AddChild(Button);
-            */
-
             Camera mainCamera = InitializeMainCamera(windowWidth, windowHeight);
             mainCamera.RootGameObject = game;
             Camera uiCamera = InitializeUICamera(windowWidth, windowHeight);
             uiCamera.RootGameObject = ui;
 
-
             List<Player> players = InitializePlayers(floor);
             InitializeUI(ui);
 
             new GameManager("GameManager", players, buildMenu, ui);
+            new IngameMenu("IngameMenu", ui, buildMenu);
             new PlayerSwitcher("PlayerSwitcher", players[0], players[1], game);
 
             CameraManager cameraManager = new CameraManager("CameraManager", new Transform(), new List<Camera>() { mainCamera }, players, scene);

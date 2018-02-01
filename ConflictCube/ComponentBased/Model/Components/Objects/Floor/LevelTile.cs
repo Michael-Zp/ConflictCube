@@ -1,10 +1,13 @@
 ﻿using ConflictCube.ComponentBased.Model.Components.Colliders;
 using ConflictCube.ComponentBased.Model.Components.Objects.Events;
+using ConflictCube.ComponentBased.Model.Components.ParticleSystem;
+using OpenTK;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using Zenseless.Geometry;
 using Zenseless.HLGL;
+using Zenseless.OpenGL;
 
 namespace ConflictCube.ComponentBased.Components.Objects.Tiles
 {
@@ -16,6 +19,8 @@ namespace ConflictCube.ComponentBased.Components.Objects.Tiles
         public int Column { get; private set; }
         public OnButtonChangeFloorEvent Event { private get; set; }
 
+        private static Material MagmaParticle;
+        private static Material IceParticle;
         private static Dictionary<int, Material> FloorTileMaterials = new Dictionary<int, Material>();
         private static Dictionary<GameObjectType, List<uint>> ReverseMaterialList = new Dictionary<GameObjectType, List<uint>>();
         private static GameObjectType[] TileIndexToObjectType = new GameObjectType[48];
@@ -36,20 +41,23 @@ namespace ConflictCube.ComponentBased.Components.Objects.Tiles
 
             AddTileMaterial(GameObjectType.None, spriteSheet, 42); //Not used but I dont want to change the spritesheet again...
 
-            AddTileMaterial(GameObjectType.OrangeFloor, spriteSheet, 43);
-            AddTileMaterial(GameObjectType.BlueFloor, spriteSheet, 44);
+            AddTileMaterial(GameObjectType.OrangeFloor, spriteSheet, 43, ResxFiles.ShaderResources.Liquid);
+            AddTileMaterial(GameObjectType.BlueFloor, spriteSheet, 44, ResxFiles.ShaderResources.Liquid);
             AddTileMaterial(GameObjectType.NotActiveButton, spriteSheet, 45);
             AddTileMaterial(GameObjectType.ActiveButton, spriteSheet, 46);
             AddTileMaterial(GameObjectType.BlueBlock, spriteSheet, 47);
             AddTileMaterial(GameObjectType.OrangeBlock, spriteSheet, 48);
 
 
+            IceParticle = new Material(Color.White, TextureLoader.FromBitmap(ResxFiles.ParticleSystemResources.IceParticle), new Box2D(Box2D.BOX01));
+            MagmaParticle = new Material(Color.White, TextureLoader.FromBitmap(ResxFiles.ParticleSystemResources.MagmaParticle), new Box2D(Box2D.BOX01));
+
             MaterialsAreInitialized = true;
         }
 
-        private static void AddTileMaterial(GameObjectType type, SpriteSheet spriteSheet, uint index)
+        private static void AddTileMaterial(GameObjectType type, SpriteSheet spriteSheet, uint index, string fragmentShader = null)
         {
-            FloorTileMaterials.Add((int)index, new Material(Color.White, spriteSheet.Tex, new Box2D(spriteSheet.CalcSpriteTexCoords(index - 1))));
+            FloorTileMaterials.Add((int)index, new Material(Color.White, spriteSheet.Tex, new Box2D(spriteSheet.CalcSpriteTexCoords(index - 1)), fragmentShader));
             TileIndexToObjectType[index - 1] = type;
             
             if(ReverseMaterialList.ContainsKey(type))
@@ -91,7 +99,7 @@ namespace ConflictCube.ComponentBased.Components.Objects.Tiles
             TileIndex = tileIndex;
             Event = changeEvent;
             Type = GetGameObjectTypeForIndex(TileIndex);
-
+            
             InitializeComponents();
         }
 
@@ -99,13 +107,37 @@ namespace ConflictCube.ComponentBased.Components.Objects.Tiles
         {
             AddMaterialOnCreate();
             AddColliderOnCreate(FloorOfTile.CollisionGroup);
+            AddOtherComponents();
+        }
+
+        private void AddOtherComponents()
+        {
+            if(Type == GameObjectType.BlueBlock)
+            {
+                ParticleSystem iceSystem = new ParticleSystem(50, .01f, IceParticle, new Vector2(.05f), .8f, null, null, Vector2.UnitY, 360)
+                {
+                    Enabled = false
+                };
+
+                AddComponent(iceSystem);
+            }
+            else if(Type == GameObjectType.OrangeBlock)
+            {
+                ParticleSystem magmaSystem = new ParticleSystem(50, .01f, MagmaParticle, new Vector2(.05f), .8f, null, null, Vector2.UnitY, 360)
+                {
+                    Enabled = false
+                };
+
+                AddComponent(magmaSystem);
+            }
         }
 
         private void AddMaterialOnCreate()
         {
             FloorTileMaterials.TryGetValue(TileIndex, out Material material);
 
-            AddComponent(material);
+            //Only add a clone. Otherwise every change on one material will affect the others (like disable one -> disables all ^^)
+            AddComponent(material?.Clone());
         }
 
         private void AddColliderOnCreate(CollisionGroup group)

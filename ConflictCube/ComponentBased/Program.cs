@@ -22,7 +22,7 @@ namespace ConflictCube.ComponentBased
             DebugGame.PrintFPS = true;
 
             //End debug options----
-
+                
             MyWindow window = new MyWindow(512, 512);
             GameView view = new GameView(window);
             GameState state = new GameState(window.Width, window.Height);
@@ -35,7 +35,7 @@ namespace ConflictCube.ComponentBased
                 Time.Time.CurrentTime = window.GetTime();
 
                 controller.UpdateInputs();
-                state.UpdateAll();
+                state.UpdateGameState();
                 view.Render(state.GetViewModel());
             }
         }

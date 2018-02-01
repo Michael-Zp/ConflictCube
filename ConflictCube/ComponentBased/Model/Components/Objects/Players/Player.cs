@@ -21,7 +21,7 @@ namespace ConflictCube.ComponentBased
         public bool CanMove = true;
         public Player OtherPlayer { private get; set; }
 
-        private IGameManager _GameManager;
+        private IGameManager _GameManager = null;
         private IGameManager GameManager {
             get {
                 if(_GameManager == null)
@@ -31,7 +31,7 @@ namespace ConflictCube.ComponentBased
                 return _GameManager;
             }
         }
-        private ISwitchPlayers _SwitchPlayer;
+        private ISwitchPlayers _SwitchPlayer = null;
         private ISwitchPlayers SwitchPlayers {
             get {
                 if (_SwitchPlayer == null)
@@ -92,7 +92,6 @@ namespace ConflictCube.ComponentBased
             }
 
             AddComponent(collider);
-
             
             AfterglowMaterialY = new Material(Color.White, ShaderResources.Afterglow);
             AfterglowMaterialY.AddShaderParameter("startTime", -AfterglowLifetime * 2);
@@ -165,9 +164,8 @@ namespace ConflictCube.ComponentBased
                 SwitchPlayers.SwitchYAxis();
 
                 //Afterglow
-
-                ShowYAfterglow();
-                OtherPlayer.ShowYAfterglow();
+                //ShowYAfterglow();
+                //OtherPlayer.ShowYAfterglow();
             }
             
             if (Input.OnButtonDown(SwitchPositionXY, ActiveGamePad))
@@ -175,9 +173,8 @@ namespace ConflictCube.ComponentBased
                 SwitchPlayers.SwitchXYAxis();
 
                 //Afterglow
-
-                ShowXYAfterglow();
-                OtherPlayer.ShowXYAfterglow();
+                //ShowXYAfterglow();
+                //OtherPlayer.ShowXYAfterglow();
             }
             
             if (Input.OnButtonDown(SwitchPositionX, ActiveGamePad))
@@ -185,9 +182,8 @@ namespace ConflictCube.ComponentBased
                 SwitchPlayers.SwitchXAxis();
                 
                 //Afterglow
-
-                ShowXAfterglow();
-                OtherPlayer.ShowXAfterglow();
+                //ShowXAfterglow();
+                //OtherPlayer.ShowXAfterglow();
             }
 
             Move(moveVector * Time.Time.DifTime);
@@ -454,12 +450,8 @@ namespace ConflictCube.ComponentBased
             return CurrentFloor.FloorTiles[(int)currentGridPosition.Y, (int)currentGridPosition.X].Type;
         }
 
-        
-        public void ResetPositionToLastCheckpoint()
-        {
-            Transform.SetPosition(CurrentFloor.FindStartPosition().GetPosition(WorldRelation.Global), WorldRelation.Global);
-            Transform.SetRotation(0, WorldRelation.Global);
-        }
+
+        public abstract void ResetPositionToLastCheckpoint();
 
         private void SetUseFieldWithOffset(float xOffset = 0, float yOffset = 0)
         {

@@ -1,6 +1,5 @@
 ﻿using ConflictCube.ResxFiles;
 using OpenTK;
-using OpenTK.Graphics.OpenGL;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -146,10 +145,6 @@ namespace ConflictCube.ComponentBased.Components
         public Material(Color color, ITexture texture, Box2D uvCoordinates) : this(color, texture, uvCoordinates, null)
         {}
         
-        public enum VertexShaderAttributes : int {
-            UvPosition = 0
-        }
-
         public Material(Color color, ITexture texture, Box2D uvCoordinates, string fragmentShader)
         {
             IShader shader;
@@ -169,7 +164,6 @@ namespace ConflictCube.ComponentBased.Components
                     Console.WriteLine(e.Message);
                     while (true) {  }
                 }
-                GL.BindAttribLocation(shader.ProgramID, (int)VertexShaderAttributes.UvPosition, "uvPos");
             }
 
 
