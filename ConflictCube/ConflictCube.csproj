@@ -323,5 +323,11 @@
   <ItemGroup>
     <None Include="Audio\Walking.wav" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Audio\WalkingFast.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Audio\Background.wav" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

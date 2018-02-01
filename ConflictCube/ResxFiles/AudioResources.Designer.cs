@@ -73,6 +73,15 @@ namespace ConflictCube.ResxFiles {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.IO.UnmanagedMemoryStream ähnlich wie System.IO.MemoryStream.
         /// </summary>
+        internal static System.IO.UnmanagedMemoryStream Background {
+            get {
+                return ResourceManager.GetStream("Background", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.IO.UnmanagedMemoryStream ähnlich wie System.IO.MemoryStream.
+        /// </summary>
         internal static System.IO.UnmanagedMemoryStream BirdWhistle {
             get {
                 return ResourceManager.GetStream("BirdWhistle", resourceCulture);
@@ -85,6 +94,15 @@ namespace ConflictCube.ResxFiles {
         internal static System.IO.UnmanagedMemoryStream Walking {
             get {
                 return ResourceManager.GetStream("Walking", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.IO.UnmanagedMemoryStream ähnlich wie System.IO.MemoryStream.
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream WalkingFast {
+            get {
+                return ResourceManager.GetStream("WalkingFast", resourceCulture);
             }
         }
     }

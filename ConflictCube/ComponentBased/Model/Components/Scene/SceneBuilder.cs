@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using ConflictCube.ResxFiles;
+using ConflictCube.ComponentBased.Model.Components.Sound;
 
 namespace ConflictCube.ComponentBased
 {
@@ -114,6 +115,11 @@ namespace ConflictCube.ComponentBased
             new PlayerSwitcher("PlayerSwitcher", players[0], players[1], game);
 
             CameraManager cameraManager = new CameraManager("CameraManager", new Transform(), new List<Camera>() { mainCamera }, players, scene);
+
+            AudioPlayer bgMusic = new AudioPlayer(AudioResources.Background, true);
+            bgMusic.PlayAudio();
+            scene.AddComponent(bgMusic);
+
 
             return new Scene(scene, new List<Camera> { mainCamera, uiCamera });
         }

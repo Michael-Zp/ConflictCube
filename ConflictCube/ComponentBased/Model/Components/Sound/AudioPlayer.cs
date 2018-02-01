@@ -24,6 +24,11 @@ namespace ConflictCube.ComponentBased.Model.Components.Sound
             Loop = loop;
         }
 
+        public override void OnRemove()
+        {
+            StopAudio();
+        }
+
         public void StopAudio()
         {
             if(SampleProvider != null)

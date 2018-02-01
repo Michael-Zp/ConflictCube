@@ -25,7 +25,7 @@ namespace ZenselessTests
                 Console.WriteLine("---");
             }
 
-            Audio.Instance.StopSound(song);
+            Audio.Instance.StopSound(song.Sample);
 
 
             for (int i = 0; i < 4; i++)

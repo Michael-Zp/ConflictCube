@@ -130,7 +130,7 @@ namespace ConflictCube.ComponentBased
             SetUseFieldWithOffset();
 
 
-            FootstepsSound = new AudioPlayer(AudioResources.Walking, true);
+            FootstepsSound = new AudioPlayer(AudioResources.WalkingFast, true);
 
 
             ResetPositionToLastCheckpoint();
