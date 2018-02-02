@@ -1,4 +1,5 @@
 ﻿using ConflictCube.ComponentBased.Components;
+using ConflictCube.ComponentBased.Model.Components.Animators;
 using ConflictCube.ComponentBased.Model.Components.UI;
 using System.Collections.Generic;
 
@@ -53,7 +54,7 @@ namespace ConflictCube.ComponentBased.Model.Components.Objects
                     player.IsAlive = false;
                 }
 
-                GameOverScreen.Enabled = true;
+                ShowDeathScreen();
 
                 if (Input.AnyButtonDown())
                 {
@@ -88,7 +89,7 @@ namespace ConflictCube.ComponentBased.Model.Components.Objects
                     player.CanMove = false;
                 }
 
-                GameWonScreen.Enabled = true;
+                ShowWonScreen();
 
                 if (Input.AnyButtonDown())
                 {
@@ -108,6 +109,7 @@ namespace ConflictCube.ComponentBased.Model.Components.Objects
         public void ShowDeathScreen()
         {
             GameOverScreen.Enabled = true;
+            GameOverScreen.GetComponent<MaterialAnimator>().StartAnimation();
         }
 
         public void ShowMenu()
@@ -118,6 +120,7 @@ namespace ConflictCube.ComponentBased.Model.Components.Objects
         public void ShowWonScreen()
         {
             GameWonScreen.Enabled = true;
+            GameWonScreen.GetComponent<MaterialAnimator>().StartAnimation();
         }
 
         public void HideWonScreen()

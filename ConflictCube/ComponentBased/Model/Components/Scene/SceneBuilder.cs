@@ -94,6 +94,8 @@ namespace ConflictCube.ComponentBased
 
         public static Scene BuildLevel(IBuildMenu buildMenu, string level, Transform sceneTransform, int windowWidth, int windowHeight, GameObject parent)
         {
+            Time.Time.TimeScale = 1;
+
             GameObject scene = new GameObject("Scene", sceneTransform, parent, GameObjectType.Scene);
             GameObject game = new GameObject("Game", new Transform(), scene);
             GameObject ui = new GameObject("UI", new Transform(), scene);

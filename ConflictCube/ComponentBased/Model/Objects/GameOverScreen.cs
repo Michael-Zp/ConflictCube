@@ -1,4 +1,5 @@
 ﻿using ConflictCube.ComponentBased.Components;
+using ConflictCube.ComponentBased.Model.Components.Animators;
 using System.Drawing;
 
 namespace ConflictCube.ComponentBased.Model.Components.UI
@@ -11,9 +12,15 @@ namespace ConflictCube.ComponentBased.Model.Components.UI
 
         public GameOverScreen(string name, Transform transform, GameObject parent, bool enabled = true) : base(name, transform, parent, enabled)
         {
-            new ColoredBox("GameOverBackground", new Transform(), new Material(Color.FromArgb(245, Color.Black)), this);
+            Material bgMat = new Material(Color.FromArgb(245, Color.Black));
+            new ColoredBox("GameOverBackground", new Transform(), bgMat, this);
             new TextField("GameOverText", new Transform(0f, .4f, 1f, .3f), "Game over", Font.Instance().BloodBath, this);
             new TextField("Press any key...", new Transform(0f, -.7f, 1.5f, .15f), "Press any key to start over...", Font.Instance().BloodBath, this);
+
+            MaterialAnimator animator = new MaterialAnimator(bgMat);
+            animator.AddKeyframe(0, 125);
+            animator.AddKeyframe(1, 245);
+            AddComponent(animator);
 
 
             DeathReason = new TextField("DeathReason", new Transform(0f, -.1f, 1, .15f), "", Font.Instance().BloodBath, this);

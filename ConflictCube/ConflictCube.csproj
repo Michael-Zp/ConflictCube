@@ -79,6 +79,8 @@
     <Compile Include="ComponentBased\Controller\InputKey.cs" />
     <Compile Include="ComponentBased\Controller\ViewModel.cs" />
     <Compile Include="ComponentBased\DebugGame.cs" />
+    <Compile Include="ComponentBased\Model\Components\Animators\MaterialAnimator.cs" />
+    <Compile Include="ComponentBased\Model\Components\Animators\MaterialAnimatorKeyframe.cs" />
     <Compile Include="ComponentBased\Model\Components\Sound\AudioPlayer.cs" />
     <Compile Include="ComponentBased\Model\Objects\GameManager.cs" />
     <Compile Include="ComponentBased\Model\Objects\IGameManager.cs" />

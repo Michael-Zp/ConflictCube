@@ -1,5 +1,6 @@
 ﻿using ConflictCube.ComponentBased.Components;
 using ConflictCube.ComponentBased.Controller;
+using ConflictCube.ComponentBased.Model.Components.Animators;
 using ConflictCube.ComponentBased.Model.Components.ParticleSystem;
 using ConflictCube.ComponentBased.View;
 using ConflictCube.ResxFiles;
@@ -22,6 +23,31 @@ namespace ConflictCube.ComponentBased
             WindowHeight = windowHeight;
 
             BuildMenu();
+        }
+
+
+        public void BuildAnimatorTest()
+        {
+            ClearGameObjectTree();
+
+            ActiveScene = new Scene();
+
+            GameObject root = new GameObject("root", new Transform(0f, 0f, 1f, 1f), null);
+
+            GameObject test = new GameObject("test", new Transform(0f, 0f, .5f, .5f), root);
+            test.AddComponent(new Material(System.Drawing.Color.White));
+
+            MaterialAnimator animator = new MaterialAnimator(test.GetComponent<Material>());
+            animator.AddKeyframe(3, MaterialAnimator.UseOriginalValue, 0);
+            animator.AddKeyframe(6, MaterialAnimator.UseOriginalValue, 0, 0);
+            animator.AddKeyframe(9, MaterialAnimator.UseOriginalValue, 0, MaterialAnimator.UseOriginalValue);
+            animator.AddKeyframe(12, MaterialAnimator.UseOriginalValue, 255, 0, 0);
+            test.AddComponent(animator);
+            animator.StartAnimation();
+
+
+            ActiveScene.RootGameObject = root;
+            ActiveScene.Cameras = new System.Collections.Generic.List<Camera>() { new Camera(new Transform(0f, 0f, 1, 1), root, WindowWidth, WindowHeight, new Transform(), false) };
         }
 
         public void BuildParticleSystemTest()

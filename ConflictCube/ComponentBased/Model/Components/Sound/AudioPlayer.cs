@@ -12,6 +12,9 @@ namespace ConflictCube.ComponentBased.Model.Components.Sound
         private LoopingAudio LoopingAudio = null;
         private bool Loop;
 
+        private bool StartPlayingSoundOnUpdate = false;
+        
+
         public AudioPlayer(byte[] audioResource, bool loop) : this(new CachedSound(audioResource), loop)
         {}
 
@@ -22,6 +25,22 @@ namespace ConflictCube.ComponentBased.Model.Components.Sound
         {
             Sound = sound;
             Loop = loop;
+        }
+
+        public override void OnUpdate()
+        {
+            if(StartPlayingSoundOnUpdate)
+            {
+                if (!Loop)
+                {
+                    SampleProvider = Audio.Instance.PlaySound(Sound);
+                }
+                else
+                {
+                    LoopingAudio = Audio.Instance.LoopSound(Sound);
+                }
+                StartPlayingSoundOnUpdate = false;
+            }
         }
 
         public override void OnRemove()
@@ -41,8 +60,13 @@ namespace ConflictCube.ComponentBased.Model.Components.Sound
                 Audio.Instance.StopLoop(LoopingAudio);
                 LoopingAudio = null;
             }
+
+            StartPlayingSoundOnUpdate = false;
         }
 
+        /// <summary>
+        /// Stops the current sound and starts playing the new sound the next time OnUpdate() is called.
+        /// </summary>
         public void PlayAudio()
         {
             if(SampleProvider != null || LoopingAudio != null)
@@ -50,14 +74,7 @@ namespace ConflictCube.ComponentBased.Model.Components.Sound
                 StopAudio();
             }
 
-            if(!Loop)
-            {
-                SampleProvider = Audio.Instance.PlaySound(Sound);
-            }
-            else
-            {
-                LoopingAudio = Audio.Instance.LoopSound(Sound);
-            }
+            StartPlayingSoundOnUpdate = true;
         }
     }
 }
