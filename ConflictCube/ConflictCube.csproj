@@ -75,123 +75,63 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ComponentBased\Controller\GameController.cs" />
-    <Compile Include="ComponentBased\Controller\InputKey.cs" />
-    <Compile Include="ComponentBased\Controller\ViewModel.cs" />
-    <Compile Include="ComponentBased\DebugGame.cs" />
-    <Compile Include="ComponentBased\Model\Components\Animators\MaterialAnimator.cs" />
-    <Compile Include="ComponentBased\Model\Components\Animators\MaterialAnimatorKeyframe.cs" />
-    <Compile Include="ComponentBased\Model\Components\Colliders\ColliderGridCell.cs" />
-    <Compile Include="ComponentBased\Model\Components\Sound\AudioPlayer.cs" />
-    <Compile Include="ComponentBased\Model\Objects\GameManager.cs" />
-    <Compile Include="ComponentBased\Model\Objects\IGameManager.cs" />
-    <Compile Include="ComponentBased\Model\Objects\IngameMenu.cs" />
-    <Compile Include="ComponentBased\Model\Objects\Players\ISwitchPlayers.cs" />
-    <Compile Include="ComponentBased\Model\Objects\Players\PlayerSwitcher.cs" />
-    <Compile Include="ComponentBased\Model\Objects\Players\UseField.cs" />
-    <Compile Include="ComponentBased\Model\Components\ParticleSystem\Particle.cs" />
-    <Compile Include="ComponentBased\Model\Components\ParticleSystem\ParticleSystem.cs" />
-    <Compile Include="ComponentBased\Model\Components\Physics\PhysicsObject.cs" />
-    <Compile Include="ComponentBased\Model\Components\UI\ButtonGroup.cs" />
-    <Compile Include="ComponentBased\Model\Components\UI\DoActionOnButtonClick.cs" />
-    <Compile Include="ComponentBased\Model\Objects\GameWonScreen.cs" />
-    <Compile Include="ComponentBased\Model\Objects\GameOverScreen.cs" />
-    <Compile Include="ComponentBased\Model\IBuildMenu.cs" />
-    <Compile Include="ComponentBased\Model\IBuildScene.cs" />
-    <Compile Include="GlobalMethods\Audio\Audio.cs" />
-    <Compile Include="GlobalMethods\Audio\CachedSound.cs" />
-    <Compile Include="GlobalMethods\Audio\CachedSoundSampleProvider.cs" />
-    <Compile Include="GlobalMethods\Audio\LoopingAudio.cs" />
+    <Compile Include="Game\Debug\DebugGame.cs" />
+    <Compile Include="Game\Objects\ColoredBox.cs" />
+    <Compile Include="Game\Objects\UI\ButtonGroup.cs" />
+    <Compile Include="Game\Objects\Managers\GameManager.cs" />
+    <Compile Include="Game\Objects\Managers\IGameManager.cs" />
+    <Compile Include="Game\Objects\UI\IngameMenu.cs" />
+    <Compile Include="Game\Objects\Players\ISwitchPlayers.cs" />
+    <Compile Include="Game\Objects\Players\PlayerSwitcher.cs" />
+    <Compile Include="Game\Objects\Players\UseField.cs" />
+    <Compile Include="Game\Objects\UI\GameWonScreen.cs" />
+    <Compile Include="Game\Objects\UI\GameOverScreen.cs" />
+    <Compile Include="Game\SceneBuilders\IBuildMenu.cs" />
+    <Compile Include="Game\SceneBuilders\IBuildScene.cs" />
     <Compile Include="ResxFiles\AudioResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>AudioResources.resx</DependentUpon>
     </Compile>
-    <Compile Include="ResxFiles\FontResources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>FontResources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="ResxFiles\InventoryResources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>InventoryResources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="ComponentBased\Model\Components\Colliders\CollisionGroup.cs" />
-    <Compile Include="ComponentBased\Model\Components\Colliders\CollisionLayer.cs" />
-    <Compile Include="ComponentBased\Model\Components\GameCallbacks.cs" />
-    <Compile Include="ComponentBased\Model\Objects\Button.cs" />
-    <Compile Include="ComponentBased\Model\Objects\CameraManager.cs" />
-    <Compile Include="ComponentBased\Model\Objects\Events\Event.cs" />
-    <Compile Include="ComponentBased\Model\Objects\Events\OnButtonChangeFloorEvent.cs" />
-    <Compile Include="ComponentBased\Model\Objects\Game.cs" />
-    <Compile Include="ComponentBased\Model\Objects\Players\GhostPlayer.cs" />
-    <Compile Include="ComponentBased\Model\Objects\Players\OrangePlayer.cs" />
-    <Compile Include="ComponentBased\Model\Objects\Floor\Pickable.cs" />
-    <Compile Include="ComponentBased\Model\Objects\Floor\PlayerArea.cs" />
-    <Compile Include="ComponentBased\Model\Objects\Players\PlayerInventory.cs" />
-    <Compile Include="ComponentBased\Model\Objects\Players\BluePlayer.cs" />
-    <Compile Include="ComponentBased\Model\Components\Scene\SceneBuilder.cs" />
-    <Compile Include="ComponentBased\Model\Components\Material\MaterialData.cs" />
-    <Compile Include="ComponentBased\Model\Components\Material\Materials.cs" />
-    <Compile Include="ComponentBased\Model\Objects\ColoredBox.cs" />
-    <Compile Include="ComponentBased\Model\Objects\Floor\Floor.cs" />
-    <Compile Include="ComponentBased\Model\Objects\Floor\FloorLoader.cs" />
-    <Compile Include="ComponentBased\Model\Objects\Players\Player.cs" />
-    <Compile Include="ComponentBased\Model\Objects\Floor\LevelTile.cs" />
-    <Compile Include="ComponentBased\Model\Components\GameObjectType.cs" />
-    <Compile Include="ComponentBased\Model\Objects\Floor\Boundary.cs" />
-    <Compile Include="ComponentBased\Model\Components\UI\Canvas.cs" />
-    <Compile Include="ComponentBased\Model\Components\UI\Font.cs" />
-    <Compile Include="ComponentBased\Model\Objects\Players\PlayerUI.cs" />
+    <Compile Include="Game\Objects\Floor\Button.cs" />
+    <Compile Include="Game\Objects\Managers\CameraManager.cs" />
+    <Compile Include="Game\Objects\Events\Event.cs" />
+    <Compile Include="Game\Objects\Events\OnButtonChangeFloorEvent.cs" />
+    <Compile Include="Game\Objects\Players\OrangePlayer.cs" />
+    <Compile Include="Game\Objects\Players\BluePlayer.cs" />
+    <Compile Include="Game\SceneBuilders\SceneBuilder.cs" />
+    <Compile Include="Game\Objects\Floor\Floor.cs" />
+    <Compile Include="Game\Objects\Floor\FloorLoader.cs" />
+    <Compile Include="Game\Objects\Players\Player.cs" />
+    <Compile Include="Game\Objects\Floor\LevelTile.cs" />
+    <Compile Include="Game\Objects\Floor\Boundary.cs" />
     <Compile Include="ResxFiles\Levels.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Levels.resx</DependentUpon>
     </Compile>
-    <Compile Include="ComponentBased\Model\Components\UI\TextField.cs" />
-    <Compile Include="ComponentBased\Program.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="ResxFiles\LevelsWithNewTileset.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>LevelsWithNewTileset.resx</DependentUpon>
     </Compile>
+    <Compile Include="Game\Tilesets.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ResxFiles\ParticleSystemResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>ParticleSystemResources.resx</DependentUpon>
     </Compile>
-    <Compile Include="ResxFiles\TempResources.Designer.cs">
+    <Compile Include="ResxFiles\ShaderResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>TempResources.resx</DependentUpon>
+      <DependentUpon>ShaderResources.resx</DependentUpon>
     </Compile>
     <Compile Include="ResxFiles\TexturResource.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>TexturResource.resx</DependentUpon>
-    </Compile>
-    <Compile Include="ComponentBased\Model\Tilesets.cs" />
-    <Compile Include="ComponentBased\Model\GameState.cs" />
-    <Compile Include="ComponentBased\View\Camera.cs" />
-    <Compile Include="ComponentBased\View\GameView.cs" />
-    <Compile Include="ComponentBased\View\MyWindow.cs" />
-    <Compile Include="ComponentBased\View\OpenTKWrapper.cs" />
-    <Compile Include="ComponentBased\View\ZenselessWrapper.cs" />
-    <Compile Include="GlobalMethods\GamePadStateExtensionMethods.cs" />
-    <Compile Include="GlobalMethods\Input.cs" />
-    <Compile Include="GlobalMethods\Time.cs" />
-    <Compile Include="ComponentBased\Model\Components\Colliders\BoxCollider.cs" />
-    <Compile Include="ComponentBased\Model\Components\Colliders\Collider.cs" />
-    <Compile Include="ComponentBased\Model\Components\Component.cs" />
-    <Compile Include="ComponentBased\Model\Components\GameObject.cs" />
-    <Compile Include="ComponentBased\Model\Components\Material\Material.cs" />
-    <Compile Include="ComponentBased\Model\Components\Transform\Transform.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ResxFiles\ShaderResources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ShaderResources.resx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -215,10 +155,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>AudioResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="ResxFiles\FontResources.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>FontResources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
     <EmbeddedResource Include="ResxFiles\Levels.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Levels.Designer.cs</LastGenOutput>
@@ -231,17 +167,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>ParticleSystemResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="ResxFiles\TempResources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>TempResources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
     <EmbeddedResource Include="ResxFiles\TexturResource.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>TexturResource.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ResxFiles\InventoryResources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>InventoryResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="ResxFiles\ShaderResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -284,8 +212,8 @@
     <None Include="Resources\XYShiftTest.tmx" />
     <None Include="Resources\YShiftTest.csv" />
     <None Include="Resources\YShiftTest.tmx" />
-    <None Include="Shaders\Aftershadow.glsl" />
-    <None Include="Textures\Sledgehammer.jpg" />
+    <None Include="ResourceFiles\Shaders\Aftershadow.glsl" />
+    <None Include="ResourceFiles\Textures\Sledgehammer.jpg" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\FireTileset.png" />
@@ -297,43 +225,52 @@
     <None Include="Resources\FloorTileset.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Textures\UseFieldIndicator.png" />
+    <None Include="ResourceFiles\Textures\UseFieldIndicator.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Textures\Swap.png" />
+    <None Include="ResourceFiles\Textures\Swap.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Textures\SpritesheetNewTextures.png" />
+    <None Include="ResourceFiles\Textures\SpritesheetNewTextures.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Textures\Fireman.png" />
+    <None Include="ResourceFiles\Textures\Fireman.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Textures\welder.png" />
+    <None Include="ResourceFiles\Textures\welder.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Particles\IceParticle.png" />
+    <None Include="ResourceFiles\Particles\IceParticle.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Particles\MagmaParticle.png" />
+    <None Include="ResourceFiles\Particles\MagmaParticle.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Particles\Particle-Sprite-Smoke-1.png" />
+    <None Include="ResourceFiles\Particles\Particle-Sprite-Smoke-1.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\05 - Manowar.mp3" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Audio\BirdWhistle.wav" />
+    <None Include="ResourceFiles\Audio\BirdWhistle.wav" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Audio\Walking.wav" />
+    <None Include="ResourceFiles\Audio\Walking.wav" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Audio\WalkingFast.wav" />
+    <None Include="ResourceFiles\Audio\WalkingFast.wav" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Audio\Background.wav" />
+    <None Include="ResourceFiles\Audio\Background.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Engine\Engine.csproj">
+      <Project>{246649f2-118c-4b07-a915-8c8507464dce}</Project>
+      <Name>Engine</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ResourceFiles\Textures\Firemanred.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConflictCubeTest", "Conflic
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZenselessTests", "ZenselessTests\ZenselessTests.csproj", "{637958CE-FAE1-4B83-9A52-3E88B5EDB8DB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engine", "Engine\Engine.csproj", "{246649F2-118C-4B07-A915-8C8507464DCE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{637958CE-FAE1-4B83-9A52-3E88B5EDB8DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{637958CE-FAE1-4B83-9A52-3E88B5EDB8DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{637958CE-FAE1-4B83-9A52-3E88B5EDB8DB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{246649F2-118C-4B07-A915-8C8507464DCE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{246649F2-118C-4B07-A915-8C8507464DCE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{246649F2-118C-4B07-A915-8C8507464DCE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{246649F2-118C-4B07-A915-8C8507464DCE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

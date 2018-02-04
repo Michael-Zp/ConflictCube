@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ConflictCube.ResxFiles {
+namespace Engine.StandardResources {
     using System;
     
     
@@ -22,14 +22,14 @@ namespace ConflictCube.ResxFiles {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class TexturResource {
+    internal class StandardShader {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal TexturResource() {
+        internal StandardShader() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace ConflictCube.ResxFiles {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ConflictCube.ResxFiles.TexturResource", typeof(TexturResource).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Engine.StandardResources.StandardShader", typeof(StandardShader).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,62 +61,28 @@ namespace ConflictCube.ResxFiles {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        ///   Sucht eine lokalisierte Zeichenfolge, die #version 330
+        ///
+        ///uniform mat4 camera;
+        ///
+        ///in vec2 uvPos;
+        ///in vec2 position;
+        ///
+        ///out vec2 uv;
+        ///out vec2 pos;
+        ///	
+        ///void main()
+        ///{
+        ///    uv = uvPos;
+        ///    pos = position;
+        ///    gl_Position = camera * vec4(position, 0, 1);
+        ///    
+        ///    //gl_Position = vec4(-position, 0, 1);
+        ///} ähnelt.
         /// </summary>
-        internal static System.Drawing.Bitmap FiremanTexture {
+        internal static string StandardVertexShader {
             get {
-                object obj = ResourceManager.GetObject("FiremanTexture", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap FloorTileset {
-            get {
-                object obj = ResourceManager.GetObject("FloorTileset", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap FloorTilesetIceFire {
-            get {
-                object obj = ResourceManager.GetObject("FloorTilesetIceFire", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap SpritesheetNewTextures {
-            get {
-                object obj = ResourceManager.GetObject("SpritesheetNewTextures", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap UseFieldIndicator {
-            get {
-                object obj = ResourceManager.GetObject("UseFieldIndicator", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap WelderTexture {
-            get {
-                object obj = ResourceManager.GetObject("WelderTexture", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
+                return ResourceManager.GetString("StandardVertexShader", resourceCulture);
             }
         }
     }
