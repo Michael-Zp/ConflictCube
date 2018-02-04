@@ -19,8 +19,8 @@ namespace ConflictCube.ComponentBased.Model.Components.Objects
             Action resume = new Action(() => { Time.Time.TimeScale = 1; menu.Enabled = false; });
             Action backToMenu = new Action(() => { Time.Time.TimeScale = 1; buildMenu.BuildMenu(); });
 
-            btnGroup.AddButton(new Transform(0f, .3f, .8f, .2f), new TextField("Resume", new Transform(0f, .3f, .6f, .3f), "Resume", Font.Instance().NormalFont, btnGroup), resume);
-            btnGroup.AddButton(new Transform(0f, -.3f, .8f, .2f), new TextField("BackToMenu", new Transform(0f, -.3f, .9f, .3f), "Back to menu", Font.Instance().NormalFont, btnGroup), backToMenu);
+            btnGroup.AddButton(new Transform(0f, .3f, .8f, .2f), "Resume", resume);
+            btnGroup.AddButton(new Transform(0f, -.3f, .8f, .2f),"Back to menu", backToMenu);
         }
 
         public override void OnUpdate()

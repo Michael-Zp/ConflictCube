@@ -11,6 +11,7 @@ namespace ConflictCube.ComponentBased.Model.Components.UI
         private List<Action> OnClicks = new List<Action>();
         private int LastActiveButton = 0;
         private int ActiveButton = 0;
+        private float LastVerticalAxisInput = 0;
 
         private Material NotActiveMat;
         private Material ActiveMat;
@@ -48,11 +49,13 @@ namespace ConflictCube.ComponentBased.Model.Components.UI
                 return;
             }
 
-            if (Input.OnButtonDown(InputKey.PlayerOneMoveDown, 0) || Input.OnButtonDown(OpenTK.Input.Key.Down))
+            float verticalAxisInput = Input.GetAxis(InputAxis.Player1Vertical, 0);
+
+            if (Input.OnButtonDown(OpenTK.Input.Key.Down) || (LastVerticalAxisInput > -.25f && verticalAxisInput < -.25f))
             {
                 ActiveButton++;
             }
-            else if(Input.OnButtonDown(InputKey.PlayerOneMoveUp, 0) || Input.OnButtonDown(OpenTK.Input.Key.Up))
+            else if(Input.OnButtonDown(OpenTK.Input.Key.Up) || (LastVerticalAxisInput < .25f && verticalAxisInput > .25f))
             {
                 ActiveButton--;
             }
@@ -71,12 +74,13 @@ namespace ConflictCube.ComponentBased.Model.Components.UI
                 UpdateSelectedButton();
             }
 
-            if(Input.OnButtonIsReleased(OpenTK.Input.Key.Enter))
+            if(Input.OnButtonIsReleased(OpenTK.Input.Key.Enter) || Input.OnButtonIsReleased(InputKey.PlayerOneUse))
             {
                 OnClicks[ActiveButton].Invoke();
             }
 
             LastActiveButton = ActiveButton;
+            LastVerticalAxisInput = verticalAxisInput;
         }
 
         private void UpdateSelectedButton()
@@ -91,19 +95,19 @@ namespace ConflictCube.ComponentBased.Model.Components.UI
             button.AddComponent(state ? ActiveMat : NotActiveMat);
         }
 
-        public void AddButton(Transform transform, TextField textField, Action action)
+        public void AddButton(Transform transform, string text, Action action)
         {
-            ColoredBox buttonBox = new ColoredBox("btn" + textField.Text, transform, NotActiveMat, this);
+            ColoredBox buttonBox = new ColoredBox("btn" + text, transform, NotActiveMat, this);
+            TextField textField = new TextField("tf" + text, new Transform(0, 0, 0.2f * text.Length, 1), text, Font.Instance().NormalFont, buttonBox);
             Buttons.Add(buttonBox);
             Texts.Add(textField);
+            
 
             if(action == null)
             {
                 action = new Action(() => { });
             }
             OnClicks.Add(action);
-
-            textField.Parent = this;
 
             UpdateSelectedButton();
         }

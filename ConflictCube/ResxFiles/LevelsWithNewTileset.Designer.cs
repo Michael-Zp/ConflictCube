@@ -118,19 +118,39 @@ namespace ConflictCube.ResxFiles {
         /// &lt;tileset firstgid=&quot;1&quot; source=&quot;../../ConflictCube/Textures/ConCubeTileset.tsx&quot;/&gt;
         /// &lt;layer name=&quot;Floor&quot; width=&quot;5&quot; height=&quot;5&quot;&gt;
         ///  &lt;data encoding=&quot;csv&quot;&gt;
-        ///33,1,21,19,1,
-        ///2,2,16,2,18,
-        ///44,17,40,2,20,
-        ///2,43,20,43,2,
-        ///33,43,2,44,2
+        ///21,1,9,7,1,
+        ///2,2,4,2,6,
+        ///44,5,32,2,8,
+        ///2,43,8,43,2,
+        ///21,43,2,44,2
         ///&lt;/data&gt;
         /// &lt;/layer&gt;
         /// &lt;layer name=&quot;Buttons&quot; width=&quot;5&quot; height=&quot;5&quot;&gt;
-        ///  &lt;data encoding=&quot;cs [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
+        ///  &lt;data encoding=&quot;csv&quot;&gt;
+        ///0, [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
         /// </summary>
         internal static string level1 {
             get {
                 return ResourceManager.GetString("level1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+        ///&lt;map version=&quot;1.0&quot; tiledversion=&quot;1.0.3&quot; orientation=&quot;orthogonal&quot; renderorder=&quot;right-down&quot; width=&quot;10&quot; height=&quot;11&quot; tilewidth=&quot;64&quot; tileheight=&quot;64&quot; nextobjectid=&quot;1&quot;&gt;
+        /// &lt;tileset firstgid=&quot;1&quot; source=&quot;../../ConflictCube/Textures/ConCubeTileset.tsx&quot;/&gt;
+        /// &lt;layer name=&quot;Floor&quot; width=&quot;10&quot; height=&quot;11&quot;&gt;
+        ///  &lt;data encoding=&quot;csv&quot;&gt;
+        ///1,21,43,2,6,44,21,2,21,1,
+        ///21,43,43,2,4,44,44,44,44,6,
+        ///2,43,21,2,12,10,2,2,44,4,
+        ///21,43,43,43,43,8,44,44,44,8,
+        ///2,2,9,10,43,44,44,2,2,2,
+        ///9,3,26,11,43,44,6 [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
+        /// </summary>
+        internal static string level2 {
+            get {
+                return ResourceManager.GetString("level2", resourceCulture);
             }
         }
         
@@ -149,6 +169,39 @@ namespace ConflictCube.ResxFiles {
         internal static string level3 {
             get {
                 return ResourceManager.GetString("level3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+        ///&lt;map version=&quot;1.0&quot; tiledversion=&quot;1.0.3&quot; orientation=&quot;orthogonal&quot; renderorder=&quot;right-down&quot; width=&quot;20&quot; height=&quot;20&quot; tilewidth=&quot;64&quot; tileheight=&quot;64&quot; nextobjectid=&quot;1&quot;&gt;
+        /// &lt;tileset firstgid=&quot;1&quot; source=&quot;../../ConflictCube/Textures/ConCubeTileset.tsx&quot;/&gt;
+        /// &lt;layer name=&quot;Floor&quot; width=&quot;20&quot; height=&quot;20&quot;&gt;
+        ///  &lt;data encoding=&quot;csv&quot;&gt;
+        ///44,44,44,44,44,9,7,2,6,1,1,6,2,5,10,43,43,43,43,43,
+        ///44,44,44,44,44,8,2,9,11,1,1,12,10,2,8,43,43,43,43,43,
+        ///2,9,10,2,2,2,2,4,2,9,10,2,4,2,2,2,2,9,10,2,
+        ///2,4 [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
+        /// </summary>
+        internal static string level4 {
+            get {
+                return ResourceManager.GetString("level4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+        ///&lt;map version=&quot;1.0&quot; tiledversion=&quot;1.0.3&quot; orientation=&quot;orthogonal&quot; renderorder=&quot;right-down&quot; width=&quot;25&quot; height=&quot;25&quot; tilewidth=&quot;64&quot; tileheight=&quot;64&quot; nextobjectid=&quot;1&quot;&gt;
+        /// &lt;tileset firstgid=&quot;1&quot; source=&quot;../../ConflictCube/Textures/ConCubeTileset.tsx&quot;/&gt;
+        /// &lt;layer name=&quot;Floor&quot; width=&quot;25&quot; height=&quot;25&quot;&gt;
+        ///  &lt;data encoding=&quot;csv&quot;&gt;
+        ///5,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,7,
+        ///2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,
+        ///2,43,43,43,43,2,43,43,43,43,43,2,2,2,44,44,44,44,44, [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
+        /// </summary>
+        internal static string level5 {
+            get {
+                return ResourceManager.GetString("level5", resourceCulture);
             }
         }
         

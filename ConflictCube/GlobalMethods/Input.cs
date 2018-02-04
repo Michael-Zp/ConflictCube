@@ -50,7 +50,7 @@ namespace ConflictCube.ComponentBased
                 }
             }
             set {
-                if(KeyboardState1IsCurrent)
+                if (KeyboardState1IsCurrent)
                 {
                     _KeyboardState1 = value;
                 }
@@ -62,7 +62,7 @@ namespace ConflictCube.ComponentBased
         }
         private static KeyboardState LastKeyboardState {
             get {
-                if(KeyboardState1IsCurrent)
+                if (KeyboardState1IsCurrent)
                 {
                     return _KeyboardState2;
                 }
@@ -152,7 +152,7 @@ namespace ConflictCube.ComponentBased
 
 
             //GamePad - Player 1
-            
+
             GamePadSettings.Add(InputKey.PlayerOneSprint, GamePadButton.RightShoulder);
             GamePadSettings.Add(InputKey.PlayerOneUse, GamePadButton.X);
             GamePadSettings.Add(InputKey.PlayerOneSwitchPositionsX, GamePadButton.Y);
@@ -172,13 +172,13 @@ namespace ConflictCube.ComponentBased
 
             GamePadAxesSettings.Add(InputAxis.Player1Horizontal, GamePadAxis.LeftPadX);
             GamePadAxesSettings.Add(InputAxis.Player1Vertical, GamePadAxis.LeftPadY);
-            
+
             //Player 2
 
             GamePadAxesSettings.Add(InputAxis.Player2Horizontal, GamePadAxis.LeftPadX);
             GamePadAxesSettings.Add(InputAxis.Player2Vertical, GamePadAxis.LeftPadY);
 
-            for(int i = 0; i < GamePadCount; i++)
+            for (int i = 0; i < GamePadCount; i++)
             {
                 LastGamePadState.Add(GamePad.GetState(i));
             }
@@ -260,7 +260,7 @@ namespace ConflictCube.ComponentBased
             bool negativePressed = OnButtonIsPressed(data.NegativeKey) || OnButtonDown(data.NegativeKey);
 
             Axes.TryGetValue(axis, out float currentValue);
-            
+
             if (!positivePressed && !negativePressed)
             {
                 currentValue = 0;
@@ -312,7 +312,7 @@ namespace ConflictCube.ComponentBased
 
         private static bool FetchGamepadKey(InputKey input, out GamePadButton button)
         {
-            if(!GamePadSettings.ContainsKey(input))
+            if (!GamePadSettings.ContainsKey(input))
             {
                 button = GamePadButton.None;
                 return false;
@@ -340,7 +340,7 @@ namespace ConflictCube.ComponentBased
         {
             bool buttonDown = false;
 
-            if(FetchKeyboardKey(input, out Key KeyboardKey))
+            if (FetchKeyboardKey(input, out Key KeyboardKey))
             {
                 buttonDown = buttonDown || OnButtonDown(KeyboardKey);
             }
@@ -349,7 +349,7 @@ namespace ConflictCube.ComponentBased
             {
                 buttonDown = buttonDown || OnGamePadButtonDown(gamePadButton, activeGamePad);
             }
-
+            
             return buttonDown;
         }
 
@@ -381,7 +381,7 @@ namespace ConflictCube.ComponentBased
             return buttonPressed;
         }
 
-        
+
         public static bool OnGamePadButtonIsReleased(GamePadButton button, int activeGamePad)
         {
             return !GamePad.GetState(activeGamePad).IsPressed(button) && LastGamePadState[activeGamePad].IsPressed(button);
@@ -428,7 +428,7 @@ namespace ConflictCube.ComponentBased
 
             return currentValue;
         }
-        
+
         public static float GetGamePadAxis(InputAxis axis, int activeGamePad)
         {
             GamePadAxesSettings.TryGetValue(axis, out GamePadAxis gpAxis);

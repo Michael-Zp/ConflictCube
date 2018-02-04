@@ -12,8 +12,8 @@ namespace ConflictCube.ComponentBased
 {
     public struct Scene
     {
-        public GameObject RootGameObject;
-        public List<Camera> Cameras;
+        public readonly GameObject RootGameObject;
+        public readonly List<Camera> Cameras;
 
         public Scene(GameObject rootGameObject, List<Camera> cameras)
         {
@@ -45,9 +45,9 @@ namespace ConflictCube.ComponentBased
             Action controlsOnClick = new Action(() => { mainMenu.Enabled = false; controls.Enabled = true; });
             Action exitOnClick = new Action(() => { Environment.Exit(0); });
 
-            buttonsInMainMenu.AddButton(new Transform(0, .5f, .8f, .2f), new TextField("Level select", new Transform(0, .5f, 1.2f, .15f), "Level select", Font.Instance().NormalFont, null), levelSelectOnClick);
-            buttonsInMainMenu.AddButton(new Transform(0, 0f, .8f, .2f), new TextField("Controls", new Transform(0, 0f, .7f, .15f), "Controls", Font.Instance().NormalFont, null), controlsOnClick);
-            buttonsInMainMenu.AddButton(new Transform(0, -.5f, .8f, .2f), new TextField("Exit", new Transform(0, -.5f, .4f, .15f), "Exit", Font.Instance().NormalFont, null), exitOnClick);
+            buttonsInMainMenu.AddButton(new Transform(0, .5f, .8f, .2f), "Level select", levelSelectOnClick);
+            buttonsInMainMenu.AddButton(new Transform(0, 0f, .8f, .2f), "Controls", controlsOnClick);
+            buttonsInMainMenu.AddButton(new Transform(0, -.5f, .8f, .2f), "Exit", exitOnClick);
             
 
 
@@ -55,18 +55,31 @@ namespace ConflictCube.ComponentBased
 
             ButtonGroup buttonsInLevelSelect = new ButtonGroup("ButtonGroup", new Transform(), levelSelect);
 
-            Action level1OnClick = new Action(() => { buildScene.BuildScene(LevelsWithNewTileset.FireIceFirstTestNewTileset); });
-            Action level2OnClick = new Action(() => { buildScene.BuildScene(LevelsWithNewTileset.FireIceSecondTestNewTileset); });
-            Action level3OnClick = new Action(() => { buildScene.BuildScene(LevelsWithNewTileset.YShiftTest); });
-            Action level4OnClick = new Action(() => { buildScene.BuildScene(LevelsWithNewTileset.XShiftTest); });
-            Action level5OnClick = new Action(() => { buildScene.BuildScene(LevelsWithNewTileset.level1); });
+            Action level1OnClick  = new Action(() => { buildScene.BuildScene(LevelsWithNewTileset.FireIceFirstTestNewTileset); });
+            Action level2OnClick  = new Action(() => { buildScene.BuildScene(LevelsWithNewTileset.FireIceSecondTestNewTileset); });
+            Action level3OnClick  = new Action(() => { buildScene.BuildScene(LevelsWithNewTileset.YShiftTest); });
+            Action level4OnClick  = new Action(() => { buildScene.BuildScene(LevelsWithNewTileset.XShiftTest); });
+            Action level5OnClick  = new Action(() => { buildScene.BuildScene(LevelsWithNewTileset.XYShiftTest); });
+            Action level6OnClick  = new Action(() => { buildScene.BuildScene(LevelsWithNewTileset.tutlevel); });
+            Action level7OnClick  = new Action(() => { buildScene.BuildScene(LevelsWithNewTileset.level1); });
+            Action level8OnClick  = new Action(() => { buildScene.BuildScene(LevelsWithNewTileset.level2); });
+            Action level9OnClick  = new Action(() => { buildScene.BuildScene(LevelsWithNewTileset.level3); });
+            Action level10OnClick = new Action(() => { buildScene.BuildScene(LevelsWithNewTileset.level4); });
+            Action level11OnClick = new Action(() => { buildScene.BuildScene(LevelsWithNewTileset.level5); });
 
-            buttonsInLevelSelect.AddButton(new Transform(0, .8f, .8f, .15f), new TextField("Level1", new Transform(0, .8f, .7f, .15f), "Level 1", Font.Instance().NormalFont, null), level1OnClick);
-            buttonsInLevelSelect.AddButton(new Transform(0, .4f, .8f, .15f), new TextField("Level2", new Transform(0, .4f, .7f, .15f), "Level 2", Font.Instance().NormalFont, null), level2OnClick);
-            buttonsInLevelSelect.AddButton(new Transform(0, .0f, .8f, .15f), new TextField("Level3", new Transform(0, 0f, .7f, .15f), "Level 3", Font.Instance().NormalFont, null), level3OnClick);
-            buttonsInLevelSelect.AddButton(new Transform(0, -.4f, .8f, .15f), new TextField("Level4", new Transform(0, -.4f, .7f, .15f), "Level 4", Font.Instance().NormalFont, null), level4OnClick);
-            buttonsInLevelSelect.AddButton(new Transform(0, -.8f, .8f, .15f), new TextField("Level5", new Transform(0, -.8f, .7f, .15f), "Level 5", Font.Instance().NormalFont, null), level5OnClick);
-            
+            buttonsInLevelSelect.AddButton(new Transform(-.533f, 1 - ( 1 * .125f) - 1 * (0.5f / 7), .4f, .125f), "Level 1", level1OnClick);
+            buttonsInLevelSelect.AddButton(new Transform(-.533f, 1 - ( 3 * .125f) - 2 * (0.5f / 7), .4f, .125f), "Level 2", level2OnClick);
+            buttonsInLevelSelect.AddButton(new Transform(-.533f, 1 - ( 5 * .125f) - 3 * (0.5f / 7), .4f, .125f), "Level 3", level3OnClick);
+            buttonsInLevelSelect.AddButton(new Transform(-.533f, 1 - ( 7 * .125f) - 4 * (0.5f / 7), .4f, .125f), "Level 4", level4OnClick);
+            buttonsInLevelSelect.AddButton(new Transform(-.533f, 1 - ( 9 * .125f) - 5 * (0.5f / 7), .4f, .125f), "Level 5", level5OnClick);
+            buttonsInLevelSelect.AddButton(new Transform(-.533f, 1 - (11 * .125f) - 6 * (0.5f / 7), .4f, .125f), "Level 6", level6OnClick);
+
+            buttonsInLevelSelect.AddButton(new Transform( .533f, 1 - (1 * .125f) - 1 * (0.5f / 7), .4f, .125f), "Level 7", level7OnClick);
+            buttonsInLevelSelect.AddButton(new Transform( .533f, 1 - (3 * .125f) - 2 * (0.5f / 7), .4f, .125f), "Level 8", level8OnClick);
+            buttonsInLevelSelect.AddButton(new Transform( .533f, 1 - (5 * .125f) - 3 * (0.5f / 7), .4f, .125f), "Level 9", level9OnClick);
+            buttonsInLevelSelect.AddButton(new Transform( .533f, 1 - (7 * .125f) - 4 * (0.5f / 7), .4f, .125f), "Level 10", level10OnClick);
+            buttonsInLevelSelect.AddButton(new Transform( .533f, 1 - (9 * .125f) - 5 * (0.5f / 7), .4f, .125f), "Level 11", level11OnClick);
+
 
             Action gotoMainMenuOnEscape = new Action(() => { levelSelect.Enabled = false; controls.Enabled = false; mainMenu.Enabled = true; });
 

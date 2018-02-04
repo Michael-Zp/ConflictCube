@@ -11,8 +11,14 @@ namespace ConflictCube.ComponentBased.Components
         public BoxCollider(Transform transform, bool isTrigger, CollisionGroup group) : this(transform, isTrigger, group, CollisionType.NonCollider)
         {}
 
-        public BoxCollider(Transform transform, bool isTrigger, CollisionGroup group, CollisionType type, CollisionLayer layer = CollisionLayer.Default) : base(isTrigger, group, type, layer)
+        public BoxCollider(Transform transform, bool isTrigger, CollisionGroup group, CollisionType type, CollisionLayer layer = CollisionLayer.Default)
+            : base(isTrigger, group, type, transform.GetMinX(WorldRelation.Global), transform.GetMaxX(WorldRelation.Global), transform.GetMinY(WorldRelation.Global), transform.GetMaxY(WorldRelation.Global), layer)
         {
+            if(transform == null)
+            {
+                transform = new Transform();
+            }
+
             Box = transform;
         }
 

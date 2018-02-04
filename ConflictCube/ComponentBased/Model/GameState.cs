@@ -30,8 +30,6 @@ namespace ConflictCube.ComponentBased
         {
             ClearGameObjectTree();
 
-            ActiveScene = new Scene();
-
             GameObject root = new GameObject("root", new Transform(0f, 0f, 1f, 1f), null);
 
             GameObject test = new GameObject("test", new Transform(0f, 0f, .5f, .5f), root);
@@ -45,16 +43,13 @@ namespace ConflictCube.ComponentBased
             test.AddComponent(animator);
             animator.StartAnimation();
 
-
-            ActiveScene.RootGameObject = root;
-            ActiveScene.Cameras = new System.Collections.Generic.List<Camera>() { new Camera(new Transform(0f, 0f, 1, 1), root, WindowWidth, WindowHeight, new Transform(), false) };
+            
+            ActiveScene = new Scene(root, new System.Collections.Generic.List<Camera>() { new Camera(new Transform(0f, 0f, 1, 1), root, WindowWidth, WindowHeight, new Transform(), false) });
         }
 
         public void BuildParticleSystemTest()
         {
             ClearGameObjectTree();
-
-            ActiveScene = new Scene();
 
             GameObject root = new GameObject("root", new Transform(0f, 0f, 1f, 1f), null);
 
@@ -69,16 +64,13 @@ namespace ConflictCube.ComponentBased
             particleSystemObject.AddComponent(system);
 
 
-            ActiveScene.RootGameObject = root;
-            ActiveScene.Cameras = new System.Collections.Generic.List<Camera>() { new Camera(new Transform(0f, 0f, 1, 1), root, WindowWidth, WindowHeight, new Transform(), false) };
-        
+            ActiveScene = new Scene(root, new System.Collections.Generic.List<Camera>() { new Camera(new Transform(0f, 0f, 1, 1), root, WindowWidth, WindowHeight, new Transform(), false) });
+
         }
 
         public void BuildShaderTest()
         {
             ClearGameObjectTree();
-
-            ActiveScene = new Scene();
 
             GameObject root = new GameObject("root", new Transform(0f, 0f, 1f, 1f), null);
 
@@ -93,9 +85,8 @@ namespace ConflictCube.ComponentBased
             test2.AddComponent(new Material(System.Drawing.Color.White, Tilesets.Instance().NewFloorSheet.Tex, Tilesets.Instance().NewFloorSheet.CalcSpriteTexCoords(42), ResxFiles.ShaderResources.Liquid));
 
             Camera camera = new Camera(new Transform(0f, 0f, 1, 1), root, WindowWidth, WindowHeight, new Transform(), false);
-                        
-            ActiveScene.RootGameObject = root;
-            ActiveScene.Cameras = new System.Collections.Generic.List<Camera> { camera };
+
+            ActiveScene = new Scene(root, new System.Collections.Generic.List<Camera>() { new Camera(new Transform(0f, 0f, 1, 1), root, WindowWidth, WindowHeight, new Transform(), false) });
         }
         
         public void BuildMenu()

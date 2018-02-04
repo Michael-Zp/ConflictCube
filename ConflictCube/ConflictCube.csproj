@@ -81,6 +81,7 @@
     <Compile Include="ComponentBased\DebugGame.cs" />
     <Compile Include="ComponentBased\Model\Components\Animators\MaterialAnimator.cs" />
     <Compile Include="ComponentBased\Model\Components\Animators\MaterialAnimatorKeyframe.cs" />
+    <Compile Include="ComponentBased\Model\Components\Colliders\ColliderGridCell.cs" />
     <Compile Include="ComponentBased\Model\Components\Sound\AudioPlayer.cs" />
     <Compile Include="ComponentBased\Model\Objects\GameManager.cs" />
     <Compile Include="ComponentBased\Model\Objects\IGameManager.cs" />
@@ -257,10 +258,13 @@
     <None Include="Resources\Level1Middle.csv" />
     <None Include="Resources\Level1Right.csv" />
     <None Include="Resources\Level2.csv" />
+    <None Include="Resources\level2.tmx" />
     <None Include="Resources\Level2Left.csv" />
     <None Include="Resources\Level2Middle.csv" />
     <None Include="Resources\Level2Right.csv" />
     <None Include="Resources\level3.tmx" />
+    <None Include="Resources\level4.tmx" />
+    <None Include="Resources\level5.tmx" />
     <None Include="Resources\Tileset.png" />
   </ItemGroup>
   <ItemGroup>

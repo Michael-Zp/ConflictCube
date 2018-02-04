@@ -25,15 +25,21 @@ namespace ConflictCube.ComponentBased.Components
     public abstract class Collider : Component
     {
         public bool IsTrigger;
+        public bool IsStatic;
         public CollisionGroup Group;
         public CollisionType Type;
         public CollisionLayer Layer;
         public List<CollisionType> IgnoreCollisionsWith = new List<CollisionType>();
 
-        public Collider(bool isTrigger, CollisionGroup group) : this(isTrigger, group, CollisionType.NonCollider)
+        public float MinX { get; }
+        public float MaxX { get; }
+        public float MinY { get; }
+        public float MaxY { get; }
+
+        public Collider(bool isTrigger, CollisionGroup group, float minX, float maxX, float minY, float maxY) : this(isTrigger, group, CollisionType.NonCollider, minX, maxX, minY, maxY)
         {}
 
-        public Collider(bool isTrigger, CollisionGroup group, CollisionType type, CollisionLayer layer = CollisionLayer.Default)
+        public Collider(bool isTrigger, CollisionGroup group, CollisionType type, float minX, float maxX, float minY, float maxY, CollisionLayer layer = CollisionLayer.Default)
         {
             IsTrigger = isTrigger;
             if(group == null)

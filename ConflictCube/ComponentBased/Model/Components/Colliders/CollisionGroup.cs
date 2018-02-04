@@ -6,22 +6,38 @@ namespace ConflictCube.ComponentBased.Components
 {
     public class CollisionGroup
     {
-        private List<Collider> _CollidersInGroup = new List<Collider>();
-        public List<Collider> CollidersInGroup {
-            get {
-                return _CollidersInGroup;
-            }
-            private set {
-                _CollidersInGroup = value;
-            }
-        }
+        private Vector2 CellSize;
+
+        private Dictionary<string, List<Collider>> CollidersInGroupGrid = new Dictionary<string, List<Collider>>();
 
         public static CollisionGroup DefaultCollisionGroup { get; private set; } = new CollisionGroup();
 
+
+        public CollisionGroup() : this(new Vector2(1))
+        { }
+
+        public CollisionGroup(Vector2 cellSize)
+        {
+            CellSize = cellSize;
+        }
+
         public void AddCollider(Collider collider)
         {
-            CollidersInGroup.Add(collider);
             collider.Group = this;
+
+
+            foreach (string cell in ColliderGridCell.GetGridCells(collider, CellSize))
+            {
+                if (CollidersInGroupGrid.ContainsKey(cell))
+                {
+                    CollidersInGroupGrid.TryGetValue(cell, out List<Collider> gridCell);
+                    gridCell.Add(collider);
+                }
+                else
+                {
+                    CollidersInGroupGrid.Add(cell, new List<Collider>() { collider });
+                }
+            }
         }
 
         public void AddRangeColliders(IEnumerable<Collider> colliders)
@@ -39,44 +55,92 @@ namespace ConflictCube.ComponentBased.Components
                 return;
             }
 
-            //No foreach loop, because events in the CollidesWIth could change the CollidersInGroup list -> Throws exception
-            for (int i = 0; i < CollidersInGroup.Count; i++)
+            ColliderGridCell gridCell = ColliderGridCell.GetGridCells(collider, CellSize);
+
+            if (!collider.Owner.EnabledInHierachy)
             {
-                if (CollidersInGroup[i] == collider || !collider.Owner.EnabledInHierachy || !CollidersInGroup[i].Owner.EnabledInHierachy)
-                {
-                    continue;
-                }
+                return;
+            }
 
-                if (!CollidersInGroup[i].Enabled)
-                {
-                    continue;
-                }
 
-                if (!collider.Layer.AreLayersColliding(CollidersInGroup[i].Layer))
-                {
-                    continue;
-                }
+            //Check for collision
 
-                if (collider.IgnoreCollisionsWith.Contains(CollidersInGroup[i].Type))
+            for (int x = gridCell.MinXCoord; x <= gridCell.MaxXCoord; x++)
+            {
+                for (int y = gridCell.MinYCoord; y <= gridCell.MaxYCoord; y++)
                 {
-                    continue;
-                }
+                    string key = ColliderGridCell.GetCoordString(x, y);
 
-                if (collider.IsCollidingWith(CollidersInGroup[i]))
-                {
-                    collider.CollidesWith(CollidersInGroup[i], movement);
+                    CollidersInGroupGrid.TryGetValue(key, out List<Collider> collidersInCell);
 
-                    if (CollidersInGroup[i].IsCollidingWith(collider))
+                    if (collidersInCell == null || collidersInCell?.Count == 0)
                     {
-                        CollidersInGroup[i].CollidesWith(collider, new Vector2(0, 0));
+                        continue;
+                    }
+
+                    for (int i = 0; i < collidersInCell.Count; i++)
+                    {
+                        if (collidersInCell[i] == collider || !collidersInCell[i].Owner.EnabledInHierachy)
+                        {
+                            continue;
+                        }
+
+                        if (!collidersInCell[i].Enabled)
+                        {
+                            continue;
+                        }
+
+                        if (!collider.Layer.AreLayersColliding(collidersInCell[i].Layer))
+                        {
+                            continue;
+                        }
+
+                        if (collider.IgnoreCollisionsWith.Contains(collidersInCell[i].Type))
+                        {
+                            continue;
+                        }
+
+                        if (collider.IsCollidingWith(collidersInCell[i]))
+                        {
+                            collider.CollidesWith(collidersInCell[i], movement);
+
+                            if (collidersInCell[i].IsCollidingWith(collider))
+                            {
+                                collidersInCell[i].CollidesWith(collider, new Vector2(0, 0));
+                            }
+                        }
                     }
                 }
             }
+
+            //TODO: Could go wrong if the collider is removing itself in OnCollision();
+            //Collision cell could have changed
+            RemoveCollider(collider);
+            AddCollider(collider);
         }
 
         public void RemoveCollider(Collider colliderToRemove)
         {
-            CollidersInGroup.Remove(colliderToRemove);
+            ColliderGridCell gridCells = ColliderGridCell.GetGridCells(colliderToRemove, CellSize);
+
+            foreach (string cellString in gridCells)
+            {
+                CollidersInGroupGrid.TryGetValue(cellString, out List<Collider> colliders);
+
+                if (colliders == null)
+                {
+                    continue;
+                }
+
+                if (colliders.Count == 1)
+                {
+                    CollidersInGroupGrid.Remove(cellString);
+                }
+                else
+                {
+                    colliders.Remove(colliderToRemove);
+                }
+            }
         }
     }
 }
