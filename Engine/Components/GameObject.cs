@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Engine.Time;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 
 namespace Engine.Components
 {
@@ -28,6 +30,13 @@ namespace Engine.Components
         public bool IncludeChildrenInCallOnLateUpdateFlag = false;
 
         private bool DestroyAtEndOfFrame = false;
+
+#pragma warning disable 0649
+
+        [Import(typeof(ITime))]
+        private ITime Time;
+        
+#pragma warning restore 0649
 
         private Transform _Transform;
         public Transform Transform {
@@ -122,6 +131,8 @@ namespace Engine.Components
 
         public GameObject(string name, Transform transform, GameObject parent, string type, bool enabled = true)
         {
+            GameEngine.Container.ComposeParts(this);
+            
             Name = name;
             Transform = transform;
             Transform.SetOwner(this);
@@ -233,9 +244,9 @@ namespace Engine.Components
                 }
             }
 
-            foreach (GameObject child in Children)
+            for(int i = 0; i < Children.Count; i++)
             {
-                child.CallAllOnUpdate();
+                Children[i].CallAllOnUpdate();
             }
         }
 
@@ -320,13 +331,25 @@ namespace Engine.Components
             return allGameObjects;
         }
 
+        private static GameObject _staticInstance = null;
+        private static GameObject staticInstance {
+            get {
+                if(_staticInstance == null)
+                {
+                    _staticInstance = new GameObject("staticInstance", new Transform(), null);
+                }
+                return _staticInstance;
+            }
+
+            set {
+                _staticInstance = value;
+            }
+        }
 
         //Static
-
-
         private static List<GameObject> RootGameObjectNode = new List<GameObject>();
         private static List<Tuple<float, GameObject>> GameObjectsToBeDestroied = new List<Tuple<float, GameObject>>();
-
+        
         /// <summary>
         /// Destroies a game object.
         /// Can only be destroied if the GameObject has a parent.
@@ -334,11 +357,11 @@ namespace Engine.Components
         /// <param name="gameObject"></param>
         public static void Destroy(GameObject gameObject, float afterTime = 0)
         {
-            if(gameObject.CallOnDestroy)
+            if (gameObject.CallOnDestroy)
                 gameObject.OnDestroy();
             gameObject.DestroyAtEndOfFrame = true;
             gameObject.Enabled = false;
-            GameObjectsToBeDestroied.Add(Tuple.Create(Time.Time.CurrentTime + afterTime, gameObject));
+            GameObjectsToBeDestroied.Add(Tuple.Create(staticInstance.Time.CurrentTime + afterTime, gameObject));
         }
 
 
@@ -416,7 +439,7 @@ namespace Engine.Components
         {
             foreach(Tuple<float, GameObject> obj in GameObjectsToBeDestroied)
             {
-                if(Time.Time.CurrentTime >= obj.Item1)
+                if(staticInstance.Time.CurrentTime >= obj.Item1)
                 {
                     foreach(Component comp in obj.Item2.Components)
                     {

@@ -6,15 +6,24 @@ using System.Collections.Generic;
 using Engine.Components;
 using Engine;
 using ConflictCube.SceneBuilders;
+using System.ComponentModel.Composition.Hosting;
+using System.ComponentModel.Composition;
 
 namespace ConflictCube
 {
     public class Program
     {
+        public static CompositionContainer Container;
+
         public static void Main(string[] args)
         {
+            new Program();
+        }
+
+        private Program()
+        {
             //Debug game options
-            
+
             DebugGame.CanLoose = true;
             DebugGame.Player1PrintPosition = false;
             DebugGame.Player2PrintPosition = false;
@@ -29,8 +38,9 @@ namespace ConflictCube
 
             DebugEngine.DrawBoxColliderCollisions = false;
             DebugEngine.DrawXandYAxis = false;
-            DebugEngine.PrintFPS = false;
+            DebugEngine.PrintFPS = true;
 
+            InitializeMEF();
             InitalizeInputs();
             InitalizeCollisionLayers();
 
@@ -42,15 +52,16 @@ namespace ConflictCube
             engine.RunGameLoop();
         }
 
-
-        private static void InitalizeInputs()
+        private void InitializeMEF()
         {
-            //GamePad and Keyboard - General
+            var catalog = new DirectoryCatalog(".");
+            Container = new CompositionContainer(catalog);
+            Container.ComposeParts(this);
+        }
 
-            Input.KeyboardSettings.Add("ExitGame", Key.Escape);
-            Input.GamePadSettings.Add("ExitGame", GamePadButton.RightStick);
 
-
+        private void InitalizeInputs()
+        {
             //GamePad - Player 1
 
             Input.GamePadSettings.Add("PlayerOneSprint", GamePadButton.RightShoulder);
@@ -120,7 +131,7 @@ namespace ConflictCube
         }
 
 
-        private static void InitalizeCollisionLayers()
+        private void InitalizeCollisionLayers()
         {
             CollisionLayers.AddLayer("Default", new List<string> { "Default", "Orange", "Blue" });
             CollisionLayers.AddLayer("Orange", new List<string> { "Default", "Blue" });

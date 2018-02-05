@@ -1,9 +1,18 @@
-﻿using OpenTK;
+﻿using Engine.Time;
+using OpenTK;
+using System.ComponentModel.Composition;
 
 namespace Engine.Components
 {
     public class Particle : GameObject
     {
+#pragma warning disable 0649
+
+        [Import(typeof(ITime))]
+        private ITime Time;
+
+#pragma warning restore 0649
+
         public Vector2 OriginalVelocity;
         public float SpawnTime;
 
@@ -11,7 +20,9 @@ namespace Engine.Components
 
         public Particle(string name, Transform transform, GameObject parent, ParticleSystem mySystem, Material material, Vector2 velocity, bool enabled = true) : base(name, transform, parent, enabled)
         {
-            SpawnTime = Time.Time.CurrentTime;
+            GameEngine.Container.ComposeParts(this);
+
+            SpawnTime = Time.CurrentTime;
             OriginalVelocity = velocity;
             MySystem = mySystem;
 
@@ -20,7 +31,7 @@ namespace Engine.Components
 
         public override void OnUpdate()
         {
-            if(Time.Time.CurrentTime - SpawnTime >= MySystem.Lifetime)
+            if(Time.CurrentTime - SpawnTime >= MySystem.Lifetime)
             {
                 Destroy(this);
             }

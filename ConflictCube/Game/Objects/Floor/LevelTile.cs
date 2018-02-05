@@ -3,6 +3,7 @@ using Engine.Time;
 using OpenTK;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Drawing;
 using Zenseless.Geometry;
 using Zenseless.HLGL;
@@ -12,7 +13,12 @@ namespace ConflictCube.Objects
 {
     public class LevelTile : GameObject
     {
-        
+#pragma warning disable 0649
+
+        [Import(typeof(ITime))]
+        private ITime Time;
+
+#pragma warning restore 0649
 
         public int Row { get; private set; }
         public int Column { get; private set; }
@@ -29,7 +35,7 @@ namespace ConflictCube.Objects
 
         private static void InitalizeMaterials()
         {
-            SpriteSheet spriteSheet = Tilesets.Instance().NewFloorSheet;
+            SpriteSheet spriteSheet = Tilesets.Instance().FloorSheet;
             AddTileMaterial("Finish", spriteSheet, 1);
             AddTileMaterial("Floor", spriteSheet, 2);
 
@@ -87,6 +93,8 @@ namespace ConflictCube.Objects
 
         public LevelTile(int row, int column, string name, Transform transform, int tileIndex, Floor floorOfTile, GameObject parent, OnButtonChangeFloorEvent changeEvent = null) : base(name, transform, parent)
         {
+            Program.Container.ComposeParts(this);
+
             if (!MaterialsAreInitialized)
             {
                 InitalizeMaterials();

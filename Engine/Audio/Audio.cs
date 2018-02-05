@@ -2,11 +2,13 @@
 using NAudio.Wave.SampleProviders;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Threading;
 
-namespace Engine.AudioSuppoert
+namespace Engine.AudioSupport
 {
-    public class Audio
+    [Export(typeof(IAudio))]
+    public class Audio : IAudio
     {
         private readonly IWavePlayer outputDevice;
         public readonly MixingSampleProvider mixer;
@@ -15,10 +17,10 @@ namespace Engine.AudioSuppoert
         private List<LoopingAudio> Looping = new List<LoopingAudio>();
 
 
-        private Audio(int sampleRate = 48000, int channelCount = 2)
+        private Audio()
         {
             outputDevice = new WaveOutEvent();
-            mixer = new MixingSampleProvider(WaveFormat.CreateIeeeFloatWaveFormat(sampleRate, channelCount));
+            mixer = new MixingSampleProvider(WaveFormat.CreateIeeeFloatWaveFormat(48000, 2));
             mixer.ReadFully = true;
             outputDevice.Init(mixer);
             outputDevice.Play();
@@ -26,7 +28,7 @@ namespace Engine.AudioSuppoert
             new Thread(new ThreadStart(() => { while (true) { Thread.Sleep(50); StartLoopSoundsIfTheyStopped(); } })).Start();
         }
 
-        public void StartLoopSoundsIfTheyStopped()
+        private void StartLoopSoundsIfTheyStopped()
         {
             if(Looping.Count == 0)
             {
@@ -129,8 +131,6 @@ namespace Engine.AudioSuppoert
         {
             outputDevice.Dispose();
         }
-
-        public static readonly Audio Instance = new Audio(48000, 2);
 
     }
 }

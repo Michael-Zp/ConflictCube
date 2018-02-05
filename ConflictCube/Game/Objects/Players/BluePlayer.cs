@@ -1,4 +1,5 @@
 ﻿using ConflictCube.Debug;
+using ConflictCube.ResxFiles;
 using Engine.Components;
 using OpenTK;
 using System;
@@ -56,6 +57,25 @@ namespace ConflictCube.Objects
                 tile.GetComponent<Collider>().Enabled = false;
                 tile.Type = "None";
                 Destroy(tile, tile.GetComponent<ParticleSystem>().Lifetime);
+
+
+
+                Transform fireTransform = (Transform)Transform.Clone();
+                fireTransform.SetPosition(fireTransform.GetPosition(WorldRelation.Global) + fireTransform.Forward * (fireTransform.GetSize(WorldRelation.Global).Length * 1.2f), WorldRelation.Global);
+                GameObject fireObject = new GameObject("Fire", fireTransform, Parent);
+
+                Material fireMat = new Material(Color.FromArgb(180, Color.White), TextureLoader.FromBitmap(ParticleSystemResources.WelderTorch), new Zenseless.Geometry.Box2D(Zenseless.Geometry.Box2D.BOX01));
+                Func<float, float> sizeOverTime = new Func<float, float>((r) => { return 1 + 0.1f * (float)Math.Sin(8 * r); });
+                Func<float, float> velocityOverTime = new Func<float, float>((r) => { return 0; });
+
+                ParticleSystem sys = new ParticleSystem(1, 0, fireMat, new Vector2(1), .5f, sizeOverTime, velocityOverTime, new Vector2(0), 1);
+                fireObject.AddComponent(sys);
+
+                AudioPlayer destroySound = new AudioPlayer(AudioResources.StoneBreaking, false);
+                fireObject.AddComponent(destroySound);
+                destroySound.PlayAudio();
+
+                Destroy(fireObject, .5f);
             }
         }
 

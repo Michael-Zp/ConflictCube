@@ -1,7 +1,7 @@
 ﻿using NAudio.Wave;
 using System;
 
-namespace Engine.AudioSuppoert
+namespace Engine.AudioSupport
 {
     class CachedSoundSampleProvider : ISampleProvider
     {

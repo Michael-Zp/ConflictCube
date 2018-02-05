@@ -1,11 +1,19 @@
 ﻿using Engine.Components;
 using Engine.Time;
 using OpenTK;
+using System.ComponentModel.Composition;
 
 namespace ConflictCube.Objects
 {
     public class PlayerSwitcher : GameObject, ISwitchPlayers
     {
+#pragma warning disable 0649
+
+        [Import(typeof(ITime))]
+        private ITime Time;
+
+#pragma warning restore 0649
+
         private Player PlayerOne;
         private Player PlayerTwo;
 
@@ -19,6 +27,8 @@ namespace ConflictCube.Objects
 
         public PlayerSwitcher(string name, Player playerOne, Player playerTwo, GameObject parent) : base(name, new Transform(), parent, true)
         {
+            Program.Container.ComposeParts(this);
+
             PlayerOne = playerOne;
             PlayerTwo = playerTwo;
 

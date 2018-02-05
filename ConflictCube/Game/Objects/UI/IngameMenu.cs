@@ -4,15 +4,25 @@ using Engine.Components;
 using Engine.Inputs;
 using Engine.Time;
 using System;
+using System.ComponentModel.Composition;
 
 namespace ConflictCube.Objects
 {
     public class IngameMenu : GameObject
     {
+#pragma warning disable 0649
+
+        [Import(typeof(ITime))]
+        private ITime Time;
+
+#pragma warning restore 0649
+
         private GameObject menu;
 
         public IngameMenu(string name, GameObject parent, IBuildMenu buildMenu, bool enabled = true) : base(name, new Transform(), parent, enabled)
         {
+            Program.Container.ComposeParts(this);
+
             menu = new GameObject("IngameMenuHolder", new Transform(), this, false);
 
             new ColoredBox("Background", new Transform(), new Material(System.Drawing.Color.FromArgb(250, System.Drawing.Color.Black)), menu);

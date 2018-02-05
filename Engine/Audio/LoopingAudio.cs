@@ -1,6 +1,6 @@
 ﻿using NAudio.Wave;
 
-namespace Engine.AudioSuppoert
+namespace Engine.AudioSupport
 {
     public class LoopingAudio
     {

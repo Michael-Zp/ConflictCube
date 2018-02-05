@@ -43,6 +43,7 @@
       <HintPath>..\packages\OpenTK.3.0.0-pre\lib\net20\OpenTK.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Numerics" />
@@ -88,11 +89,6 @@
     <Compile Include="Game\Objects\UI\GameOverScreen.cs" />
     <Compile Include="Game\SceneBuilders\IBuildMenu.cs" />
     <Compile Include="Game\SceneBuilders\IBuildScene.cs" />
-    <Compile Include="ResxFiles\AudioResources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>AudioResources.resx</DependentUpon>
-    </Compile>
     <Compile Include="Game\Objects\Floor\Button.cs" />
     <Compile Include="Game\Objects\Managers\CameraManager.cs" />
     <Compile Include="Game\Objects\Events\Event.cs" />
@@ -105,16 +101,16 @@
     <Compile Include="Game\Objects\Players\Player.cs" />
     <Compile Include="Game\Objects\Floor\LevelTile.cs" />
     <Compile Include="Game\Objects\Floor\Boundary.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="ResxFiles\AudioResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AudioResources.resx</DependentUpon>
+    </Compile>
     <Compile Include="ResxFiles\Levels.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Levels.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Program.cs" />
-    <Compile Include="ResxFiles\LevelsWithNewTileset.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>LevelsWithNewTileset.resx</DependentUpon>
     </Compile>
     <Compile Include="Game\Tilesets.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -138,30 +134,27 @@
     <None Include="App.config" />
     <None Include="OpenTK.dll.config" />
     <None Include="packages.config" />
-    <None Include="Resources\FireIceFirstTest.csv" />
-    <None Include="Resources\FireIceFirstTestNewTileset.tmx" />
-    <None Include="Resources\FireIceFourthTest.csv" />
-    <None Include="Resources\FireIceSecondTest.csv" />
-    <None Include="Resources\FireIceSecondTestNewTileset.tmx" />
-    <None Include="Resources\FireIceThirdTest.csv" />
-    <None Include="Resources\FragmentTest.glslx" />
-    <None Include="Resources\Level0.csv" />
-    <None Include="Resources\Level0Left.csv" />
-    <None Include="Resources\Level0Middle.csv" />
-    <None Include="Resources\Level0Right.csv" />
+    <None Include="ResourceFiles\Levels\FireIceFirstTestNewTileset.tmx" />
+    <None Include="ResourceFiles\Levels\FireIceSecondTestNewTileset.tmx" />
+    <None Include="ResourceFiles\Levels\level1.tmx" />
+    <None Include="ResourceFiles\Levels\level2.tmx" />
+    <None Include="ResourceFiles\Levels\level3.tmx" />
+    <None Include="ResourceFiles\Levels\level4.tmx" />
+    <None Include="ResourceFiles\Levels\level5.tmx" />
+    <None Include="ResourceFiles\Levels\tutlevel.tmx" />
+    <None Include="ResourceFiles\Levels\XShiftTest.tmx" />
+    <None Include="ResourceFiles\Levels\XYShiftTest.tmx" />
+    <None Include="ResourceFiles\Levels\YShiftTest.tmx" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="ResxFiles\AudioResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
+      <SubType>Designer</SubType>
       <LastGenOutput>AudioResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="ResxFiles\Levels.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Levels.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ResxFiles\LevelsWithNewTileset.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>LevelsWithNewTileset.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="ResxFiles\ParticleSystemResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -177,52 +170,8 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\FloorSpriteSheet.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\level1.csv" />
-    <None Include="Resources\level1.tmx" />
-    <None Include="Resources\Level1Left.csv" />
-    <None Include="Resources\Level1Middle.csv" />
-    <None Include="Resources\Level1Right.csv" />
-    <None Include="Resources\Level2.csv" />
-    <None Include="Resources\level2.tmx" />
-    <None Include="Resources\Level2Left.csv" />
-    <None Include="Resources\Level2Middle.csv" />
-    <None Include="Resources\Level2Right.csv" />
-    <None Include="Resources\level3.tmx" />
-    <None Include="Resources\level4.tmx" />
-    <None Include="Resources\level5.tmx" />
-    <None Include="Resources\Tileset.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Player.gif" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Font1.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Blood Bath 2.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\tutlevel.tmx" />
-    <None Include="Resources\XShiftTest.csv" />
-    <None Include="Resources\XShiftTest.tmx" />
-    <None Include="Resources\XYShiftTest.csv" />
-    <None Include="Resources\XYShiftTest.tmx" />
-    <None Include="Resources\YShiftTest.csv" />
-    <None Include="Resources\YShiftTest.tmx" />
     <None Include="ResourceFiles\Shaders\Aftershadow.glsl" />
     <None Include="ResourceFiles\Textures\Sledgehammer.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\FireTileset.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\IceTileset.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\FloorTileset.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ResourceFiles\Textures\UseFieldIndicator.png" />
@@ -249,9 +198,6 @@
     <None Include="ResourceFiles\Particles\Particle-Sprite-Smoke-1.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\05 - Manowar.mp3" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="ResourceFiles\Audio\BirdWhistle.wav" />
   </ItemGroup>
   <ItemGroup>
@@ -271,6 +217,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ResourceFiles\Textures\Firemanred.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ResourceFiles\Particles\WelderTorch.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ResourceFiles\Particles\smoke.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ResourceFiles\Audio\StoneBreaking.wav" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,8 +1,6 @@
 ﻿using OpenTK;
 using System;
 using Engine.Components;
-using Engine.Time;
-using ConflictCube.Debug;
 
 namespace ConflictCube.Objects
 {
@@ -15,14 +13,9 @@ namespace ConflictCube.Objects
         public LevelTile[,] FloorTiles { get; set; }
         public LevelTile[,] ButtonTiles { get; set; }
         public LevelTile[,] CubeTiles { get; set; }
-        public float FloorBreakdownInterval { get; set; } = 3.0f;
         public CollisionGroup CollisionGroup;
         public Transform BluePlayerCheckpoint;
         public Transform OrangePlayerCheckpoint;
-        
-        private Player PlayerOnFloor = null;
-        private int FloorRowThreshold = 3;
-        public bool PlayerIsOverThreshold = false;
 
         //floorSize is the size of the whole floor and not only the part which should be shown.
         public Floor(string name, Transform transform, int rows, int columns, CollisionGroup group, Vector2 tileSize, GameObject parent) : base(name, transform, parent)
@@ -35,25 +28,6 @@ namespace ConflictCube.Objects
             CollisionGroup = group;
 
             FloorTileSize = tileSize;
-        }
-
-        public override void OnUpdate()
-        {
-            if(PlayerOnFloor == null)
-            {
-                PlayerOnFloor = (Player)FindGameObjectByTypeInChildren<Player>();
-            }
-
-            if(PlayerOnFloor != null)
-            {
-                Vector2 playerPositionInGrid = GetGridPosition(PlayerOnFloor.Transform.TransformToGlobal());
-
-                //If the level has to initialize itself dont start the floor breakdown.
-                if(playerPositionInGrid.Y >= FloorRowThreshold && Time.CurrentTime > 1)
-                {
-                    PlayerIsOverThreshold = true;
-                }
-            }
         }
 
         public void AddLevelTile(LevelTile floorTile, LevelTile buttonTile, LevelTile cubeTile, int y, int x)

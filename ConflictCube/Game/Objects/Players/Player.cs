@@ -7,11 +7,19 @@ using Engine.Time;
 using Engine.Components;
 using ConflictCube.Debug;
 using Engine.View;
+using System.ComponentModel.Composition;
 
 namespace ConflictCube.Objects
 {
     public abstract class Player : GameObject
     {
+#pragma warning disable 0649
+
+        [Import(typeof(ITime))]
+        private ITime Time;
+
+#pragma warning restore 0649
+
         public float Speed { get; protected set; } = 20;
         public bool IsAlive { get; set; } = true;
         public float MaxSprintEnergy = 100;
@@ -79,6 +87,8 @@ namespace ConflictCube.Objects
         /// </summary>
         protected Player(string name, Floor currentFloor, GameObject parent, string playerType, string collisionType, string collisionLayer) : base(name, new Transform(0, 0, .06f, .06f), parent, playerType)
         {
+            Program.Container.ComposeParts(this);
+
             CurrentFloor = currentFloor;
             LastUse = -UseCooldown;
 
@@ -96,6 +106,7 @@ namespace ConflictCube.Objects
 
 
             FootstepsSound = new AudioPlayer(AudioResources.WalkingFast, true);
+            AddComponent(FootstepsSound);
 
 
             ResetPositionToLastCheckpoint();
@@ -151,7 +162,7 @@ namespace ConflictCube.Objects
 
             Move(moveVector);
 
-            //l == 0
+            //l < 0.03 && LastFS > 0.03 -> MoveSpeed == 0
             if (moveVector.Length < 0.03f)
             {
                 if (LastFrameSpeed > 0.03f)

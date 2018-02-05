@@ -1,11 +1,20 @@
-﻿using OpenTK;
+﻿using Engine.Time;
+using OpenTK;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 
 namespace Engine.Components
 {
     public class ParticleSystem : Component
     {
+#pragma warning disable 0649
+
+        [Import(typeof(ITime))]
+        private ITime Time;
+
+#pragma warning restore 0649
+
         public int ParticleCount;
         public float TimeBetweenParticles;
         private float LastParticleSpawn;
@@ -56,6 +65,8 @@ namespace Engine.Components
 
         public ParticleSystem(int particleCount, float timeBetweenParticles, Material particleTexture, Vector2 originalParticleSize, float lifetime, Func<float, float> sizeOverTime, Func<float, float> velocityOverTime, Vector2 particleFlowDirection, float flowConeRadius)
         {
+            GameEngine.Container.ComposeParts(this);
+
             ParticleCount = particleCount;
             TimeBetweenParticles = timeBetweenParticles;
             LastParticleSpawn = -TimeBetweenParticles;
@@ -78,9 +89,9 @@ namespace Engine.Components
             }
             else
             {
-                if (Time.Time.CooldownIsOver(LastParticleSpawn, TimeBetweenParticles))
+                if (Time.CooldownIsOver(LastParticleSpawn, TimeBetweenParticles))
                 {
-                    ParticlesToBeSpawned += Time.Time.DifTime / TimeBetweenParticles;
+                    ParticlesToBeSpawned += Time.DifTime / TimeBetweenParticles;
                 }
             }
 
@@ -137,7 +148,7 @@ namespace Engine.Components
         {
             foreach (Particle particle in Particles)
             {
-                float normalizedAliveTime = (Time.Time.CurrentTime - particle.SpawnTime) / Lifetime;
+                float normalizedAliveTime = (Time.CurrentTime - particle.SpawnTime) / Lifetime;
 
                 float sizeFactor = SizeOverTime(normalizedAliveTime);
                 float velocityVector = VelocityOverTime(normalizedAliveTime);

@@ -2,6 +2,7 @@
 using Engine.Components;
 using Engine.Time;
 using System;
+using System.ComponentModel.Composition;
 using System.Drawing;
 using Zenseless.OpenGL;
 
@@ -9,6 +10,14 @@ namespace ConflictCube.Objects
 {
     public class UseField : GameObject
     {
+#pragma warning disable 0649
+
+        [Import(typeof(ITime))]
+        private ITime Time;
+
+
+#pragma warning restore 0649
+
         private static bool MaterialsAreInitialized = false;
         private static Material ForegroundMaterial;
         private static Material BackgroundMaterial;
@@ -17,6 +26,8 @@ namespace ConflictCube.Objects
 
         public UseField(string name, Transform transform, GameObject parent) : base(name, transform, parent)
         {
+            Program.Container.ComposeParts(this);
+
             if (!MaterialsAreInitialized)
             {
                 MaterialsAreInitialized = true;

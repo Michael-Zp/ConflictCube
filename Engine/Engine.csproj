@@ -42,6 +42,7 @@
       <HintPath>..\packages\OpenTK.3.0.0-pre\lib\net20\OpenTK.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Numerics" />
@@ -74,6 +75,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Audio\IAudio.cs" />
+    <Compile Include="Components\Transform\Rectangle.cs" />
+    <Compile Include="Components\Transform\RectangleExtensionMethods.cs" />
+    <Compile Include="Components\Transform\RotationMode.cs" />
+    <Compile Include="Components\Transform\Vector2ExtensionMethods.cs" />
+    <Compile Include="Components\Transform\WorldRelation.cs" />
     <Compile Include="Controller\GameController.cs" />
     <Compile Include="Debug\DebugEngine.cs" />
     <Compile Include="GameEngine.cs" />
@@ -95,6 +102,7 @@
     <Compile Include="Components\ParticleSystem\Particle.cs" />
     <Compile Include="Components\ParticleSystem\ParticleSystem.cs" />
     <Compile Include="Components\Physics\PhysicsObject.cs" />
+    <Compile Include="Scenes\IChangeScene.cs" />
     <Compile Include="Scenes\Scene.cs" />
     <Compile Include="Components\Sound\AudioPlayer.cs" />
     <Compile Include="Components\Transform\Transform.cs" />
@@ -104,6 +112,8 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="Time\ITime.cs" />
+    <Compile Include="Time\ITimeSetter.cs" />
     <Compile Include="UI\Canvas.cs" />
     <Compile Include="UI\DoActionOnButtonClick.cs" />
     <Compile Include="UI\Font.cs" />

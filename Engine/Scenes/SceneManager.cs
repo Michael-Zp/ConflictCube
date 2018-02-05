@@ -2,7 +2,7 @@
 
 namespace Engine.Scenes
 {
-    public class SceneManager
+    public class SceneManager : IChangeScene
     {
         private GameState State;
 

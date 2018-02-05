@@ -83,9 +83,19 @@ namespace ConflictCube.ResxFiles {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Particle_Sprite_Smoke_1 {
+        internal static System.Drawing.Bitmap smoke {
             get {
-                object obj = ResourceManager.GetObject("Particle_Sprite_Smoke_1", resourceCulture);
+                object obj = ResourceManager.GetObject("smoke", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap WelderTorch {
+            get {
+                object obj = ResourceManager.GetObject("WelderTorch", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

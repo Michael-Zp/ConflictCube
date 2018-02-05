@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Drawing;
 using ConflictCube.Debug;
 using ConflictCube.Objects;
@@ -11,14 +12,24 @@ using Engine.UI;
 
 namespace ConflictCube.SceneBuilders
 {
+    [Export]
     public class SceneBuilder : IBuildScene, IBuildMenu
     {
+#pragma warning disable 0649
+
+        [Import(typeof(ITime))]
+        private ITime Time;
+
+#pragma warning restore 0649
+
         private int WindowWidth;
         private int WindowHeight;
         private SceneManager SceneManager;
 
         public SceneBuilder(int windowWidth, int windowHeight, SceneManager sceneManager)
         {
+            Program.Container.ComposeParts(this);
+
             WindowWidth = windowWidth;
             WindowHeight = windowHeight;
             SceneManager = sceneManager;
@@ -35,6 +46,7 @@ namespace ConflictCube.SceneBuilders
 
             GameObject mainMenu = new GameObject("MainMenu", new Transform(), menu);
             GameObject controls = new GameObject("LevelSelectMenu", new Transform(), menu);
+            GameObject credits = new GameObject("Credits", new Transform(), menu);
             GameObject levelSelect = new GameObject("LevelSelectMenu", new Transform(), menu);
 
             //Main menu
@@ -43,29 +55,31 @@ namespace ConflictCube.SceneBuilders
 
             Action levelSelectOnClick = new Action(() => { mainMenu.Enabled = false; levelSelect.Enabled = true; });
             Action controlsOnClick = new Action(() => { mainMenu.Enabled = false; controls.Enabled = true; });
+            Action creditsOnClick = new Action(() => { mainMenu.Enabled = false; credits.Enabled = true; });
             Action exitOnClick = new Action(() => { Environment.Exit(0); });
 
-            buttonsInMainMenu.AddButton(new Transform(0, .5f, .8f, .2f), "Level select", levelSelectOnClick);
-            buttonsInMainMenu.AddButton(new Transform(0, 0f, .8f, .2f), "Controls", controlsOnClick);
-            buttonsInMainMenu.AddButton(new Transform(0, -.5f, .8f, .2f), "Exit", exitOnClick);
-            
+            buttonsInMainMenu.AddButton(new Transform(0, .75f, .8f, .2f), "Level select", levelSelectOnClick);
+            buttonsInMainMenu.AddButton(new Transform(0, .25f, .8f, .2f), "Controls", controlsOnClick);
+            buttonsInMainMenu.AddButton(new Transform(0, -.25f, .8f, .2f), "Credits", creditsOnClick);
+            buttonsInMainMenu.AddButton(new Transform(0, -.75f, .8f, .2f), "Exit", exitOnClick);
+
 
 
             //Level select
 
             ButtonGroup buttonsInLevelSelect = new ButtonGroup("ButtonGroup", new Transform(), levelSelect);
 
-            Action level1OnClick  = new Action(() => { BuildScene(LevelsWithNewTileset.FireIceFirstTestNewTileset); });
-            Action level2OnClick  = new Action(() => { BuildScene(LevelsWithNewTileset.FireIceSecondTestNewTileset); });
-            Action level3OnClick  = new Action(() => { BuildScene(LevelsWithNewTileset.YShiftTest); });
-            Action level4OnClick  = new Action(() => { BuildScene(LevelsWithNewTileset.XShiftTest); });
-            Action level5OnClick  = new Action(() => { BuildScene(LevelsWithNewTileset.XYShiftTest); });
-            Action level6OnClick  = new Action(() => { BuildScene(LevelsWithNewTileset.tutlevel); });
-            Action level7OnClick  = new Action(() => { BuildScene(LevelsWithNewTileset.level1); });
-            Action level8OnClick  = new Action(() => { BuildScene(LevelsWithNewTileset.level2); });
-            Action level9OnClick  = new Action(() => { BuildScene(LevelsWithNewTileset.level3); });
-            Action level10OnClick = new Action(() => { BuildScene(LevelsWithNewTileset.level4); });
-            Action level11OnClick = new Action(() => { BuildScene(LevelsWithNewTileset.level5); });
+            Action level1OnClick  = new Action(() => { BuildScene(Levels.FireIceFirstTestNewTileset); });
+            Action level2OnClick  = new Action(() => { BuildScene(Levels.FireIceSecondTestNewTileset); });
+            Action level3OnClick  = new Action(() => { BuildScene(Levels.YShiftTest); });
+            Action level4OnClick  = new Action(() => { BuildScene(Levels.XShiftTest); });
+            Action level5OnClick  = new Action(() => { BuildScene(Levels.XYShiftTest); });
+            Action level6OnClick  = new Action(() => { BuildScene(Levels.tutlevel); });
+            Action level7OnClick  = new Action(() => { BuildScene(Levels.level1); });
+            Action level8OnClick  = new Action(() => { BuildScene(Levels.level2); });
+            Action level9OnClick  = new Action(() => { BuildScene(Levels.level3); });
+            Action level10OnClick = new Action(() => { BuildScene(Levels.level4); });
+            Action level11OnClick = new Action(() => { BuildScene(Levels.level5); });
 
             buttonsInLevelSelect.AddButton(new Transform(-.533f, 1 - ( 1 * .125f) - 1 * (0.5f / 7), .4f, .125f), "Level 1", level1OnClick);
             buttonsInLevelSelect.AddButton(new Transform(-.533f, 1 - ( 3 * .125f) - 2 * (0.5f / 7), .4f, .125f), "Level 2", level2OnClick);
@@ -81,7 +95,7 @@ namespace ConflictCube.SceneBuilders
             buttonsInLevelSelect.AddButton(new Transform( .533f, 1 - (9 * .125f) - 5 * (0.5f / 7), .4f, .125f), "Level 11", level11OnClick);
 
 
-            Action gotoMainMenuOnEscape = new Action(() => { levelSelect.Enabled = false; controls.Enabled = false; mainMenu.Enabled = true; });
+            Action gotoMainMenuOnEscape = new Action(() => { levelSelect.Enabled = false; controls.Enabled = false; credits.Enabled = false; mainMenu.Enabled = true; });
 
             DoActionOnButtonClick gotoMainMenuAction = new DoActionOnButtonClick("GotoMainMenu", new Transform(), OpenTK.Input.Key.BackSpace, gotoMainMenuOnEscape, KeyPressType.Release, levelSelect);
             
@@ -100,7 +114,17 @@ namespace ConflictCube.SceneBuilders
             DoActionOnButtonClick gotoMainMenuAction1 = new DoActionOnButtonClick("GotoMainMenu", new Transform(), OpenTK.Input.Key.BackSpace, gotoMainMenuOnEscape, KeyPressType.Release, controls);
                     
             controls.Enabled = false;
-            
+
+
+            //Credits
+
+            new TextField("BgMusic0", new Transform(0, .7f, 2f, .2f), "Bg Music \"Tidecaller\"", Engine.UI.Font.Instance().NormalFont, credits);
+            new TextField("BgMusic1", new Transform(0, .3f, 2f, .2f), "Made by Riot Games", Engine.UI.Font.Instance().NormalFont, credits);
+
+            DoActionOnButtonClick gotoMainMenuAction2 = new DoActionOnButtonClick("GotoMainMenu", new Transform(), OpenTK.Input.Key.BackSpace, gotoMainMenuOnEscape, KeyPressType.Release, credits);
+
+            credits.Enabled = false;
+
             SceneManager.SetActiveScene(new Scene(menu, new List<Camera> { camera }));
         }
 

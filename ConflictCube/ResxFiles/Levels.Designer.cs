@@ -61,200 +61,73 @@ namespace ConflictCube.ResxFiles {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die 0,0,0,0
-        ///3,1,1,3
-        ///3,1,1,3
-        ///3,1,1,3
-        ///3,5,5,3
-        ///3,4,4,3
-        ///3,1,1,3
-        ///3,1,1,3
-        ///3,1,1,3
-        ///3,1,1,3
-        /// ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+        ///&lt;map version=&quot;1.0&quot; tiledversion=&quot;1.0.3&quot; orientation=&quot;orthogonal&quot; renderorder=&quot;right-down&quot; width=&quot;4&quot; height=&quot;10&quot; tilewidth=&quot;64&quot; tileheight=&quot;64&quot; nextobjectid=&quot;1&quot;&gt;
+        /// &lt;tileset firstgid=&quot;1&quot; source=&quot;../../ConflictCube/Textures/ConCubeTileset.tsx&quot;/&gt;
+        /// &lt;layer name=&quot;Floor&quot; width=&quot;4&quot; height=&quot;10&quot;&gt;
+        ///  &lt;data encoding=&quot;csv&quot;&gt;
+        ///1,1,1,1,
+        ///4,2,2,4,
+        ///4,2,2,4,
+        ///4,2,2,4,
+        ///4,2,2,4,
+        ///4,2,2,4,
+        ///4,2,2,4,
+        ///4,2,2,4,
+        ///4,2,2,4,
+        ///4,2,2,4
+        ///&lt;/data&gt;
+        /// &lt;/layer&gt;
+        /// &lt;layer name=&quot;Buttons&quot; width=&quot;4&quot; height [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
         /// </summary>
-        internal static string FireIceFirstTest {
+        internal static string FireIceFirstTestNewTileset {
             get {
-                return ResourceManager.GetString("FireIceFirstTest", resourceCulture);
+                return ResourceManager.GetString("FireIceFirstTestNewTileset", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die 0,0,0
-        ///3,3,3
-        ///7,7,3
-        ///1,1,3
-        ///6,6,3
-        ///1,1,3
-        ///7,7,3
-        ///1,1,1
-        /// ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+        ///&lt;map version=&quot;1.0&quot; tiledversion=&quot;1.0.3&quot; orientation=&quot;orthogonal&quot; renderorder=&quot;right-down&quot; width=&quot;4&quot; height=&quot;10&quot; tilewidth=&quot;64&quot; tileheight=&quot;64&quot; nextobjectid=&quot;1&quot;&gt;
+        /// &lt;tileset firstgid=&quot;1&quot; source=&quot;../../ConflictCube/Textures/ConCubeTileset.tsx&quot;/&gt;
+        /// &lt;layer name=&quot;Floor&quot; width=&quot;4&quot; height=&quot;10&quot;&gt;
+        ///  &lt;data encoding=&quot;csv&quot;&gt;
+        ///1,1,1,1,
+        ///2,2,2,9,
+        ///2,44,44,34,
+        ///43,5,2,30,
+        ///43,43,2,19,
+        ///43,4,44,18,
+        ///43,32,44,33,
+        ///43,36,44,23,
+        ///43,34,44,22,
+        ///43,43,2,12
+        ///&lt;/data&gt;
+        /// &lt;/layer&gt;
+        /// &lt;layer name= [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
         /// </summary>
-        internal static string FireIceFourthTest {
+        internal static string FireIceSecondTestNewTileset {
             get {
-                return ResourceManager.GetString("FireIceFourthTest", resourceCulture);
+                return ResourceManager.GetString("FireIceSecondTestNewTileset", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die 0,0,0,0
-        ///1,1,1,3
-        ///5,7,7,3
-        ///6,3,5,3
-        ///6,6,4,3
-        ///6,3,5,3
-        ///6,3,1,3
-        ///6,3,1,3
-        ///6,3,1,3
-        ///6,6,1,3
-        /// ähnelt.
-        /// </summary>
-        internal static string FireIceSecondTest {
-            get {
-                return ResourceManager.GetString("FireIceSecondTest", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die 0,0,0
-        ///3,3,4
-        ///7,7,1
-        ///3,1,5
-        ///3,5,3
-        ///3,1,3
-        ///6,6,6
-        ///1,1,1
-        /// ähnelt.
-        /// </summary>
-        internal static string FireIceThirdTest {
-            get {
-                return ResourceManager.GetString("FireIceThirdTest", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die 0,0,0,0
-        ///1,1,1,1
-        ///1,3,3,1
-        ///1,1,3,3
-        ///2,1,1,3
-        ///3,3,1,1
-        ///3,3,1,2
-        ///3,3,1,1
-        ///3,1,1,1
-        ///3,1,3,3
-        /// ähnelt.
-        /// </summary>
-        internal static string Level0 {
-            get {
-                return ResourceManager.GetString("Level0", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die 0,0,0,0
-        ///1,1,1,1
-        ///1,3,3,1
-        ///1,1,3,3
-        ///2,1,1,3
-        ///3,3,1,1
-        ///3,3,1,2
-        ///3,3,1,1
-        ///3,1,1,1
-        ///3,1,3,3
-        /// ähnelt.
-        /// </summary>
-        internal static string Level0Left {
-            get {
-                return ResourceManager.GetString("Level0Left", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die 3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        /// ähnelt.
-        /// </summary>
-        internal static string Level0Middle {
-            get {
-                return ResourceManager.GetString("Level0Middle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die 0,0,0,0
-        ///1,1,1,1
-        ///1,3,3,1
-        ///1,1,3,3
-        ///2,1,1,3
-        ///3,3,1,1
-        ///3,3,1,2
-        ///3,3,1,1
-        ///3,1,1,1
-        ///3,1,3,3
-        /// ähnelt.
-        /// </summary>
-        internal static string Level0Right {
-            get {
-                return ResourceManager.GetString("Level0Right", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die 0,0,0,0,0,0,0,0,0,0
-        ///1,3,3,3,3,3,3,3,3,3
-        ///1,1,1,1,1,1,1,1,1,1
-        ///3,3,3,3,2,3,3,3,2,3
-        ///1,1,1,1,1,1,1,1,1,1
-        ///1,1,1,1,1,1,1,1,1,1
-        ///1,1,3,3,3,3,3,3,3,3
-        ///3,2,3,1,1,1,1,1,1,1
-        ///3,1,3,1,3,3,3,3,3,1
-        ///1,1,3,1,3,1,1,1,3,1
-        ///1,3,3,1,3,1,3,1,3,1
-        ///1,1,1,1,3,1,3,1,3,1
-        ///3,3,3,3,3,1,3,1,1,1
-        ///1,1,1,1,1,1,3,3,3,3
-        ///1,3,3,3,3,3,3,1,1,1
-        ///1,3,3,1,2,1,2,1,3,1
-        ///1,1,3,1,2,1,1,1,3,1
-        ///3,1,3,1,1,1,1,1,3,1
-        ///3,1,1,1,3,3,3,3,3,1
-        ///3,3,3,3,3,1,1,1,1,1
-        ///1,1,1,1,1,1,3,3,3,3
-        ///1,3,3,3,1,1,3,1,1,1
-        ///1,1,1,3,1,1,3,1,3,1
-        ///3,3,1,3,1,2,3,1,3,1
-        ///1,1,1,3,1,1,1,1,3,1
-        ///1,3,3,3,3,3, [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+        ///&lt;map version=&quot;1.0&quot; tiledversion=&quot;1.0.3&quot; orientation=&quot;orthogonal&quot; renderorder=&quot;right-down&quot; width=&quot;5&quot; height=&quot;5&quot; tilewidth=&quot;64&quot; tileheight=&quot;64&quot; nextobjectid=&quot;1&quot;&gt;
+        /// &lt;tileset firstgid=&quot;1&quot; source=&quot;../../ConflictCube/Textures/ConCubeTileset.tsx&quot;/&gt;
+        /// &lt;layer name=&quot;Floor&quot; width=&quot;5&quot; height=&quot;5&quot;&gt;
+        ///  &lt;data encoding=&quot;csv&quot;&gt;
+        ///21,1,9,7,1,
+        ///2,2,4,2,6,
+        ///44,5,32,2,8,
+        ///2,43,8,43,2,
+        ///21,43,2,44,2
+        ///&lt;/data&gt;
+        /// &lt;/layer&gt;
+        /// &lt;layer name=&quot;Buttons&quot; width=&quot;5&quot; height=&quot;5&quot;&gt;
+        ///  &lt;data encoding=&quot;csv&quot;&gt;
+        ///0, [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
         /// </summary>
         internal static string level1 {
             get {
@@ -263,333 +136,115 @@ namespace ConflictCube.ResxFiles {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die 0,0,0,0,0,0,0,0,0,0
-        ///1,3,3,3,3,3,3,3,3,3
-        ///1,1,1,1,1,1,1,1,1,1
-        ///3,3,3,3,2,3,3,3,1,3
-        ///1,1,1,1,1,2,2,2,1,1
-        ///1,2,2,1,1,1,1,1,1,1
-        ///1,1,3,3,3,3,3,3,3,3
-        ///3,1,3,1,1,1,1,1,1,1
-        ///3,1,3,1,3,3,3,3,3,1
-        ///1,1,3,1,3,1,1,1,3,1
-        ///1,3,3,1,3,1,3,1,3,1
-        ///1,1,1,1,3,1,3,1,3,1
-        ///3,3,3,3,3,1,3,1,1,1
-        ///1,1,1,1,1,1,3,3,3,3
-        ///1,3,3,3,3,3,3,1,1,1
-        ///1,3,3,1,2,1,2,1,3,1
-        ///1,1,3,1,2,1,1,1,3,1
-        ///3,1,3,1,1,1,1,1,3,1
-        ///3,1,1,1,3,3,3,3,3,1
-        ///3,3,3,3,3,1,1,1,1,1
-        ///1,1,1,1,1,1,3,3,3,3
-        ///1,3,3,3,1,1,3,1,1,1
-        ///1,1,1,3,1,1,3,1,3,1
-        ///3,3,1,3,1,2,3,1,3,1
-        ///1,1,1,3,1,1,1,1,3,1
-        ///1,3,3,3,3,3, [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+        ///&lt;map version=&quot;1.0&quot; tiledversion=&quot;1.0.3&quot; orientation=&quot;orthogonal&quot; renderorder=&quot;right-down&quot; width=&quot;10&quot; height=&quot;11&quot; tilewidth=&quot;64&quot; tileheight=&quot;64&quot; nextobjectid=&quot;1&quot;&gt;
+        /// &lt;tileset firstgid=&quot;1&quot; source=&quot;../../ConflictCube/Textures/ConCubeTileset.tsx&quot;/&gt;
+        /// &lt;layer name=&quot;Floor&quot; width=&quot;10&quot; height=&quot;11&quot;&gt;
+        ///  &lt;data encoding=&quot;csv&quot;&gt;
+        ///1,21,43,2,6,44,21,2,21,1,
+        ///21,43,43,2,4,44,44,44,44,6,
+        ///2,43,21,2,12,10,2,2,44,4,
+        ///21,43,43,43,43,8,44,44,44,8,
+        ///2,2,9,10,43,44,44,2,2,2,
+        ///9,3,26,11,43,44,6 [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
         /// </summary>
-        internal static string Level1Left {
+        internal static string level2 {
             get {
-                return ResourceManager.GetString("Level1Left", resourceCulture);
+                return ResourceManager.GetString("level2", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die 3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        /// ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+        ///&lt;map version=&quot;1.0&quot; tiledversion=&quot;1.0.3&quot; orientation=&quot;orthogonal&quot; renderorder=&quot;right-down&quot; width=&quot;15&quot; height=&quot;15&quot; tilewidth=&quot;64&quot; tileheight=&quot;64&quot; nextobjectid=&quot;1&quot;&gt;
+        /// &lt;tileset firstgid=&quot;1&quot; source=&quot;../../ConflictCube/Textures/ConCubeTileset.tsx&quot;/&gt;
+        /// &lt;layer name=&quot;Floor&quot; width=&quot;15&quot; height=&quot;15&quot;&gt;
+        ///  &lt;data encoding=&quot;csv&quot;&gt;
+        ///2,2,2,6,2,2,2,9,3,3,3,3,31,27,10,
+        ///2,6,2,8,2,6,2,4,2,2,2,2,30,21,28,
+        ///2,4,2,2,2,4,2,8,2,9,7,2,12,29,32,
+        ///2,12,3,3,3,26,10,2,2,8,2,2,2,2,4,
+        ///2,2,2,2,2,34,26, [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
         /// </summary>
-        internal static string Level1Middle {
+        internal static string level3 {
             get {
-                return ResourceManager.GetString("Level1Middle", resourceCulture);
+                return ResourceManager.GetString("level3", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die 0,0,0,0,0,0,0,0,0,0
-        ///1,3,3,3,3,3,3,3,3,3
-        ///1,1,1,1,1,1,1,1,1,1
-        ///3,3,3,3,2,3,3,3,1,3
-        ///1,1,1,1,1,2,2,2,1,1
-        ///1,2,2,1,1,1,1,1,1,1
-        ///1,1,3,3,3,3,3,3,3,3
-        ///3,1,3,1,1,1,1,1,1,1
-        ///3,1,3,1,3,3,3,3,3,1
-        ///1,1,3,1,3,1,1,1,3,1
-        ///1,3,3,1,3,1,3,1,3,1
-        ///1,1,1,1,3,1,3,1,3,1
-        ///3,3,3,3,3,1,3,1,1,1
-        ///1,1,1,1,1,1,3,3,3,3
-        ///1,3,3,3,3,3,3,1,1,1
-        ///1,3,3,1,2,1,2,1,3,1
-        ///1,1,3,1,2,1,1,1,3,1
-        ///3,1,3,1,1,1,1,1,3,1
-        ///3,1,1,1,3,3,3,3,3,1
-        ///3,3,3,3,3,1,1,1,1,1
-        ///1,1,1,1,1,1,3,3,3,3
-        ///1,3,3,3,1,1,3,1,1,1
-        ///1,1,1,3,1,1,3,1,3,1
-        ///3,3,1,3,1,2,3,1,3,1
-        ///1,1,1,3,1,1,1,1,3,1
-        ///1,3,3,3,3,3, [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+        ///&lt;map version=&quot;1.0&quot; tiledversion=&quot;1.0.3&quot; orientation=&quot;orthogonal&quot; renderorder=&quot;right-down&quot; width=&quot;20&quot; height=&quot;20&quot; tilewidth=&quot;64&quot; tileheight=&quot;64&quot; nextobjectid=&quot;1&quot;&gt;
+        /// &lt;tileset firstgid=&quot;1&quot; source=&quot;../../ConflictCube/Textures/ConCubeTileset.tsx&quot;/&gt;
+        /// &lt;layer name=&quot;Floor&quot; width=&quot;20&quot; height=&quot;20&quot;&gt;
+        ///  &lt;data encoding=&quot;csv&quot;&gt;
+        ///44,44,44,44,44,9,7,2,6,1,1,6,2,5,10,43,43,43,43,43,
+        ///44,44,44,44,44,8,2,9,11,1,1,12,10,2,8,43,43,43,43,43,
+        ///2,9,10,2,2,2,2,4,2,9,10,2,4,2,2,2,2,9,10,2,
+        ///2,4 [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
         /// </summary>
-        internal static string Level1Right {
+        internal static string level4 {
             get {
-                return ResourceManager.GetString("Level1Right", resourceCulture);
+                return ResourceManager.GetString("level4", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die 0,0,0,0,0,0,0,0,0,0
-        ///1,1,1,1,1,1,1,1,1,1
-        ///1,3,3,3,2,2,3,3,3,1
-        ///1,3,1,1,1,1,1,1,1,1
-        ///1,3,1,3,1,1,3,3,3,3
-        ///1,3,1,3,1,1,1,1,1,3
-        ///1,3,1,3,1,1,1,3,1,3
-        ///1,1,1,3,1,1,1,3,1,3
-        ///3,3,3,3,1,1,1,3,1,3
-        ///1,1,1,3,3,3,1,3,1,3
-        ///2,2,1,1,1,1,1,3,1,1
-        ///1,1,1,3,3,3,3,3,3,2
-        ///1,3,3,3,1,1,1,3,3,2
-        ///1,3,1,1,1,3,1,3,3,2
-        ///1,3,1,3,1,3,1,3,3,1
-        ///1,3,1,3,1,3,1,1,1,1
-        ///1,3,1,3,1,3,3,3,3,3
-        ///1,3,1,3,1,1,1,1,1,1
-        ///1,3,1,3,3,3,3,3,1,1
-        ///1,3,1,1,3,1,1,1,1,1
-        ///1,3,3,1,3,1,3,3,3,3
-        ///1,1,1,1,3,1,1,1,1,3
-        ///3,3,3,3,3,3,3,3,1,3
-        ///1,1,1,1,1,1,1,1,1,3
-        ///1,3,3,3,2,3,1,3,3,3
-        ///1,3,1,1,1,3, [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+        ///&lt;map version=&quot;1.0&quot; tiledversion=&quot;1.0.3&quot; orientation=&quot;orthogonal&quot; renderorder=&quot;right-down&quot; width=&quot;25&quot; height=&quot;25&quot; tilewidth=&quot;64&quot; tileheight=&quot;64&quot; nextobjectid=&quot;1&quot;&gt;
+        /// &lt;tileset firstgid=&quot;1&quot; source=&quot;../../ConflictCube/Textures/ConCubeTileset.tsx&quot;/&gt;
+        /// &lt;layer name=&quot;Floor&quot; width=&quot;25&quot; height=&quot;25&quot;&gt;
+        ///  &lt;data encoding=&quot;csv&quot;&gt;
+        ///5,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,7,
+        ///2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,
+        ///2,43,43,43,43,2,43,43,43,43,43,2,2,2,44,44,44,44,44, [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
         /// </summary>
-        internal static string Level2 {
+        internal static string level5 {
             get {
-                return ResourceManager.GetString("Level2", resourceCulture);
+                return ResourceManager.GetString("level5", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die 0,0,0,0,0,0,0,0,0,0
-        ///1,1,1,1,1,1,1,1,1,1
-        ///1,3,3,3,2,2,3,3,3,1
-        ///1,3,1,1,1,1,1,1,1,1
-        ///1,3,1,3,1,1,3,3,3,3
-        ///1,3,1,3,1,1,1,1,1,3
-        ///1,3,1,3,1,1,1,3,1,3
-        ///1,1,1,3,1,1,1,3,1,3
-        ///3,3,3,3,1,1,1,3,1,3
-        ///1,1,1,3,3,3,1,3,1,3
-        ///2,2,1,1,1,1,1,3,1,1
-        ///1,1,1,3,3,3,3,3,3,2
-        ///1,3,3,3,1,1,1,3,3,2
-        ///1,3,1,1,1,3,1,3,3,2
-        ///1,3,1,3,1,3,1,3,3,1
-        ///1,3,1,3,1,3,1,1,1,1
-        ///1,3,1,3,1,3,3,3,3,3
-        ///1,3,1,3,1,1,1,1,1,1
-        ///1,3,1,3,3,3,3,3,1,1
-        ///1,3,1,1,3,1,1,1,1,1
-        ///1,3,3,1,3,1,3,3,3,3
-        ///1,1,1,1,3,1,1,1,1,3
-        ///3,3,3,3,3,3,3,3,1,3
-        ///1,1,1,1,1,1,1,1,1,3
-        ///1,3,3,3,2,3,1,3,3,3
-        ///1,3,1,1,1,3, [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+        ///&lt;map version=&quot;1.0&quot; tiledversion=&quot;1.0.3&quot; orientation=&quot;orthogonal&quot; renderorder=&quot;right-down&quot; width=&quot;5&quot; height=&quot;15&quot; tilewidth=&quot;64&quot; tileheight=&quot;64&quot; nextobjectid=&quot;1&quot;&gt;
+        /// &lt;tileset firstgid=&quot;1&quot; source=&quot;../../ConflictCube/Textures/ConCubeTileset.tsx&quot;/&gt;
+        /// &lt;layer name=&quot;Floor&quot; width=&quot;5&quot; height=&quot;15&quot;&gt;
+        ///  &lt;data encoding=&quot;csv&quot;&gt;
+        ///1,1,1,1,1,
+        ///5,3,31,3,7,
+        ///2,2,4,2,2,
+        ///2,2,4,2,2,
+        ///2,9,26,10,2,
+        ///2,34,33,11,2,
+        ///2,4,44,44,44,
+        ///2,4,2,43,43,
+        ///43,12,3,10,43,
+        ///43,43,43,4,43,
+        ///6,44,2,8,43,
+        ///4,44, [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
         /// </summary>
-        internal static string Level2Left {
+        internal static string tutlevel {
             get {
-                return ResourceManager.GetString("Level2Left", resourceCulture);
+                return ResourceManager.GetString("tutlevel", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die 3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        ///3
-        /// ähnelt.
-        /// </summary>
-        internal static string Level2Middle {
-            get {
-                return ResourceManager.GetString("Level2Middle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die 0,0,0,0,0,0,0,0,0,0
-        ///1,1,1,1,1,1,1,1,1,1
-        ///1,3,3,3,2,2,3,3,3,1
-        ///1,3,1,1,1,1,1,1,1,1
-        ///1,3,1,3,1,1,3,3,3,3
-        ///1,3,1,3,1,1,1,1,1,3
-        ///1,3,1,3,1,1,1,3,1,3
-        ///1,1,1,3,1,1,1,3,1,3
-        ///3,3,3,3,1,1,1,3,1,3
-        ///1,1,1,3,3,3,1,3,1,3
-        ///2,2,1,1,1,1,1,3,1,1
-        ///1,1,1,3,3,3,3,3,3,2
-        ///1,3,3,3,1,1,1,3,3,2
-        ///1,3,1,1,1,3,1,3,3,2
-        ///1,3,1,3,1,3,1,3,3,1
-        ///1,3,1,3,1,3,1,1,1,1
-        ///1,3,1,3,1,3,3,3,3,3
-        ///1,3,1,3,1,1,1,1,1,1
-        ///1,3,1,3,3,3,3,3,1,1
-        ///1,3,1,1,3,1,1,1,1,1
-        ///1,3,3,1,3,1,3,3,3,3
-        ///1,1,1,1,3,1,1,1,1,3
-        ///3,3,3,3,3,3,3,3,1,3
-        ///1,1,1,1,1,1,1,1,1,3
-        ///1,3,3,3,2,3,1,3,3,3
-        ///1,3,1,1,1,3, [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
-        /// </summary>
-        internal static string Level2Right {
-            get {
-                return ResourceManager.GetString("Level2Right", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die 0,0,0,0,0,0,0,0
-        ///1,1,1,1,1,1,1,1
-        ///1,1,1,1,1,1,1,1
-        ///1,1,1,1,1,1,1,1
-        ///3,3,3,3,3,1,1,1
-        ///6,6,6,6,3,1,1,1
-        ///3,6,3,3,3,1,1,1
-        ///1,6,3,1,1,1,1,1
-        /// ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+        ///&lt;map version=&quot;1.0&quot; tiledversion=&quot;1.0.3&quot; orientation=&quot;orthogonal&quot; renderorder=&quot;right-down&quot; width=&quot;8&quot; height=&quot;8&quot; tilewidth=&quot;64&quot; tileheight=&quot;64&quot; nextobjectid=&quot;1&quot;&gt;
+        /// &lt;tileset firstgid=&quot;1&quot; source=&quot;../../ConflictCube/Textures/ConCubeTileset.tsx&quot;/&gt;
+        /// &lt;layer name=&quot;Floor&quot; width=&quot;8&quot; height=&quot;8&quot;&gt;
+        ///  &lt;data encoding=&quot;csv&quot;&gt;
+        ///1,1,1,1,1,1,1,1,
+        ///2,2,2,2,2,2,2,2,
+        ///2,2,2,2,2,2,2,2,
+        ///2,2,2,2,2,2,2,2,
+        ///3,3,3,3,3,2,2,2,
+        ///43,43,43,43,4,2,2,2,
+        ///8,43,19,10,4,2,2,2,
+        ///2,43,25,2,2,2,2,2
+        ///&lt;/data&gt;        /// [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
         /// </summary>
         internal static string XShiftTest {
             get {
@@ -598,15 +253,23 @@ namespace ConflictCube.ResxFiles {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die 0,0,0
-        ///1,1,1
-        ///1,1,1
-        ///3,5,3
-        ///6,1,6
-        ///6,6,6
-        ///6,6,6
-        ///1,3,3
-        /// ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+        ///&lt;map version=&quot;1.0&quot; tiledversion=&quot;1.0.3&quot; orientation=&quot;orthogonal&quot; renderorder=&quot;right-down&quot; width=&quot;3&quot; height=&quot;8&quot; tilewidth=&quot;64&quot; tileheight=&quot;64&quot; nextobjectid=&quot;1&quot;&gt;
+        /// &lt;tileset firstgid=&quot;1&quot; source=&quot;../../ConflictCube/Textures/ConCubeTileset.tsx&quot;/&gt;
+        /// &lt;layer name=&quot;Floor&quot; width=&quot;3&quot; height=&quot;8&quot;&gt;
+        ///  &lt;data encoding=&quot;csv&quot;&gt;
+        ///1,1,1,
+        ///2,2,2,
+        ///2,2,2,
+        ///10,2,30,
+        ///43,2,43,
+        ///43,43,43,
+        ///43,43,43,
+        ///2,6,12
+        ///&lt;/data&gt;
+        /// &lt;/layer&gt;
+        /// &lt;layer name=&quot;Buttons&quot; width=&quot;3&quot; height=&quot;8&quot;&gt;
+        ///  &lt;data encoding=&quot;cs [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
         /// </summary>
         internal static string XYShiftTest {
             get {
@@ -615,15 +278,23 @@ namespace ConflictCube.ResxFiles {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die 0,0,0
-        ///1,1,1
-        ///1,1,1
-        ///1,1,1
-        ///1,3,3
-        ///1,3,6
-        ///3,3,6
-        ///1,1,6
-        /// ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+        ///&lt;map version=&quot;1.0&quot; tiledversion=&quot;1.0.3&quot; orientation=&quot;orthogonal&quot; renderorder=&quot;right-down&quot; width=&quot;3&quot; height=&quot;8&quot; tilewidth=&quot;64&quot; tileheight=&quot;64&quot; nextobjectid=&quot;1&quot;&gt;
+        /// &lt;tileset firstgid=&quot;1&quot; source=&quot;../../ConflictCube/Textures/ConCubeTileset.tsx&quot;/&gt;
+        /// &lt;layer name=&quot;Floor&quot; width=&quot;3&quot; height=&quot;8&quot;&gt;
+        ///  &lt;data encoding=&quot;csv&quot;&gt;
+        ///1,1,1,
+        ///2,2,2,
+        ///2,2,2,
+        ///2,2,2,
+        ///2,18,10,
+        ///2,12,43,
+        ///37,41,43,
+        ///2,2,43
+        ///&lt;/data&gt;
+        /// &lt;/layer&gt;
+        /// &lt;layer name=&quot;Buttons&quot; width=&quot;3&quot; height=&quot;8&quot;&gt;
+        ///  &lt;data encoding=&quot;csv&quot;&gt; [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
         /// </summary>
         internal static string YShiftTest {
             get {

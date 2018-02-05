@@ -12,7 +12,7 @@ namespace Engine.View
     public class GameView
     {
         private MyWindow Window;
-        private OpenTKWrapper OpenTKWrapper = OpenTKWrapper.Instance();
+        private OpenTKWrapper OpenTKWrapper;
 
         /// <summary>
         ///     Match the GL Viewport with the given window and load all Tilesets that are used in the game.
@@ -20,6 +20,7 @@ namespace Engine.View
         /// <param name="window">The window of the game</param>
         public GameView(MyWindow window)
         {
+            OpenTKWrapper = OpenTKWrapper.Instance();
             Window = window;
 
             Window.Resize += (s, a) =>

@@ -1,11 +1,21 @@
-﻿using OpenTK;
+﻿using Engine.Time;
+using OpenTK;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 
 namespace Engine.Components
 {
     public class MaterialAnimator : Component
     {
+#pragma warning disable 0649
+
+        [Import(typeof(ITime))]
+        private ITime Time;
+
+#pragma warning restore 0649
+
+
         public const float UseOriginalValue = -100000;
 
         private bool AnimationIsStarted = false;
@@ -18,6 +28,8 @@ namespace Engine.Components
 
         public MaterialAnimator(Material materialToAnimate)
         {
+            GameEngine.Container.ComposeParts(this);
+
             MateraialToAnimate = materialToAnimate;
         }
 
@@ -27,7 +39,7 @@ namespace Engine.Components
             {
                 MaterialAnimatorKeyframe currentKeyframe = Keyframes[CurrentKeyframeIndex];
 
-                float timeInAnimation = Time.Time.CurrentTime - StartTime - LastKeyframe.Time;
+                float timeInAnimation = Time.CurrentTime - StartTime - LastKeyframe.Time;
 
                 float linearRatio;
                 if(currentKeyframe.Time - LastKeyframe.Time == 0)
@@ -68,7 +80,7 @@ namespace Engine.Components
                 return;
             }
 
-            StartTime = Time.Time.CurrentTime;
+            StartTime = Time.CurrentTime;
             AnimationIsStarted = true;
             LastKeyframe = new MaterialAnimatorKeyframe(0f, MateraialToAnimate.Color);
             CurrentKeyframeIndex = 0;

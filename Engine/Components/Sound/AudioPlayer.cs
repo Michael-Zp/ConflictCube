@@ -1,11 +1,19 @@
-﻿using System.IO;
-using Engine.AudioSuppoert;
+﻿using System.ComponentModel.Composition;
+using System.IO;
+using Engine.AudioSupport;
 using NAudio.Wave;
 
 namespace Engine.Components
 {
     public class AudioPlayer : Component
     {
+#pragma warning disable 0649
+
+        [Import(typeof(IAudio))]
+        private IAudio Audio;
+
+#pragma warning restore 0649
+
         private CachedSound Sound;
         private ISampleProvider SampleProvider = null;
         private LoopingAudio LoopingAudio = null;
@@ -22,6 +30,8 @@ namespace Engine.Components
 
         private AudioPlayer(CachedSound sound, bool loop)
         {
+            GameEngine.Container.ComposeParts(this);
+
             Sound = sound;
             Loop = loop;
         }
@@ -32,11 +42,11 @@ namespace Engine.Components
             {
                 if (!Loop)
                 {
-                    SampleProvider = Audio.Instance.PlaySound(Sound);
+                    SampleProvider = Audio.PlaySound(Sound);
                 }
                 else
                 {
-                    LoopingAudio = Audio.Instance.LoopSound(Sound);
+                    LoopingAudio = Audio.LoopSound(Sound);
                 }
                 StartPlayingSoundOnUpdate = false;
             }
@@ -51,12 +61,12 @@ namespace Engine.Components
         {
             if(SampleProvider != null)
             {
-                Audio.Instance.StopSound(SampleProvider);
+                Audio.StopSound(SampleProvider);
                 SampleProvider = null;
             }
             else if(LoopingAudio != null)
             {
-                Audio.Instance.StopLoop(LoopingAudio);
+                Audio.StopLoop(LoopingAudio);
                 LoopingAudio = null;
             }
 

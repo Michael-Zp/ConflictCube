@@ -28,11 +28,6 @@ namespace ConflictCube.Objects
 
         public override void OnUpdate()
         {
-            if (Input.OnButtonIsPressed("ExitGame"))
-            {
-                Environment.Exit(0);
-            }
-
             if (!CheckLooseCondition())
             {
                 CheckWinCondition();

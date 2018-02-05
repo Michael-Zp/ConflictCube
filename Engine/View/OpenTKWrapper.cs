@@ -9,11 +9,20 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using Engine.Components;
 using static Engine.View.ZenselessWrapper;
+using System.ComponentModel.Composition;
+using Engine.Time;
 
 namespace Engine.View
 {
     public class OpenTKWrapper
     {
+#pragma warning disable 0649
+
+        [Import(typeof(ITime))]
+        private ITime Time;
+
+#pragma warning restore 0649
+
         public Color StandardColor = Color.White;
         public float WindowHeight = 0;
         public float WindowWidth = 0;
@@ -30,6 +39,11 @@ namespace Engine.View
                 OpenTKWrapperInstance = new OpenTKWrapper();
             }
             return OpenTKWrapperInstance;
+        }
+
+        public OpenTKWrapper()
+        {
+            GameEngine.Container.ComposeParts(this);
         }
 
         public void DrawBoxWithAlphaChannel(Components.Rectangle rect, Color color)
@@ -63,7 +77,7 @@ namespace Engine.View
                 shader.Activate();
 
                 GL.Uniform2(shader.GetResourceLocation(ShaderResourceType.Uniform, "iResolution"), WindowWidth, WindowHeight);
-                GL.Uniform1(shader.GetResourceLocation(ShaderResourceType.Uniform, "iGlobalTime"), Time.Time.CurrentTime);
+                GL.Uniform1(shader.GetResourceLocation(ShaderResourceType.Uniform, "iGlobalTime"), Time.CurrentTime);
 
                 foreach (Tuple<string, float> parameter in currentMat.ShaderParameters1D)
                 {

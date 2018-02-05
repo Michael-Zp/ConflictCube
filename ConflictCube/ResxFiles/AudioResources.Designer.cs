@@ -61,16 +61,6 @@ namespace ConflictCube.ResxFiles {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
-        /// </summary>
-        internal static byte[] _05___Manowar {
-            get {
-                object obj = ResourceManager.GetObject("_05___Manowar", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.IO.UnmanagedMemoryStream ähnlich wie System.IO.MemoryStream.
         /// </summary>
         internal static System.IO.UnmanagedMemoryStream Background {
@@ -82,18 +72,9 @@ namespace ConflictCube.ResxFiles {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.IO.UnmanagedMemoryStream ähnlich wie System.IO.MemoryStream.
         /// </summary>
-        internal static System.IO.UnmanagedMemoryStream BirdWhistle {
+        internal static System.IO.UnmanagedMemoryStream StoneBreaking {
             get {
-                return ResourceManager.GetStream("BirdWhistle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.IO.UnmanagedMemoryStream ähnlich wie System.IO.MemoryStream.
-        /// </summary>
-        internal static System.IO.UnmanagedMemoryStream Walking {
-            get {
-                return ResourceManager.GetStream("Walking", resourceCulture);
+                return ResourceManager.GetStream("StoneBreaking", resourceCulture);
             }
         }
         
