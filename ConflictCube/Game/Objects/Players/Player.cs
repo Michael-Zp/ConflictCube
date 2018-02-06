@@ -100,7 +100,7 @@ namespace ConflictCube.Objects
             }
 
             AddComponent(collider);
-            
+
             UseField = new UseField("ThrowUseIndicator", new Transform(), CurrentFloor);
             SetUseFieldWithOffset();
 
@@ -204,7 +204,7 @@ namespace ConflictCube.Objects
 
             return true;
         }
-        
+
 
 
         private void UpdateUseField()
@@ -324,8 +324,21 @@ namespace ConflictCube.Objects
                 float currentAngle = Transform.GetRotation(WorldRelation.Local);
                 float angleDist = targetAngle - currentAngle;
 
+                if (angleDist > 180)
+                {
+                    currentAngle += 360;
+                    angleDist -= 180;
+                    angleDist *= -1;
+                }
+                else if (angleDist < -180)
+                {
+                    angleDist += 180;
+                    angleDist *= -1;
+                }
 
                 float angle = currentAngle + angleDist * (10f * Time.DifTime);
+
+                angle %= 360;
 
                 Transform.SetRotation(angle, WorldRelation.Local);
 

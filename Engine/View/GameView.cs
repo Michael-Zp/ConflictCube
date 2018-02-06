@@ -3,7 +3,7 @@ using OpenTK.Graphics.OpenGL;
 using System.Drawing;
 using System;
 using System.Collections.Generic;
-using Engine.Controler;
+using Engine.ModelView;
 using Engine.Components;
 using Engine.UI;
 
@@ -44,7 +44,7 @@ namespace Engine.View
         
         public void Render(ViewModel viewModel)
         {
-            foreach(Camera camera in viewModel.Cameras)
+            foreach(ViewModelCamera camera in viewModel.Cameras)
             {
                 //Scale camera to keep world propotions in the view
                 Vector2 newRenderTargetAspectRatio;
@@ -65,7 +65,7 @@ namespace Engine.View
             }
 
             ClearScreen();
-            foreach(Camera camera in viewModel.Cameras)
+            foreach(ViewModelCamera camera in viewModel.Cameras)
             {
                 camera.FBO.Activate();
                 RenderGameObject(camera.Transform, camera.RootGameObject);

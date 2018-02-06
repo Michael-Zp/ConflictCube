@@ -1,4 +1,5 @@
 ﻿using Engine.Time;
+using Engine.ModelView;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
@@ -48,6 +49,8 @@ namespace Engine.Components
                 _Transform.Owner = this;
             }
         }
+
+        
         public List<GameObject> Children = new List<GameObject>();
         public List<Component> Components = new List<Component>();
         private GameObject _Parent;
