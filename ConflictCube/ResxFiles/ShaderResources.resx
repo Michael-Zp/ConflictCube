@@ -1,0 +1,310 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Afterglow" xml:space="preserve">
+    <value>#version 330
+
+uniform vec2 iResolution; //[xResolution, yResolution] of display
+uniform float iGlobalTime; //global time in seconds as float
+uniform float startTime; //Time the shader was first activated on this object
+uniform float direction; //Positive =&gt; up/right; Negative =&gt; down/left
+uniform float lifetime; //How long the effect will be visible
+uniform vec3 desiredColor;
+	
+in vec2 uv;
+
+void main()
+{
+    //create uv to be in the range [0..1]x[0..1]
+	//vec2 uv = gl_FragCoord.xy / iResolution;
+
+    //gl_FragColor = vec4(vec3(min(distance(uv, vec2(1)), distance(uv, vec2(0)))), 1);
+
+    //gl_FragColor = vec4(uv, 0, 1);
+    //return;
+
+    //gl_FragColor = vec4(1, 1, 1, 1);
+
+    //Is the orange which is defined in System.Drawings.Color
+    vec4 color = vec4(desiredColor, 1);
+
+    if(direction &gt; 0.0) 
+    {
+        color.a = uv.x + 0.5;
+    }
+    else
+    {
+        color.a = 1.5 - uv.x;
+    }
+
+    //color.a is 1.5 at maximum (only 1 is to clamped)
+    color.a -= (iGlobalTime - startTime) / (1.5 / (1.0 / lifetime));
+
+	gl_FragColor = color;
+}</value>
+  </data>
+  <data name="FragmentTest" xml:space="preserve">
+    <value>#version 330
+
+uniform vec2 iResolution; //[xResolution, yResolution] of display
+uniform float iGlobalTime; //global time in seconds as float
+uniform float startTime; //Time the shader was first activated on this object
+uniform float direction; //Positive =&gt; up/right; Negative =&gt; down/left
+uniform float lifetime; //How long the effect will be visible
+uniform vec3 desiredColor;
+	
+in vec2 uv;
+
+void main()
+{
+    gl_FragColor = vec4(vec3(min(distance(uv, vec2(1)), distance(uv, vec2(0)))), 1);
+}</value>
+  </data>
+  <data name="Liquid" xml:space="preserve">
+    <value>#version 330
+
+uniform vec2 iResolution; //[xResolution, yResolution] of display
+uniform float iGlobalTime; //global time in seconds as float
+uniform sampler2D tex;
+uniform float minXuv;
+uniform float maxXuv;
+uniform float minYuv;
+uniform float maxYuv;
+
+
+in vec2 pos;
+in vec2 uv;
+
+float rand(float seed)
+{
+	return fract(sin(seed) * 1231534.9);
+}
+
+vec2 scaleBack(in vec2 toScale) 
+{
+    vec2 scaledVec = vec2(0);
+    scaledVec.x = toScale.x * (maxXuv - minXuv) + minXuv;
+    scaledVec.y = toScale.y * (maxYuv - minYuv) + minYuv;
+
+    return scaledVec;
+}
+
+vec2 wobblePoint(in vec2 uvCoords) 
+{
+    uvCoords.x = uvCoords.x + (0.04 * cos(6.0 * uvCoords.y)) * sin(iGlobalTime);
+
+    if(uvCoords.x &gt; 1.0) 
+    {
+        uvCoords.x = 1.0 - fract(uvCoords.x);
+    }
+
+    if(uvCoords.x &lt; 0.0) 
+    {
+        uvCoords.x = -uvCoords.x;
+    }
+
+
+    uvCoords.y = uvCoords.y + (0.04 * sin(6.0 * uvCoords.x)) * cos(iGlobalTime);
+
+    if(uvCoords.y &gt; 1.0) 
+    {
+        uvCoords.y = 1.0 - fract(uvCoords.y);
+    }
+
+    if(uvCoords.y &lt; 0.0) 
+    {
+        uvCoords.y = -uvCoords.y;
+    }
+
+    return uvCoords;
+}
+
+vec4 averageColorIn3x3Field(vec2 center) 
+{
+    float delta = 0.01;
+
+    vec4 color = vec4(0);
+
+    for(int x = -1; x &lt;= 1; x++)
+    {
+        for(int y = -1; y &lt;= 1; y++)
+        {
+            color += texture2D(tex, center + vec2(x, y));
+        }
+    }
+
+    return color / 9.0;
+}
+
+void main()
+{
+    //Texture out of sprite sheet -&gt; uv coords are not from 0..1 and should not be
+    vec2 scaledUv = vec2((uv.x - minXuv) * (1.0 / (maxXuv - minXuv)), 
+                         (uv.y - minYuv) * (1.0 / (maxYuv - minYuv)));
+
+    vec2 xMirroredUv = vec2(1.0 - scaledUv.x, scaledUv.y);
+    vec2 yMirroredUv = vec2(scaledUv.y, 1.0 - scaledUv.y);
+    vec2 xyMirroredUv = vec2(xMirroredUv.x, yMirroredUv.y);
+
+    float weightX = (abs(0.5 - xMirroredUv.x)) / 2;
+    float weightY = (abs(0.5 - xMirroredUv.y)) / 2;
+    float weightXY = distance(vec2(0.5), xyMirroredUv) / 2;
+    float weightThis = 1.0 - weightX;
+
+    
+    scaledUv = wobblePoint(scaledUv);
+    xMirroredUv = wobblePoint(xMirroredUv);
+    yMirroredUv = wobblePoint(yMirroredUv);
+    xyMirroredUv = wobblePoint(xyMirroredUv);
+    
+
+    scaledUv = scaleBack(scaledUv);
+    xMirroredUv = scaleBack(xMirroredUv);
+    yMirroredUv = scaleBack(yMirroredUv);
+    xyMirroredUv = scaleBack(xyMirroredUv);
+
+    vec4 thisColor = texture2D(tex, scaledUv) * weightThis;
+    vec4 xMirroredColor = averageColorIn3x3Field(xMirroredUv) * weightX;
+    vec4 yMirroredColor = averageColorIn3x3Field(yMirroredUv) * weightY;
+    vec4 xyMirroredColor = averageColorIn3x3Field(xyMirroredUv) * weightXY;
+
+    gl_FragColor = thisColor + xMirroredColor + yMirroredColor + xyMirroredColor;
+}</value>
+  </data>
+  <data name="StandardVertexShader" xml:space="preserve">
+    <value>#version 330
+
+uniform mat4 camera;
+
+in vec2 uvPos;
+in vec2 position;
+
+out vec2 uv;
+out vec2 pos;
+	
+void main()
+{
+    uv = uvPos;
+    pos = position;
+    gl_Position = camera * vec4(position, 0, 1);
+    
+    //gl_Position = vec4(-position, 0, 1);
+}</value>
+  </data>
+</root>

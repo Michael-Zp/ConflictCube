@@ -1,0 +1,231 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{F7124B93-9E54-49F0-8ED9-00ABA61D7166}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>ConflictCube</RootNamespace>
+    <AssemblyName>ConflictCube</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="NAudio, Version=1.8.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\NAudio.1.8.4\lib\net35\NAudio.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenTK, Version=3.0.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
+      <HintPath>..\packages\OpenTK.3.0.0-pre\lib\net20\OpenTK.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Zenseless.Application, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Zenseless.0.3.126\lib\net46\Zenseless.Application.dll</HintPath>
+    </Reference>
+    <Reference Include="Zenseless.Base, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Zenseless.0.3.126\lib\net46\Zenseless.Base.dll</HintPath>
+    </Reference>
+    <Reference Include="Zenseless.Geometry, Version=0.2.0.7490, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Zenseless.0.3.126\lib\net46\Zenseless.Geometry.dll</HintPath>
+    </Reference>
+    <Reference Include="Zenseless.HLGL, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Zenseless.0.3.126\lib\net46\Zenseless.HLGL.dll</HintPath>
+    </Reference>
+    <Reference Include="Zenseless.OpenGL, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Zenseless.0.3.126\lib\net46\Zenseless.OpenGL.dll</HintPath>
+    </Reference>
+    <Reference Include="Zenseless.ShaderDebugging, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Zenseless.0.3.126\lib\net46\Zenseless.ShaderDebugging.dll</HintPath>
+    </Reference>
+    <Reference Include="Zenseless.Sound, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Zenseless.0.3.126\lib\net46\Zenseless.Sound.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Game\Debug\DebugGame.cs" />
+    <Compile Include="Game\Objects\ColoredBox.cs" />
+    <Compile Include="Game\Objects\UI\ButtonGroup.cs" />
+    <Compile Include="Game\Objects\Managers\GameManager.cs" />
+    <Compile Include="Game\Objects\Managers\IGameManager.cs" />
+    <Compile Include="Game\Objects\UI\IngameMenu.cs" />
+    <Compile Include="Game\Objects\Players\ISwitchPlayers.cs" />
+    <Compile Include="Game\Objects\Players\PlayerSwitcher.cs" />
+    <Compile Include="Game\Objects\Players\UseField.cs" />
+    <Compile Include="Game\Objects\UI\GameWonScreen.cs" />
+    <Compile Include="Game\Objects\UI\GameOverScreen.cs" />
+    <Compile Include="Game\SceneBuilders\IBuildMenu.cs" />
+    <Compile Include="Game\SceneBuilders\IBuildScene.cs" />
+    <Compile Include="Game\Objects\Floor\Button.cs" />
+    <Compile Include="Game\Objects\Managers\CameraManager.cs" />
+    <Compile Include="Game\Objects\Events\Event.cs" />
+    <Compile Include="Game\Objects\Events\OnButtonChangeFloorEvent.cs" />
+    <Compile Include="Game\Objects\Players\OrangePlayer.cs" />
+    <Compile Include="Game\Objects\Players\BluePlayer.cs" />
+    <Compile Include="Game\SceneBuilders\SceneBuilder.cs" />
+    <Compile Include="Game\Objects\Floor\Floor.cs" />
+    <Compile Include="Game\Objects\Floor\FloorLoader.cs" />
+    <Compile Include="Game\Objects\Players\Player.cs" />
+    <Compile Include="Game\Objects\Floor\LevelTile.cs" />
+    <Compile Include="Game\Objects\Floor\Boundary.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="ResxFiles\AudioResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AudioResources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="ResxFiles\Levels.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Levels.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Game\Tilesets.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ResxFiles\ParticleSystemResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ParticleSystemResources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="ResxFiles\ShaderResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ShaderResources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="ResxFiles\TexturResource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TexturResource.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="OpenTK.dll.config" />
+    <None Include="packages.config" />
+    <None Include="ResourceFiles\Levels\FireIceFirstTestNewTileset.tmx" />
+    <None Include="ResourceFiles\Levels\FireIceSecondTestNewTileset.tmx" />
+    <None Include="ResourceFiles\Levels\level1.tmx" />
+    <None Include="ResourceFiles\Levels\level2.tmx" />
+    <None Include="ResourceFiles\Levels\level3.tmx" />
+    <None Include="ResourceFiles\Levels\level4.tmx" />
+    <None Include="ResourceFiles\Levels\level5.tmx" />
+    <None Include="ResourceFiles\Levels\tutlevel.tmx" />
+    <None Include="ResourceFiles\Levels\XShiftTest.tmx" />
+    <None Include="ResourceFiles\Levels\XYShiftTest.tmx" />
+    <None Include="ResourceFiles\Levels\YShiftTest.tmx" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ResxFiles\AudioResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <SubType>Designer</SubType>
+      <LastGenOutput>AudioResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ResxFiles\Levels.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Levels.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ResxFiles\ParticleSystemResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ParticleSystemResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ResxFiles\TexturResource.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>TexturResource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ResxFiles\ShaderResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ShaderResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ResourceFiles\Shaders\Aftershadow.glsl" />
+    <None Include="ResourceFiles\Textures\Sledgehammer.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ResourceFiles\Textures\UseFieldIndicator.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ResourceFiles\Textures\Swap.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ResourceFiles\Textures\SpritesheetNewTextures.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ResourceFiles\Textures\Fireman.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ResourceFiles\Textures\welder.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ResourceFiles\Particles\IceParticle.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ResourceFiles\Particles\MagmaParticle.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ResourceFiles\Particles\Particle-Sprite-Smoke-1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ResourceFiles\Audio\BirdWhistle.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ResourceFiles\Audio\Walking.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ResourceFiles\Audio\WalkingFast.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ResourceFiles\Audio\Background.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Engine\Engine.csproj">
+      <Project>{246649f2-118c-4b07-a915-8c8507464dce}</Project>
+      <Name>Engine</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ResourceFiles\Textures\Firemanred.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ResourceFiles\Particles\WelderTorch.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ResourceFiles\Particles\smoke.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ResourceFiles\Audio\StoneBreaking.wav" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

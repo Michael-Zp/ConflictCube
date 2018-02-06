@@ -1,0 +1,109 @@
+#version 330
+
+uniform vec2 iResolution; //[xResolution, yResolution] of display
+uniform float iGlobalTime; //global time in seconds as float
+uniform sampler2D tex;
+uniform float minXuv;
+uniform float maxXuv;
+uniform float minYuv;
+uniform float maxYuv;
+
+
+in vec2 pos;
+in vec2 uv;
+
+float rand(float seed)
+{
+	return fract(sin(seed) * 1231534.9);
+}
+
+vec2 scaleBack(in vec2 toScale) 
+{
+    vec2 scaledVec = vec2(0);
+    scaledVec.x = toScale.x * (maxXuv - minXuv) + minXuv;
+    scaledVec.y = toScale.y * (maxYuv - minYuv) + minYuv;
+
+    return scaledVec;
+}
+
+vec2 wobblePoint(in vec2 uvCoords) 
+{
+    uvCoords.x = uvCoords.x + (0.04 * cos(6.0 * uvCoords.y)) * sin(iGlobalTime);
+
+    if(uvCoords.x > 1.0) 
+    {
+        uvCoords.x = 1.0 - fract(uvCoords.x);
+    }
+
+    if(uvCoords.x < 0.0) 
+    {
+        uvCoords.x = -uvCoords.x;
+    }
+
+
+    uvCoords.y = uvCoords.y + (0.04 * sin(6.0 * uvCoords.x)) * cos(iGlobalTime);
+
+    if(uvCoords.y > 1.0) 
+    {
+        uvCoords.y = 1.0 - fract(uvCoords.y);
+    }
+
+    if(uvCoords.y < 0.0) 
+    {
+        uvCoords.y = -uvCoords.y;
+    }
+
+    return uvCoords;
+}
+
+vec4 averageColorIn3x3Field(vec2 center) 
+{
+    float delta = 0.01;
+
+    vec4 color = vec4(0);
+
+    for(int x = -1; x <= 1; x++)
+    {
+        for(int y = -1; y <= 1; y++)
+        {
+            color += texture2D(tex, center + vec2(x, y));
+        }
+    }
+
+    return color / 9.0;
+}
+
+void main()
+{
+    //Texture out of sprite sheet -> uv coords are not from 0..1 and should not be
+    vec2 scaledUv = vec2((uv.x - minXuv) * (1.0 / (maxXuv - minXuv)), 
+                         (uv.y - minYuv) * (1.0 / (maxYuv - minYuv)));
+
+    vec2 xMirroredUv = vec2(1.0 - scaledUv.x, scaledUv.y);
+    vec2 yMirroredUv = vec2(scaledUv.y, 1.0 - scaledUv.y);
+    vec2 xyMirroredUv = vec2(xMirroredUv.x, yMirroredUv.y);
+
+    float weightX = (abs(0.5 - xMirroredUv.x)) / 2;
+    float weightY = (abs(0.5 - xMirroredUv.y)) / 2;
+    float weightXY = distance(vec2(0.5), xyMirroredUv) / 2;
+    float weightThis = 1.0 - weightX;
+
+    
+    scaledUv = wobblePoint(scaledUv);
+    xMirroredUv = wobblePoint(xMirroredUv);
+    yMirroredUv = wobblePoint(yMirroredUv);
+    xyMirroredUv = wobblePoint(xyMirroredUv);
+    
+
+    scaledUv = scaleBack(scaledUv);
+    xMirroredUv = scaleBack(xMirroredUv);
+    yMirroredUv = scaleBack(yMirroredUv);
+    xyMirroredUv = scaleBack(xyMirroredUv);
+
+    vec4 thisColor = texture2D(tex, scaledUv) * weightThis;
+    vec4 xMirroredColor = averageColorIn3x3Field(xMirroredUv) * weightX;
+    vec4 yMirroredColor = averageColorIn3x3Field(yMirroredUv) * weightY;
+    vec4 xyMirroredColor = averageColorIn3x3Field(xyMirroredUv) * weightXY;
+
+    gl_FragColor = thisColor + xMirroredColor + yMirroredColor + xyMirroredColor;
+}

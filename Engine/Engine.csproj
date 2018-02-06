@@ -1,0 +1,166 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{246649F2-118C-4B07-A915-8C8507464DCE}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Engine</RootNamespace>
+    <AssemblyName>Engine</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="NAudio, Version=1.8.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\NAudio.1.8.4\lib\net35\NAudio.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenTK, Version=3.0.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
+      <HintPath>..\packages\OpenTK.3.0.0-pre\lib\net20\OpenTK.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Zenseless.Application, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Zenseless.0.4.6\lib\net46\Zenseless.Application.dll</HintPath>
+    </Reference>
+    <Reference Include="Zenseless.Base, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Zenseless.0.4.6\lib\net46\Zenseless.Base.dll</HintPath>
+    </Reference>
+    <Reference Include="Zenseless.Geometry, Version=0.2.0.21853, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Zenseless.0.4.6\lib\net46\Zenseless.Geometry.dll</HintPath>
+    </Reference>
+    <Reference Include="Zenseless.HLGL, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Zenseless.0.4.6\lib\net46\Zenseless.HLGL.dll</HintPath>
+    </Reference>
+    <Reference Include="Zenseless.OpenGL, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Zenseless.0.4.6\lib\net46\Zenseless.OpenGL.dll</HintPath>
+    </Reference>
+    <Reference Include="Zenseless.ShaderDebugging, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Zenseless.0.4.6\lib\net46\Zenseless.ShaderDebugging.dll</HintPath>
+    </Reference>
+    <Reference Include="Zenseless.Sound, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Zenseless.0.4.6\lib\net46\Zenseless.Sound.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Audio\IAudio.cs" />
+    <Compile Include="Components\Transform\Rectangle.cs" />
+    <Compile Include="Components\Transform\RectangleExtensionMethods.cs" />
+    <Compile Include="Components\Transform\RotationMode.cs" />
+    <Compile Include="Components\Transform\Vector2ExtensionMethods.cs" />
+    <Compile Include="Components\Transform\WorldRelation.cs" />
+    <Compile Include="Controller\GameController.cs" />
+    <Compile Include="Debug\DebugEngine.cs" />
+    <Compile Include="GameEngine.cs" />
+    <Compile Include="Inputs\AxisData.cs" />
+    <Compile Include="ViewModel\ViewModel.cs" />
+    <Compile Include="Components\Animators\MaterialAnimator.cs" />
+    <Compile Include="Components\Animators\MaterialAnimatorKeyframe.cs" />
+    <Compile Include="Components\Colliders\BoxCollider.cs" />
+    <Compile Include="Components\Colliders\Collider.cs" />
+    <Compile Include="Components\Colliders\ColliderGridCell.cs" />
+    <Compile Include="Components\Colliders\CollisionGroup.cs" />
+    <Compile Include="Components\Colliders\CollisionLayer.cs" />
+    <Compile Include="Components\Component.cs" />
+    <Compile Include="Components\GameCallbacks.cs" />
+    <Compile Include="Components\GameObject.cs" />
+    <Compile Include="Components\Material\Material.cs" />
+    <Compile Include="Components\Material\MaterialData.cs" />
+    <Compile Include="Components\Material\Materials.cs" />
+    <Compile Include="Components\ParticleSystem\Particle.cs" />
+    <Compile Include="Components\ParticleSystem\ParticleSystem.cs" />
+    <Compile Include="Components\Physics\PhysicsObject.cs" />
+    <Compile Include="Scenes\IChangeScene.cs" />
+    <Compile Include="Scenes\Scene.cs" />
+    <Compile Include="Components\Sound\AudioPlayer.cs" />
+    <Compile Include="Components\Transform\Transform.cs" />
+    <Compile Include="Scenes\SceneManager.cs" />
+    <Compile Include="StandardResources\FontResources.Designer.cs">
+      <DependentUpon>FontResources.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Time\ITime.cs" />
+    <Compile Include="Time\ITimeSetter.cs" />
+    <Compile Include="UI\Canvas.cs" />
+    <Compile Include="UI\DoActionOnButtonClick.cs" />
+    <Compile Include="UI\Font.cs" />
+    <Compile Include="UI\TextField.cs" />
+    <Compile Include="Model\GameState.cs" />
+    <Compile Include="Components\Camera\Camera.cs" />
+    <Compile Include="StandardResources\StandardShader.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>StandardShader.resx</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModel\IViewModelElement.cs" />
+    <Compile Include="ViewModel\ViewModelCamera.cs" />
+    <Compile Include="ViewModel\ViewModelElement.cs" />
+    <Compile Include="View\GameView.cs" />
+    <Compile Include="View\MyWindow.cs" />
+    <Compile Include="View\OpenTKWrapper.cs" />
+    <Compile Include="View\ZenselessWrapper.cs" />
+    <Compile Include="Audio\Audio.cs" />
+    <Compile Include="Audio\CachedSound.cs" />
+    <Compile Include="Audio\CachedSoundSampleProvider.cs" />
+    <Compile Include="Audio\LoopingAudio.cs" />
+    <Compile Include="Inputs\GamePadStateExtensionMethods.cs" />
+    <Compile Include="Inputs\Input.cs" />
+    <Compile Include="Time\Time.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="OpenTK.dll.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="StandardResources\FontResources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>FontResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StandardResources\StandardShader.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>StandardShader.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Fonts\Blood Bath 2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Fonts\Font1.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

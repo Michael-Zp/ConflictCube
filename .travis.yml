@@ -1,0 +1,19 @@
+language: csharp
+sudo: required
+dist: trusty
+solution: ConflictCube.sln
+branches:
+  only:
+    - master
+    - develop
+    - TravisCiTests
+
+
+install:
+  - travis_retry nuget restore -source "https://www.nuget.org/api/v2" ./ConflictCube.sln
+  - sudo nuget update -self
+  - sudo nuget restore ConflictCube.sln
+
+script:
+  - sudo msbuild ./ConflictCube.sln
+  - sudo mono ./packages/NUnit.ConsoleRunner.3.7.0/tools/nunit3-console.exe ./ConflictCubeTest/bin/Debug/ConflictCubeTest.dll --where:cat!=OpenGlTests
