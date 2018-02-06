@@ -8,6 +8,13 @@ namespace ConflictCube.Objects
 {
     public static class FloorLoader
     {
+        private const int FloorLayer = 0;
+        private const int ButtonsLayer = 1;
+        private const int CubesLayer = 2;
+        private const int StartPositionLayer = 3;
+        private const int FirstButtonEventLayer = 4;
+
+
         public static Floor Instance(string levelData, string floorName, Transform areaOfFloor, CollisionGroup group, GameObject parent)
         {
             List<int[,]> FloorTiles = ReadLayersOfLevel(levelData, out int rows, out int columns);
@@ -28,11 +35,11 @@ namespace ConflictCube.Objects
 
                     string tileName = "FloorTile, " + floorTiles.ToString() + " row: " + row + " column: " + column;
 
-                    LevelTile floorTile = new LevelTile(row, column, tileName, tileTransform, floorTiles[0][row, column], floorOfLevel, floorOfLevel);
-                    LevelTile buttonTile = new LevelTile(row, column, tileName, tileTransform, floorTiles[1][row, column], floorOfLevel, floorOfLevel);
-                    LevelTile cubeTile = new LevelTile(row, column, tileName, tileTransform, floorTiles[2][row, column], floorOfLevel, floorOfLevel);
+                    LevelTile floorTile = new LevelTile(row, column, tileName, tileTransform, floorTiles[FloorLayer][row, column], floorOfLevel, floorOfLevel);
+                    LevelTile buttonTile = new LevelTile(row, column, tileName, tileTransform, floorTiles[ButtonsLayer][row, column], floorOfLevel, floorOfLevel);
+                    LevelTile cubeTile = new LevelTile(row, column, tileName, tileTransform, floorTiles[CubesLayer][row, column], floorOfLevel, floorOfLevel);
 
-                    switch(floorTiles[3][row, column])
+                    switch(floorTiles[StartPositionLayer][row, column])
                     {
                         case 42:
                             floorOfLevel.BluePlayerCheckpoint = tileTransform;
@@ -48,7 +55,7 @@ namespace ConflictCube.Objects
                             break;
                     }
 
-                    if (!buttonTile.Type.Equals("NotActiveButton"))
+                    if (buttonTile.Type.Equals("NotActiveButton"))
                     {
                         buttonTile.Event = GenerateEvent(row, column, levelRows, levelColumns, floorTiles, floorOfLevel);
                     }
@@ -65,7 +72,7 @@ namespace ConflictCube.Objects
         {
             OnButtonChangeFloorEvent btnEvent = new OnButtonChangeFloorEvent(floor);
 
-            for (int i = 3; i < floorTiles.Count; i++)
+            for (int i = FirstButtonEventLayer; i < floorTiles.Count; i++)
             {
                 if (!LevelTile.GetstringForIndex(floorTiles[i][row, column]).Equals("NotActiveButton"))
                 {
