@@ -76,7 +76,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Game\Debug\DebugGame.cs" />
+    <Compile Include="Game\DebugGame\DebugGame.cs" />
     <Compile Include="Game\Objects\ColoredBox.cs" />
     <Compile Include="Game\Objects\UI\ButtonGroup.cs" />
     <Compile Include="Game\Objects\Managers\GameManager.cs" />

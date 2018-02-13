@@ -82,7 +82,7 @@
     <Compile Include="Components\Transform\Vector2ExtensionMethods.cs" />
     <Compile Include="Components\Transform\WorldRelation.cs" />
     <Compile Include="Controller\GameController.cs" />
-    <Compile Include="Debug\DebugEngine.cs" />
+    <Compile Include="DebugGame\DebugEngine.cs" />
     <Compile Include="GameEngine.cs" />
     <Compile Include="Inputs\AxisData.cs" />
     <Compile Include="ViewModel\ViewModel.cs" />
