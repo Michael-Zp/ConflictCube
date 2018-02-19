@@ -30,16 +30,16 @@ namespace ConflictCube.Objects
             float playerDistance = (float)Math.Sqrt(Math.Pow(player0Pos.X - player1Pos.X, 2) + Math.Pow(player0Pos.Y - player1Pos.Y, 2));
 
             float zoomFactor = 1f;
-            if(playerDistance > 1.8f)
+            if(playerDistance > 1.5f)
             {
-                zoomFactor = 1.8f / playerDistance;
+                zoomFactor = 1.5f / playerDistance;
             }
             
 
             foreach (Camera camera in Cameras)
             {
                 camera.Transform.SetSize(new Vector2(zoomFactor, zoomFactor), WorldRelation.Global);
-                camera.Transform.SetPosition(-averagePlayerPos, WorldRelation.Global);
+                camera.Transform.SetPosition(-averagePlayerPos * zoomFactor, WorldRelation.Global);
             }
         }
     }
