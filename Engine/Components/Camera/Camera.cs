@@ -10,12 +10,20 @@ namespace Engine.Components
         public GameObject RootGameObject;
         public FBO FBO;
         public Transform RenderTarget;
-        public Vector2 OriginalRenderTargetSize;
+        public readonly Vector2 OriginalRenderTargetSize;
         public bool IsUiCamera;
 
         public Camera(Transform transform, GameObject rootGameObject, int windowWidth, int windowHeight, Transform renderTarget, bool isUiCamera) 
             : this(transform, rootGameObject, new FBO(Texture2dGL.Create(windowWidth, windowHeight, OpenTK.Graphics.OpenGL4.PixelInternalFormat.Rgba)), renderTarget, isUiCamera)
         {}
+
+
+        protected Camera(Transform transform, GameObject rootGameObject, FBO fBO, Transform renderTarget, bool isUiCamera, Vector2 originalRenderTargetSize)
+            : this(transform, rootGameObject, fBO, renderTarget, isUiCamera)
+        {
+            OriginalRenderTargetSize = originalRenderTargetSize;
+        }
+
 
         public Camera(Transform transform, GameObject rootGameObject, FBO fBO, Transform renderTarget, bool isUiCamera)
         {
@@ -26,7 +34,7 @@ namespace Engine.Components
 
             if(RenderTarget == null)
             {
-                throw new ArgumentNullException("renderTarget");
+                throw new ArgumentNullException("renderTarget is null");
             }
 
             OriginalRenderTargetSize = RenderTarget.GetSize(WorldRelation.Global);

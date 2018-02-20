@@ -13,6 +13,7 @@ namespace Engine.View
     {
         private MyWindow Window;
         private OpenTKWrapper OpenTKWrapper;
+        private bool WindowResized = false;
 
         /// <summary>
         ///     Match the GL Viewport with the given window and load all Tilesets that are used in the game.
@@ -28,6 +29,7 @@ namespace Engine.View
                 GL.Viewport(0, 0, Window.Width, Window.Height);
                 OpenTKWrapper.WindowHeight = Window.Height;
                 OpenTKWrapper.WindowWidth = Window.Width;
+                WindowResized = true;
             };
 
             OpenTKWrapper.WindowHeight = Window.Height;
@@ -44,24 +46,28 @@ namespace Engine.View
         
         public void Render(ViewModel viewModel)
         {
-            foreach(ViewModelCamera camera in viewModel.Cameras)
+            if(WindowResized)
             {
-                //Scale camera to keep world propotions in the view
-                Vector2 newRenderTargetAspectRatio;
-                if(Window.Width > Window.Height)
+                foreach (ViewModelCamera camera in viewModel.Cameras)
                 {
-                    newRenderTargetAspectRatio = new Vector2((float)Window.Height / (float)Window.Width, 1);
-                }
-                else if(Window.Height > Window.Width)
-                {
-                    newRenderTargetAspectRatio = new Vector2(1, (float)Window.Width / (float)Window.Height);
-                }
-                else
-                {
-                    newRenderTargetAspectRatio = new Vector2(1);
-                }
+                    //Scale camera to keep world propotions in the view
+                    Vector2 newRenderTargetAspectRatio;
+                    if (Window.Width > Window.Height)
+                    {
+                        newRenderTargetAspectRatio = new Vector2((float)Window.Height / (float)Window.Width, 1);
+                    }
+                    else if (Window.Height > Window.Width)
+                    {
+                        newRenderTargetAspectRatio = new Vector2(1, (float)Window.Width / (float)Window.Height);
+                    }
+                    else
+                    {
+                        newRenderTargetAspectRatio = new Vector2(1);
+                    }
 
-                camera.RenderTarget.SetSize(camera.OriginalRenderTargetSize * newRenderTargetAspectRatio, WorldRelation.Global);
+                    camera.RenderTarget.SetSize(camera.OriginalRenderTargetSize * newRenderTargetAspectRatio, WorldRelation.Global);
+                }
+                WindowResized = false;
             }
 
             ClearScreen();
